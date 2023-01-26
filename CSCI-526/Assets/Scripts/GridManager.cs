@@ -6,7 +6,7 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private int _width, _height;
 
-    [SerializeField] private Tile _tile;
+    [SerializeField] private Tile _tilePrefab;
 
     [SerializeField] private Transform _camera;
     void GenerateGrid()
@@ -15,11 +15,11 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                var tile = Instantiate(_tile, new Vector3(x, y), Quaternion.identity);
-                _tile.name = $"Tile {x} {y}";
+                var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity);
+                tile.name = $"Tile {x} {y}";
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
-                _tile.Init(isOffset);
+                tile.Init(isOffset);
             }
         }
 
