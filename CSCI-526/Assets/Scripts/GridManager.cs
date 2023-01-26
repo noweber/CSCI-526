@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private int _width, _height;
+    [SerializeField] private int _width = 6, _height = 6;
 
     [SerializeField] private Tile _tilePrefab;
+    [SerializeField] private Triangle _trianglePrefab;
+    [SerializeField] private Diamond _diamondPrefab;
+    [SerializeField] private Circle _circlePrefab;
 
     [SerializeField] private Transform _camera;
     void GenerateGrid()
@@ -20,6 +23,24 @@ public class GridManager : MonoBehaviour
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 tile.Init(isOffset);
+
+                if (x == 0 && y == 0 || x == 1 && y == 0)
+                {
+                    var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                }
+                
+                if (x == 2 && y == 0 || x == 3 && y == 0)
+                {
+                    var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                }
+                
+                if (x == 4 && y == 0 || x == 5 && y == 0)
+                {
+                    var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
+                    
+                }
+                
+
             }
         }
 
