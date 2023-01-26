@@ -10,7 +10,7 @@ public class Tile : MonoBehaviour
 
     public void Init(bool isOffset)
     {
-        _renderer.color = isOffset ? _offset : _base;
+        _renderer.color = isOffset ? _base : _offset;
     }
     
     // Start is called before the first frame update

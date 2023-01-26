@@ -236,8 +236,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65e72e31e756e40d396eea1c7c376400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 16
-  _height: 9
+  _width: 5
+  _height: 5
   _tile: {fileID: 4829386787912161034, guid: 26f1bdcf23efd4b4b94c6ddf1a48a92a, type: 3}
   _camera: {fileID: 494762420}
 --- !u!4 &1305261819
