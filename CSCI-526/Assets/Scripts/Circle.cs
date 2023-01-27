@@ -32,7 +32,11 @@ public class Circle : Piece
         {
             for (int j = 0; j < boardWidth; j++)
             {
-                if (Mathf.Abs(i - pos.x) + Mathf.Abs(j - pos.y) <= 2)
+                if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) <= 1)
+                {
+                    legalSpots.Add(new Vector2(i, j));
+                }
+                else if (Mathf.Abs(i - pos.x) <= 1 && Mathf.Abs(j - pos.y) == 1)
                 {
                     legalSpots.Add(new Vector2(i, j));
                 }
