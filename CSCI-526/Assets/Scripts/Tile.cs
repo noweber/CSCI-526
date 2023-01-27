@@ -31,6 +31,8 @@ public class Tile : MonoBehaviour
         Debug.Log("Grid manager: " + GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y)));
         var check = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
         var coord = new Vector2(this.transform.position.x, this.transform.position.y);
+
+        
         Debug.Log("Tile: " + check);
         Debug.Log("Tile coord: " + coord);
         if (check != null)
@@ -41,6 +43,11 @@ public class Tile : MonoBehaviour
                 Debug.Log("Select Piece");
                 GridManager.Instance.storedPiece = check;
                 GridManager.Instance.storedCoord = coord;
+                var highlightTiles = check.LegalMoves(6, 6);
+                foreach (Vector2 tileCoords in highlightTiles)
+                {
+                    GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
+                }
             }
             else
             {
@@ -50,16 +57,17 @@ public class Tile : MonoBehaviour
                 {
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
-                } else 
-				{
-					if (check != null) 
-					{
-						Destroy(check.gameObject);
-						GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
-						GridManager.Instance.storedPiece = null;
-						GridManager.Instance.storedCoord = new Vector2(-1, -1);
-					}
-				}
+                }
+                else
+                {
+                    if (check != null)
+                    {
+                        Destroy(check.gameObject);
+                        GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
+                        GridManager.Instance.storedPiece = null;
+                        GridManager.Instance.storedCoord = new Vector2(-1, -1);
+                    }
+                }
             }
         }
         else

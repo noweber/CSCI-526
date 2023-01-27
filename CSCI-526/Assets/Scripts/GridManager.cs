@@ -15,14 +15,14 @@ public class GridManager : MonoBehaviour
 
     [SerializeField] private Transform _camera;
     
-    private Dictionary<Vector2, Tile> _tiles;
+    public Dictionary<Vector2, Tile> tiles;
     private Dictionary<Vector2, Piece> _pieces;
     public Piece storedPiece = null;
     public Vector2 storedCoord = new Vector2(-1,-1);
 
     void GenerateGrid()
     {
-        _tiles = new Dictionary<Vector2, Tile>();
+        tiles = new Dictionary<Vector2, Tile>();
         _pieces = new Dictionary<Vector2, Piece>();
         for (int x = 0; x < _width; x++)
         {
@@ -35,7 +35,7 @@ public class GridManager : MonoBehaviour
                 tile.Init(isOffset);
 
                 var coord = new Vector2(x, y);
-                _tiles[coord] = tile;
+                tiles[coord] = tile;
                 
                 if (x == 0 && y == 0 || x == 1 && y == 0)
                 {
@@ -69,7 +69,7 @@ public class GridManager : MonoBehaviour
 
     public Tile GetTile(Vector2 coord)
     {
-        if (_tiles.TryGetValue(coord, out var tile))
+        if (tiles.TryGetValue(coord, out var tile))
         {
             return tile;
         }
