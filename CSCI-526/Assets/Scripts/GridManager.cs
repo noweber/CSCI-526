@@ -109,6 +109,8 @@ public class GridManager : MonoBehaviour
         Debug.Log("Here");
         _pieces[coord] = piece;
         _pieces[storedCoord] = null;
+
+        piece.transform.position = new Vector3(coord.x, coord.y, piece.transform.position.z);
         Debug.Log(_pieces);
     }
 
