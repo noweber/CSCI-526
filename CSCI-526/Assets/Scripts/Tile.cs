@@ -50,7 +50,16 @@ public class Tile : MonoBehaviour
                 {
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
-                }
+                } else 
+				{
+					if (check != null) 
+					{
+						Destroy(check.gameObject);
+						GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
+						GridManager.Instance.storedPiece = null;
+						GridManager.Instance.storedCoord = new Vector2(-1, -1);
+					}
+				}
             }
         }
         else
@@ -63,6 +72,7 @@ public class Tile : MonoBehaviour
                 GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
                 //sets storedPiece as null here
                 GridManager.Instance.storedPiece = null;
+				GridManager.Instance.storedCoord = new Vector2(-1, -1);
                 Debug.Log("Selected Piece change: " + GridManager.Instance.storedPiece);
             }
         }
