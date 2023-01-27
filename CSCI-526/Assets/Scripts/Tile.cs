@@ -9,6 +9,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private SpriteRenderer _renderer;
 
     [SerializeField] private GameObject _highlight;
+
     
     public void Init(bool isOffset)
     {
