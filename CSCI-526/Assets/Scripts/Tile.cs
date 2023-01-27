@@ -23,7 +23,26 @@ public class Tile : MonoBehaviour
     
     void OnMouseExit()
     {
-        _highlight.SetActive(false);
+        if(GridManager.Instance.storedPiece != null)
+        {
+            var highlightTiles = GridManager.Instance.storedPiece.LegalMoves(6, 6);
+            //Vector3 mousePos = Input.mousePosition;
+            if (highlightTiles.Contains(new Vector2(this.transform.position.x, this.transform.position.y)))
+            {
+                //Debug.Log("IN THE ARRAY");
+                _highlight.SetActive(true);
+            }
+            else
+            {
+                //Debug.Log("NOT IN THE ARRAY");
+                _highlight.SetActive(false);
+            }
+        }
+        else
+        {
+            _highlight.SetActive(false);
+        }
+        //_highlight.SetActive(false);
     }
 
     private void OnMouseDown()
@@ -31,31 +50,48 @@ public class Tile : MonoBehaviour
         var clickedPiece = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
         var coord = new Vector2(this.transform.position.x, this.transform.position.y);
 		var turn = GameManager.Instance.GameState == GameState.White ? true : false;
-		Debug.Log(GameManager.Instance.GameState);
+		//Debug.Log(GameManager.Instance.GameState);
         if (clickedPiece != null) // selected piece is correct turn's color
         {
             if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
             {
                 //Selects Piece
-                Debug.Log("SELECTED PIECE: " + clickedPiece.gameObject.name);
+                Debug.Log(GameManager.Instance.NumMoves);
+                //Debug.Log("SELECTED PIECE: " + clickedPiece.gameObject.name);
                 GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
-				GameManager.Instance.MovedPieces.Add(clickedPiece);
+                var highlightTiles = clickedPiece.LegalMoves(6, 6);
+                foreach (Vector2 tileCoords in highlightTiles)
+                {
+                    GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
+                    //fix hover unhighlight while selected
+                }
+                GameManager.Instance.MovedPieces.Add(clickedPiece);
             }
             else
             {
-                Debug.Log("SELECTED ANOTHER PIECE POSSIBLY: " + clickedPiece.gameObject.name);
+                //Debug.Log("SELECTED ANOTHER PIECE POSSIBLY: " + clickedPiece.gameObject.name);
                 //If piece has already been selected and selected again, cancel action.
                 if (GridManager.Instance.storedPiece != null && GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite)
                 {
-					Debug.Log("CAPTURED: " + clickedPiece.gameObject.name);
-					// Capturing enemy piece
-					Destroy(clickedPiece.gameObject);
-					GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
-					GameManager.Instance.NumMoves += 1;
-					GridManager.Instance.storedPiece.hasMoved = true;
+					//Debug.Log("CAPTURED: " + clickedPiece.gameObject.name);
+                    // Capturing enemy piece
+                    if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
+                    {
+                        Destroy(clickedPiece.gameObject);
+                        GameManager.Instance.NumMoves += 1;
+                        GridManager.Instance.storedPiece.hasMoved = true;
+                        GridManager.Instance.storedPiece = null;
+                        GridManager.Instance.storedCoord = new Vector2(-1, -1);
+                    }
 				}
-				GridManager.Instance.storedPiece = null;
+                var highlightTiles = clickedPiece.LegalMoves(6, 6);
+                foreach (Vector2 tileCoords in highlightTiles)
+                {
+                    GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                    //fix hover unhighlight while selected
+                }
+                GridManager.Instance.storedPiece = null;
 				GridManager.Instance.storedCoord = new Vector2(-1, -1);
 			}
         }
@@ -64,13 +100,23 @@ public class Tile : MonoBehaviour
             if (GridManager.Instance.storedPiece != null)
             {
                 //Move Piece
-                GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
-				GridManager.Instance.storedPiece.hasMoved = true;
-                //sets storedPiece as null here
-                GridManager.Instance.storedPiece = null;
-				GridManager.Instance.storedCoord = new Vector2(-1, -1);
-				GameManager.Instance.NumMoves += 1;
-				
+                if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
+                {
+                    GridManager.Instance.storedPiece.hasMoved = true;
+                    var highlightTiles = GridManager.Instance.storedPiece.LegalMoves(6, 6);
+                    foreach (Vector2 tileCoords in highlightTiles)
+                    {
+                        GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        //fix hover unhighlight while selected
+                    }
+                    //sets storedPiece as null here
+                    GridManager.Instance.storedPiece = null;
+                    GridManager.Instance.storedCoord = new Vector2(-1, -1);
+                    GameManager.Instance.NumMoves += 1;
+                    //unhighlight after move.
+                }
+
+
             }
         }
 

@@ -135,12 +135,17 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void MovePiece(Vector2 coord, Piece piece)
+    public bool MovePiece(Vector2 coord, Piece piece)
     {
         _pieces[coord] = piece;
         _pieces[storedCoord] = null;
-
+        var validMoves = piece.LegalMoves(_width, _height);
+        if (!validMoves.Contains(coord))
+        {
+            return false;
+        }
         piece.transform.position = new Vector3(coord.x, coord.y, piece.transform.position.z);
+        return true;
     }
 
     // Start is called before the first frame update
