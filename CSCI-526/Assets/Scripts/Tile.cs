@@ -25,7 +25,7 @@ public class Tile : MonoBehaviour
     {
         if(GridManager.Instance.storedPiece != null)
         {
-            var highlightTiles = GridManager.Instance.storedPiece.LegalMoves(6, 6);
+            var highlightTiles = GridManager.Instance.storedPiece.highlightedMoves;
             //Vector3 mousePos = Input.mousePosition;
             if (highlightTiles.Contains(new Vector2(this.transform.position.x, this.transform.position.y)))
             {
@@ -70,28 +70,26 @@ public class Tile : MonoBehaviour
             }
             else
             {
-                if (GridManager.Instance.storedPiece != null && GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite)
+                if (GridManager.Instance.storedPiece != null)
                 {
-                    if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
-                    {
-                        Destroy(clickedPiece.gameObject);
-                        GameManager.Instance.NumMoves += 1;
-                        GridManager.Instance.storedPiece.hasMoved = true;
-                        foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
-                        {
-                            GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                        }
-                        GridManager.Instance.storedPiece = null;
-                        GridManager.Instance.storedCoord = new Vector2(-1, -1);
+					// Possible to capture clickedPiece
+					if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite) 
+					{
+                    	if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
+                    	{
+							// Capturing Piece
+                        	Destroy(clickedPiece.gameObject);
+                        	GameManager.Instance.NumMoves += 1;
+                        	GridManager.Instance.storedPiece.hasMoved = true;
+                    	}
+					}
+					foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+					{
+						GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                     }
+                    GridManager.Instance.storedPiece = null;
+                    GridManager.Instance.storedCoord = new Vector2(-1, -1);
 				}
-                foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
-                {
-                    GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                }
-                GridManager.Instance.storedPiece.hasMoved = false;
-                GridManager.Instance.storedPiece = null;
-				GridManager.Instance.storedCoord = new Vector2(-1, -1);
 			}
         }
         else
