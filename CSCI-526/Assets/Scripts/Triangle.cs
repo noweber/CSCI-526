@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Triangle : Piece
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public override bool IsMoveLegal(Vector2 destination)
     {
-        Debug.Log("Triangle's grid manager: " + GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y)));
+        /*triangle moves like a bishop (diagonal)
+         *  |srcx - destx| == |srcy- desty|
+        */
+        var pos = transform.position;
+        if (Mathf.Abs(destination.x - pos.x) == Mathf.Abs(destination.y - pos.y))
+        {
+            return true;
+        }
+        return false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UpdateLocation(Vector3 location)
     {
-        
+        this.transform.position = location;
     }
 }

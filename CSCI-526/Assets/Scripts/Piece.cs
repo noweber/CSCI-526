@@ -4,15 +4,8 @@ using UnityEngine;
 
 public abstract class Piece : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public abstract bool IsMoveLegal(Vector2 destination);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void UpdateLocation(Vector3 location);
+
 }
