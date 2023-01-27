@@ -17,6 +17,7 @@ public class GridManager : MonoBehaviour
     
     private Dictionary<Vector2, Tile> _tiles;
     private Dictionary<Vector2, Piece> _pieces;
+    public Piece storedPiece = null;
 
     void GenerateGrid()
     {

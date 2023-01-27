@@ -29,6 +29,31 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("Grid manager: " + GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y)));
+        if (GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y)) != null)
+        {
+            if (GridManager.Instance.storedPiece == null)
+            {
+                //Selects Piece
+                Debug.Log("Select Piece");
+                GridManager.Instance.storedPiece = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
+            }
+            else
+            {
+                Debug.Log("Piece Already Selected and new position has a different piece");
+            }
+        }
+        else
+        {
+            if (GridManager.Instance.storedPiece != null)
+            {
+                Debug.Log("Piece should move to this empty position");
+                Debug.Log("Selected Piece: " + GridManager.Instance.storedPiece);
+                //Move Piece
+                //sets storedPiece as null here
+                GridManager.Instance.storedPiece = null;
+                Debug.Log("Selected Piece change: " + GridManager.Instance.storedPiece);
+            }
+        }
         //Finds valid piece
         //Calls GridManager/sends to GridManager --> initialize some function to prepare for movement/store the piece
         //Piece in GridManager--> var selectedPiece = piece or null --> set as True if itself, then set null/cancel action
