@@ -7,7 +7,7 @@ public class Diamond : Piece
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("Diamond's grid manager: " + GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y)));
     }
 
     // Update is called once per frame

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance { get; private set; }
+
     [SerializeField] private int _width = 6, _height = 6;
 
     [SerializeField] private Tile _tilePrefab;
@@ -82,7 +84,24 @@ public class GridManager : MonoBehaviour
 
         return null;
     }
-    
+
+    public GridManager()
+    {
+        Instance = this;
+    }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
