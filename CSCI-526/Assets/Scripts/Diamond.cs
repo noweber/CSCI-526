@@ -27,7 +27,6 @@ public class Diamond : Piece
     {
         List<Vector2> legalSpots = new List<Vector2>();
 
-        /*Diamond moves like a knight*/
         var pos = transform.position;
 
         for (int i = 0; i < boardWidth; i++)

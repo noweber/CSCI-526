@@ -48,7 +48,6 @@ public class Circle : Piece
 
         return legalSpots;
     }
-
     public override void UpdateLocation(Vector3 location)
     {
         this.transform.position = location;

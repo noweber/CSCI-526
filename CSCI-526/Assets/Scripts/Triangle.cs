@@ -26,7 +26,7 @@ public class Triangle : Piece
          *  delta(x) = delta(y)
         */
         var pos = transform.position;
-        
+
         for (int i = 0; i < boardWidth; i++)
         {
             for (int j = 0; j < boardWidth; j++)
@@ -37,7 +37,6 @@ public class Triangle : Piece
                 }
             }
         }
-        
         if (legalSpots.Count == 0)
             return null;
 
