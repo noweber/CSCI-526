@@ -18,6 +18,7 @@ public class GridManager : MonoBehaviour
     private Dictionary<Vector2, Tile> _tiles;
     private Dictionary<Vector2, Piece> _pieces;
     public Piece storedPiece = null;
+    public Vector2 storedCoord = new Vector2(-1,-1);
 
     void GenerateGrid()
     {
@@ -101,6 +102,14 @@ public class GridManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    public void MovePiece(Vector2 coord, Piece piece)
+    {
+        Debug.Log("Here");
+        _pieces[coord] = piece;
+        _pieces[storedCoord] = null;
+        Debug.Log(_pieces);
     }
 
     // Start is called before the first frame update
