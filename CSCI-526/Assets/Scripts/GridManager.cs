@@ -17,10 +17,11 @@ public class GridManager : MonoBehaviour
     
     private Dictionary<Vector2, Tile> _tiles;
     private Dictionary<Vector2, Piece> _pieces;
+    
     public Piece storedPiece = null;
     public Vector2 storedCoord = new Vector2(-1,-1);
 
-    void GenerateGrid()
+    public void GenerateGrid()
     {
         _tiles = new Dictionary<Vector2, Tile>();
         _pieces = new Dictionary<Vector2, Piece>();
@@ -40,6 +41,7 @@ public class GridManager : MonoBehaviour
                 if (x == 0 && y == 0 || x == 1 && y == 0)
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                    triangle.isWhite = true;
                     _pieces[coord] = triangle;
                    
                 }
@@ -47,24 +49,47 @@ public class GridManager : MonoBehaviour
                 if (x == 2 && y == 0 || x == 3 && y == 0)
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                    circle.isWhite = true;
                     _pieces[coord] = circle;
                 }
                 
                 if (x == 4 && y == 0 || x == 5 && y == 0)
                 {
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
+                    diamond.isWhite = true;
                     _pieces[coord] = diamond;
                 }
-
-                if (y == 0)
+                
+                if (x == 0 && y == _height-1 || x == 1 && y == _height-1)
                 {
-                    Debug.Log("Piece: " + _pieces[new Vector2(x, y)]);
+                    var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                    triangle.isWhite = false;
+                    triangle.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    _pieces[coord] = triangle;
+                   
                 }
-
+                
+                if (x == 2 && y == _height-1 || x == 3 && y == _height-1)
+                {
+                    var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                    circle.isWhite = false;
+                    circle.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    _pieces[coord] = circle;
+                }
+                
+                if (x == 4 && y == _height-1 || x == 5 && y == _height-1)
+                {
+                    var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
+                    diamond.isWhite = false;
+                    diamond.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    _pieces[coord] = diamond;
+                }
             }
         }
 
         _camera.transform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
+
+        GameManager.Instance.ChangeState(GameState.White);
     }
 
     public Tile GetTile(Vector2 coord)
@@ -106,18 +131,16 @@ public class GridManager : MonoBehaviour
 
     public void MovePiece(Vector2 coord, Piece piece)
     {
-        Debug.Log("Here");
         _pieces[coord] = piece;
         _pieces[storedCoord] = null;
 
         piece.transform.position = new Vector3(coord.x, coord.y, piece.transform.position.z);
-        Debug.Log(_pieces);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GenerateGrid();
+        
     }
 
     // Update is called once per frame

@@ -28,54 +28,60 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("Grid manager: " + GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y)));
-        var check = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
+        var clickedPiece = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
         var coord = new Vector2(this.transform.position.x, this.transform.position.y);
-        Debug.Log("Tile: " + check);
-        Debug.Log("Tile coord: " + coord);
-        if (check != null)
+		var turn = GameManager.Instance.GameState == GameState.White ? true : false;
+		Debug.Log(GameManager.Instance.GameState);
+        if (clickedPiece != null && turn == clickedPiece.isWhite) // selected piece is correct turn's color
         {
             if (GridManager.Instance.storedPiece == null)
             {
                 //Selects Piece
-                Debug.Log("Select Piece");
-                GridManager.Instance.storedPiece = check;
+                Debug.Log("SELECTED PIECE: " + clickedPiece.gameObject.name);
+                GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
             }
             else
             {
-                Debug.Log("Piece Already Selected and new position has a different piece");
+                Debug.Log("SELECTED PIECE AGAIN: " + clickedPiece.gameObject.name);
                 //If piece has already been selected and selected again, cancel action.
-                if (GridManager.Instance.storedPiece == check)
+                if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite)
                 {
-                    GridManager.Instance.storedPiece = null;
-                    GridManager.Instance.storedCoord = new Vector2(-1, -1);
-                } else 
-				{
-					if (check != null) 
-					{
-						Destroy(check.gameObject);
-						GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
-						GridManager.Instance.storedPiece = null;
-						GridManager.Instance.storedCoord = new Vector2(-1, -1);
-					}
+					Debug.Log("CAPTURED: " + clickedPiece.gameObject.name);
+					// Capturing enemy piece
+					Destroy(clickedPiece.gameObject);
+					GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
+					GameManager.Instance.NumMoves += 1;
 				}
+					GridManager.Instance.storedPiece = null;
+					GridManager.Instance.storedCoord = new Vector2(-1, -1);
             }
         }
         else
         {
             if (GridManager.Instance.storedPiece != null)
             {
-                Debug.Log("Piece should move to this empty position");
-                Debug.Log("Selected Piece: " + GridManager.Instance.storedPiece);
                 //Move Piece
                 GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
                 //sets storedPiece as null here
                 GridManager.Instance.storedPiece = null;
 				GridManager.Instance.storedCoord = new Vector2(-1, -1);
-                Debug.Log("Selected Piece change: " + GridManager.Instance.storedPiece);
+				GameManager.Instance.NumMoves += 1;
             }
         }
+
+		// turn logic
+		if (GameManager.Instance.NumMoves == 2) 
+		{
+			if (turn == true) 
+			{
+				GameManager.Instance.ChangeState(GameState.Black);
+			} else
+			{
+				GameManager.Instance.ChangeState(GameState.White);
+			}
+			GameManager.Instance.NumMoves = 0;
+		}
         //Finds valid piece (done)
         //Calls GridManager/sends to GridManager --> initialize some function to prepare for movement/store the piece
         //Piece in GridManager--> var selectedPiece = piece or null --> set as True. if itself, then set null/cancel action

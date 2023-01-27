@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Piece : MonoBehaviour
 {
+	public bool isWhite;
+
     public abstract bool IsMoveLegal(Vector2 destination);
 
     public abstract void UpdateLocation(Vector3 location);
