@@ -50,7 +50,6 @@ public class Tile : MonoBehaviour
         var clickedPiece = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
         var coord = new Vector2(this.transform.position.x, this.transform.position.y);
 		var turn = GameManager.Instance.GameState == GameState.White ? true : false;
-		//Debug.Log(GameManager.Instance.GameState);
         if (clickedPiece != null) // selected piece is correct turn's color
         {
             if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
@@ -60,8 +59,9 @@ public class Tile : MonoBehaviour
                 //Debug.Log("SELECTED PIECE: " + clickedPiece.gameObject.name);
                 GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
-                var highlightTiles = clickedPiece.LegalMoves(6, 6);
-                foreach (Vector2 tileCoords in highlightTiles)
+ 
+                GridManager.Instance.storedPiece.highlightedMoves = clickedPiece.LegalMoves(6, 6);
+                foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                 {
                     GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
                     //fix hover unhighlight while selected
@@ -70,27 +70,26 @@ public class Tile : MonoBehaviour
             }
             else
             {
-                //Debug.Log("SELECTED ANOTHER PIECE POSSIBLY: " + clickedPiece.gameObject.name);
-                //If piece has already been selected and selected again, cancel action.
                 if (GridManager.Instance.storedPiece != null && GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite)
                 {
-					//Debug.Log("CAPTURED: " + clickedPiece.gameObject.name);
-                    // Capturing enemy piece
                     if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
                     {
                         Destroy(clickedPiece.gameObject);
                         GameManager.Instance.NumMoves += 1;
                         GridManager.Instance.storedPiece.hasMoved = true;
+                        foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+                        {
+                            GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        }
                         GridManager.Instance.storedPiece = null;
                         GridManager.Instance.storedCoord = new Vector2(-1, -1);
                     }
 				}
-                var highlightTiles = clickedPiece.LegalMoves(6, 6);
-                foreach (Vector2 tileCoords in highlightTiles)
+                foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                 {
                     GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                    //fix hover unhighlight while selected
                 }
+                GridManager.Instance.storedPiece.hasMoved = false;
                 GridManager.Instance.storedPiece = null;
 				GridManager.Instance.storedCoord = new Vector2(-1, -1);
 			}
@@ -103,13 +102,11 @@ public class Tile : MonoBehaviour
                 if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
                 {
                     GridManager.Instance.storedPiece.hasMoved = true;
-                    var highlightTiles = GridManager.Instance.storedPiece.LegalMoves(6, 6);
-                    foreach (Vector2 tileCoords in highlightTiles)
+                    foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                     {
                         GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                         //fix hover unhighlight while selected
                     }
-                    //sets storedPiece as null here
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
                     GameManager.Instance.NumMoves += 1;

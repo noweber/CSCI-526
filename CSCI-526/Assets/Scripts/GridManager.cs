@@ -20,6 +20,7 @@ public class GridManager : MonoBehaviour
     
     public Piece storedPiece = null;
     public Vector2 storedCoord = new Vector2(-1,-1);
+    //public List<Vector2> storedValidMoves = storedPiece.LegalMoves(_width, _height) ? null;
 
     public void GenerateGrid()
     {

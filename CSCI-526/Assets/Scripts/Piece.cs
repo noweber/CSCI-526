@@ -8,6 +8,8 @@ public abstract class Piece : MonoBehaviour
 
 	public bool hasMoved;
 
+    public List<Vector2> highlightedMoves;
+
     public abstract bool IsMoveLegal(Vector2 destination);
 
     public abstract List<Vector2> LegalMoves(int boardWidth, int boardHeight);
