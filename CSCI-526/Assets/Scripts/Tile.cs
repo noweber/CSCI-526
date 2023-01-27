@@ -34,27 +34,29 @@ public class Tile : MonoBehaviour
 		Debug.Log(GameManager.Instance.GameState);
         if (clickedPiece != null) // selected piece is correct turn's color
         {
-            if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite)
+            if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
             {
                 //Selects Piece
                 Debug.Log("SELECTED PIECE: " + clickedPiece.gameObject.name);
                 GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
+				GameManager.Instance.MovedPieces.Add(clickedPiece);
             }
             else
             {
-                Debug.Log("SELECTED PIECE AGAIN: " + clickedPiece.gameObject.name);
+                Debug.Log("SELECTED ANOTHER PIECE POSSIBLY: " + clickedPiece.gameObject.name);
                 //If piece has already been selected and selected again, cancel action.
-                if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite)
+                if (GridManager.Instance.storedPiece != null && GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite)
                 {
 					Debug.Log("CAPTURED: " + clickedPiece.gameObject.name);
 					// Capturing enemy piece
 					Destroy(clickedPiece.gameObject);
 					GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
 					GameManager.Instance.NumMoves += 1;
+					GridManager.Instance.storedPiece.hasMoved = true;
 				}
-					GridManager.Instance.storedPiece = null;
-					GridManager.Instance.storedCoord = new Vector2(-1, -1);
+				GridManager.Instance.storedPiece = null;
+				GridManager.Instance.storedCoord = new Vector2(-1, -1);
 			}
         }
         else
@@ -63,10 +65,12 @@ public class Tile : MonoBehaviour
             {
                 //Move Piece
                 GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece);
+				GridManager.Instance.storedPiece.hasMoved = true;
                 //sets storedPiece as null here
                 GridManager.Instance.storedPiece = null;
 				GridManager.Instance.storedCoord = new Vector2(-1, -1);
 				GameManager.Instance.NumMoves += 1;
+				
             }
         }
 
@@ -80,6 +84,11 @@ public class Tile : MonoBehaviour
 			{
 				GameManager.Instance.ChangeState(GameState.White);
 			}
+			foreach (var piece in GameManager.Instance.MovedPieces) 
+			{
+				piece.hasMoved = false;
+			}
+			GameManager.Instance.MovedPieces = new List<Piece>();
 			GameManager.Instance.NumMoves = 0;
 		}
         //Finds valid piece (done)

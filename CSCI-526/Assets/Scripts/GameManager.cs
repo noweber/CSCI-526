@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     public int NumMoves;
 
+    public List<Piece> MovedPieces;
+
     void Awake()
     {
         Instance = this;
@@ -19,6 +21,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         NumMoves = 0;
+        MovedPieces = new List<Piece>();
         ChangeState(GameState.GenerateGrid);
     }
 

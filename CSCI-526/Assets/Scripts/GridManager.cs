@@ -42,6 +42,7 @@ public class GridManager : MonoBehaviour
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = true;
+                    triangle.hasMoved = false;
                     _pieces[coord] = triangle;
                    
                 }
@@ -50,6 +51,7 @@ public class GridManager : MonoBehaviour
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = true;
+                    circle.hasMoved = false;
                     _pieces[coord] = circle;
                 }
                 
@@ -57,6 +59,7 @@ public class GridManager : MonoBehaviour
                 {
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
                     diamond.isWhite = true;
+                    diamond.hasMoved = false;
                     _pieces[coord] = diamond;
                 }
                 
@@ -64,6 +67,7 @@ public class GridManager : MonoBehaviour
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = false;
+                    triangle.hasMoved = false;
                     triangle.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
                     _pieces[coord] = triangle;
                    
@@ -73,6 +77,7 @@ public class GridManager : MonoBehaviour
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = false;
+                    circle.hasMoved = false;
                     circle.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
                     _pieces[coord] = circle;
                 }
@@ -81,6 +86,7 @@ public class GridManager : MonoBehaviour
                 {
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
                     diamond.isWhite = false;
+                    diamond.hasMoved = false;
                     diamond.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
                     _pieces[coord] = diamond;
                 }
