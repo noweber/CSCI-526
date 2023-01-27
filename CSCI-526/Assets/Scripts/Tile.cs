@@ -32,9 +32,9 @@ public class Tile : MonoBehaviour
         var coord = new Vector2(this.transform.position.x, this.transform.position.y);
 		var turn = GameManager.Instance.GameState == GameState.White ? true : false;
 		Debug.Log(GameManager.Instance.GameState);
-        if (clickedPiece != null && turn == clickedPiece.isWhite) // selected piece is correct turn's color
+        if (clickedPiece != null) // selected piece is correct turn's color
         {
-            if (GridManager.Instance.storedPiece == null)
+            if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite)
             {
                 //Selects Piece
                 Debug.Log("SELECTED PIECE: " + clickedPiece.gameObject.name);
@@ -55,7 +55,7 @@ public class Tile : MonoBehaviour
 				}
 					GridManager.Instance.storedPiece = null;
 					GridManager.Instance.storedCoord = new Vector2(-1, -1);
-            }
+			}
         }
         else
         {

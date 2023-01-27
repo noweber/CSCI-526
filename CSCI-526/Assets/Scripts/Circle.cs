@@ -21,6 +21,34 @@ public class Circle : Piece
         return false;
     }
 
+    public override List<Vector2> LegalMoves(int boardWidth, int boardHeight)
+    {
+        List<Vector2> legalSpots = new List<Vector2>();
+
+        //Circle moves like a king (delta(x) + delta(y) <= 2)
+        var pos = transform.position;
+
+        for (int i = 0; i < boardWidth; i++)
+        {
+            for (int j = 0; j < boardWidth; j++)
+            {
+                if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) <= 1)
+                {
+                    legalSpots.Add(new Vector2(i, j));
+                }
+                else if (Mathf.Abs(i - pos.x) <= 1 && Mathf.Abs(j - pos.y) == 1)
+                {
+                    legalSpots.Add(new Vector2(i, j));
+                }
+            }
+        }
+
+        if (legalSpots.Count == 0)
+            return null;
+
+        return legalSpots;
+    }
+
     public override void UpdateLocation(Vector3 location)
     {
         this.transform.position = location;
