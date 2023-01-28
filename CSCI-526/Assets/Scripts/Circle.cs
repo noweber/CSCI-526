@@ -37,7 +37,13 @@ public class Circle : Piece
                 for (int j = 0; j < boardWidth; j++)
                 {
                     //Diagonal, need vertical movement
-                    if (Mathf.Abs(i - pos.x) == Mathf.Abs(j - pos.y))
+                    if (pos.x == i)
+                    {
+                        var coord = new Vector2(i, j);
+                        legalSpots.Add(coord);
+                    }
+
+                    else if (Mathf.Abs(i - pos.x) == Mathf.Abs(j - pos.y))
                     {
                         var coord = new Vector2(i, j);
                         legalSpots.Add(coord);
@@ -46,18 +52,21 @@ public class Circle : Piece
             }
             //change to queen-like movement
         }
-        //add else block
-        for (int i = 0; i < boardHeight; i++)
+        else
         {
-            for (int j = 0; j < boardWidth; j++)
+            //add else block
+            for (int i = 0; i < boardHeight; i++)
             {
-                if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) <= 1)
+                for (int j = 0; j < boardWidth; j++)
                 {
-                    legalSpots.Add(new Vector2(i, j));
-                }
-                else if (Mathf.Abs(i - pos.x) <= 1 && Mathf.Abs(j - pos.y) == 1)
-                {
-                    legalSpots.Add(new Vector2(i, j));
+                    if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) <= 1)
+                    {
+                        legalSpots.Add(new Vector2(i, j));
+                    }
+                    else if (Mathf.Abs(i - pos.x) <= 1 && Mathf.Abs(j - pos.y) == 1)
+                    {
+                        legalSpots.Add(new Vector2(i, j));
+                    }
                 }
             }
         }
