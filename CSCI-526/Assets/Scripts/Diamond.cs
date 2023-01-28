@@ -29,7 +29,7 @@ public class Diamond : Piece
 
         var pos = transform.position;
 
-        for (int i = 0; i < boardWidth; i++)
+        for (int i = 0; i < boardHeight; i++)
         {
             for (int j = 0; j < boardWidth; j++)
             {

@@ -27,19 +27,27 @@ public class Circle : Piece
 
         //Circle moves like a king (delta(x) + delta(y) <= 2)
         var pos = transform.position;
-        var adjList = this.adjacentAllies(pos);
-        if (adjList != null)
+        bool changeMovement = this.CircleMovementCheck(pos);
+
+        if (changeMovement == true)
         {
-            foreach (Vector2 coord in adjList)
+            Debug.Log("Private function works");
+            for (int i = 0; i < boardHeight; i++)
             {
-                if (GridManager.Instance.GetPiece(coord).unitName == "Diamond")
+                for (int j = 0; j < boardWidth; j++)
                 {
-                    Debug.Log("Make Circle move like Queen");
+                    //Diagonal, need vertical movement
+                    if (Mathf.Abs(i - pos.x) == Mathf.Abs(j - pos.y))
+                    {
+                        var coord = new Vector2(i, j);
+                        legalSpots.Add(coord);
+                    }
                 }
             }
+            //change to queen-like movement
         }
-
-        for (int i = 0; i < boardWidth; i++)
+        //add else block
+        for (int i = 0; i < boardHeight; i++)
         {
             for (int j = 0; j < boardWidth; j++)
             {
@@ -71,9 +79,10 @@ public class Circle : Piece
         var adjAlly = new List<Vector2>();
         foreach (Vector2 coord in adjacentList)
         {
+            Debug.Log("Check Adj: " + coord);
             if (GridManager.Instance._pieces.ContainsKey(coord))
             {
-                if (GridManager.Instance._pieces[coord] != null && this.isWhite == GridManager.Instance._pieces[coord].isWhite)
+                if (GridManager.Instance._pieces[coord] != null && this.isWhite == GridManager.Instance._pieces[coord].isWhite )
                 {
                     adjAlly.Add(coord);
                 }
@@ -82,6 +91,23 @@ public class Circle : Piece
         if (adjAlly.Count == 0)
             return null;
         return adjAlly;
+    }
+
+    private bool CircleMovementCheck(Vector2 pos)
+    {
+        var adjList = this.adjacentAllies(pos);
+        if (adjList != null)
+        {
+            foreach (Vector2 coord in adjList)
+            {
+                if (GridManager.Instance.GetPiece(coord).unitName == "Diamond")
+                {
+                    Debug.Log("Make Circle move like Queen");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public override void UpdateLocation(Vector3 location)
