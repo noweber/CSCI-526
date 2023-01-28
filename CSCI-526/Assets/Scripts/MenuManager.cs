@@ -7,7 +7,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] public GameObject  _turnInfoObject, _selectedUnitObject;
+    [SerializeField] public GameObject  _turnInfoObject, _selectedUnitObject, _selectUnitInfo;
 
     public MenuManager()
     {
@@ -40,10 +40,13 @@ public class MenuManager : MonoBehaviour
         if (piece == null)
         {
             _selectedUnitObject.SetActive(false);
+            _selectUnitInfo.SetActive(false);
             return;
         }
         _selectedUnitObject.GetComponentInChildren<Text>().text = piece.unitName;
+        _selectUnitInfo.GetComponentInChildren<Text>().text = piece.unitInfo;
         _selectedUnitObject.SetActive(true);
+        _selectUnitInfo.SetActive(true);
     }
 
     public void HideUnitInfo(Piece piece)
@@ -51,10 +54,13 @@ public class MenuManager : MonoBehaviour
         if (piece == null)
         {
             _selectedUnitObject.SetActive(false);
+            _selectUnitInfo.SetActive(false);
             return;
         }
-        _selectedUnitObject.GetComponentInChildren<Text>().text = "UnitInfo";
+        _selectedUnitObject.GetComponentInChildren<Text>().text = "Unit Name";
+        _selectUnitInfo.GetComponentInChildren<Text>().text = "Unit Info";
         _selectedUnitObject.SetActive(false);
+        _selectUnitInfo.SetActive(false);
     }
 
     /*

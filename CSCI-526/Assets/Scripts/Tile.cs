@@ -64,7 +64,6 @@ public class Tile : MonoBehaviour
                 foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                 {
                     GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
-                    //fix hover unhighlight while selected
                 }
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManager.Instance.MovedPieces.Add(clickedPiece);

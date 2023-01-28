@@ -100,4 +100,5 @@ MonoBehaviour:
   isWhite: 0
   hasMoved: 0
   unitName: Circle
+  unitInfo: Upon Capture, get another turn.
   highlightedMoves: []
