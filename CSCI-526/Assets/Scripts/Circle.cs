@@ -88,7 +88,6 @@ public class Circle : Piece
         var adjAlly = new List<Vector2>();
         foreach (Vector2 coord in adjacentList)
         {
-            Debug.Log("Check Adj: " + coord);
             if (GridManager.Instance._pieces.ContainsKey(coord))
             {
                 if (GridManager.Instance._pieces[coord] != null && this.isWhite == GridManager.Instance._pieces[coord].isWhite )
