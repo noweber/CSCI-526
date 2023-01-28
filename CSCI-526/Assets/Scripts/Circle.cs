@@ -31,18 +31,19 @@ public class Circle : Piece
 
         if (changeMovement == true)
         {
-            Debug.Log("Private function works");
+            Debug.Log("Circle should have queen movement");
             for (int i = 0; i < boardHeight; i++)
             {
                 for (int j = 0; j < boardWidth; j++)
                 {
-                    //Diagonal, need vertical movement
+                    //Vertical Movement
                     if (pos.x == i)
                     {
                         var coord = new Vector2(i, j);
                         legalSpots.Add(coord);
                     }
 
+                    //Diagonal Movement
                     else if (Mathf.Abs(i - pos.x) == Mathf.Abs(j - pos.y))
                     {
                         var coord = new Vector2(i, j);
@@ -50,7 +51,6 @@ public class Circle : Piece
                     }
                 }
             }
-            //change to queen-like movement
         }
         else
         {
