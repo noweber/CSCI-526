@@ -27,6 +27,7 @@ public class Triangle : Piece
         */
         var pos = transform.position;
 
+
         for (int i = 0; i < boardWidth; i++)
         {
             for (int j = 0; j < boardWidth; j++)
@@ -76,6 +77,8 @@ public class Triangle : Piece
                 }
             }
         }
+        if (adjAlly.Count == 0)
+            return null;
         return adjAlly;
     }
 

@@ -27,6 +27,17 @@ public class Circle : Piece
 
         //Circle moves like a king (delta(x) + delta(y) <= 2)
         var pos = transform.position;
+        var adjList = this.adjacentAllies(pos);
+        if (adjList != null)
+        {
+            foreach (Vector2 coord in adjList)
+            {
+                if (GridManager.Instance.GetPiece(coord).unitName == "Diamond")
+                {
+                    Debug.Log("Make Circle move like Queen");
+                }
+            }
+        }
 
         for (int i = 0; i < boardWidth; i++)
         {
@@ -68,6 +79,8 @@ public class Circle : Piece
                 }
             }
         }
+        if (adjAlly.Count == 0)
+            return null;
         return adjAlly;
     }
 

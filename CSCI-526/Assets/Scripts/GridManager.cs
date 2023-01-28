@@ -138,11 +138,9 @@ public class GridManager : MonoBehaviour
 
     public bool MovePiece(Vector2 coord, Piece piece)
     {
-        Debug.Log("MovePiece: " + coord);
         var validMoves = piece.LegalMoves(_width, _height);
         if (!validMoves.Contains(coord))
         {
-            Debug.Log("Return False: " + coord);
             return false;
         }
         if (GridManager.Instance._pieces.ContainsKey(coord) && piece.unitName == "Triangle")

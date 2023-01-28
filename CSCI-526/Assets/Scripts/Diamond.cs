@@ -70,6 +70,8 @@ public class Diamond : Piece
                 }
             }
         }
+        if (adjAlly.Count == 0)
+            return null;
         return adjAlly;
     }
 
