@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
             //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
         MenuManager.Instance.ShowTurnInfo();
+        MenuManager.Instance.ShowNumMovesInfo();
     }
 }
 

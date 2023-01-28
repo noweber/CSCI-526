@@ -50,13 +50,13 @@ public class Tile : MonoBehaviour
         var clickedPiece = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
         var coord = new Vector2(this.transform.position.x, this.transform.position.y);
 		var turn = GameManager.Instance.GameState == GameState.White ? true : false;
+
         if (clickedPiece != null) // selected piece is correct turn's color
         {
             if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
             {
                 //Selects Piece
                 Debug.Log(GameManager.Instance.NumMoves);
-                //Debug.Log("SELECTED PIECE: " + clickedPiece.gameObject.name);
                 GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
  
@@ -80,6 +80,7 @@ public class Tile : MonoBehaviour
 							// Capturing Piece
                         	Destroy(clickedPiece.gameObject);
                         	GameManager.Instance.NumMoves += 1;
+                            MenuManager.Instance.ShowNumMovesInfo();
                             //If Unit that Captured a piece is Circle, gain another turn
                             if (GridManager.Instance.storedPiece.unitName != "Circle")
                             {
@@ -118,6 +119,7 @@ public class Tile : MonoBehaviour
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
                     GameManager.Instance.NumMoves += 1;
+                    MenuManager.Instance.ShowNumMovesInfo();
                     //unhighlight after move.
                 }
             }

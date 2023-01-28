@@ -7,7 +7,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] public GameObject  _turnInfoObject, _selectedUnitObject, _selectUnitInfo;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject;
 
     public MenuManager()
     {
@@ -35,6 +35,19 @@ public class MenuManager : MonoBehaviour
             _turnInfoObject.GetComponentInChildren<Text>().text = "Black Turn";
         }
     }
+
+    public void ShowNumMovesInfo()
+    {
+        if ((2 - GameManager.Instance.NumMoves) != 0)
+        {
+            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManager.Instance.NumMoves) + " Moves Remaining";
+        }
+        else
+        {
+            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2) + " Moves Remaining";
+        }
+    }
+
     public void ShowUnitInfo(Piece piece)
     {
         if (piece == null)
