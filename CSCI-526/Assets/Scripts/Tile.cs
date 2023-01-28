@@ -80,9 +80,15 @@ public class Tile : MonoBehaviour
 							// Capturing Piece
                         	Destroy(clickedPiece.gameObject);
                         	GameManager.Instance.NumMoves += 1;
-                        	GridManager.Instance.storedPiece.hasMoved = true;
-                    	}
-					}
+                            //If Unit that Captured a piece is Circle, gain another turn
+                            if (GridManager.Instance.storedPiece.unitName != "Circle")
+                            {
+                                Debug.Log("Piece that captured is NOT a circle");
+                                GridManager.Instance.storedPiece.hasMoved = true;
+                            }
+                            //GridManager.Instance.storedPiece.hasMoved = true;
+                        }
+                    }
 					foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
 					{
 						GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);

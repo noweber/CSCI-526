@@ -51,6 +51,28 @@ public class Diamond : Piece
         return legalSpots;
     }
 
+    public override List<Vector2> adjacentAllies(Vector2 unitPosition)
+    {
+        var adjacentList = new List<Vector2>();
+        adjacentList.Add(new Vector2(unitPosition.x + 1, unitPosition.y));
+        adjacentList.Add(new Vector2(unitPosition.x - 1, unitPosition.y));
+        adjacentList.Add(new Vector2(unitPosition.x, unitPosition.y + 1));
+        adjacentList.Add(new Vector2(unitPosition.x, unitPosition.y - 1));
+
+        var adjAlly = new List<Vector2>();
+        foreach (Vector2 coord in adjacentList)
+        {
+            if (GridManager.Instance._pieces.ContainsKey(coord))
+            {
+                if (GridManager.Instance._pieces[coord] != null && this.isWhite == GridManager.Instance._pieces[coord].isWhite)
+                {
+                    adjAlly.Add(coord);
+                }
+            }
+        }
+        return adjAlly;
+    }
+
     public override void UpdateLocation(Vector3 location)
     {
         this.transform.position = location;
