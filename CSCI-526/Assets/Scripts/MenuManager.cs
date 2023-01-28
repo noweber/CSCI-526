@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    [SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject;
+    //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
+    [SerializeField] private GameObject  _turnInfoObject;
 
     public MenuManager()
     {
@@ -21,6 +23,16 @@ public class MenuManager : MonoBehaviour
         else
         {
             Instance = this;
+        }
+    }
+    public void ShowTurnInfo()
+    {
+        if (GameManager.Instance.GameState == GameState.White)
+        {
+            _turnInfoObject.GetComponentInChildren<Text>().text = "White Turn";
+        } else
+        {
+            _turnInfoObject.GetComponentInChildren<Text>().text = "Black Turn";
         }
     }
     /*

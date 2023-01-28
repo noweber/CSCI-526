@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
             //default:
             //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
+        MenuManager.Instance.ShowTurnInfo();
     }
 }
 
