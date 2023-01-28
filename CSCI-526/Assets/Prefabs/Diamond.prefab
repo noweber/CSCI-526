@@ -97,3 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b7264fa99d724a13a6a06957a477a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWhite: 0
+  hasMoved: 0
+  unitName: Diamond
+  highlightedMoves: []

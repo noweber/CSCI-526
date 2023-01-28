@@ -8,6 +8,8 @@ public abstract class Piece : MonoBehaviour
 
 	public bool hasMoved;
 
+    public string unitName;
+
     public List<Vector2> highlightedMoves;
 
     public abstract bool IsMoveLegal(Vector2 destination);

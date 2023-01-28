@@ -97,3 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed54ed7bbc7154e03b0eb21e46e47626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWhite: 0
+  hasMoved: 0
+  unitName: Triangle
+  highlightedMoves: []

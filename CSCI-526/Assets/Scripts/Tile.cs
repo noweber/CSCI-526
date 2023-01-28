@@ -66,6 +66,7 @@ public class Tile : MonoBehaviour
                     GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
                     //fix hover unhighlight while selected
                 }
+                MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManager.Instance.MovedPieces.Add(clickedPiece);
             }
             else
@@ -87,9 +88,10 @@ public class Tile : MonoBehaviour
 					{
 						GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                     }
+                    MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
-				}
+                }
 			}
         }
         else
@@ -105,6 +107,7 @@ public class Tile : MonoBehaviour
                         GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                         //fix hover unhighlight while selected
                     }
+                    MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
                     GameManager.Instance.NumMoves += 1;

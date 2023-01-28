@@ -7,7 +7,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] private GameObject  _turnInfoObject;
+    [SerializeField] public GameObject  _turnInfoObject, _selectedUnitObject;
 
     public MenuManager()
     {
@@ -35,6 +35,28 @@ public class MenuManager : MonoBehaviour
             _turnInfoObject.GetComponentInChildren<Text>().text = "Black Turn";
         }
     }
+    public void ShowUnitInfo(Piece piece)
+    {
+        if (piece == null)
+        {
+            _selectedUnitObject.SetActive(false);
+            return;
+        }
+        _selectedUnitObject.GetComponentInChildren<Text>().text = piece.unitName;
+        _selectedUnitObject.SetActive(true);
+    }
+
+    public void HideUnitInfo(Piece piece)
+    {
+        if (piece == null)
+        {
+            _selectedUnitObject.SetActive(false);
+            return;
+        }
+        _selectedUnitObject.GetComponentInChildren<Text>().text = "UnitInfo";
+        _selectedUnitObject.SetActive(false);
+    }
+
     /*
     public void ShowTileInfo(Tile tile)
     {
