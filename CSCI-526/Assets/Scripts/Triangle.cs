@@ -33,7 +33,15 @@ public class Triangle : Piece
             {
                 if (Mathf.Abs(i - pos.x) == Mathf.Abs(j - pos.y))
                 {
-                    legalSpots.Add(new Vector2(i, j));
+                    var coord = new Vector2(i, j);
+
+                    if (!GridManager.Instance._pieces.ContainsKey(coord))
+                    {
+                        legalSpots.Add(coord);
+                    }
+
+                    //legalSpots.Add(coord);
+                    
                 }
             }
         }

@@ -95,6 +95,8 @@ public class Tile : MonoBehaviour
         }
         else
         {
+            Debug.Log(GridManager.Instance.storedPiece);
+            Debug.Log(clickedPiece);
             if (GridManager.Instance.storedPiece != null)
             {
                 //Move Piece
@@ -112,8 +114,6 @@ public class Tile : MonoBehaviour
                     GameManager.Instance.NumMoves += 1;
                     //unhighlight after move.
                 }
-
-
             }
         }
 

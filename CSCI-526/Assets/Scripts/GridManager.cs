@@ -16,7 +16,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform _camera;
     
     public Dictionary<Vector2, Tile> tiles;
-    private Dictionary<Vector2, Piece> _pieces;
+    public Dictionary<Vector2, Piece> _pieces;
     
     public Piece storedPiece = null;
     public Vector2 storedCoord = new Vector2(-1,-1);
@@ -138,13 +138,20 @@ public class GridManager : MonoBehaviour
 
     public bool MovePiece(Vector2 coord, Piece piece)
     {
-        _pieces[coord] = piece;
-        _pieces[storedCoord] = null;
+        Debug.Log("MovePiece: " + coord);
         var validMoves = piece.LegalMoves(_width, _height);
         if (!validMoves.Contains(coord))
         {
+            Debug.Log("Return False: " + coord);
             return false;
         }
+        if (GridManager.Instance._pieces.ContainsKey(coord) && piece.unitName == "Triangle")
+        {
+            Debug.Log("Return False Capture Triangle: " + coord);
+            return false;
+        }
+        _pieces[coord] = piece;
+        _pieces[storedCoord] = null;
         piece.transform.position = new Vector3(coord.x, coord.y, piece.transform.position.z);
         return true;
     }
