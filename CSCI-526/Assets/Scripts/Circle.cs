@@ -32,6 +32,7 @@ public class Circle : Piece
         if (changeMovement == true)
         {
             Debug.Log("Circle should have queen movement");
+/*
             for (int i = 0; i < boardHeight; i++)
             {
                 for (int j = 0; j < boardWidth; j++)
@@ -51,10 +52,121 @@ public class Circle : Piece
                     }
                 }
             }
+*/
+
+			// left 
+			for (int i = 1; i <= pos.x; i++) 
+			{
+				var availableMove = new Vector2(pos.x - i, 	pos.y);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+
+			// right
+			for (int i = 1; i < boardWidth - pos.x; i++) 
+			{
+				var availableMove = new Vector2(pos.x + i, 	pos.y);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+
+			// up
+			for (int j = 1; j < boardHeight - pos.y; j++) 
+			{
+				var availableMove = new Vector2(pos.x, 	pos.y+j);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+
+			// down
+			for (int j = 1; j <= pos.y; j++) 
+			{
+				var availableMove = new Vector2(pos.x, 	pos.y-j);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+
+			// top left 
+			var minIndex = UnityEngine.Mathf.Min(pos.x, boardHeight - pos.y - 1);
+			for (int i = 1; i <= minIndex; i++) 
+			{
+				var availableMove = new Vector2(pos.x - i, pos.y + i);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+
+			// top right 
+			minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, boardHeight - pos.y - 1);
+			for (int i = 1; i <= minIndex; i++) 
+			{
+				var availableMove = new Vector2(pos.x + i, pos.y + i);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+
+			// bottom left 
+			minIndex = UnityEngine.Mathf.Min(pos.x, pos.y);
+			for (int i = 1; i <= minIndex; i++) 
+			{
+				var availableMove = new Vector2(pos.x - i, pos.y - i);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+
+			// bottom right 
+			minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, pos.y);
+			for (int i = 1; i <= minIndex; i++) 
+			{
+				var availableMove = new Vector2(pos.x + i, pos.y - i);
+				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				{ 
+					legalSpots.Add(availableMove);
+					break; 
+				}
+				else { legalSpots.Add(availableMove); }	
+			}
+			
         }
         else
         {
             //add else block
+/*
             for (int i = 0; i < boardHeight; i++)
             {
                 for (int j = 0; j < boardWidth; j++)
@@ -69,6 +181,29 @@ public class Circle : Piece
                     }
                 }
             }
+*/
+
+			var availableMoves = new List<Vector2>();
+			availableMoves.Add(new Vector2(pos.x-1, pos.y-1));
+			availableMoves.Add(new Vector2(pos.x-1, pos.y));
+			availableMoves.Add(new Vector2(pos.x-1, pos.y+1));
+			availableMoves.Add(new Vector2(pos.x, pos.y-1));
+			availableMoves.Add(new Vector2(pos.x, pos.y+1));
+			availableMoves.Add(new Vector2(pos.x+1, pos.y-1));
+			availableMoves.Add(new Vector2(pos.x+1, pos.y));
+			availableMoves.Add(new Vector2(pos.x+1, pos.y+1));
+			foreach (Vector2 move in availableMoves) 
+			{
+				if (move.x >= 0 && move.x < boardWidth && move.y >= 0 && move.y < boardHeight) 
+				{
+					if (GridManager.Instance.GetPiece(move) != null && GridManager.Instance.GetPiece(move).isWhite == this.isWhite) 
+					{
+						continue;
+					}
+					legalSpots.Add(move);
+				}
+			}
+
         }
 
         if (legalSpots.Count == 0)

@@ -64,6 +64,22 @@ public class GridManager : MonoBehaviour
                     _pieces[coord] = diamond;
                 }
                 
+                // if (x == 4 && y == 0)
+                // {
+                //     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
+                //     diamond.isWhite = true;
+                //     diamond.hasMoved = false;
+                //     _pieces[coord] = diamond;
+                // }
+                //
+                // if (x == 5 && y == 0)
+                // {
+                //     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                //     circle.isWhite = true;
+                //     circle.hasMoved = false;
+                //     _pieces[coord] = circle;
+                // }
+                
                 if (x == 0 && y == _height-1 || x == 1 && y == _height-1)
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
