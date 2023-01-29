@@ -41,8 +41,8 @@ public class Triangle : Piece
             //GameManager.Instance.UsedAbility = true;
         }
 
-        //if (useAbility != true)
-        //{
+        
+/*
         for (int i = 0; i < boardHeight; i++)
         {
             for (int j = 0; j < boardWidth; j++)
@@ -66,7 +66,66 @@ public class Triangle : Piece
                 }
             }
         }
-        //}
+*/
+
+		
+		// top left 
+		var minIndex = UnityEngine.Mathf.Min(pos.x, boardHeight - pos.y - 1);
+		for (int i = 1; i <= minIndex; i++) 
+		{
+			var availableMove = new Vector2(pos.x - i, pos.y + i);
+			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+			{ 
+				legalSpots.Add(availableMove);
+				break; 
+			}
+			else { legalSpots.Add(availableMove); }	
+		}
+
+		// top right 
+		minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, boardHeight - pos.y - 1);
+		for (int i = 1; i <= minIndex; i++) 
+		{
+			var availableMove = new Vector2(pos.x + i, pos.y + i);
+			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+			{ 
+				legalSpots.Add(availableMove);
+				break; 
+			}
+			else { legalSpots.Add(availableMove); }	
+		}
+
+		// bottom left 
+		minIndex = UnityEngine.Mathf.Min(pos.x, pos.y);
+		for (int i = 1; i <= minIndex; i++) 
+		{
+			var availableMove = new Vector2(pos.x - i, pos.y - i);
+			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+			{ 
+				legalSpots.Add(availableMove);
+				break; 
+			}
+			else { legalSpots.Add(availableMove); }	
+		}
+
+		// bottom right 
+		minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, pos.y);
+		for (int i = 1; i <= minIndex; i++) 
+		{
+			var availableMove = new Vector2(pos.x + i, pos.y - i);
+			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
+			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+			{ 
+				legalSpots.Add(availableMove);
+				break; 
+			}
+			else { legalSpots.Add(availableMove); }	
+		}	
+        
+
         if (legalSpots.Count == 0)
             return null;
 
