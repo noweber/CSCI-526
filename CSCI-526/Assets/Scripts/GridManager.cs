@@ -139,7 +139,7 @@ public class GridManager : MonoBehaviour
                         }
                         break;
                     case MODE.CIRCLE:        // (-1, -1), (-1, 1), (1, -1), (1, 1), (-1, 0), (1, 0), (0, -1), (0, 1)
-                        t.mouseNear = false;        // Do not fill center of the circle
+                        t.mouseNear = true;     // Center of circle
                         if (t.pos.x - 1 >= 0 && t.pos.y - 1 >= 0)
                         {
                             board[t.pos.x - 1, t.pos.y - 1].mouseNear = true;
