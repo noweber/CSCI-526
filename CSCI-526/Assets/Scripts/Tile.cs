@@ -63,7 +63,24 @@ public class Tile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(mouseNear || mouseHere)
+        switch(GridManager.Instance.selectedElement)
+        {
+            case "water":
+                highlight.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 255, 120);
+                break;
+            case "earth":
+                highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 0, 120);
+                break;
+            case "fire":
+                highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 120);
+                break;
+            case "air":
+                highlight.GetComponent<SpriteRenderer>().color = new Color32(161, 255, 230, 255);
+                break;
+            default:
+                break;
+        }
+        if(mouseNear)
         {
             HighlightOn();
         }
