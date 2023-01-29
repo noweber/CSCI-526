@@ -10,6 +10,7 @@ public abstract class Piece : MonoBehaviour
 
     public string unitName;
     public string unitInfo;
+    //public bool hasAbility = false;
 
     public List<Vector2> highlightedMoves;
 

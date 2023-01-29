@@ -27,7 +27,22 @@ public class Triangle : Piece
         */
         var pos = transform.position;
 
+        bool triangleAbilityCheck = this.TriangleAbilityCheck(pos);
+        bool useAbility = false;
 
+        if (triangleAbilityCheck == true && GameManager.Instance.UsedAbility != true)
+        {
+            //enable some ability option to add another movement turn
+            //MenuManager Option pops up
+            MenuManager.Instance.ShowAbilityButton();
+            //if option is selected, ignore triangle legal moves + add 1 to NumMoves?
+
+            //useAbility = true;
+            //GameManager.Instance.UsedAbility = true;
+        }
+
+        //if (useAbility != true)
+        //{
         for (int i = 0; i < boardHeight; i++)
         {
             for (int j = 0; j < boardWidth; j++)
@@ -47,11 +62,11 @@ public class Triangle : Piece
                             legalSpots.Add(coord);
                         }
                     }
-                    //legalSpots.Add(coord);
-                    
+
                 }
             }
         }
+        //}
         if (legalSpots.Count == 0)
             return null;
 
@@ -80,6 +95,24 @@ public class Triangle : Piece
         if (adjAlly.Count == 0)
             return null;
         return adjAlly;
+    }
+
+
+    private bool TriangleAbilityCheck(Vector2 pos)
+    {
+        var adjList = this.adjacentAllies(pos);
+        if (adjList != null)
+        {
+            foreach (Vector2 coord in adjList)
+            {
+                if (GridManager.Instance.GetPiece(coord).unitName != "Triangle")
+                {
+                    Debug.Log("Set Triangle Ability True");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public override void UpdateLocation(Vector3 location)

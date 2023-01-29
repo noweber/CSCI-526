@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     public int NumMoves;
 
+    public bool UsedAbility = false;
+
     public List<Piece> MovedPieces;
 
     void Awake()

@@ -7,7 +7,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject;
 
     public MenuManager()
     {
@@ -40,12 +40,39 @@ public class MenuManager : MonoBehaviour
     {
         if ((2 - GameManager.Instance.NumMoves) != 0)
         {
-            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManager.Instance.NumMoves) + " Moves Remaining";
+            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManager.Instance.NumMoves) + " Moves Left";
         }
         else
         {
-            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2) + " Moves Remaining";
+            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2) + " Moves Left";
         }
+    }
+
+    public void ShowAbilityButton()
+    {
+        Debug.Log("Ability Open time");
+        _abilityUseObject.SetActive(true);
+
+        //var triangle = GridManager.Instance.storedPiece;
+        _abilityUseObject.GetComponentInChildren<Button>().onClick.AddListener(() => TriangleEvent());
+    }
+
+    public void HideAbilityButton()
+    {
+        Debug.Log("Ability Close time");
+        _abilityUseObject.SetActive(false);
+    }
+
+    public void TriangleEvent()//(Piece triangle, Piece other)
+    {
+        Debug.Log("BUTTON WORKS");
+        if (GameManager.Instance.UsedAbility == false)
+        {
+            GameManager.Instance.NumMoves -= 1;
+            GameManager.Instance.UsedAbility = true;
+            this.ShowNumMovesInfo();
+        }
+        this.HideAbilityButton();
     }
 
     public void ShowUnitInfo(Piece piece)

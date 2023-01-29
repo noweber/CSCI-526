@@ -10,7 +10,8 @@ public class Tile : MonoBehaviour
 
     [SerializeField] private GameObject _highlight;
 
-    
+    //[SerializeField] private GameObject _useAbility;
+
     public void Init(bool isOffset)
     {
         _renderer.color = isOffset ? _base : _offset;
@@ -72,8 +73,12 @@ public class Tile : MonoBehaviour
             {
                 if (GridManager.Instance.storedPiece != null)
                 {
-					// Possible to capture clickedPiece
-					if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite) 
+                    // Possible to capture clickedPiece
+                    if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite == clickedPiece.isWhite)
+                    {
+
+                    }
+                    else if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite) 
 					{
                     	if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
                     	{
@@ -94,6 +99,7 @@ public class Tile : MonoBehaviour
 					{
 						GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                     }
+                    MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
@@ -115,6 +121,7 @@ public class Tile : MonoBehaviour
                         GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                         //fix hover unhighlight while selected
                     }
+                    MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Vector2(-1, -1);
@@ -141,7 +148,9 @@ public class Tile : MonoBehaviour
 			}
 			GameManager.Instance.MovedPieces = new List<Piece>();
 			GameManager.Instance.NumMoves = 0;
-		}
+            GameManager.Instance.UsedAbility = false;
+
+        }
         //Finds valid piece (done)
         //Calls GridManager/sends to GridManager --> initialize some function to prepare for movement/store the piece
         //Piece in GridManager--> var selectedPiece = piece or null --> set as True. if itself, then set null/cancel action
