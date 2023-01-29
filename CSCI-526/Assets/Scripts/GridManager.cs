@@ -23,7 +23,7 @@ public class GridManager : MonoBehaviour
 
     // Interactive modes
     public enum MODE { PLUS, MINUS, X, CIRCLE }
-    public MODE currentMode = MODE.PLUS;
+    public MODE currentMode;
     // Create 5x5 grid
     private void MakeGrid()
     {
@@ -205,6 +205,7 @@ public class GridManager : MonoBehaviour
 
         board = new Tile[_width, _height];
         selectedElement = "water";
+        currentMode = MODE.PLUS;
         MakeGrid();
     }
     // Update is called once per frame

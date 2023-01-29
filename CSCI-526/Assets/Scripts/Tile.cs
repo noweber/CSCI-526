@@ -75,7 +75,7 @@ public class Tile : MonoBehaviour
                 highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 120);
                 break;
             case "air":
-                highlight.GetComponent<SpriteRenderer>().color = new Color32(161, 255, 230, 255);
+                highlight.GetComponent<SpriteRenderer>().color = new Color32(161, 255, 230, 120);
                 break;
             default:
                 break;
