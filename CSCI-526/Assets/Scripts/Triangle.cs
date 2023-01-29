@@ -74,12 +74,8 @@ public class Triangle : Piece
 		for (int i = 1; i <= minIndex; i++) 
 		{
 			var availableMove = new Vector2(pos.x - i, pos.y + i);
-			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-			{ 
-				legalSpots.Add(availableMove);
-				break; 
-			}
+			if (GridManager.Instance.GetPiece(availableMove) != null) { break; }
+			
 			else { legalSpots.Add(availableMove); }	
 		}
 
@@ -88,12 +84,8 @@ public class Triangle : Piece
 		for (int i = 1; i <= minIndex; i++) 
 		{
 			var availableMove = new Vector2(pos.x + i, pos.y + i);
-			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-			{ 
-				legalSpots.Add(availableMove);
-				break; 
-			}
+			if (GridManager.Instance.GetPiece(availableMove) != null ) { break; }
+			
 			else { legalSpots.Add(availableMove); }	
 		}
 
@@ -102,12 +94,8 @@ public class Triangle : Piece
 		for (int i = 1; i <= minIndex; i++) 
 		{
 			var availableMove = new Vector2(pos.x - i, pos.y - i);
-			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-			{ 
-				legalSpots.Add(availableMove);
-				break; 
-			}
+			if (GridManager.Instance.GetPiece(availableMove) != null ) { break; }
+			
 			else { legalSpots.Add(availableMove); }	
 		}
 
@@ -116,12 +104,8 @@ public class Triangle : Piece
 		for (int i = 1; i <= minIndex; i++) 
 		{
 			var availableMove = new Vector2(pos.x + i, pos.y - i);
-			if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-			else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-			{ 
-				legalSpots.Add(availableMove);
-				break; 
-			}
+			if (GridManager.Instance.GetPiece(availableMove) != null) { break; }
+			
 			else { legalSpots.Add(availableMove); }	
 		}	
         

@@ -35,12 +35,21 @@ public class Diamond : Piece
             {
                 if (Mathf.Abs(i - pos.x) == 2 && Mathf.Abs(j - pos.y) == 1)
                 {
-                    legalSpots.Add(new Vector2(i, j));
+					var availableMove = new Vector2(i, j);
+					if (GridManager.Instance.GetPiece(availableMove) != null) 
+					{
+						if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
+					}
+                    legalSpots.Add(availableMove);
                 }
                 else if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) == 2)
                 {
-                    legalSpots.Add(new Vector2(i, j));
-
+                    var availableMove = new Vector2(i, j);
+					if (GridManager.Instance.GetPiece(availableMove) != null) 
+					{
+						if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
+					}
+                    legalSpots.Add(availableMove);
                 }
             }
         }
