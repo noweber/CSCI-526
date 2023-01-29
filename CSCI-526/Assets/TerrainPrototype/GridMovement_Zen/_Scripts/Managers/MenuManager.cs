@@ -13,7 +13,7 @@ public class MenuManager : MonoBehaviour {
         _selectedTurnPhaseObject.SetActive(true);
     }
 
-    public void ShowTileInfo(Tile tile) {
+    public void ShowTileInfo(ZenTile tile) {
 
         if (tile == null)
         {

@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class BaseUnit : MonoBehaviour {
     public string UnitName;
-    public Tile OccupiedTile;
+    public ZenTile OccupiedTile;
     public Faction Faction;
 }

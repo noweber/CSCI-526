@@ -9,11 +9,11 @@ public class GridManager : MonoBehaviour {
     public static GridManager Instance;
     [SerializeField] private int _width, _height;
 
-    [SerializeField] private Tile _grassTile, _mountainTile;
+    [SerializeField] private ZenTile _grassTile, _mountainTile;
 
     [SerializeField] private Transform _cam;
 
-    private Dictionary<Vector2, Tile> _tiles;
+    private Dictionary<Vector2, ZenTile> _tiles;
 
     void Awake() {
         Instance = this;
@@ -21,7 +21,7 @@ public class GridManager : MonoBehaviour {
 
     public void GenerateGrid()
     {
-        _tiles = new Dictionary<Vector2, Tile>();
+        _tiles = new Dictionary<Vector2, ZenTile>();
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++) {
@@ -42,18 +42,18 @@ public class GridManager : MonoBehaviour {
         GameManager.Instance.ChangeState(GameState.SpawnHeroes);
     }
 
-    public Tile GetHeroSpawnTile() {
+    public ZenTile GetHeroSpawnTile() {
         //Debug.Log(_tiles.Where(t => t.Key.x < _width / 2 && t.Value.Walkable).OrderBy(t => Random.value).First().Value);
         return _tiles.Where(t => t.Key.x < _width / 2 && t.Value.Walkable).OrderBy(t => Random.value).First().Value;
     }
 
-    public Tile GetEnemySpawnTile()
+    public ZenTile GetEnemySpawnTile()
     {
         //Debug.Log(_tiles.Where(t => t.Key.x > _width / 2 && t.Value.Walkable).OrderBy(t => Random.value).First().Value);
         return _tiles.Where(t => t.Key.x > _width / 2 && t.Value.Walkable).OrderBy(t => Random.value).First().Value;
     }
 
-    public Tile GetTileAtPosition(Vector2 pos)
+    public ZenTile GetTileAtPosition(Vector2 pos)
     {
         if (_tiles.TryGetValue(pos, out var tile)) return tile;
         return null;

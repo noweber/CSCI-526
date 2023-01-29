@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
+ 
 /* GridManager
  * Create and color the grid
  * Src: https://www.youtube.com/watch?v=kkAjpQAM-jE
  */
-public class GridManager : MonoBehaviour
+public class JoshGridManager : MonoBehaviour
 {
-    private static GridManager instance;
-    public static GridManager Instance { get { return instance; } }
+    private static JoshGridManager instance;
+    public static JoshGridManager Instance { get { return instance; } }
 
     [SerializeField] private int _width, _height;
-    [SerializeField] private Tile ti ;
+    [SerializeField] private JoshTile ti ;
     [SerializeField] private Transform cam;
 
 
-    public Tile[,] board;
+    public JoshTile[,] board;
     public string selectedElement;
 
     // Interactive modes
@@ -70,7 +70,7 @@ public class GridManager : MonoBehaviour
 
     public void ChangeElement()
     {
-        foreach (Tile t in board)
+        foreach (JoshTile t in board)
         {
             if(t.mouseNear)      // If highlighted (selected)
             {
@@ -82,7 +82,7 @@ public class GridManager : MonoBehaviour
     // Highlight tiles based on pattern
     public void MousedOver()
     {
-        foreach (Tile t in board)
+        foreach (JoshTile t in board)
         {
             if (t.mouseHere)
             {
@@ -183,7 +183,7 @@ public class GridManager : MonoBehaviour
     public void MouseExit()
     {
         // Disable "near" highlight on all first
-        foreach (Tile t in board)
+        foreach (JoshTile t in board)
         {
             t.mouseHere = false;
             t.mouseNear = false;
@@ -203,7 +203,7 @@ public class GridManager : MonoBehaviour
             instance = this;
         }
 
-        board = new Tile[_width, _height];
+        board = new JoshTile[_width, _height];
         selectedElement = "water";
         currentMode = MODE.PLUS;
         MakeGrid();
