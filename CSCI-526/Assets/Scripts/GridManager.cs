@@ -14,6 +14,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Circle _circlePrefab;
 
     [SerializeField] private Transform _camera;
+
+    public Color colorOne;
+    public Color colorTwo;
     
     public Dictionary<Vector2, Tile> tiles;
     public Dictionary<Vector2, Piece> _pieces;
@@ -44,6 +47,7 @@ public class GridManager : MonoBehaviour
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = true;
                     triangle.hasMoved = false;
+                    triangle.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
                     _pieces[coord] = triangle;
                    
                 }
@@ -53,6 +57,7 @@ public class GridManager : MonoBehaviour
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = true;
                     circle.hasMoved = false;
+                    circle.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
                     _pieces[coord] = circle;
                 }
                 
@@ -61,6 +66,7 @@ public class GridManager : MonoBehaviour
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
                     diamond.isWhite = true;
                     diamond.hasMoved = false;
+                    diamond.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
                     _pieces[coord] = diamond;
                 }
                 
@@ -85,7 +91,7 @@ public class GridManager : MonoBehaviour
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = false;
                     triangle.hasMoved = false;
-                    triangle.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    triangle.gameObject.GetComponent<SpriteRenderer>().color = colorTwo;
                     _pieces[coord] = triangle;
                    
                 }
@@ -95,7 +101,7 @@ public class GridManager : MonoBehaviour
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = false;
                     circle.hasMoved = false;
-                    circle.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    circle.gameObject.GetComponent<SpriteRenderer>().color = colorTwo;
                     _pieces[coord] = circle;
                 }
                 
@@ -104,7 +110,7 @@ public class GridManager : MonoBehaviour
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
                     diamond.isWhite = false;
                     diamond.hasMoved = false;
-                    diamond.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    diamond.gameObject.GetComponent<SpriteRenderer>().color = colorTwo;
                     _pieces[coord] = diamond;
                 }
             }
@@ -159,7 +165,7 @@ public class GridManager : MonoBehaviour
         {
             return false;
         }
-        if (GridManager.Instance._pieces.ContainsKey(coord) && piece.unitName == "Triangle")
+        if (GridManager.Instance.GetPiece(coord) != null && piece.unitName == "Triangle")
         {
             Debug.Log("Return False Capture Triangle: " + coord);
             return false;
