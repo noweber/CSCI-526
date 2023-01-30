@@ -13,7 +13,6 @@ public class TerrainTile : MonoBehaviour
 
     public MeshRenderer ElementTwoRenderer;
 
-    [SerializeField]
     public TerrainType TerrainType { get; private set; }
 
     [SerializeField]
@@ -30,6 +29,9 @@ public class TerrainTile : MonoBehaviour
     private bool isTileDataSet;
 
     private bool isMaterialDataSet;
+
+    [SerializeField]
+    private GameObject mouseoverHighlight;
 
 
     private void Awake()
@@ -52,11 +54,27 @@ public class TerrainTile : MonoBehaviour
 
     void OnMouseEnter()
     {
+        if (mouseoverHighlight != null)
+        {
+            mouseoverHighlight.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("Cannot set the mouseover highlight on the tile because the reference is null. Fix this in the inspector.");
+        }
         Prototype2MenuManager.Instance.ShowTileInfo(this);
     }
 
     void OnMouseExit()
     {
+        if (mouseoverHighlight != null)
+        {
+            mouseoverHighlight.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("The mouseover highlight is null when trying to deactivate it. Fix this in the inspector.");
+        }
         Prototype2MenuManager.Instance.ShowTileInfo(null);
     }
 
