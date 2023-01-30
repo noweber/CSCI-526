@@ -33,24 +33,56 @@ public class Diamond : Piece
         {
             for (int j = 0; j < boardWidth; j++)
             {
-                if (Mathf.Abs(i - pos.x) == 2 && Mathf.Abs(j - pos.y) == 1)
-                {
-					var availableMove = new Vector2(i, j);
-					if (GridManager.Instance.GetPiece(availableMove) != null) 
-					{
-						if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
-					}
-                    legalSpots.Add(availableMove);
-                }
-                else if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) == 2)
+                //get diagonals - those are ok
+                if (Mathf.Abs(i-pos.x) == 1 && Mathf.Abs(j-pos.y) == 1)
                 {
                     var availableMove = new Vector2(i, j);
-					if (GridManager.Instance.GetPiece(availableMove) != null) 
-					{
-						if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
-					}
+                    if (GridManager.Instance.GetPiece(availableMove) != null)
+                    {
+                        if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
+                    }
                     legalSpots.Add(availableMove);
                 }
+
+                //get +1 to cardinal directions
+                if (Mathf.Abs(i - pos.x) == 2 && Mathf.Abs(j - pos.y) == 0)
+                {
+                    var availableMove = new Vector2(i, j);
+                    if (GridManager.Instance.GetPiece(availableMove) != null)
+                    {
+                        if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
+                    }
+                    legalSpots.Add(availableMove);
+                }
+                if (Mathf.Abs(i - pos.x) == 0 && Mathf.Abs(j - pos.y) == 2)
+                {
+                    var availableMove = new Vector2(i, j);
+                    if (GridManager.Instance.GetPiece(availableMove) != null)
+                    {
+                        if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
+                    }
+                    legalSpots.Add(availableMove);
+                }
+
+
+                //           if (Mathf.Abs(i - pos.x) == 2 && Mathf.Abs(j - pos.y) == 1)
+                //           {
+                //var availableMove = new Vector2(i, j);
+                //if (GridManager.Instance.GetPiece(availableMove) != null) 
+                //{
+                //	if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
+                //}
+                //               legalSpots.Add(availableMove);
+                //           }
+                //           else if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) == 2)
+                //           {
+                //               var availableMove = new Vector2(i, j);
+                //if (GridManager.Instance.GetPiece(availableMove) != null) 
+                //{
+                //	if (GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { continue; }
+                //}
+                //               legalSpots.Add(availableMove);
+                //           }
             }
         }
 
