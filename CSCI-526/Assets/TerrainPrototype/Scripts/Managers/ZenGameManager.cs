@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ZenGameManager : MonoBehaviour
@@ -24,13 +22,16 @@ public class ZenGameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.GenerateGrid:
-                ZenGridManager.Instance.GenerateGrid();
+                WorldMapController.Instance.CreateWorldMap(WorldMapController.Instance.MapSize);
+                ChangeState(GameState.SpawnHeroes);
                 break;
             case GameState.SpawnHeroes:
                 ZenUnitManager.Instance.SpawnHeroes();
+                ChangeState(GameState.SpawnEnemies);
                 break;
             case GameState.SpawnEnemies:
                 ZenUnitManager.Instance.SpawnEnemies();
+                ChangeState(GameState.HeroesTurn);
                 break;
             case GameState.HeroesTurn:
                 break;

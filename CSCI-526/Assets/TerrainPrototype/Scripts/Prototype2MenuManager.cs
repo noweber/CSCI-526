@@ -26,14 +26,35 @@ public class Prototype2MenuManager : MonoBehaviour
         _tileObject.GetComponentInChildren<Text>().text = tile.TerrainType.ToString();
         _tileObject.SetActive(true);
 
-        /* TODO
-        if (tile.OccupiedUnit)
+        if (tile.Occupant)
         {
-            _tileUnitObject.GetComponentInChildren<Text>().text = tile.OccupiedUnit.UnitName;
+            _tileUnitObject.GetComponentInChildren<Text>().text = tile.Occupant.UnitName;
             _tileUnitObject.SetActive(true);
-        }*/
+        }
+    }
+    public void ShowSelectedHero(BaseHero hero)
+    {
+        if (hero == null)
+        {
+            _selectedHeroObject.SetActive(false);
+            return;
+        }
+
+        _selectedHeroObject.GetComponentInChildren<Text>().text = hero.UnitName;
+        _selectedHeroObject.SetActive(true);
     }
 
+    public void ShowSelectedEnemy(BaseEnemy enemy)
+    {
+        if (enemy == null)
+        {
+            _selectedEnemyObject.SetActive(false);
+            return;
+        }
+
+        _selectedEnemyObject.GetComponentInChildren<Text>().text = enemy.UnitName;
+        _selectedEnemyObject.SetActive(true);
+    }
 
     //Hero is BLACK, Enemy is WHITE for now
     public void ShowPlayerBLACKPhase()

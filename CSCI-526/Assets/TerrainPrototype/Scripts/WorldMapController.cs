@@ -1,33 +1,46 @@
 using Assets.TerrainPrototype.Source;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using static Assets.TerrainPrototype.Source.TerrainMappings;
 
 /// <summary>
 /// A behavioral wrapper for controlling the world map data within the game.
 /// </summary>
 public class WorldMapController : MonoBehaviour
 {
+    public static WorldMapController Instance;
+
     public GameObject TerrainTilePrefab;
 
     public Vector2 TileSize = new(1.0f, 1.0f);
 
     public Vector2Int MapSize = new(10, 10);
 
+    public int Age = 10;
+
     private IWorldMap worldMap;
 
-    private List<GameObject> worldMapTiles;
+    private List<TerrainTile> worldMapTiles;
 
-    private void Awake()
+    public TerrainTile GetRandomSpawnTile()
     {
-        worldMap = new WorldMap(MapSize.x, MapSize.y);
-        worldMapTiles = new List<GameObject>();
+        return worldMapTiles.Where(x => x.Occupant == null).OrderBy(t => Random.value).First();
     }
 
-    private void Start()
+    public void CreateWorldMap(Vector2Int mapSize)
     {
-        // TODO: Remove these hard-coded 10 iterations and add/use a method on the WorldMap object to iterate generations until steady state.
-        for (int i = 0; i < 100; i++)
+        if (worldMapTiles != null)
+        {
+            foreach (TerrainTile tile in worldMapTiles)
+            {
+                Destroy(tile.transform.gameObject);
+            }
+        }
+        MapSize = mapSize;
+        worldMap = new WorldMap(MapSize.x, MapSize.y);
+        worldMapTiles = new List<TerrainTile>();
+
+        for (int i = 0; i < Age; i++)
         {
             worldMap.GotoNextGeneration();
         }
@@ -41,14 +54,15 @@ public class WorldMapController : MonoBehaviour
                 {
                     GameObject nextTile = Instantiate(TerrainTilePrefab, new Vector3(i * TileSize.x, -j * TileSize.y, 0) + transform.position, TerrainTilePrefab.transform.rotation, transform);
                     TerrainTile tileController = nextTile.GetComponent<TerrainTile>();
-                    if(tileController != null)
+                    if (tileController != null)
                     {
                         tileController.SetTileData(i, j, ref worldMap);
-                    } else
+                    }
+                    else
                     {
                         Debug.LogError("Unable to get the terrain tile script when creating a tile in the world map.");
                     }
-                    worldMapTiles.Add(nextTile);
+                    worldMapTiles.Add(tileController);
                 }
             }
         }
@@ -56,5 +70,11 @@ public class WorldMapController : MonoBehaviour
         {
             Debug.LogError("The tile prefab is null, so the world map game objects can not be created in the scene.");
         }
+    }
+
+    private void Awake()
+    {
+        Instance = this;
+        CreateWorldMap(MapSize);
     }
 }

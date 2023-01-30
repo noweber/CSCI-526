@@ -110,9 +110,10 @@ public abstract class ZenTile : MonoBehaviour {
     }
 
     public void SetUnit(BaseUnit unit) {
-        if (unit.OccupiedTile != null) unit.OccupiedTile.OccupiedUnit = null;
+        /*
+        if (unit.OccupiedTile != null) unit.OccupiedTile.Occupant = null;
         unit.transform.position = transform.position;
         OccupiedUnit = unit;
-        unit.OccupiedTile = this;
+        unit.OccupiedTile = this;*/
     }
 }
