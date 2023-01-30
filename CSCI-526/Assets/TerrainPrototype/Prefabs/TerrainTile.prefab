@@ -204,6 +204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1924466465686246371}
   - component: {fileID: 7647870915095433434}
+  - component: {fileID: -5565703537751283332}
   m_Layer: 0
   m_Name: TerrainTile
   m_TagString: Untagged
@@ -247,3 +248,19 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6ad935331268b00499ee23524a6f3a71, type: 2}
   ElementOneRenderer: {fileID: 1924466464464334269}
   ElementTwoRenderer: {fileID: 1924466465029947587}
+  firstElement: 0
+  secondElement: 0
+  cellCoordinates: {x: 0, y: 0}
+--- !u!65 &-5565703537751283332
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924466465686246370}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

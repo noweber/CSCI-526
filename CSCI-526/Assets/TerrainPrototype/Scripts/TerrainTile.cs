@@ -14,7 +14,7 @@ public class TerrainTile : MonoBehaviour
     public MeshRenderer ElementTwoRenderer;
 
     [SerializeField]
-    private TerrainType terrainType;
+    public TerrainType TerrainType { get; private set; }
 
     [SerializeField]
     private Element firstElement;
@@ -31,6 +31,7 @@ public class TerrainTile : MonoBehaviour
 
     private bool isMaterialDataSet;
 
+
     private void Awake()
     {
         isTileDataSet = false;
@@ -41,12 +42,22 @@ public class TerrainTile : MonoBehaviour
     {
         // TODO: validate inputs
         worldMapData = mapData;
-        terrainType = mapData.LookupTerrainOfCell(x, y);
-        var elements = TerrainMappings.GetElementsByTerrain(terrainType);
+        TerrainType = mapData.LookupTerrainOfCell(x, y);
+        var elements = TerrainMappings.GetElementsByTerrain(TerrainType);
         firstElement = elements.Item1;
         secondElement = elements.Item2;
         cellCoordinates = new Vector2Int(x, y);
         isTileDataSet = true;
+    }
+
+    void OnMouseEnter()
+    {
+        Prototype2MenuManager.Instance.ShowTileInfo(this);
+    }
+
+    void OnMouseExit()
+    {
+        Prototype2MenuManager.Instance.ShowTileInfo(null);
     }
 
     // Update is called once per frame

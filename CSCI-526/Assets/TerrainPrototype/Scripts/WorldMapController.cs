@@ -10,9 +10,9 @@ public class WorldMapController : MonoBehaviour
 {
     public GameObject TerrainTilePrefab;
 
-    public Vector2 TileSize = new Vector2(1.0f, 1.0f);
+    public Vector2 TileSize = new(1.0f, 1.0f);
 
-    private Element[,] initialElementGeneration;
+    public Vector2Int MapSize = new(10, 10);
 
     private IWorldMap worldMap;
 
@@ -20,16 +20,7 @@ public class WorldMapController : MonoBehaviour
 
     private void Awake()
     {
-        initialElementGeneration = new Element[5, 5]
-        {
-            { Element.Air, Element.Air, Element.Air, Element.Water, Element.Water },
-            { Element.Air, Element.Earth, Element.Fire, Element.Water, Element.Water },
-            { Element.Earth, Element.Fire, Element.Earth, Element.Air, Element.Earth },
-            { Element.Earth, Element.Earth, Element.Fire, Element.Fire, Element.Water },
-            { Element.Water, Element.Water, Element.Air, Element.Air, Element.Air }
-        };
-        //worldMap = new WorldMap(initialElementGeneration);
-        worldMap = new WorldMap(10, 10);
+        worldMap = new WorldMap(MapSize.x, MapSize.y);
         worldMapTiles = new List<GameObject>();
     }
 

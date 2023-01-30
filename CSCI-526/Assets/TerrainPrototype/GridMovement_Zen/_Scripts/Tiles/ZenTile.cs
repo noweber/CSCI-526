@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ZenTile : MonoBehaviour {
@@ -10,7 +8,6 @@ public abstract class ZenTile : MonoBehaviour {
     [SerializeField] private bool _isWalkable;
     public BaseUnit OccupiedUnit;
     public bool Walkable => _isWalkable && OccupiedUnit == null;
-
 
     public virtual void Init(int x, int y)
     {
