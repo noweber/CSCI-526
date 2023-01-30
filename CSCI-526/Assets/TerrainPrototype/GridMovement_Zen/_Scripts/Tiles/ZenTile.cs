@@ -21,34 +21,34 @@ public abstract class ZenTile : MonoBehaviour {
     void OnMouseEnter()
     {
         _highlight.SetActive(true);
-        MenuManager.Instance.ShowTileInfo(this);
+        ZenMenuManager.Instance.ShowTileInfo(this);
     }
 
     void OnMouseExit()
     {
         _highlight.SetActive(false);
-        MenuManager.Instance.ShowTileInfo(null);
+        ZenMenuManager.Instance.ShowTileInfo(null);
     }
 
     void OnMouseDown() {
         //If it's enemy(team WHITE)'s turn
-        if(GameManager.Instance.GameState == GameState.EnemiesTurn)
+        if(ZenGameManager.Instance.GameState == GameState.EnemiesTurn)
         {
             if (OccupiedUnit != null)
             {
-                if (OccupiedUnit.Faction == Faction.Enemy) UnitManager.Instance.SetSelectedEnemy((BaseEnemy)OccupiedUnit);
+                if (OccupiedUnit.Faction == Faction.Enemy) ZenUnitManager.Instance.SetSelectedEnemy((BaseEnemy)OccupiedUnit);
                 else
                 {
-                    if (UnitManager.Instance.SelectedEnemy != null)
+                    if (ZenUnitManager.Instance.SelectedEnemy != null)
                     {
                         var hero = (BaseHero)OccupiedUnit;
-                        SetUnit(UnitManager.Instance.SelectedEnemy);
+                        SetUnit(ZenUnitManager.Instance.SelectedEnemy);
                         Destroy(hero.gameObject);
-                        UnitManager.Instance.SetSelectedEnemy(null);
+                        ZenUnitManager.Instance.SetSelectedEnemy(null);
 
                         //Change to enemy's turn
-                        MenuManager.Instance.ShowPlayerBLACKPhase();
-                        GameManager.Instance.ChangeState(GameState.HeroesTurn);
+                        ZenMenuManager.Instance.ShowPlayerBLACKPhase();
+                        ZenGameManager.Instance.ChangeState(GameState.HeroesTurn);
                     }
                 }
             }
@@ -58,37 +58,37 @@ public abstract class ZenTile : MonoBehaviour {
                 if (_isWalkable)
                 {
                     //Set the targeted tile to the selected hero's position and move prefab over
-                    if (UnitManager.Instance.SelectedEnemy != null)
+                    if (ZenUnitManager.Instance.SelectedEnemy != null)
                     {
-                        SetUnit(UnitManager.Instance.SelectedEnemy);
-                        UnitManager.Instance.SetSelectedEnemy(null);
+                        SetUnit(ZenUnitManager.Instance.SelectedEnemy);
+                        ZenUnitManager.Instance.SetSelectedEnemy(null);
 
                         //Change to enemy's turn
-                        MenuManager.Instance.ShowPlayerBLACKPhase();
-                        GameManager.Instance.ChangeState(GameState.HeroesTurn);
+                        ZenMenuManager.Instance.ShowPlayerBLACKPhase();
+                        ZenGameManager.Instance.ChangeState(GameState.HeroesTurn);
                     }
                 }
             }
         }
 
         //If it's hero(team 2)'s turn
-        if (GameManager.Instance.GameState == GameState.HeroesTurn)
+        if (ZenGameManager.Instance.GameState == GameState.HeroesTurn)
         {
             if (OccupiedUnit != null)
             {
-                if (OccupiedUnit.Faction == Faction.Hero) UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
+                if (OccupiedUnit.Faction == Faction.Hero) ZenUnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
                 else
                 {
-                    if (UnitManager.Instance.SelectedHero != null)
+                    if (ZenUnitManager.Instance.SelectedHero != null)
                     {
                         var enemy = (BaseEnemy)OccupiedUnit;
-                        SetUnit(UnitManager.Instance.SelectedHero);
+                        SetUnit(ZenUnitManager.Instance.SelectedHero);
                         Destroy(enemy.gameObject);
-                        UnitManager.Instance.SetSelectedHero(null);
+                        ZenUnitManager.Instance.SetSelectedHero(null);
 
                         //Change to enemy's turn
-                        MenuManager.Instance.ShowPlayerWHITEPhase();
-                        GameManager.Instance.ChangeState(GameState.EnemiesTurn);
+                        ZenMenuManager.Instance.ShowPlayerWHITEPhase();
+                        ZenGameManager.Instance.ChangeState(GameState.EnemiesTurn);
                     }
                 }
             }
@@ -98,14 +98,14 @@ public abstract class ZenTile : MonoBehaviour {
                 if (_isWalkable)
                 {
                     //Set the targeted tile to the selected hero's position and move prefab over
-                    if (UnitManager.Instance.SelectedHero != null)
+                    if (ZenUnitManager.Instance.SelectedHero != null)
                     {
-                        SetUnit(UnitManager.Instance.SelectedHero);
-                        UnitManager.Instance.SetSelectedHero(null);
+                        SetUnit(ZenUnitManager.Instance.SelectedHero);
+                        ZenUnitManager.Instance.SetSelectedHero(null);
 
                         //Change to enemy's turn
-                        MenuManager.Instance.ShowPlayerWHITEPhase();
-                        GameManager.Instance.ChangeState(GameState.EnemiesTurn);
+                        ZenMenuManager.Instance.ShowPlayerWHITEPhase();
+                        ZenGameManager.Instance.ChangeState(GameState.EnemiesTurn);
                     }
                 }
             }
