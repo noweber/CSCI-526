@@ -29,10 +29,10 @@ public class MenuManager : MonoBehaviour
     {
         if (GameManager.Instance.GameState == GameState.White)
         {
-            _turnInfoObject.GetComponentInChildren<Text>().text = "White Turn";
+            _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
         } else
         {
-            _turnInfoObject.GetComponentInChildren<Text>().text = "Black Turn";
+            _turnInfoObject.GetComponentInChildren<Text>().text = "Blue Turn";
         }
     }
 

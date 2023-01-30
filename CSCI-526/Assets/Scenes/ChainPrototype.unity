@@ -668,11 +668,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65e72e31e756e40d396eea1c7c376400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 6
-  _height: 8
+  _width: 8
+  _height: 10
   _tilePrefab: {fileID: 4829386787912161034, guid: 26f1bdcf23efd4b4b94c6ddf1a48a92a, type: 3}
   _trianglePrefab: {fileID: -2734158268479683581, guid: 3de7a7b5052bf45c3ab52ce7772f0e3c, type: 3}
-  _diamondPrefab: {fileID: 5561974632197201486, guid: 896f12e38c54945fe91df0cb01093b01, type: 3}
+  _diamondPrefab: {fileID: 1182704519935292955, guid: 5b2b3f5f24aa643afaacb3b505f663ec, type: 3}
   _circlePrefab: {fileID: 4209586453225497907, guid: 88faaf480b95a451fb31740047228ead, type: 3}
   _camera: {fileID: 494762420}
   colorOne: {r: 0.5660378, g: 0, b: 0, a: 1}
