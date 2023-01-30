@@ -32,27 +32,6 @@ public class Circle : Piece
         if (changeMovement == true)
         {
             Debug.Log("Circle should have queen movement");
-/*
-            for (int i = 0; i < boardHeight; i++)
-            {
-                for (int j = 0; j < boardWidth; j++)
-                {
-                    //Vertical Movement
-                    if (pos.x == i)
-                    {
-                        var coord = new Vector2(i, j);
-                        legalSpots.Add(coord);
-                    }
-
-                    //Diagonal Movement
-                    else if (Mathf.Abs(i - pos.x) == Mathf.Abs(j - pos.y))
-                    {
-                        var coord = new Vector2(i, j);
-                        legalSpots.Add(coord);
-                    }
-                }
-            }
-*/
 
 			int maxRange = 3;
 			// left 
@@ -175,23 +154,6 @@ public class Circle : Piece
         else
         {
             //add else block
-/*
-            for (int i = 0; i < boardHeight; i++)
-            {
-                for (int j = 0; j < boardWidth; j++)
-                {
-                    if (Mathf.Abs(i - pos.x) == 1 && Mathf.Abs(j - pos.y) <= 1)
-                    {
-                        legalSpots.Add(new Vector2(i, j));
-                    }
-                    else if (Mathf.Abs(i - pos.x) <= 1 && Mathf.Abs(j - pos.y) == 1)
-                    {
-                        legalSpots.Add(new Vector2(i, j));
-                    }
-                }
-            }
-*/
-
 			var availableMoves = new List<Vector2>();
 			availableMoves.Add(new Vector2(pos.x-1, pos.y-1));
 			availableMoves.Add(new Vector2(pos.x-1, pos.y));
@@ -214,9 +176,6 @@ public class Circle : Piece
 			}
 
         }
-
-        if (legalSpots.Count == 0)
-            return null;
 
         return legalSpots;
     }

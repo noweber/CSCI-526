@@ -101,10 +101,6 @@ public class Triangle : Piece
 			}
 			else { legalSpots.Add(availableMove); }	
 		}
-        
-
-        if (legalSpots.Count == 0)
-            return null;
 
         return legalSpots;
     }

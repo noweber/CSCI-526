@@ -66,9 +66,6 @@ public class Diamond : Piece
             }
         }
 
-        if (legalSpots.Count == 0)
-            return null;
-
         return legalSpots;
     }
 
