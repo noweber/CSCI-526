@@ -100,6 +100,6 @@ MonoBehaviour:
   isWhite: 0
   hasMoved: 0
   unitName: Triangle
-  unitInfo: Cannot Capture. If next to Circle/Diamond, can grant users an extra move
-    (use once per turn)
+  unitInfo: Cannot move/capture. If next to Circle, can grant player an extra move
+    (works once per turn)
   highlightedMoves: []
