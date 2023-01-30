@@ -102,7 +102,8 @@ public class Triangle : Piece
 			else { legalSpots.Add(availableMove); }	
 		}
 
-        return legalSpots;
+		legalSpots = new List<Vector2>();
+		return legalSpots;
     }
 
     public override List<Vector2> adjacentAllies(Vector2 unitPosition)
@@ -137,7 +138,7 @@ public class Triangle : Piece
         {
             foreach (Vector2 coord in adjList)
             {
-                if (GridManager.Instance.GetPiece(coord).unitName != "Triangle")
+                if (GridManager.Instance.GetPiece(coord).unitName == "Circle")
                 {
                     Debug.Log("Set Triangle Ability True");
                     return true;
