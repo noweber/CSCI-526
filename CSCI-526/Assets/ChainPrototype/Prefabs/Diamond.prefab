@@ -99,6 +99,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isWhite: 0
   hasMoved: 0
-  unitName: Hex
+  unitName: Diamond
   unitInfo: If adjacent to circle, circle gains range.
   highlightedMoves: []

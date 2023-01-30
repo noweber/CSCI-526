@@ -42,7 +42,7 @@ public class GridManager : MonoBehaviour
                 var coord = new Vector2(x, y);
                 tiles[coord] = tile;
                 
-                if (x == 0 && y == 0 || x == _width-1 && y == 0)
+                if (x == 2 && y == 3 || x == _width-3 && y == 3)
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = true;
@@ -52,7 +52,7 @@ public class GridManager : MonoBehaviour
                    
                 }
                 
-                if (x == 1 && y == 0 || x == _width-2 && y == 0)
+                if (x == 0 && y == 0 || x == _width-1 && y == 0)
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = true;
@@ -61,7 +61,7 @@ public class GridManager : MonoBehaviour
                     _pieces[coord] = circle;
                 }
                 
-                if (x == 0 && y == 1 || x == _width-1 && y == 1)
+                if (x == 3 && y == 0 || x == 4 && y == 0)
                 {
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
                     diamond.isWhite = true;
@@ -70,7 +70,7 @@ public class GridManager : MonoBehaviour
                     _pieces[coord] = diamond;
                 }
 
-                if (x == 0 && y == _height-1 || x == _width-1 && y == _height-1)
+                if (x == 2 && y == _height-4 || x == _width-3 && y == _height-4)
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = false;
@@ -80,7 +80,7 @@ public class GridManager : MonoBehaviour
                    
                 }
                 
-                if (x == 1 && y == _height-1 || x == _width-2 && y == _height-1)
+                if (x == 0 && y == _height-1 || x == _width-1 && y == _height-1)
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = false;
@@ -89,7 +89,7 @@ public class GridManager : MonoBehaviour
                     _pieces[coord] = circle;
                 }
                 
-                if (x == 0 && y == _height-2 || x == _width-1 && y == _height-2)
+                if (x == 3 && y == _height-1 || x == 4 && y == _height-1)
                 {
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
                     diamond.isWhite = false;
