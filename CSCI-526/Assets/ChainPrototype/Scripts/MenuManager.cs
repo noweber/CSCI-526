@@ -7,7 +7,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject;
 
     public MenuManager()
     {
@@ -38,6 +38,9 @@ public class MenuManager : MonoBehaviour
 
     public void ShowNumMovesInfo()
     {
+        
+        _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManager.Instance.NumMoves) + " Moves Left";
+        /*
         if ((2 - GameManager.Instance.NumMoves) != 0)
         {
             _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManager.Instance.NumMoves) + " Moves Left";
@@ -45,6 +48,35 @@ public class MenuManager : MonoBehaviour
         else
         {
             _numTurnObject.GetComponentInChildren<Text>().text = "" + (2) + " Moves Left";
+        }
+        */
+
+    }
+    public void ShowEndTurnButton()
+    {
+        _endTurnObject.GetComponentInChildren<Button>().onClick.AddListener(() => EndTurnEvent());
+    }
+
+    public void EndTurnEvent()//(Piece triangle, Piece other)
+    {
+        Debug.Log("End Turn Event");
+        foreach (var piece in GameManager.Instance.MovedPieces)
+        {
+            piece.hasMoved = false;
+        }
+        GameManager.Instance.MovedPieces = new List<Piece>();
+        GameManager.Instance.NumMoves = 0;
+        GameManager.Instance.UsedAbility = false;
+        var turn = GameManager.Instance.GameState == GameState.White ? true : false;
+        if (turn == true)
+        {
+            Debug.Log(GameManager.Instance.GameState);
+            GameManager.Instance.ChangeState(GameState.Black);
+        }
+        else
+        {
+            Debug.Log(GameManager.Instance.GameState);
+            GameManager.Instance.ChangeState(GameState.White);
         }
     }
 

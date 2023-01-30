@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
         NumMoves = 0;
         MovedPieces = new List<Piece>();
         ChangeState(GameState.GenerateGrid);
+        MenuManager.Instance.ShowEndTurnButton();
     }
 
     // Update is called once per frame
