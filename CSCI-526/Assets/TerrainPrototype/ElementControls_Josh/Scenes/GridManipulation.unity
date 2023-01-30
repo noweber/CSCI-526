@@ -207,7 +207,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetMode
         m_Mode: 3
@@ -1086,14 +1086,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 242e46431eeaa80409868d358799157f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  water: {fileID: 1804754822}
-  fire: {fileID: 1279675889}
-  earth: {fileID: 1745655517}
-  air: {fileID: 1464494043}
-  plus: {fileID: 733078609}
-  minus: {fileID: 751170262}
-  x: {fileID: 1452073499}
-  o: {fileID: 11313083}
 --- !u!1 &446452015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,56 +1221,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446452015}
   m_CullTransparentMesh: 1
---- !u!1 &457315953
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 457315954}
-  - component: {fileID: 457315956}
-  m_Layer: 0
-  m_Name: GridManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &457315954
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 457315953}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.25332657, y: -0.16770588, z: 0.08003185}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &457315956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 457315953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717ca6debb3d00440a36c61d7113aa64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _width: 5
-  _height: 5
-  ti: {fileID: 3177927122738691909, guid: dd9c56345cd504c458e165a739f7ee01, type: 3}
-  cam: {fileID: 1822027761}
-  selectedElement: 
-  currentMode: 0
 --- !u!1 &581081514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1633,7 +1575,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetMode
         m_Mode: 3
@@ -1779,7 +1721,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetMode
         m_Mode: 3
@@ -1841,6 +1783,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 751170260}
   m_CullTransparentMesh: 1
+--- !u!1 &805643162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 805643163}
+  m_Layer: 0
+  m_Name: ElementManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &805643163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805643162}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &829125733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1976,6 +1949,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 829125733}
   m_CullTransparentMesh: 1
+--- !u!1 &925677561
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 925677563}
+  - component: {fileID: 925677562}
+  m_Layer: 0
+  m_Name: GridManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &925677562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925677561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717ca6debb3d00440a36c61d7113aa64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _width: 10
+  _height: 5
+  ti: {fileID: 3177927122738691909, guid: dd9c56345cd504c458e165a739f7ee01, type: 3}
+  cam: {fileID: 1822027761}
+  selectedElement: 
+  currentMode: 0
+--- !u!4 &925677563
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925677561}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.36027235, y: 0.1487816, z: 0.03238613}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1188520178
 GameObject:
   m_ObjectHideFlags: 0
@@ -2128,7 +2151,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetElement
         m_Mode: 5
@@ -2274,7 +2297,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetMode
         m_Mode: 3
@@ -2420,7 +2443,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetElement
         m_Mode: 5
@@ -2566,7 +2589,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetElement
         m_Mode: 5
@@ -2847,7 +2870,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 457315956}
+      - m_Target: {fileID: 925677562}
         m_TargetAssemblyTypeName: JoshGridManager, Assembly-CSharp
         m_MethodName: SetElement
         m_Mode: 5
