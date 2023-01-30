@@ -45,7 +45,7 @@ public class JoshTile : MonoBehaviour
     }
     public void OnMouseExit()
     {
-        mouseHere = true;
+        mouseHere = false;
         JoshGridManager.Instance.MouseExit();
     }
 
