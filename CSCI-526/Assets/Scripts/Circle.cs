@@ -54,8 +54,10 @@ public class Circle : Piece
             }
 */
 
+			int maxRange = 3;
 			// left 
-			for (int i = 1; i <= pos.x; i++) 
+			var range = UnityEngine.Mathf.Min(pos.x, maxRange);
+			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Vector2(pos.x - i, 	pos.y);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
@@ -68,7 +70,8 @@ public class Circle : Piece
 			}
 
 			// right
-			for (int i = 1; i < boardWidth - pos.x; i++) 
+			range = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, maxRange);
+			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Vector2(pos.x + i, 	pos.y);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
@@ -81,7 +84,8 @@ public class Circle : Piece
 			}
 
 			// up
-			for (int j = 1; j < boardHeight - pos.y; j++) 
+			range = UnityEngine.Mathf.Min(boardHeight - pos.y - 1, maxRange);
+			for (int j = 1; j <= range; j++) 
 			{
 				var availableMove = new Vector2(pos.x, 	pos.y+j);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
@@ -94,7 +98,8 @@ public class Circle : Piece
 			}
 
 			// down
-			for (int j = 1; j <= pos.y; j++) 
+			range = UnityEngine.Mathf.Min(pos.y, maxRange);
+			for (int j = 1; j <= range; j++) 
 			{
 				var availableMove = new Vector2(pos.x, 	pos.y-j);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
@@ -108,7 +113,8 @@ public class Circle : Piece
 
 			// top left 
 			var minIndex = UnityEngine.Mathf.Min(pos.x, boardHeight - pos.y - 1);
-			for (int i = 1; i <= minIndex; i++) 
+			range = UnityEngine.Mathf.Min(minIndex, maxRange);
+			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Vector2(pos.x - i, pos.y + i);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
@@ -122,7 +128,8 @@ public class Circle : Piece
 
 			// top right 
 			minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, boardHeight - pos.y - 1);
-			for (int i = 1; i <= minIndex; i++) 
+			range = UnityEngine.Mathf.Min(minIndex, maxRange);
+			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Vector2(pos.x + i, pos.y + i);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
@@ -136,7 +143,8 @@ public class Circle : Piece
 
 			// bottom left 
 			minIndex = UnityEngine.Mathf.Min(pos.x, pos.y);
-			for (int i = 1; i <= minIndex; i++) 
+			range = UnityEngine.Mathf.Min(minIndex, maxRange);
+			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Vector2(pos.x - i, pos.y - i);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
@@ -150,7 +158,8 @@ public class Circle : Piece
 
 			// bottom right 
 			minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, pos.y);
-			for (int i = 1; i <= minIndex; i++) 
+			range = UnityEngine.Mathf.Min(minIndex, maxRange);
+			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Vector2(pos.x + i, pos.y - i);
 				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }

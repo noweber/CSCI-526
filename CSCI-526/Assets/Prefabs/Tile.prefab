@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d51ce9db5c8c40ec80745c486ba8cdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _base: {r: 0.6226415, g: 0.61383057, b: 0.61383057, a: 1}
-  _offset: {r: 0.38679248, g: 0.38496798, b: 0.38496798, a: 1}
+  _base: {r: 0.2163901, g: 0.6792453, b: 0, a: 1}
+  _offset: {r: 0.058229566, g: 0.5, b: 0, a: 1}
   _renderer: {fileID: 5922647709050670891}
   _highlight: {fileID: 2354291538725966542}
 --- !u!61 &3037628098194511250
