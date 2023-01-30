@@ -19,20 +19,15 @@ public class TerrainTile : MonoBehaviour
 
     public bool IsPassable { get; private set; }
 
-    [SerializeField]
-    private Element firstElement;
+    public Vector2Int MapCoordinates { get; private set; }
 
-    [SerializeField]
-    private Element secondElement;
+    public Element FirstElement { get; private set; }
 
-    [SerializeField]
-    private Vector2Int cellCoordinates;
+    public Element SecondElement { get; private set; }
 
     private IWorldMap worldMapData;
 
     private bool isTileDataSet;
-
-    private bool isMaterialDataSet;
 
     [SerializeField]
     private GameObject mouseoverHighlight;
@@ -41,7 +36,6 @@ public class TerrainTile : MonoBehaviour
     private void Awake()
     {
         isTileDataSet = false;
-        isMaterialDataSet = false;
         IsPassable = true;
     }
 
@@ -49,13 +43,10 @@ public class TerrainTile : MonoBehaviour
     {
         // TODO: validate inputs
         worldMapData = mapData;
-        TerrainType = mapData.LookupTerrainOfCell(x, y);
-        var elements = TerrainMappings.GetElementsByTerrain(TerrainType);
-        firstElement = elements.Item1;
-        secondElement = elements.Item2;
-        cellCoordinates = new Vector2Int(x, y);
+        MapCoordinates = new Vector2Int(x, y);
         isTileDataSet = true;
         IsPassable = isPassable;
+        PollMapData();
     }
 
     public void SetUnitOccupant(BaseUnit unit)
@@ -64,6 +55,42 @@ public class TerrainTile : MonoBehaviour
         unit.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
         Occupant = unit;
         unit.OccupiedTile = this;
+    }
+
+    public void PollMapData()
+    {
+        TerrainType = worldMapData.LookupTerrainOfCell(MapCoordinates.x, MapCoordinates.y);
+        var elements = TerrainMappings.GetElementsByTerrain(TerrainType);
+        FirstElement = elements.Item1;
+        SecondElement = elements.Item2;
+
+        if (isTileDataSet)
+        {
+            if (elementMaterials != null)
+            {
+                if (ElementOneRenderer != null && ElementTwoRenderer != null)
+                {
+                    // TODO: Check that the list of materials is the same as the number of types of elements, else log an error.
+                    if (elementMaterials.Count == Enum.GetValues(typeof(Element)).Length)
+                    {
+                        ElementOneRenderer.material = elementMaterials[(int)FirstElement];
+                        ElementTwoRenderer.material = elementMaterials[(int)SecondElement];
+                    }
+                    else
+                    {
+                        Debug.LogError("The set of materials for each element is of a different size than the number of elements. Fix this in the inspector.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("A required reference to the render of the tile's meshes is null. Set this in the inspector.");
+                }
+            }
+            else
+            {
+                Debug.LogError("The map of elements to materials is null. The tile's materials cannot be set. Add these in the inspector.");
+            }
+        }
     }
 
     void OnMouseEnter()
@@ -94,6 +121,16 @@ public class TerrainTile : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (SpellManager.Instance.SpellSelected && (ZenGameManager.Instance.GameState == GameState.HeroesSpell || ZenGameManager.Instance.GameState == GameState.EnemiesSpell))
+        {
+            WorldMapController.Instance.ChangeCellElement(MapCoordinates.x, MapCoordinates.y, SpellManager.Instance.SelectedElement);
+            PollMapData();
+            Prototype2MenuManager.Instance.HideSpellUi();
+
+            // Transition to the turn phase
+            ZenGameManager.Instance.ChangeState(ZenGameManager.Instance.GameState + 1);
+        }
+
         //If it's enemy(team WHITE)'s turn
         if (ZenGameManager.Instance.GameState == GameState.EnemiesTurn)
         {
@@ -111,7 +148,8 @@ public class TerrainTile : MonoBehaviour
 
                         //Change to enemy's turn
                         Prototype2MenuManager.Instance.ShowPlayerBLACKPhase();
-                        ZenGameManager.Instance.ChangeState(GameState.HeroesTurn);
+                        Prototype2MenuManager.Instance.HideMoveUi();
+                        ZenGameManager.Instance.ChangeState(GameState.HeroesSpell);
                     }
                 }
             }
@@ -128,7 +166,8 @@ public class TerrainTile : MonoBehaviour
 
                         //Change to enemy's turn
                         Prototype2MenuManager.Instance.ShowPlayerBLACKPhase();
-                        ZenGameManager.Instance.ChangeState(GameState.HeroesTurn);
+                        Prototype2MenuManager.Instance.HideMoveUi();
+                        ZenGameManager.Instance.ChangeState(GameState.HeroesSpell);
                     }
                 }
             }
@@ -151,7 +190,8 @@ public class TerrainTile : MonoBehaviour
 
                         //Change to enemy's turn
                         Prototype2MenuManager.Instance.ShowPlayerWHITEPhase();
-                        ZenGameManager.Instance.ChangeState(GameState.EnemiesTurn);
+                        Prototype2MenuManager.Instance.HideMoveUi();
+                        ZenGameManager.Instance.ChangeState(GameState.EnemiesSpell);
                     }
                 }
             }
@@ -168,46 +208,11 @@ public class TerrainTile : MonoBehaviour
 
                         //Change to enemy's turn
                         Prototype2MenuManager.Instance.ShowPlayerWHITEPhase();
-                        ZenGameManager.Instance.ChangeState(GameState.EnemiesTurn);
+                        Prototype2MenuManager.Instance.HideMoveUi();
+                        ZenGameManager.Instance.ChangeState(GameState.EnemiesSpell);
                     }
                 }
             }
-        }
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        // TODO: for now, poll for any changes of the terrain in the map data.
-        // TODO: later, use an observable to see the terrain changes.
-
-        if (isTileDataSet && !isMaterialDataSet)
-        {
-            if (elementMaterials != null)
-            {
-                if (ElementOneRenderer != null && ElementTwoRenderer != null)
-                {
-                    // TODO: Check that the list of materials is the same as the number of types of elements, else log an error.
-                    if (elementMaterials.Count == Enum.GetValues(typeof(Element)).Length)
-                    {
-                        ElementOneRenderer.material = elementMaterials[(int)firstElement];
-                        ElementTwoRenderer.material = elementMaterials[(int)secondElement];
-                    }
-                    else
-                    {
-                        Debug.LogError("The set of materials for each element is of a different size than the number of elements. Fix this in the inspector.");
-                    }
-                }
-                else
-                {
-                    Debug.LogError("A required reference to the render of the tile's meshes is null. Set this in the inspector.");
-                }
-            }
-            else
-            {
-                Debug.LogError("The map of elements to materials is null. The tile's materials cannot be set. Add these in the inspector.");
-            }
-            isMaterialDataSet = true;
         }
     }
 }

@@ -5,7 +5,7 @@ public class Prototype2MenuManager : MonoBehaviour
 {
     public static Prototype2MenuManager Instance;
 
-    [SerializeField] private GameObject _selectedHeroObject, _selectedEnemyObject, _selectedTurnPhaseObject, _tileObject, _tileUnitObject;
+    [SerializeField] private GameObject _selectedHeroObject, _selectedEnemyObject, _selectedTurnPhaseObject, _tileObject, _tileUnitObject, _spellCastObject, _moveUnitNotificationObject;
 
     void Awake()
     {
@@ -23,7 +23,7 @@ public class Prototype2MenuManager : MonoBehaviour
             return;
         }
 
-        _tileObject.GetComponentInChildren<Text>().text = tile.TerrainType.ToString();
+        _tileObject.GetComponentInChildren<Text>().text = "Terrain: " + tile.TerrainType.ToString() + "\nElements: " + tile.FirstElement.ToString() + " + " + tile.SecondElement.ToString();
         _tileObject.SetActive(true);
 
         if (tile.Occupant)
@@ -65,5 +65,25 @@ public class Prototype2MenuManager : MonoBehaviour
     public void ShowPlayerWHITEPhase()
     {
         _selectedTurnPhaseObject.GetComponentInChildren<Text>().text = "Player WHITE's turn";
+    }
+
+    public void ShowSpellUi()
+    {
+        _spellCastObject.SetActive(true);
+    }
+
+    public void HideSpellUi()
+    {
+        _spellCastObject.SetActive(false);
+    }
+
+    public void ShowMoveUi()
+    {
+        _moveUnitNotificationObject.SetActive(true);
+    }
+
+    public void HideMoveUi()
+    {
+        _moveUnitNotificationObject.SetActive(false);
     }
 }

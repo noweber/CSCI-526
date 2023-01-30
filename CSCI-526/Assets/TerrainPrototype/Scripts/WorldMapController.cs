@@ -16,7 +16,7 @@ public class WorldMapController : MonoBehaviour
 
     public Vector2Int MapSize = new(10, 10);
 
-    public int Age = 10;
+    public int InitializationAge = 100;
 
     private IWorldMap worldMap;
 
@@ -25,6 +25,19 @@ public class WorldMapController : MonoBehaviour
     public TerrainTile GetRandomSpawnTile()
     {
         return worldMapTiles.Where(x => x.Occupant == null).OrderBy(t => Random.value).First();
+    }
+
+    public void ChangeCellElement(int x, int y, TerrainMappings.Element element)
+    {
+        // TODO: Validate inputs
+        worldMap.SetElementAtCell(x, y, element);
+        worldMap.GotoNextGeneration();
+
+        foreach(TerrainTile tile in worldMapTiles)
+        {
+            tile.PollMapData();
+        }
+        Debug.Log("Tile updated.");
     }
 
     public void CreateWorldMap(Vector2Int mapSize)
@@ -40,7 +53,7 @@ public class WorldMapController : MonoBehaviour
         worldMap = new WorldMap(MapSize.x, MapSize.y);
         worldMapTiles = new List<TerrainTile>();
 
-        for (int i = 0; i < Age; i++)
+        for (int i = 0; i < InitializationAge; i++)
         {
             worldMap.GotoNextGeneration();
         }

@@ -31,11 +31,19 @@ public class ZenGameManager : MonoBehaviour
                 break;
             case GameState.SpawnEnemies:
                 ZenUnitManager.Instance.SpawnEnemies();
-                ChangeState(GameState.HeroesTurn);
+                ChangeState(GameState.HeroesSpell);
+                break;
+            case GameState.HeroesSpell:
+                Prototype2MenuManager.Instance.ShowSpellUi();
                 break;
             case GameState.HeroesTurn:
+                Prototype2MenuManager.Instance.ShowMoveUi();
+                break;
+            case GameState.EnemiesSpell:
+                Prototype2MenuManager.Instance.ShowSpellUi();
                 break;
             case GameState.EnemiesTurn:
+                Prototype2MenuManager.Instance.ShowMoveUi();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
@@ -48,6 +56,8 @@ public enum GameState
     GenerateGrid = 0,
     SpawnHeroes = 1,
     SpawnEnemies = 2,
-    HeroesTurn = 3,
-    EnemiesTurn = 4
+    HeroesSpell = 3,
+    HeroesTurn = 4,
+    EnemiesSpell = 5,
+    EnemiesTurn = 6
 }
