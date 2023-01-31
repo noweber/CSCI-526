@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour
 
     [SerializeField] private SpriteRenderer _renderer;
 
-    [SerializeField] private GameObject _highlight;
+    [SerializeField] public GameObject _highlight;
 
     //[SerializeField] private GameObject _useAbility;
 
