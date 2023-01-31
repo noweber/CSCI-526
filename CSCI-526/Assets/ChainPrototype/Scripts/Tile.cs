@@ -135,6 +135,8 @@ public class Tile : MonoBehaviour
 		// turn logic
 		if (GameManager.Instance.NumMoves == 2) 
 		{
+			
+			GameManager.Instance.NumMoves = 0;
 			if (turn == true) 
 			{
 				GameManager.Instance.ChangeState(GameState.Black);
@@ -146,10 +148,8 @@ public class Tile : MonoBehaviour
 			{
 				piece.hasMoved = false;
 			}
+			GameManager.Instance.UsedAbility = false;
 			GameManager.Instance.MovedPieces = new List<Piece>();
-			GameManager.Instance.NumMoves = 0;
-            GameManager.Instance.UsedAbility = false;
-
         }
         //Finds valid piece (done)
         //Calls GridManager/sends to GridManager --> initialize some function to prepare for movement/store the piece
