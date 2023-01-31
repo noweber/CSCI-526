@@ -104,6 +104,25 @@ namespace Assets.TerrainPrototype.Source
         {
             ValidateCoordinatesInMaps(x, y);
             elementalMap[x, y] = element;
+
+            // 25% chance of it affecting each direct neighbor tile:
+            if (x - 1 >= 0 && Random.Range(0, 1) > 0.75f)
+            {
+                elementalMap[x - 1, y] = element;
+            }
+            if (x + 1 < elementalMap.GetLength(0) && Random.Range(0, 1) > 0.75f)
+            {
+                elementalMap[x + 1, y] = element;
+            }
+            if (y - 1 >= 0 && Random.Range(0, 1) > 0.75f)
+            {
+                elementalMap[x, y - 1] = element;
+            }
+            if (y + 1 < elementalMap.GetLength(1) && Random.Range(0, 1) > 0.75f)
+            {
+                elementalMap[x, y + 1] = element;
+            }
+
             // Note: No change to surrounding elements occurs until the next generation.
         }
 
