@@ -1,3 +1,4 @@
+using Assets.TerrainPrototype.Source;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,12 +24,14 @@ public class Prototype2MenuManager : MonoBehaviour
             return;
         }
 
-        _tileObject.GetComponentInChildren<Text>().text = "Terrain: " + tile.TerrainType.ToString() + "\nElements: " + tile.FirstElement.ToString() + " + " + tile.SecondElement.ToString();
+        _tileObject.GetComponentInChildren<Text>().text = "Terrain: " + tile.TerrainType.ToString() + "\nElements: " + tile.FirstElement.ToString() + " + " + tile.SecondElement.ToString()
+            + "\n Unit Life Bonus: " + TerrainMappings.GetLifeBonusByTerrainType(tile.TerrainType)
+            + "\n Unit Damage Bonus: " + TerrainMappings.GetDamageBonusByTerrainType(tile.TerrainType);
         _tileObject.SetActive(true);
-
-        if (tile.Occupant)
+        
+        if (tile.Occupant != null)
         {
-            _tileUnitObject.GetComponentInChildren<Text>().text = tile.Occupant.UnitName;
+            _tileUnitObject.GetComponentInChildren<Text>().text = tile.Occupant.GetSummary();
             _tileUnitObject.SetActive(true);
         }
     }
@@ -40,7 +43,7 @@ public class Prototype2MenuManager : MonoBehaviour
             return;
         }
 
-        _selectedHeroObject.GetComponentInChildren<Text>().text = hero.UnitName;
+        _selectedHeroObject.GetComponentInChildren<Text>().text = hero.GetSummary();
         _selectedHeroObject.SetActive(true);
     }
 
@@ -52,7 +55,7 @@ public class Prototype2MenuManager : MonoBehaviour
             return;
         }
 
-        _selectedEnemyObject.GetComponentInChildren<Text>().text = enemy.UnitName;
+        _selectedEnemyObject.GetComponentInChildren<Text>().text = enemy.GetSummary();
         _selectedEnemyObject.SetActive(true);
     }
 

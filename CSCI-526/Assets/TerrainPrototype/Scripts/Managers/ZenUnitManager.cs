@@ -20,7 +20,7 @@ public class ZenUnitManager : MonoBehaviour
 
     public void SpawnHeroes()
     {
-        var heroCount = 2;
+        var heroCount = 3;
 
         for (int i = 0; i < heroCount; i++)
         {
@@ -33,7 +33,7 @@ public class ZenUnitManager : MonoBehaviour
 
     public void SpawnEnemies()
     {
-        var enemyCount = 2;
+        var enemyCount = 3;
 
         for (int i = 0; i < enemyCount; i++)
         {

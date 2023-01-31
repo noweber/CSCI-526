@@ -141,9 +141,29 @@ public class TerrainTile : MonoBehaviour
                 {
                     if (ZenUnitManager.Instance.SelectedEnemy != null)
                     {
+                        // Calculate combat for this enemy unit attacking a hero unit:
                         var hero = (BaseHero)Occupant;
-                        SetUnitOccupant(ZenUnitManager.Instance.SelectedEnemy);
-                        Destroy(hero.gameObject);
+                        bool doesEnemyUnitSurvive = CombatCalculator.DoesThisUnitSurviveAttacking(ZenUnitManager.Instance.SelectedEnemy, hero, true);
+                        bool doesHeroUnitSurvive = CombatCalculator.DoesThisUnitSurviveAttacking(ZenUnitManager.Instance.SelectedEnemy, hero, false);
+
+                        if (doesEnemyUnitSurvive && !doesHeroUnitSurvive)
+                        {
+                            SetUnitOccupant(ZenUnitManager.Instance.SelectedEnemy);
+                        }
+                        else if (doesEnemyUnitSurvive && doesHeroUnitSurvive)
+                        {
+                            Destroy(ZenUnitManager.Instance.SelectedEnemy.gameObject);
+                        }
+                        else
+                        {
+                            Destroy(ZenUnitManager.Instance.SelectedEnemy.gameObject);
+                        }
+
+                        if (!doesHeroUnitSurvive)
+                        {
+                            Destroy(hero.gameObject);
+                        }
+
                         ZenUnitManager.Instance.SetSelectedEnemy(null);
 
                         //Change to enemy's turn
@@ -183,9 +203,29 @@ public class TerrainTile : MonoBehaviour
                 {
                     if (ZenUnitManager.Instance.SelectedHero != null)
                     {
+                        // Calculate combat for this hero unit attacking an enemy unit:
                         var enemy = (BaseEnemy)Occupant;
-                        SetUnitOccupant(ZenUnitManager.Instance.SelectedHero);
-                        Destroy(enemy.gameObject);
+                        bool doesEnemyUnitSurvive = CombatCalculator.DoesThisUnitSurviveAttacking(ZenUnitManager.Instance.SelectedHero, enemy, true);
+                        bool doesHeroUnitSurvive = CombatCalculator.DoesThisUnitSurviveAttacking(ZenUnitManager.Instance.SelectedHero, enemy, false);
+
+                        if (doesHeroUnitSurvive)
+                        {
+                            SetUnitOccupant(ZenUnitManager.Instance.SelectedHero);
+                        }
+                        else if (doesEnemyUnitSurvive && doesHeroUnitSurvive)
+                        {
+                            Destroy(ZenUnitManager.Instance.SelectedHero.gameObject);
+                        }
+                        else
+                        {
+                            Destroy(ZenUnitManager.Instance.SelectedHero.gameObject);
+                        }
+
+                        if (!doesEnemyUnitSurvive)
+                        {
+                            Destroy(enemy.gameObject);
+                        }
+
                         ZenUnitManager.Instance.SetSelectedHero(null);
 
                         //Change to enemy's turn

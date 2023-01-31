@@ -27,6 +27,36 @@ namespace Assets.TerrainPrototype.Source
             Plains = 10, // Air + Air
         }
 
+        public static int GetLifeBonusByTerrainType(TerrainType terrain)
+        {
+            switch (terrain)
+            {
+                case TerrainType.Forest:
+                    return 2;
+                case TerrainType.Jungle:
+                case TerrainType.Marsh:
+                case TerrainType.Grasslands:
+                    return 1;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int GetDamageBonusByTerrainType(TerrainType terrain)
+        {
+            switch (terrain)
+            {
+                case TerrainType.Desert:
+                    return 2;
+                case TerrainType.Beach:
+                case TerrainType.Rock:
+                case TerrainType.Plains:
+                    return 1;
+                default:
+                    return 0;
+            }
+        }
+
         public static Tuple<Element, Element> GetElementsByTerrain(TerrainType terrain)
         {
             return terrain switch

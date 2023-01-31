@@ -37,7 +37,6 @@ public class WorldMapController : MonoBehaviour
         {
             tile.PollMapData();
         }
-        Debug.Log("Tile updated.");
     }
 
     public void CreateWorldMap(Vector2Int mapSize)
