@@ -37,6 +37,8 @@ namespace Assets.TerrainPrototype.Source
                 case TerrainType.Marsh:
                 case TerrainType.Grasslands:
                     return 1;
+                case TerrainType.Lake:
+                    return -1;
                 default:
                     return 0;
             }
@@ -48,10 +50,12 @@ namespace Assets.TerrainPrototype.Source
             {
                 case TerrainType.Desert:
                     return 2;
+                case TerrainType.Jungle:
                 case TerrainType.Beach:
                 case TerrainType.Rock:
-                case TerrainType.Plains:
                     return 1;
+                case TerrainType.Plains:
+                    return -1;
                 default:
                     return 0;
             }
