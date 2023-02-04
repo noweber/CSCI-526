@@ -1,3 +1,6 @@
+using Assets.Scripts.Levels;
+using Assets.Scripts.Units;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,14 +20,73 @@ public class GridManager : MonoBehaviour
 
     public Color colorOne;
     public Color colorTwo;
-    
+
     public Dictionary<Vector2, Tile> tiles;
-    public Dictionary<Vector2, Piece> _pieces;
-    
+    //public Dictionary<Vector2, Piece> _pieces;
+
     public Piece storedPiece = null;
-    public Vector2 storedCoord = new Vector2(-1,-1);
+    public Vector2 storedCoord = new Vector2(-1, -1);
     //public List<Vector2> storedValidMoves = storedPiece.LegalMoves(_width, _height) ? null;
 
+    ILevelModel levelModel;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        // TODO: Take these units (along with a width and height) from a file for each level to load.
+
+        tiles = new Dictionary<Vector2, Tile>();
+
+        Dictionary<Tuple<int, int>, Tuple<bool, UnitType>> units = new();
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                Tuple<int, int> position = new(x, y);
+                if (x == 2 && y == 3 || x == _width - 3 && y == 3)
+                {
+                    units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Triangle));
+                }
+
+                if (x == 0 && y == 0 || x == _width - 1 && y == 0)
+                {
+                    units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Cicle));
+                }
+
+                if (x == 3 && y == 0 || x == 4 && y == 0)
+                {
+                    units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Diamond));
+                }
+
+                if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
+                {
+                    units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Triangle));
+
+                }
+
+                if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
+                {
+                    units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Cicle));
+                }
+
+                if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
+                {
+                    units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Diamond));
+                }
+            }
+        }
+        levelModel = new LevelModel(_width, _height, units);
+    }
+
+    // TODO: Turn this into create scene objects
     public void GenerateGrid()
     {
         tiles = new Dictionary<Vector2, Tile>();
@@ -41,18 +103,18 @@ public class GridManager : MonoBehaviour
 
                 var coord = new Vector2(x, y);
                 tiles[coord] = tile;
-                
-                if (x == 2 && y == 3 || x == _width-3 && y == 3)
+
+                if (x == 2 && y == 3 || x == _width - 3 && y == 3)
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = true;
                     triangle.hasMoved = false;
                     triangle.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
                     _pieces[coord] = triangle;
-                   
+
                 }
-                
-                if (x == 0 && y == 0 || x == _width-1 && y == 0)
+
+                if (x == 0 && y == 0 || x == _width - 1 && y == 0)
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = true;
@@ -60,7 +122,7 @@ public class GridManager : MonoBehaviour
                     circle.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
                     _pieces[coord] = circle;
                 }
-                
+
                 if (x == 3 && y == 0 || x == 4 && y == 0)
                 {
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
@@ -70,17 +132,17 @@ public class GridManager : MonoBehaviour
                     _pieces[coord] = diamond;
                 }
 
-                if (x == 2 && y == _height-4 || x == _width-3 && y == _height-4)
+                if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
                 {
                     var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     triangle.isWhite = false;
                     triangle.hasMoved = false;
                     triangle.gameObject.GetComponent<SpriteRenderer>().color = colorTwo;
                     _pieces[coord] = triangle;
-                   
+
                 }
-                
-                if (x == 0 && y == _height-1 || x == _width-1 && y == _height-1)
+
+                if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = false;
@@ -88,8 +150,8 @@ public class GridManager : MonoBehaviour
                     circle.gameObject.GetComponent<SpriteRenderer>().color = colorTwo;
                     _pieces[coord] = circle;
                 }
-                
-                if (x == 3 && y == _height-1 || x == 4 && y == _height-1)
+
+                if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
                 {
                     var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
                     diamond.isWhite = false;
@@ -114,7 +176,7 @@ public class GridManager : MonoBehaviour
 
         return null;
     }
-    
+
     public Piece GetPiece(Vector2 coord)
     {
         if (_pieces.TryGetValue(coord, out var piece))
@@ -128,18 +190,6 @@ public class GridManager : MonoBehaviour
     public GridManager()
     {
         Instance = this;
-    }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
     }
 
     public bool MovePiece(Vector2 coord, Piece piece)
@@ -163,12 +213,12 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
