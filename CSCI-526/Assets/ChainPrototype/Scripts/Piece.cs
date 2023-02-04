@@ -14,11 +14,11 @@ public abstract class Piece : MonoBehaviour
 
     public List<Vector2> highlightedMoves;
 
-    public abstract List<Vector2> adjacentAllies(Vector2 unitPosition);
+    public abstract List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition);
 
     public abstract bool IsMoveLegal(Vector2 destination);
 
-    public abstract List<Vector2> LegalMoves(int boardWidth, int boardHeight);
+    public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
 
     public abstract void UpdateLocation(Vector3 location);
 

@@ -21,14 +21,14 @@ public class Circle : Piece
         return false;
     }
 
-    public override List<Vector2> LegalMoves(int boardWidth, int boardHeight)
+    public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
     {
-        List<Vector2> legalSpots = new List<Vector2>();
+        List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
         //Circle moves like a king (delta(x) + delta(y) <= 2)
-        var pos = transform.position;
+        var pos = new Vector2Int ((int)transform.position.x, (int)transform.position.y);
         bool changeMovement = this.CircleMovementCheck(pos);
-
+		var lvlModel = GridManager.Instance.levelModel;
         if (changeMovement == true)
         {
             Debug.Log("Circle should have queen movement");
@@ -38,26 +38,39 @@ public class Circle : Piece
 			var range = UnityEngine.Mathf.Min(pos.x, maxRange);
 			for (int i = 1; i <= range; i++) 
 			{
-				var availableMove = new Vector2(pos.x - i, 	pos.y);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x - i, 	pos.y);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
+				// var availableMove = new Tuple<int, int>(pos.x - i, 	pos.y);
+				// if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) 
+				// { 
+				// 	break; 
+				// 	}
+				// else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
+				// { 
+				// 	legalSpots.Add(availableMove);
+				// 	break; 
+				// }
+				// else { legalSpots.Add(availableMove); }	
 			}
 
 			// right
 			range = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, maxRange);
 			for (int i = 1; i <= range; i++) 
 			{
-				var availableMove = new Vector2(pos.x + i, 	pos.y);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x + i, 	pos.y);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
 			}
@@ -66,12 +79,13 @@ public class Circle : Piece
 			range = UnityEngine.Mathf.Min(boardHeight - pos.y - 1, maxRange);
 			for (int j = 1; j <= range; j++) 
 			{
-				var availableMove = new Vector2(pos.x, 	pos.y+j);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x, 	pos.y+j);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
 			}
@@ -80,12 +94,13 @@ public class Circle : Piece
 			range = UnityEngine.Mathf.Min(pos.y, maxRange);
 			for (int j = 1; j <= range; j++) 
 			{
-				var availableMove = new Vector2(pos.x, 	pos.y-j);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x, 	pos.y-j);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
 			}
@@ -95,12 +110,13 @@ public class Circle : Piece
 			range = UnityEngine.Mathf.Min(minIndex, maxRange);
 			for (int i = 1; i <= range; i++) 
 			{
-				var availableMove = new Vector2(pos.x - i, pos.y + i);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x - i, pos.y + i);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
 			}
@@ -110,12 +126,13 @@ public class Circle : Piece
 			range = UnityEngine.Mathf.Min(minIndex, maxRange);
 			for (int i = 1; i <= range; i++) 
 			{
-				var availableMove = new Vector2(pos.x + i, pos.y + i);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x + i, pos.y + i);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
 			}
@@ -125,12 +142,13 @@ public class Circle : Piece
 			range = UnityEngine.Mathf.Min(minIndex, maxRange);
 			for (int i = 1; i <= range; i++) 
 			{
-				var availableMove = new Vector2(pos.x - i, pos.y - i);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x - i, pos.y - i);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
 			}
@@ -140,12 +158,13 @@ public class Circle : Piece
 			range = UnityEngine.Mathf.Min(minIndex, maxRange);
 			for (int i = 1; i <= range; i++) 
 			{
-				var availableMove = new Vector2(pos.x + i, pos.y - i);
-				if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite == this.isWhite) { break; }
-				else if (GridManager.Instance.GetPiece(availableMove) != null && GridManager.Instance.GetPiece(availableMove).isWhite != this.isWhite) 
-				{ 
+				var availableMove = new Tuple<int, int>(pos.x + i, pos.y - i);
+				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				{
+					break;
+				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
 					legalSpots.Add(availableMove);
-					break; 
+					break;
 				}
 				else { legalSpots.Add(availableMove); }	
 			}
@@ -154,20 +173,20 @@ public class Circle : Piece
         else
         {
             //add else block
-			var availableMoves = new List<Vector2>();
-			availableMoves.Add(new Vector2(pos.x-1, pos.y-1));
-			availableMoves.Add(new Vector2(pos.x-1, pos.y));
-			availableMoves.Add(new Vector2(pos.x-1, pos.y+1));
-			availableMoves.Add(new Vector2(pos.x, pos.y-1));
-			availableMoves.Add(new Vector2(pos.x, pos.y+1));
-			availableMoves.Add(new Vector2(pos.x+1, pos.y-1));
-			availableMoves.Add(new Vector2(pos.x+1, pos.y));
-			availableMoves.Add(new Vector2(pos.x+1, pos.y+1));
-			foreach (Vector2 move in availableMoves) 
+			var availableMoves = new List<Tuple<int, int>>();
+			availableMoves.Add(new Tuple<int, int>(pos.x-1, pos.y-1));
+			availableMoves.Add(new Tuple<int, int>(pos.x-1, pos.y));
+			availableMoves.Add(new Tuple<int, int>(pos.x-1, pos.y+1));
+			availableMoves.Add(new Tuple<int, int>(pos.x, pos.y-1));
+			availableMoves.Add(new Tuple<int, int>(pos.x, pos.y+1));
+			availableMoves.Add(new Tuple<int, int>(pos.x+1, pos.y-1));
+			availableMoves.Add(new Tuple<int, int>(pos.x+1, pos.y));
+			availableMoves.Add(new Tuple<int, int>(pos.x+1, pos.y+1));
+			foreach (Tuple<int, int> move in availableMoves) 
 			{
-				if (move.x >= 0 && move.x < boardWidth && move.y >= 0 && move.y < boardHeight) 
+				if (move[0] >= 0 && move[0] < boardWidth && move[1] >= 0 && move[1] < boardHeight) 
 				{
-					if (GridManager.Instance.GetPiece(move) != null && GridManager.Instance.GetPiece(move).isWhite == this.isWhite) 
+					if (lvlModel.TryGetUnit(move[0],move[1]) != null && lvlModel.TryGetUnit(move[0],move[1])[0] == this.isWhite) 
 					{
 						continue;
 					}
@@ -180,23 +199,21 @@ public class Circle : Piece
         return legalSpots;
     }
 
-    public override List<Vector2> adjacentAllies(Vector2 unitPosition)
+    public override List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition)
     {
-        var adjacentList = new List<Vector2>();
-        adjacentList.Add(new Vector2(unitPosition.x + 1, unitPosition.y));
-        adjacentList.Add(new Vector2(unitPosition.x - 1, unitPosition.y));
-        adjacentList.Add(new Vector2(unitPosition.x, unitPosition.y + 1));
-        adjacentList.Add(new Vector2(unitPosition.x, unitPosition.y - 1));
+        var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(new Tuple<int, int>(unitPosition.x + 1, unitPosition.y));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.x - 1, unitPosition.y));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y + 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y - 1));
 
-        var adjAlly = new List<Vector2>();
-        foreach (Vector2 coord in adjacentList)
+        var adjAlly = new List<Tuple<int, int>>();
+        var lvlModel = GridManager.Instance.levelModel;
+        foreach (Tuple<int, int> coord in adjacentList)
         {
-            if (GridManager.Instance._pieces.ContainsKey(coord))
+            if (lvlModel.TryGetUnit(coord[0], coord[1])[0] == this.isWhite)
             {
-                if (GridManager.Instance._pieces[coord] != null && this.isWhite == GridManager.Instance._pieces[coord].isWhite )
-                {
-                    adjAlly.Add(coord);
-                }
+                adjAlly.Add(coord);
             }
         }
         if (adjAlly.Count == 0)
@@ -204,12 +221,12 @@ public class Circle : Piece
         return adjAlly;
     }
 
-    private bool CircleMovementCheck(Vector2 pos)
+    private bool CircleMovementCheck(Vector2Int pos)
     {
-        var adjList = this.adjacentAllies(pos);
+        var adjList = this.adjacentAllies(new Tuple<int, int>(pos.x, pos.y));
         if (adjList != null)
         {
-            foreach (Vector2 coord in adjList)
+            foreach (Tuple<int, int> coord in adjList)
             {
                 if (GridManager.Instance.GetPiece(coord).unitName == "Diamond")
                 {

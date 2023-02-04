@@ -31,6 +31,10 @@ namespace Assets.Scripts.Levels
         public Tuple<bool, UnitType> TryGetUnit(int xPosition, int yPosition)
         {
             // TODO: Validate inputs.
+            if (!units.ContainsKey(xPosition, yPosition))
+            {
+                return null;
+            }
             return units[xPosition, yPosition];
         }
 
