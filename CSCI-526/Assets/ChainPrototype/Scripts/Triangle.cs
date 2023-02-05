@@ -4,20 +4,6 @@ using UnityEngine;
 using System;
 public class Triangle : Piece
 {
-
-    public override bool IsMoveLegal(Vector2 destination)
-    {
-        /*triangle moves like a bishop (diagonal)
-         *  |srcx - destx| == |srcy- desty|
-        */
-        var pos = transform.position;
-        if (Mathf.Abs(destination.x - pos.x) == Mathf.Abs(destination.y - pos.y))
-        {
-            return true;
-        }
-        return false;
-    }
-
     public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
     {
         List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
@@ -47,16 +33,16 @@ public class Triangle : Piece
     public override List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition)
     {
         var adjacentList = new List<Tuple<int, int>>();
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x + 1, unitPosition.y));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x - 1, unitPosition.y));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y + 1));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y - 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
         var adjAlly = new List<Tuple<int, int>>();
         var lvlModel = GridManager.Instance.levelModel;
         foreach (Tuple<int, int> coord in adjacentList)
         {
-            if (lvlModel.TryGetUnit(coord[0], coord[1])[0] == this.isWhite)
+            if (lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item1 == this.isWhite)
             {
                 adjAlly.Add(coord);
             }
@@ -70,11 +56,12 @@ public class Triangle : Piece
     private bool TriangleAbilityCheck(Vector2Int pos)
     {
         var adjList = this.adjacentAllies(new Tuple<int, int>(pos.x, pos.y));
+        var lvlModel = GridManager.Instance.levelModel;
         if (adjList != null)
         {
             foreach (Tuple<int, int> coord in adjList)
             {
-                if (lvlModel.TryGetUnit(coord[0], coord[1])[1].unitName == "Circle")
+                if (lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item2 == Assets.Scripts.Units.UnitType.Circle)
                 {
                     Debug.Log("Set Triangle Ability True");
                     return true;

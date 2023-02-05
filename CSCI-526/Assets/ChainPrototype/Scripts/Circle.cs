@@ -4,23 +4,6 @@ using UnityEngine;
 using System;
 public class Circle : Piece
 {
-
-    public override bool IsMoveLegal(Vector2 destination)
-    {
-        //Circle moves like a king (if x and/or y change by 1)
-        var pos = transform.position;
-        if (Mathf.Abs(destination.x - pos.x) == 1 && Mathf.Abs(destination.y - pos.y) <= 1)
-        {
-            return true;
-        }
-        else if (Mathf.Abs(destination.x - pos.x) <= 1 && Mathf.Abs(destination.y - pos.y) == 1)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
     {
         List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
@@ -39,10 +22,10 @@ public class Circle : Piece
 			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x - i, 	pos.y);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
+				if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
 				{
 					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
+				} else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite){
 					legalSpots.Add(availableMove);
 					break;
 				}
@@ -65,45 +48,51 @@ public class Circle : Piece
 			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x + i, 	pos.y);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
-				{
-					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
-					legalSpots.Add(availableMove);
-					break;
-				}
-				else { legalSpots.Add(availableMove); }	
-			}
+                if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
+                {
+                    break;
+                }
+                else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite)
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 
 			// up
 			range = UnityEngine.Mathf.Min(boardHeight - pos.y - 1, maxRange);
 			for (int j = 1; j <= range; j++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x, 	pos.y+j);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
-				{
-					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
-					legalSpots.Add(availableMove);
-					break;
-				}
-				else { legalSpots.Add(availableMove); }	
-			}
+                if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
+                {
+                    break;
+                }
+                else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite)
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 
 			// down
 			range = UnityEngine.Mathf.Min(pos.y, maxRange);
 			for (int j = 1; j <= range; j++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x, 	pos.y-j);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
-				{
-					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
-					legalSpots.Add(availableMove);
-					break;
-				}
-				else { legalSpots.Add(availableMove); }	
-			}
+                if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
+                {
+                    break;
+                }
+                else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite)
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 
 			// top left 
 			var minIndex = UnityEngine.Mathf.Min(pos.x, boardHeight - pos.y - 1);
@@ -111,15 +100,17 @@ public class Circle : Piece
 			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x - i, pos.y + i);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
-				{
-					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
-					legalSpots.Add(availableMove);
-					break;
-				}
-				else { legalSpots.Add(availableMove); }	
-			}
+                if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
+                {
+                    break;
+                }
+                else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite)
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 
 			// top right 
 			minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, boardHeight - pos.y - 1);
@@ -127,15 +118,17 @@ public class Circle : Piece
 			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x + i, pos.y + i);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
-				{
-					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
-					legalSpots.Add(availableMove);
-					break;
-				}
-				else { legalSpots.Add(availableMove); }	
-			}
+                if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
+                {
+                    break;
+                }
+                else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite)
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 
 			// bottom left 
 			minIndex = UnityEngine.Mathf.Min(pos.x, pos.y);
@@ -143,15 +136,17 @@ public class Circle : Piece
 			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x - i, pos.y - i);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
-				{
-					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
-					legalSpots.Add(availableMove);
-					break;
-				}
-				else { legalSpots.Add(availableMove); }	
-			}
+                if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
+                {
+                    break;
+                }
+                else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite)
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 
 			// bottom right 
 			minIndex = UnityEngine.Mathf.Min(boardWidth - pos.x - 1, pos.y);
@@ -159,15 +154,17 @@ public class Circle : Piece
 			for (int i = 1; i <= range; i++) 
 			{
 				var availableMove = new Tuple<int, int>(pos.x + i, pos.y - i);
-				if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] == this.isWhite)
-				{
-					break;
-				} else if (lvlModel.TryGetUnit(i, j) != null && lvlModel.TryGetUnit(i, j)[0] != this.isWhite){
-					legalSpots.Add(availableMove);
-					break;
-				}
-				else { legalSpots.Add(availableMove); }	
-			}
+                if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 == this.isWhite)
+                {
+                    break;
+                }
+                else if (lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2) != null && lvlModel.TryGetUnit(availableMove.Item1, availableMove.Item2).Item1 != this.isWhite)
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 			
         }
         else
@@ -184,9 +181,9 @@ public class Circle : Piece
 			availableMoves.Add(new Tuple<int, int>(pos.x+1, pos.y+1));
 			foreach (Tuple<int, int> move in availableMoves) 
 			{
-				if (move[0] >= 0 && move[0] < boardWidth && move[1] >= 0 && move[1] < boardHeight) 
+				if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight) 
 				{
-					if (lvlModel.TryGetUnit(move[0],move[1]) != null && lvlModel.TryGetUnit(move[0],move[1])[0] == this.isWhite) 
+					if (lvlModel.TryGetUnit(move.Item1, move.Item2) != null && lvlModel.TryGetUnit(move.Item1, move.Item2).Item1 == this.isWhite) 
 					{
 						continue;
 					}
@@ -202,16 +199,16 @@ public class Circle : Piece
     public override List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition)
     {
         var adjacentList = new List<Tuple<int, int>>();
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x + 1, unitPosition.y));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x - 1, unitPosition.y));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y + 1));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y - 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
         var adjAlly = new List<Tuple<int, int>>();
         var lvlModel = GridManager.Instance.levelModel;
         foreach (Tuple<int, int> coord in adjacentList)
         {
-            if (lvlModel.TryGetUnit(coord[0], coord[1])[0] == this.isWhite)
+            if (lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item1 == this.isWhite)
             {
                 adjAlly.Add(coord);
             }
@@ -221,14 +218,16 @@ public class Circle : Piece
         return adjAlly;
     }
 
+    //fix later
     private bool CircleMovementCheck(Vector2Int pos)
     {
         var adjList = this.adjacentAllies(new Tuple<int, int>(pos.x, pos.y));
+        var lvlModel = GridManager.Instance.levelModel;
         if (adjList != null)
         {
             foreach (Tuple<int, int> coord in adjList)
             {
-                if (GridManager.Instance.GetPiece(coord).unitName == "Diamond")
+                if (lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item2 == Assets.Scripts.Units.UnitType.Diamond)
                 {
                     Debug.Log("Make Circle move like Queen");
                     return true;

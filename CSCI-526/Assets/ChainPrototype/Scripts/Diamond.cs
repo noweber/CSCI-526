@@ -5,25 +5,6 @@ using System;
 
 public class Diamond : Piece
 {
-
-    public override bool IsMoveLegal(Vector2 destination)
-    {
-        /* Diamond movoes like a knight:
-            Two moves horizontal and one move vertical, OR
-            Two moves vertical, one move horizontal */
-        var pos = transform.position;
-        if (Mathf.Abs(destination.x - pos.x) == 2 && Mathf.Abs(destination.y - pos.y) == 1)
-        { 
-            return true; 
-        }
-        else if (Mathf.Abs(destination.x - pos.x) == 1 && Mathf.Abs(destination.y - pos.y) == 2)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
     {
         List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
@@ -41,7 +22,7 @@ public class Diamond : Piece
                     var availableMove = new Tuple<int, int>(i, j);
                     if (lvlModel.TryGetUnit(i, j) != null)
                     {
-                        if (lvlModel.TryGetUnit(i, j)[0] == this.isWhite) {continue;}
+                        if (lvlModel.TryGetUnit(i, j).Item1 == this.isWhite) {continue;}
                     }
                     // if (GridManager.Instance.GetPiece(availableMove) != null)
                     // {
@@ -56,7 +37,7 @@ public class Diamond : Piece
                     var availableMove = new Tuple<int, int>(i, j);
                     if (lvlModel.TryGetUnit(i, j) != null)
                     {
-                        if (lvlModel.TryGetUnit(i, j)[0] == this.isWhite) {continue;}
+                        if (lvlModel.TryGetUnit(i, j).Item1 == this.isWhite) {continue;}
                     }
                     legalSpots.Add(availableMove);
                 }
@@ -65,7 +46,7 @@ public class Diamond : Piece
                     var availableMove = new Tuple<int, int>(i, j);
                     if (lvlModel.TryGetUnit(i, j) != null)
                     {
-                        if (lvlModel.TryGetUnit(i, j)[0] == this.isWhite) {continue;}
+                        if (lvlModel.TryGetUnit(i, j).Item1 == this.isWhite) {continue;}
                     }
                     legalSpots.Add(availableMove);
                 }
@@ -78,16 +59,16 @@ public class Diamond : Piece
     public override List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition)
     {
         var adjacentList = new List<Tuple<int, int>>();
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x + 1, unitPosition.y));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x - 1, unitPosition.y));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y + 1));
-        adjacentList.Add(new Tuple<int, int>(unitPosition.x, unitPosition.y - 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
         var adjAlly = new List<Tuple<int, int>>();
         var lvlModel = GridManager.Instance.levelModel;
         foreach (Tuple<int, int> coord in adjacentList)
         {
-            if (lvlModel.TryGetUnit(coord[0], coord[1])[0] == this.isWhite)
+            if (lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item1 == this.isWhite)
             {
                 adjAlly.Add(coord);
             }

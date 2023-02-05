@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,14 +81,14 @@ public class MenuManager : MonoBehaviour
         }
 		if (GridManager.Instance.storedPiece.highlightedMoves.Count > 0) 
 		{
-			foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+			foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
     		{
        			GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
     		}
 		}	
 		GridManager.Instance.storedPiece.highlightedMoves.Clear();
 		GridManager.Instance.storedPiece = null;
-        GridManager.Instance.storedCoord = new Vector2(-1, -1);
+        GridManager.Instance.storedCoord = new Tuple<int, int>(-1, -1);
     }
 
     public void ShowAbilityButton()

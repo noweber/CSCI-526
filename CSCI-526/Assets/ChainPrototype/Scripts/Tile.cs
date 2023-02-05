@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +29,7 @@ public class Tile : MonoBehaviour
         {
             var highlightTiles = GridManager.Instance.storedPiece.highlightedMoves;
             //Vector3 mousePos = Input.mousePosition;
-            if (highlightTiles.Contains(new Vector2(this.transform.position.x, this.transform.position.y)))
+            if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
             {
                 //Debug.Log("IN THE ARRAY");
                 _highlight.SetActive(true);
@@ -48,8 +49,8 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        var clickedPiece = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
-        var coord = new Vector2(this.transform.position.x, this.transform.position.y);
+        var clickedPiece = GridManager.Instance.GetPiece(new Tuple<int, int>((int)this.transform.position.x,(int)this.transform.position.y));
+        var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
 		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.White ? true : false;
 
         if (clickedPiece != null) // selected piece is correct turn's color
@@ -62,7 +63,7 @@ public class Tile : MonoBehaviour
                 GridManager.Instance.storedCoord = coord;
  
                 GridManager.Instance.storedPiece.highlightedMoves = clickedPiece.LegalMoves(GridManager.Instance._width, GridManager.Instance._height);
-                foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+                foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                 {
                     GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
                 }
@@ -95,14 +96,14 @@ public class Tile : MonoBehaviour
                             //GridManager.Instance.storedPiece.hasMoved = true;
                         }
                     }
-					foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+					foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
 					{
 						GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                     }
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
                     GridManager.Instance.storedPiece = null;
-                    GridManager.Instance.storedCoord = new Vector2(-1, -1);
+                    GridManager.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                 }
 			}
         }
@@ -116,7 +117,7 @@ public class Tile : MonoBehaviour
                 if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
                 {
                     GridManager.Instance.storedPiece.hasMoved = true;
-                    foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+                    foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                     {
                         GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
                         //fix hover unhighlight while selected
@@ -124,7 +125,7 @@ public class Tile : MonoBehaviour
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
                     GridManager.Instance.storedPiece = null;
-                    GridManager.Instance.storedCoord = new Vector2(-1, -1);
+                    GridManager.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                     GameManagerChain.Instance.NumMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
                     //unhighlight after move.

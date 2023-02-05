@@ -13,11 +13,9 @@ public abstract class Piece : MonoBehaviour
     public string unitInfo;
     //public bool hasAbility = false;
 
-    public List<Vector2> highlightedMoves;
+    public List<Tuple<int, int>> highlightedMoves;
 
     public abstract List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition);
-
-    public abstract bool IsMoveLegal(Vector2 destination);
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
 

@@ -21,14 +21,14 @@ public class GridManager : MonoBehaviour
     public Color colorOne;
     public Color colorTwo;
 
-    public Dictionary<Vector2, Tile> tiles;
-    //public Dictionary<Vector2, Piece> _pieces;
+    public Dictionary<Tuple<int, int>, Tile> tiles;
+    public Dictionary<Tuple<int, int>, Piece> _pieces;
 
     public Piece storedPiece = null;
-    public Vector2 storedCoord = new Vector2(-1, -1);
+    public Tuple<int, int> storedCoord = new Tuple<int, int>(-1, -1);
     //public List<Vector2> storedValidMoves = storedPiece.LegalMoves(_width, _height) ? null;
 
-    ILevelModel levelModel;
+    public ILevelModel levelModel;
 
     private void Awake()
     {
@@ -43,7 +43,7 @@ public class GridManager : MonoBehaviour
 
         // TODO: Take these units (along with a width and height) from a file for each level to load.
 
-        tiles = new Dictionary<Vector2, Tile>();
+        tiles = new Dictionary<Tuple<int, int>, Tile>();
 
         Dictionary<Tuple<int, int>, Tuple<bool, UnitType>> units = new();
         for (int x = 0; x < _width; x++)
@@ -58,7 +58,7 @@ public class GridManager : MonoBehaviour
 
                 if (x == 0 && y == 0 || x == _width - 1 && y == 0)
                 {
-                    units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Cicle));
+                    units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Circle));
                 }
 
                 if (x == 3 && y == 0 || x == 4 && y == 0)
@@ -74,7 +74,7 @@ public class GridManager : MonoBehaviour
 
                 if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
                 {
-                    units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Cicle));
+                    units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Circle));
                 }
 
                 if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
@@ -89,8 +89,8 @@ public class GridManager : MonoBehaviour
     // TODO: Turn this into create scene objects
     public void GenerateGrid()
     {
-        tiles = new Dictionary<Vector2, Tile>();
-        _pieces = new Dictionary<Vector2, Piece>();
+        tiles = new Dictionary<Tuple<int, int>, Tile>();
+        _pieces = new Dictionary<Tuple<int, int>, Piece>();
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
@@ -101,7 +101,7 @@ public class GridManager : MonoBehaviour
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 tile.Init(isOffset);
 
-                var coord = new Vector2(x, y);
+                var coord = new Tuple<int, int>(x, y);
                 tiles[coord] = tile;
 
                 if (x == 2 && y == 3 || x == _width - 3 && y == 3)
@@ -167,7 +167,7 @@ public class GridManager : MonoBehaviour
         GameManagerChain.Instance.ChangeState(GameStateEnum.White);
     }
 
-    public Tile GetTile(Vector2 coord)
+    public Tile GetTile(Tuple<int, int> coord)
     {
         if (tiles.TryGetValue(coord, out var tile))
         {
@@ -177,7 +177,7 @@ public class GridManager : MonoBehaviour
         return null;
     }
 
-    public Piece GetPiece(Vector2 coord)
+    public Piece GetPiece(Tuple<int, int> coord)
     {
         if (_pieces.TryGetValue(coord, out var piece))
         {
@@ -192,10 +192,10 @@ public class GridManager : MonoBehaviour
         Instance = this;
     }
 
-    public bool MovePiece(Vector2 coord, Piece piece)
+    public bool MovePiece(Tuple<int, int> coord, Piece piece)
     {
         var validMoves = piece.LegalMoves(_width, _height);
-        if (!validMoves.Contains(coord))
+        if (!validMoves.Contains(new Tuple<int, int> (coord.Item1, coord.Item2)))
         {
             return false;
         }
@@ -206,7 +206,7 @@ public class GridManager : MonoBehaviour
         }
         _pieces[coord] = piece;
         _pieces[storedCoord] = null;
-        piece.transform.position = new Vector3(coord.x, coord.y, piece.transform.position.z);
+        piece.transform.position = new Vector3(coord.Item1, coord.Item2, piece.transform.position.z);
         return true;
     }
 
