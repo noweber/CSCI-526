@@ -79,16 +79,19 @@ public class MenuManager : MonoBehaviour
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
             GameManagerChain.Instance.ChangeState(GameStateEnum.White);
         }
-		if (GridManager.Instance.storedPiece.highlightedMoves.Count > 0) 
+		if (GridManager.Instance.storedPiece != null && GridManager.Instance.storedPiece.highlightedMoves.Count > 0) 
 		{
 			foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
     		{
        			GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
     		}
 		}	
-		GridManager.Instance.storedPiece.highlightedMoves.Clear();
-		GridManager.Instance.storedPiece = null;
-        GridManager.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+        if (GridManager.Instance.storedPiece != null)
+        {
+            GridManager.Instance.storedPiece.highlightedMoves.Clear();
+            GridManager.Instance.storedPiece = null;
+            GridManager.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+        }
     }
 
     public void ShowAbilityButton()
