@@ -209,9 +209,12 @@ public class Circle : Piece
         var lvlModel = GridManager.Instance.levelModel;
         foreach (Tuple<int, int> coord in adjacentList)
         {
-            if (lvlModel.TryGetUnit(coord.Item1, coord.Item2) != null && lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item1 == this.isWhite)
+            if (coord.Item1 >= 0 && coord.Item1 < GridManager.Instance._width && coord.Item2 >= 0 && coord.Item2 < GridManager.Instance._height)
             {
-                adjAlly.Add(coord);
+                if (lvlModel.TryGetUnit(coord.Item1, coord.Item2) != null && lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item1 == this.isWhite)
+                {
+                    adjAlly.Add(coord);
+                }
             }
         }
         if (adjAlly.Count == 0)
