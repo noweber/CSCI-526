@@ -84,11 +84,6 @@ public class GridManager : MonoBehaviour
             }
         }
         levelModel = new LevelModel(_width, _height, units);
-        Debug.Log("Units Dictionary");
-        foreach (var pair in units)
-        {
-            Debug.Log("" + pair.Key + ", " + pair.Value);
-        }
     }
 
     // TODO: Turn this into create scene objects
@@ -171,10 +166,6 @@ public class GridManager : MonoBehaviour
 
         GameManagerChain.Instance.ChangeState(GameStateEnum.White);
         Debug.Log("Tiles Dictionary");
-        foreach(var pair in tiles)
-        {
-            Debug.Log("" + pair.Key + ", " + pair.Value);
-        }
     }
 
     public Tile GetTile(Tuple<int, int> coord)
