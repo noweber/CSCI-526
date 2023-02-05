@@ -197,7 +197,8 @@ public class Circle : Piece
     }
 
     public override List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition)
-    {
+    { 
+        Debug.Log("Unit Position: " + unitPosition.Item1 + ", " + unitPosition.Item2);
         var adjacentList = new List<Tuple<int, int>>();
         adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
         adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2));
@@ -208,7 +209,7 @@ public class Circle : Piece
         var lvlModel = GridManager.Instance.levelModel;
         foreach (Tuple<int, int> coord in adjacentList)
         {
-            if (lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item1 == this.isWhite)
+            if (lvlModel.TryGetUnit(coord.Item1, coord.Item2) != null && lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item1 == this.isWhite)
             {
                 adjAlly.Add(coord);
             }

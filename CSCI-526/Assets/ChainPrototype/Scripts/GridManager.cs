@@ -84,6 +84,11 @@ public class GridManager : MonoBehaviour
             }
         }
         levelModel = new LevelModel(_width, _height, units);
+        Debug.Log("Units Dictionary");
+        foreach (var pair in units)
+        {
+            Debug.Log("" + pair.Key + ", " + pair.Value);
+        }
     }
 
     // TODO: Turn this into create scene objects
@@ -165,6 +170,11 @@ public class GridManager : MonoBehaviour
         _camera.transform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
 
         GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+        Debug.Log("Tiles Dictionary");
+        foreach(var pair in tiles)
+        {
+            Debug.Log("" + pair.Key + ", " + pair.Value);
+        }
     }
 
     public Tile GetTile(Tuple<int, int> coord)

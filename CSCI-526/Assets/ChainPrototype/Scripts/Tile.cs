@@ -50,6 +50,7 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         var clickedPiece = GridManager.Instance.GetPiece(new Tuple<int, int>((int)this.transform.position.x,(int)this.transform.position.y));
+        Debug.Log(clickedPiece);
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
 		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.White ? true : false;
 
