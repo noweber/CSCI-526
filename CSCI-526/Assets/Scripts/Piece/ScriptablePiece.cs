@@ -6,7 +6,7 @@ using UnityEngine;
 public class ScriptablePiece : ScriptableObject
 {
     public Alignment Faction;
-    public Piece UnitPrefab;
+    public PieceController UnitPrefab;
 
     //add data later for stats, hp, etc.
 }

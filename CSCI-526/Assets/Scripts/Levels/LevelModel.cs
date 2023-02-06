@@ -1,3 +1,4 @@
+using Assets.Scripts.Piece;
 using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Assets.Scripts.Levels
 
         private int height;
 
-        private Tuple<bool, UnitType>[,] units;
+        private Dictionary<Tuple<int, int>, IPiece> units;
 
         public int GetWidth()
         {
@@ -28,16 +29,27 @@ namespace Assets.Scripts.Levels
         /// <param name="xPosition">The level grid x coordinate.</param>
         /// <param name="yPosition">The level grid y coordinate.</param>
         /// <returns>Returns a tuple. The bool is true when the piece is white, else false. The unit type is the second item of the typle.</returns>
-        public Tuple<bool, UnitType> TryGetUnit(int xPosition, int yPosition)
+        public IPiece TryGetUnit(Tuple<int, int> position)
         {
             // TODO: Validate inputs.
-            return units[xPosition, yPosition];
+            if (units.ContainsKey(position))
+            {
+                return units[position];
+            }
+            return null;
         }
 
-        public void PutUnit(Tuple<int, int> position, bool isWhite, UnitType playerUnit)
+        public void PutUnit(Tuple<int, int> position, IPiece playerUnit)
         {
             // TODO: Validate inputs.
-            units[position.Item1, position.Item2] = new Tuple<bool, UnitType>(isWhite, playerUnit);
+            if (units.ContainsKey(position))
+            {
+                units[position] = playerUnit;
+            }
+            else
+            {
+                units.Add(position, playerUnit);
+            }
         }
 
         public void TryMoveUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition)
@@ -45,13 +57,19 @@ namespace Assets.Scripts.Levels
             // TODO: Validate inputs.
             UnityEngine.Debug.Log("From: " + fromPosition.Item1 + ", " + fromPosition.Item2);
             UnityEngine.Debug.Log("To: " + toPosition.Item1 + ", " + toPosition.Item2);
-            if (units[fromPosition.Item1, fromPosition.Item2] != null && units[toPosition.Item1, toPosition.Item2] == null)
+
+            if (units.ContainsKey(fromPosition) && !units.ContainsKey(toPosition))
             {
-                units[toPosition.Item1, toPosition.Item2] = units[fromPosition.Item1, fromPosition.Item2];
+                units.Add(toPosition, units[fromPosition]);
+                units.Remove(fromPosition);
+            }
+            else if (units.ContainsKey(fromPosition) && units.ContainsKey(toPosition))
+            {
+                // TODO: handle capture?
             }
         }
 
-        public LevelModel(int gridWidth, int gridHeight, Dictionary<Tuple<int, int>, Tuple<bool, UnitType>> playerUnits = null)
+        public LevelModel(int gridWidth, int gridHeight, Dictionary<Tuple<int, int>, IPiece> playerUnits = null)
         {
             if (gridWidth <= 0)
             {
@@ -65,21 +83,14 @@ namespace Assets.Scripts.Levels
             }
             height = gridHeight;
 
-            units = new Tuple<bool, UnitType>[width, height];
-            if (playerUnits != null)
+            if (playerUnits == null)
             {
-                // Place the units onto level:
-                for (int x = 0; x < gridWidth; x++)
-                {
-                    for (int y = 0; y < gridHeight; y++)
-                    {
-                        Tuple<int, int> positionKey = new(x, y);
-                        if (playerUnits.ContainsKey(positionKey))
-                        {
-                            units[x, y] = playerUnits[positionKey];
-                        }
-                    }
-                }
+                units = new Dictionary<Tuple<int, int>, IPiece>();
+            }
+            else
+            {
+                // TODO: validate that each unit's position is valid within the level.
+                units = playerUnits;
             }
         }
     }

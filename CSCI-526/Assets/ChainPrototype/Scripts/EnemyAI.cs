@@ -31,12 +31,13 @@ public class EnemyAI : MonoBehaviour
     public void GetPieces()
     {
         allEnemyPieces = new List<Tuple<int, int>>();
-        var lvlModel = GridManager.Instance.levelModel;
-        for (int x = 0; x < GridManager.Instance._width; x++)
+        var lvlModel = LevelController.Instance.levelModel;
+        for (int x = 0; x < LevelController.Instance._width; x++)
         {
-            for (int y = 0; y < GridManager.Instance._height; y++)
+            for (int y = 0; y < LevelController.Instance._height; y++)
             {
-                if (lvlModel.TryGetUnit(x, y) != null && lvlModel.TryGetUnit(x, y).Item1 != true && lvlModel.TryGetUnit(x, y).Item2 != UnitType.Triangle)
+                Tuple<int, int> position = new Tuple<int, int>(x, y);
+                if (lvlModel.TryGetUnit(position) != null && !lvlModel.TryGetUnit(position).IsControlledByHuman() && !string.Equals(lvlModel.TryGetUnit(position).Name(), UnitType.Triangle))
                 {
                     allEnemyPieces.Add(new Tuple<int, int>(x, y));
                 }
@@ -44,10 +45,10 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public Piece SelectRandomPiece()
+    public PieceController SelectRandomPiece()
     {
         GetPieces();
-        var pieces = GridManager.Instance._pieces; 
+        var pieces = LevelController.Instance._pieces; 
         bool checkMove = true;
         while (checkMove == true)
         {
@@ -55,15 +56,15 @@ public class EnemyAI : MonoBehaviour
             if (pieces.ContainsKey(allEnemyPieces[index]) && pieces[allEnemyPieces[index]] != null)
             {
                 Debug.Log("ContainsKey");
-                if (pieces[allEnemyPieces[index]].unitName != "Triangle")
+                if (pieces[allEnemyPieces[index]].Name() != "Triangle")
                 {
                     Debug.Log("not Triangle");
-                    if (pieces[allEnemyPieces[index]].hasMoved != true)
+                    if (pieces[allEnemyPieces[index]].HasMoved() != true)
                     {
                         Debug.Log("hasMoved");
                         checkMove = false;
-                        GridManager.Instance.storedCoord = allEnemyPieces[index];
-                        pieces[allEnemyPieces[index]].hasMoved = true;
+                        LevelController.Instance.storedCoord = allEnemyPieces[index];
+                        pieces[allEnemyPieces[index]].SetMoveState(true);
                         return pieces[allEnemyPieces[index]];
                     }
                 }
@@ -73,7 +74,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     foreach(var enemy in allEnemyPieces)
                     {
-                        if (pieces[enemy].unitName == "Triangle" || pieces[enemy].hasMoved == true)
+                        if (pieces[enemy].Name() == "Triangle" || pieces[enemy].HasMoved() == true)
                         {
                             checkMove = false;
                             break;
@@ -93,11 +94,11 @@ public class EnemyAI : MonoBehaviour
 
     private void PerformTurn()
     {
-        var grid = GridManager.Instance;
+        var grid = LevelController.Instance;
         var piece = SelectRandomPiece();
         if (piece != null)
         {
-            var moves = piece.LegalMoves(grid._width, grid._height);
+            var moves = piece.GetLegalMoves(grid._width, grid._height);
             int index = Random.Range(0, moves.Count);
             if (grid.MovePiece(moves[index], piece))
             {
@@ -111,7 +112,7 @@ public class EnemyAI : MonoBehaviour
         {
             foreach (var pieces in GameManagerChain.Instance.MovedPieces)
             {
-                pieces.hasMoved = false;
+                pieces.SetMoveState(false);
             }
             StopAllCoroutines();
             GameManagerChain.Instance.NumMoves = 0;

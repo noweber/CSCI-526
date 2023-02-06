@@ -915,12 +915,13 @@ MonoBehaviour:
   _width: 8
   _height: 10
   _tilePrefab: {fileID: 4829386787912161034, guid: 26f1bdcf23efd4b4b94c6ddf1a48a92a, type: 3}
-  _trianglePrefab: {fileID: -2734158268479683581, guid: 3de7a7b5052bf45c3ab52ce7772f0e3c, type: 3}
-  _diamondPrefab: {fileID: 1182704519935292955, guid: 5b2b3f5f24aa643afaacb3b505f663ec, type: 3}
-  _circlePrefab: {fileID: 4209586453225497907, guid: 88faaf480b95a451fb31740047228ead, type: 3}
+  humanTriangleUnitPrefab: {fileID: 8500252308163710806, guid: 3de7a7b5052bf45c3ab52ce7772f0e3c, type: 3}
+  humanDiamondUnitPrefab: {fileID: 4644458566182940093, guid: 5b2b3f5f24aa643afaacb3b505f663ec, type: 3}
+  humanCircleUnitPrefab: {fileID: 6246947301073050286, guid: 88faaf480b95a451fb31740047228ead, type: 3}
+  aiTriangleUnitPrefab: {fileID: 973737288460802875, guid: 53af826635fd3554eb59e8869cafecaf, type: 3}
+  aiDiamondUnitPrefab: {fileID: 7968071493738047273, guid: 0a9bef9bb54adcf4c921cdcee3cb13d6, type: 3}
+  aiCircleUnitPrefab: {fileID: 2247610607438224395, guid: 7b334507e7d8ff647a1f1aab31b2a2f6, type: 3}
   _camera: {fileID: 494762420}
-  colorOne: {r: 0.5660378, g: 0, b: 0, a: 1}
-  colorTwo: {r: 0.20734814, g: 0.19037023, b: 0.5849056, a: 1}
   storedPiece: {fileID: 0}
 --- !u!4 &1305261819
 Transform:

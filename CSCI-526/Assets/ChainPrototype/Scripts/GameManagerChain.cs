@@ -12,7 +12,7 @@ public class GameManagerChain : MonoBehaviour
 
     public bool UsedAbility = false;
 
-    public List<Piece> MovedPieces;
+    public List<PieceController> MovedPieces;
 
     void Awake()
     {
@@ -23,7 +23,7 @@ public class GameManagerChain : MonoBehaviour
     void Start()
     {
         NumMoves = 0;
-        MovedPieces = new List<Piece>();
+        MovedPieces = new List<PieceController>();
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
     }
@@ -40,7 +40,7 @@ public class GameManagerChain : MonoBehaviour
         switch (newState)
         {
             case GameStateEnum.GenerateGrid:
-                GridManager.Instance.GenerateGrid();
+                LevelController.Instance.GenerateGrid();
                 break;
             case GameStateEnum.White:
                 break;

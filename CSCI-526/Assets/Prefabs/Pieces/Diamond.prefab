@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4967982436456613717}
   - component: {fileID: 3726126107720656838}
-  - component: {fileID: 1182704519935292955}
+  - component: {fileID: 4644458566182940093}
   m_Layer: 0
   m_Name: Diamond
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1182704519935292955
+--- !u!114 &4644458566182940093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,11 +94,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3948055355563052478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b7264fa99d724a13a6a06957a477a83, type: 3}
+  m_Script: {fileID: 11500000, guid: c6fc82b35651442f88b63874dcad279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isWhite: 0
-  hasMoved: 0
-  unitName: Diamond
-  unitInfo: If adjacent to circle, circle gains range.
-  highlightedMoves: []
+  UnitColor: {r: 0.20784314, g: 0.19215687, b: 0.58431375, a: 1}
+  TypeOfUnit: 1
+  IsHumanUnit: 1

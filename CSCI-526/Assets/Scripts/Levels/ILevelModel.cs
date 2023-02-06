@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Units;
+﻿using Assets.Scripts.Piece;
+using Assets.Scripts.Units;
 using System;
 
 namespace Assets.Scripts.Levels
@@ -9,9 +10,9 @@ namespace Assets.Scripts.Levels
 
         int GetHeight();
 
-        Tuple<bool, UnitType> TryGetUnit(int xPosition, int yPosition);
+        IPiece TryGetUnit(Tuple<int, int> position);
 
-        void PutUnit(Tuple<int, int> position, bool isWhite, UnitType playerUnit);
+        void PutUnit(Tuple<int, int> position, IPiece playerUnit);
 
         void TryMoveUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition);
     }

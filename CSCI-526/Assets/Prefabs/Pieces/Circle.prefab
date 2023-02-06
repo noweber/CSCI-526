@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2672373381976359518}
   - component: {fileID: 8987676611608543054}
-  - component: {fileID: 4209586453225497907}
+  - component: {fileID: 6246947301073050286}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4209586453225497907
+--- !u!114 &6246947301073050286
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,11 +94,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4268147872431162997}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a125fe68de193451180528da1e611f59, type: 3}
+  m_Script: {fileID: 11500000, guid: c6fc82b35651442f88b63874dcad279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isWhite: 0
-  hasMoved: 0
-  unitName: Circle
-  unitInfo: Upon Capture, get another turn.
-  highlightedMoves: []
+  UnitColor: {r: 0.20784314, g: 0.19215687, b: 0.58431375, a: 1}
+  TypeOfUnit: 0
+  IsHumanUnit: 1

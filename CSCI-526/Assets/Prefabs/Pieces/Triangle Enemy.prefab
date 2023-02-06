@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5682133794172599421}
   - component: {fileID: 7840549658547990761}
-  - component: {fileID: -2734158268479683581}
+  - component: {fileID: 973737288460802875}
   m_Layer: 0
   m_Name: Triangle Enemy
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-2734158268479683581
+--- !u!114 &973737288460802875
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,12 +94,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8349681756844506498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed54ed7bbc7154e03b0eb21e46e47626, type: 3}
+  m_Script: {fileID: 11500000, guid: c6fc82b35651442f88b63874dcad279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isWhite: 0
-  hasMoved: 0
-  unitName: Triangle
-  unitInfo: Cannot move/capture. If next to Circle, can grant player an extra move
-    (works once per turn)
-  highlightedMoves: []
+  UnitColor: {r: 0.5647059, g: 0, b: 0, a: 1}
+  TypeOfUnit: 2
+  IsHumanUnit: 0
