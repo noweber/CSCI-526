@@ -44,9 +44,9 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.White:
                 break;
-            //case GameStateEnum.Black:
-            //    EnemyAI.Instance.MovePiece();
-            //    break;
+            case GameStateEnum.Black:
+                EnemyAI.Instance.MovePiece();
+                break;
             //default:
             //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
