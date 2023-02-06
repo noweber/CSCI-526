@@ -72,27 +72,36 @@ public class EnemyAI : MonoBehaviour
 
     public void MovePiece()
     {
+        StartCoroutine(DelayEnemyStart());
+    }
+
+    private void PerformTurn()
+    {
         var grid = GridManager.Instance;
-        for (int i=0; i < 2; i++)
+        var piece = SelectRandomPiece();
+        if (piece != null)
         {
-            var piece = SelectRandomPiece();
-            if (piece == null)
-            {
-                break;
-            }
             var moves = piece.LegalMoves(grid._width, grid._height);
             int index = Random.Range(0, moves.Count);
             if (grid.MovePiece(moves[index], piece))
             {
                 GameManagerChain.Instance.NumMoves += 1;
             }
-        }
+        }        
 
         if (GameManagerChain.Instance.NumMoves == 2)
         {
+            StopAllCoroutines();
             GameManagerChain.Instance.NumMoves = 0;
             GameManagerChain.Instance.ChangeState(GameStateEnum.White);
         }
+    }
 
+    private IEnumerator DelayEnemyStart()
+    {
+        yield return new WaitForSeconds(1f);
+        PerformTurn();
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(DelayEnemyStart());
     }
 }
