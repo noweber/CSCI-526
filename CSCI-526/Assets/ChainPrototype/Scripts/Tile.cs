@@ -84,7 +84,8 @@ public class Tile : MonoBehaviour
 					{
                     	if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
                     	{
-							// Capturing Piece
+                            //TODO: add LEVELMODEL update for capture
+							// Capturing Piece 
                         	Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
@@ -94,6 +95,7 @@ public class Tile : MonoBehaviour
                                 Debug.Log("Piece that captured is NOT a circle");
                                 GridManager.Instance.storedPiece.hasMoved = true;
                             }
+
                             //GridManager.Instance.storedPiece.hasMoved = true;
                         }
                     }
