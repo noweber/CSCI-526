@@ -160,7 +160,7 @@ public class LevelController : MonoBehaviour
         this.levelModel.TryMoveUnit(storedCoord, coord);
         _pieces[coord] = piece;
         _pieces[storedCoord] = null;
-        piece.transform.position = new Vector3(coord.Item1, coord.Item2, piece.transform.position.z);
+        piece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, piece.transform.position.z));
         storedCoord = new Tuple<int, int>(-1, -1);
         return true;
     }
