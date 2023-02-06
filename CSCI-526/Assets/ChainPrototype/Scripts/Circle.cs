@@ -193,6 +193,22 @@ public class Circle : Piece
 
         }
 
+		
+		if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1) 
+		{
+			legalSpots.Clear();
+			var availableMove = new Tuple<int, int>(3, 3);
+			legalSpots.Add(availableMove);
+		} 
+		else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
+		{
+			// designate move
+		} 
+		else if (GameManagerChain.Instance.SceneName == "TutorialLevel") 
+		{
+			legalSpots.Clear();
+		}
+		
         return legalSpots;
     }
 

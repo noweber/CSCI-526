@@ -59,15 +59,31 @@ public class Tile : MonoBehaviour
             if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
             {
                 //Selects Piece
-                Debug.Log(turn);
                 Debug.Log(GameManagerChain.Instance.NumMoves);
                 GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
  
                 GridManager.Instance.storedPiece.highlightedMoves = clickedPiece.LegalMoves(GridManager.Instance._width, GridManager.Instance._height);
+                
+                if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.unitName == "Circle") 
+                {
+                    GridManager.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(1, 1));
+                    GridManager.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(2, 2));
+                } 
+                
                 foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                 {
                     GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
+                    if (tileCoords.Item1 == 1 && tileCoords.Item2 == 1)
+                    {
+                        GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
+                            new Color32(200, 100, 70, 255);
+                    }
+                    
+                    if (tileCoords.Item1 == 2 && tileCoords.Item2 == 2)
+                    {
+                        GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200,100,70,255);
+                    }
                 }
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
@@ -89,6 +105,7 @@ public class Tile : MonoBehaviour
 							// Capturing Piece 
                         	Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
+                            GameManagerChain.Instance.TotalMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
                             //If Unit that Captured a piece is Circle, gain another turn
                             if (GridManager.Instance.storedPiece.unitName != "Circle")
@@ -103,6 +120,8 @@ public class Tile : MonoBehaviour
 					foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
 					{
 						GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
+                            new Color32(255, 255, 255, 100);
                     }
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
@@ -124,6 +143,8 @@ public class Tile : MonoBehaviour
                     foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                     {
                         GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
+                            new Color32(255, 255, 255, 100);
                         //fix hover unhighlight while selected
                     }
                     MenuManager.Instance.HideAbilityButton();
@@ -131,6 +152,7 @@ public class Tile : MonoBehaviour
                     GridManager.Instance.storedPiece = null;
                     GridManager.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                     GameManagerChain.Instance.NumMoves += 1;
+                    GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
                     //unhighlight after move.
                 }

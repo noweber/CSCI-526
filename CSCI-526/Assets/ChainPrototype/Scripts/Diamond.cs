@@ -53,6 +53,17 @@ public class Diamond : Piece
             }
         }
 
+		if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0) 
+		{
+			// first move of tutorial
+			Debug.Log("FIRST MOVE");
+			var availableMove = new Tuple<int, int>(1, 0);
+			legalSpots.Clear();
+			legalSpots.Add(availableMove);
+		} else if (GameManagerChain.Instance.SceneName == "TutorialLevel") {
+			legalSpots.Clear();
+		}
+
         return legalSpots;
     }
 

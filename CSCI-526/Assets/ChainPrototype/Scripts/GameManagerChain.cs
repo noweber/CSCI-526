@@ -11,19 +11,25 @@ public class GameManagerChain : MonoBehaviour
 
     public int NumMoves;
 
+    public int TotalMoves;
+
     public bool UsedAbility = false;
+
+    public string SceneName;
 
     public List<Piece> MovedPieces;
 
     void Awake()
     {
         Instance = this;
+        SceneName = SceneManager.GetActiveScene().name;
         
     }
     // Start is called before the first frame update
     void Start()
     {
         NumMoves = 0;
+        TotalMoves = 0;
         MovedPieces = new List<Piece>();
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
@@ -38,11 +44,11 @@ public class GameManagerChain : MonoBehaviour
     public void ChangeState(GameStateEnum newState)
     {
         GameStateEnum = newState;
-        var sceneName = SceneManager.GetActiveScene().name;
+        
         switch (newState)
         {
             case GameStateEnum.GenerateGrid:
-                if (sceneName == "TutorialLevel")
+                if (SceneName == "TutorialLevel")
                 {
                     GridManager.Instance.GenerateTutorialGrid();
                 }
@@ -54,7 +60,7 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.White:
                 break;
             case GameStateEnum.Black:
-                if (sceneName == "TutorialLevel")
+                if (SceneName == "TutorialLevel")
                 {
                     // slacking off 
                 }

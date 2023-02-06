@@ -73,7 +73,7 @@ public class GridManager : MonoBehaviour
                 //
                 // }
 
-                if (x == 2 && y == _height - 2 || x == 3 && y == _height - 2)
+                if (x == 3 && y == _height - 4 || x == 3 && y == _height - 3)
                 {
                     units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Circle));
                 }
@@ -215,7 +215,7 @@ public class GridManager : MonoBehaviour
                 }
 
                 // enemies
-                if (x == 2 && y == _height - 2 || x == 3 && y == _height - 2)
+                if (x == 3 && y == _height - 4 || x == 3 && y == _height - 3)
                 {
                     var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
                     circle.isWhite = false;
