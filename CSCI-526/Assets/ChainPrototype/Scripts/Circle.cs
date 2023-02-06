@@ -200,11 +200,7 @@ public class Circle : Piece
 			var availableMove = new Tuple<int, int>(3, 3);
 			legalSpots.Add(availableMove);
 		} 
-		else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
-		{
-			// designate move
-		} 
-		else if (GameManagerChain.Instance.SceneName == "TutorialLevel") 
+		else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0) 
 		{
 			legalSpots.Clear();
 		}

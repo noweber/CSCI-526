@@ -60,7 +60,7 @@ public class Diamond : Piece
 			var availableMove = new Tuple<int, int>(1, 0);
 			legalSpots.Clear();
 			legalSpots.Add(availableMove);
-		} else if (GameManagerChain.Instance.SceneName == "TutorialLevel") {
+		} else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1) {
 			legalSpots.Clear();
 		}
 

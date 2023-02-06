@@ -60,6 +60,7 @@ public class Tile : MonoBehaviour
             {
                 //Selects Piece
                 Debug.Log(GameManagerChain.Instance.NumMoves);
+                Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
                 GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
  
@@ -74,16 +75,8 @@ public class Tile : MonoBehaviour
                 foreach (Tuple<int, int> tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
                 {
                     GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
-                    if (tileCoords.Item1 == 1 && tileCoords.Item2 == 1)
-                    {
-                        GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
-                            new Color32(200, 100, 70, 255);
-                    }
-                    
-                    if (tileCoords.Item1 == 2 && tileCoords.Item2 == 2)
-                    {
-                        GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200,100,70,255);
-                    }
+                    if (tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1 ) { GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+                    if (tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1 ) { GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200,100,70,255); }
                 }
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
