@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManagerChain : MonoBehaviour
 {
@@ -37,15 +38,30 @@ public class GameManagerChain : MonoBehaviour
     public void ChangeState(GameStateEnum newState)
     {
         GameStateEnum = newState;
+        var sceneName = SceneManager.GetActiveScene().name;
         switch (newState)
         {
             case GameStateEnum.GenerateGrid:
-                GridManager.Instance.GenerateGrid();
+                if (sceneName == "TutorialLevel")
+                {
+                    GridManager.Instance.GenerateTutorialGrid();
+                }
+                else
+                {
+                    GridManager.Instance.GenerateGrid(); 
+                }
                 break;
             case GameStateEnum.White:
                 break;
             case GameStateEnum.Black:
-                EnemyAI.Instance.MovePiece();
+                if (sceneName == "TutorialLevel")
+                {
+                    // slacking off 
+                }
+                else
+                {
+                    EnemyAI.Instance.MovePiece();
+                }
                 break;
             //default:
             //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);

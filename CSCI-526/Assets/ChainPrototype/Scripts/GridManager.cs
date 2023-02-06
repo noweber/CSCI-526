@@ -29,6 +29,7 @@ public class GridManager : MonoBehaviour
     //public List<Vector2> storedValidMoves = storedPiece.LegalMoves(_width, _height) ? null;
 
     public ILevelModel levelModel;
+    public ILevelModel tutorialLevelModel;
 
     private void Awake()
     {
@@ -51,36 +52,36 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < _height; y++)
             {
                 Tuple<int, int> position = new(x, y);
-                if (x == 2 && y == 3 || x == _width - 3 && y == 3)
+                if (x == 2 && y == 3)
                 {
                     units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Triangle));
                 }
 
-                if (x == 0 && y == 0 || x == _width - 1 && y == 0)
+                if (x == 0 && y == 0)
                 {
                     units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Circle));
                 }
 
-                if (x == 3 && y == 0 || x == 4 && y == 0)
+                if (x == 3 && y == 0)
                 {
                     units.Add(position, new Tuple<bool, UnitType>(true, UnitType.Diamond));
                 }
 
-                if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
-                {
-                    units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Triangle));
+                // if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
+                // {
+                //     units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Triangle));
+                //
+                // }
 
-                }
-
-                if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
+                if (x == 2 && y == _height - 2 || x == 3 && y == _height - 2)
                 {
                     units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Circle));
                 }
 
-                if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
-                {
-                    units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Diamond));
-                }
+                // if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
+                // {
+                //     units.Add(position, new Tuple<bool, UnitType>(false, UnitType.Diamond));
+                // }
             }
         }
         levelModel = new LevelModel(_width, _height, units);
@@ -166,6 +167,68 @@ public class GridManager : MonoBehaviour
 
         GameManagerChain.Instance.ChangeState(GameStateEnum.White);
         //Debug.Log("Tiles Dictionary");
+    }
+    
+    public void GenerateTutorialGrid()
+    {
+        tiles = new Dictionary<Tuple<int, int>, Tile>();
+        _pieces = new Dictionary<Tuple<int, int>, Piece>();
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity);
+                tile.name = $"Tile {x} {y}";
+
+                var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
+                tile.Init(isOffset);
+
+                var coord = new Tuple<int, int>(x, y);
+                tiles[coord] = tile;
+
+                if (x == 2 && y == 3)
+                {
+                    var triangle = Instantiate(_trianglePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                    triangle.isWhite = true;
+                    triangle.hasMoved = false;
+                    triangle.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
+                    _pieces[coord] = triangle;
+
+                }
+
+                if (x == 0 && y == 0)
+                {
+                    var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                    circle.isWhite = true;
+                    circle.hasMoved = false;
+                    circle.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
+                    _pieces[coord] = circle;
+                }
+
+                if (x == 3 && y == 0)
+                {
+                    var diamond = Instantiate(_diamondPrefab, new Vector3(x, y, -1), _diamondPrefab.transform.rotation);
+                    diamond.isWhite = true;
+                    diamond.hasMoved = false;
+                    diamond.gameObject.GetComponent<SpriteRenderer>().color = colorOne;
+                    _pieces[coord] = diamond;
+                }
+
+                // enemies
+                if (x == 2 && y == _height - 2 || x == 3 && y == _height - 2)
+                {
+                    var circle = Instantiate(_circlePrefab, new Vector3(x, y, -1), Quaternion.identity);
+                    circle.isWhite = false;
+                    circle.hasMoved = false;
+                    circle.gameObject.GetComponent<SpriteRenderer>().color = colorTwo;
+                    _pieces[coord] = circle;
+                }
+            }
+        }
+
+        _camera.transform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
+
+        GameManagerChain.Instance.ChangeState(GameStateEnum.White);
     }
 
     public Tile GetTile(Tuple<int, int> coord)

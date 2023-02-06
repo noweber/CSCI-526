@@ -59,6 +59,7 @@ public class Tile : MonoBehaviour
             if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
             {
                 //Selects Piece
+                Debug.Log(turn);
                 Debug.Log(GameManagerChain.Instance.NumMoves);
                 GridManager.Instance.storedPiece = clickedPiece;
                 GridManager.Instance.storedCoord = coord;
