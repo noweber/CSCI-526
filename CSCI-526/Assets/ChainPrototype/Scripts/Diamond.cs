@@ -61,8 +61,8 @@ public class Diamond : Piece
 			legalSpots.Clear();
 			legalSpots.Add(availableMove);
 		} else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1) {
-			legalSpots.Clear();
-		}
+            legalSpots.Clear();
+        }
 
         return legalSpots;
     }

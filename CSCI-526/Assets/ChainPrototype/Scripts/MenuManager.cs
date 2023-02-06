@@ -1,14 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
 
     public MenuManager()
     {
@@ -149,6 +151,28 @@ public class MenuManager : MonoBehaviour
         _selectUnitInfo.SetActive(false);
     }
 
+    public void UpdateObjectiveContent()
+    {
+        TextMeshProUGUI tmpro = _objectiveContent.GetComponent<TextMeshProUGUI>();
+
+        if(SceneManager.GetActiveScene().name == "TutorialLevel")
+        switch(GameManagerChain.Instance.TotalMoves)
+        {
+                case 0:     // First move -- player must move diamond to the circle
+                    tmpro.text = "<color=black>Let's move the diamond next to the circle.</color>";
+                    break;
+                case 1:     // Second move -- player must move circle next to triangle, directly in front of enemy
+                    tmpro.text = "<color=black>The circle is the main attacker for your team, so let's move the circle closer to the enemy (blue) units.</color>";
+                    break;
+                case 2:     // Free movement -- player freely maneuvers
+                    tmpro.text = "<color=black>Capture the enemy's pieces.</color>";
+                    break;
+        }
+    }
+    public void SetSlackDialogue(bool status)
+    {
+        _slackObject.SetActive(status);
+    }
     /*
     public void ShowTileInfo(Tile tile)
     {
@@ -185,7 +209,10 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(SceneManager.GetActiveScene().name == "TutorialLevel")
+        {
+            MenuManager.Instance.UpdateObjectiveContent();
+        }
     }
 
     // Update is called once per frame

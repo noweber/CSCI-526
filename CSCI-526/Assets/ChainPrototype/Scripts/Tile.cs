@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Tile : MonoBehaviour
 {
@@ -99,6 +100,12 @@ public class Tile : MonoBehaviour
                         	Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
                             GameManagerChain.Instance.TotalMoves += 1;
+
+                            if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                            {
+                                MenuManager.Instance.UpdateObjectiveContent();
+                            }
+
                             MenuManager.Instance.ShowNumMovesInfo();
                             //If Unit that Captured a piece is Circle, gain another turn
                             if (GridManager.Instance.storedPiece.unitName != "Circle")
@@ -147,6 +154,11 @@ public class Tile : MonoBehaviour
                     GameManagerChain.Instance.NumMoves += 1;
                     GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
+
+                    if(SceneManager.GetActiveScene().name == "TutorialLevel")
+                    {
+                        MenuManager.Instance.UpdateObjectiveContent();
+                    }
                     //unhighlight after move.
                 }
             }
@@ -159,8 +171,17 @@ public class Tile : MonoBehaviour
 			GameManagerChain.Instance.NumMoves = 0;
 			if (turn == true) 
 			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
-			} else
+                if(SceneManager.GetActiveScene().name == "TutorialLevel")
+                {
+                    // Delayed switch back from black for tutorial
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+                    StartCoroutine(DelayedChangeState());
+                }
+                else
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+                }
+            } else
 			{
 				GameManagerChain.Instance.ChangeState(GameStateEnum.White);
 			}
@@ -182,6 +203,16 @@ public class Tile : MonoBehaviour
 
         //extra: highlight valid spots to move for specific piece
         //_highlight.SetActive(true)?
+    }
+
+    // "Slacking off" text for 3 seconds, then change state to white
+    private IEnumerator DelayedChangeState()
+    {
+        MenuManager.Instance.SetSlackDialogue(true);
+        yield return new WaitForSeconds(3);
+        MenuManager.Instance.SetSlackDialogue(false);
+        GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+        yield return null;
     }
 
     // Start is called before the first frame update
