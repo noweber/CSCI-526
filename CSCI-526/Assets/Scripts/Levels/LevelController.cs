@@ -52,6 +52,7 @@ public class LevelController : MonoBehaviour
     {
         // TODO: Delete all tiles
         // TODO: Delete all pieces
+        // TODO: Ensure any elements of the previous level are removed from the scene.
     }
 
     private void CreateSceneObjects(LevelData level)
