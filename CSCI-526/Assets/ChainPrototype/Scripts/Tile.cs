@@ -209,7 +209,7 @@ public class Tile : MonoBehaviour
     private IEnumerator DelayedChangeState()
     {
         MenuManager.Instance.SetSlackDialogue(true);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
         MenuManager.Instance.SetSlackDialogue(false);
         GameManagerChain.Instance.ChangeState(GameStateEnum.White);
         yield return null;
