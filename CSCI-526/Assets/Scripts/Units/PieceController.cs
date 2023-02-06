@@ -14,6 +14,9 @@ public class PieceController : MonoBehaviour
 
     public bool IsHumanUnit;
 
+    // TODO: Ask what this is used for.
+    public List<Tuple<int, int>> highlightedMoves = new();
+
     private void Awake()
     {
         Tuple<int, int> position = new((int)transform.position.x, (int)transform.position.y);
@@ -25,8 +28,6 @@ public class PieceController : MonoBehaviour
         };
         gameObject.GetComponent<SpriteRenderer>().color = UnitColor;
     }
-
-    public List<Tuple<int, int>> highlightedMoves;
 
     public List<Tuple<int, int>> GetAdjacentAllies(Tuple<int, int> unitPosition)
     {

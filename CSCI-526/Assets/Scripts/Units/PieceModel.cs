@@ -35,7 +35,8 @@ namespace Assets.Scripts.Piece
 
         public string Summary()
         {
-            throw new NotImplementedException();
+            // TODO: Ask where this data should come from for the UI.
+            return "TODO";
         }
 
         public void UpdateLocation(Tuple<int, int> location)

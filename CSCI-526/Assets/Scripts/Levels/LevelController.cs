@@ -2,7 +2,6 @@ using Assets.Scripts.Levels;
 using Assets.Scripts.Piece;
 using Assets.Scripts.Units;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,59 +39,28 @@ public class LevelController : MonoBehaviour
         {
             Instance = this;
         }
-
-        // TODO: Take these units (along with a width and height) from a file for each level to load.
-
-        tiles = new Dictionary<Tuple<int, int>, Tile>();
-
-        Dictionary<Tuple<int, int>, IPiece> units = new();
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                Tuple<int, int> position = new(x, y);
-                if (x == 2 && y == 3 || x == _width - 3 && y == 3)
-                {
-                    units.Add(position, new TriangleModel(position, true));
-                }
-
-                if (x == 0 && y == 0 || x == _width - 1 && y == 0)
-                {
-                    units.Add(position, new CircleModel(position, true));
-                }
-
-                if (x == 3 && y == 0 || x == 4 && y == 0)
-                {
-                    units.Add(position, new DiamondModel(position, true));
-                }
-
-                if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
-                {
-                    units.Add(position, new TriangleModel(position, false));
-
-                }
-
-                if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
-                {
-                    units.Add(position, new CircleModel(position, false));
-                }
-
-                if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
-                {
-                    units.Add(position, new DiamondModel(position, false));
-                }
-            }
-        }
-        levelModel = new LevelModel(_width, _height, units);
     }
 
-    public void GenerateGrid()
+    public void LoadLevel(LevelData level)
+    {
+        UnloadLevel();
+        levelModel = new LevelModel(level.Width, level.Height, level.Units);
+        CreateSceneObjects(level);
+    }
+
+    private void UnloadLevel()
+    {
+        // TODO: Delete all tiles
+        // TODO: Delete all pieces
+    }
+
+    private void CreateSceneObjects(LevelData level)
     {
         tiles = new Dictionary<Tuple<int, int>, Tile>();
         _pieces = new Dictionary<Tuple<int, int>, PieceController>();
-        for (int x = 0; x < _width; x++)
+        for (int x = 0; x < level.Width; x++)
         {
-            for (int y = 0; y < _height; y++)
+            for (int y = 0; y < level.Height; y++)
             {
                 var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity);
                 tile.name = $"Tile {x} {y}";
@@ -148,9 +116,7 @@ public class LevelController : MonoBehaviour
         }
 
         _camera.transform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
-
-        GameManagerChain.Instance.ChangeState(GameStateEnum.White);
-        //Debug.Log("Tiles Dictionary");
+        GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
     }
 
     public Tile GetTile(Tuple<int, int> coord)

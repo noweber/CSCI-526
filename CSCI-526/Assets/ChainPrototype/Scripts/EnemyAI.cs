@@ -116,7 +116,7 @@ public class EnemyAI : MonoBehaviour
             }
             StopAllCoroutines();
             GameManagerChain.Instance.NumMoves = 0;
-            GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
     }
 

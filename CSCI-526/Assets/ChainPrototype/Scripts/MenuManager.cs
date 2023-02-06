@@ -28,7 +28,7 @@ public class MenuManager : MonoBehaviour
     }
     public void ShowTurnInfo()
     {
-        if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.White)
+        if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human)
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
         } else
@@ -68,16 +68,16 @@ public class MenuManager : MonoBehaviour
         GameManagerChain.Instance.MovedPieces = new List<PieceController>();
         GameManagerChain.Instance.NumMoves = 0;
         GameManagerChain.Instance.UsedAbility = false;
-        var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.White ? true : false;
+        var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
         if (turn == true)
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+            GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
         }
         else
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
 		if (LevelController.Instance.storedPiece != null && LevelController.Instance.storedPiece.highlightedMoves.Count > 0) 
 		{

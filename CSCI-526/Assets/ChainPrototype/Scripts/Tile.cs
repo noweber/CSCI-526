@@ -54,7 +54,7 @@ public class Tile : MonoBehaviour
         var clickedPiece = LevelController.Instance.GetPiece(new Tuple<int, int>((int)this.transform.position.x,(int)this.transform.position.y));
         Debug.Log(clickedPiece);
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
-		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.White ? true : false;
+		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
         if (clickedPiece != null) // selected piece is correct turn's color
         {
@@ -145,10 +145,10 @@ public class Tile : MonoBehaviour
 			GameManagerChain.Instance.NumMoves = 0;
 			if (turn == true) 
 			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+				GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
 			} else
 			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+				GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
 			}
 			foreach (var piece in GameManagerChain.Instance.MovedPieces) 
 			{

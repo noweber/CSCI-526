@@ -58,10 +58,10 @@ namespace Assets.Scripts.Units
         private bool TriangleAbilityCheck(Tuple<int, int> position)
         {
             var adjList = this.AdjacentAllies(new Tuple<int, int>(position.Item1, position.Item2));
-            foreach (Tuple<int, int> coord in adjList)
+            /*foreach (Tuple<int, int> coord in adjList)
             {
                 Debug.Log("Triangle Allies: " + coord.Item1 + ", " + coord.Item2);
-            }
+            }*/
             var lvlModel = LevelController.Instance.levelModel;
             if (adjList != null)
             {
