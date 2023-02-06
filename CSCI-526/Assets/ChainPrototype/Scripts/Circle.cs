@@ -218,19 +218,23 @@ public class Circle : Piece
             }
         }
         if (adjAlly.Count == 0)
+        {
             return null;
+        }
         return adjAlly;
     }
 
     //fix later
     private bool CircleMovementCheck(Vector2Int pos)
     {
+        Debug.Log("CircleMovementCheck");
         var adjList = this.adjacentAllies(new Tuple<int, int>(pos.x, pos.y));
         var lvlModel = GridManager.Instance.levelModel;
         if (adjList != null)
         {
             foreach (Tuple<int, int> coord in adjList)
             {
+                Debug.Log("" + coord.Item1 + " " + coord.Item2);
                 if (lvlModel.TryGetUnit(coord.Item1, coord.Item2).Item2 == Assets.Scripts.Units.UnitType.Diamond)
                 {
                     Debug.Log("Make Circle move like Queen");

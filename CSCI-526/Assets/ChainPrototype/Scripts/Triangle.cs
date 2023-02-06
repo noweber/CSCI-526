@@ -59,6 +59,10 @@ public class Triangle : Piece
     private bool TriangleAbilityCheck(Vector2Int pos)
     {
         var adjList = this.adjacentAllies(new Tuple<int, int>(pos.x, pos.y));
+        foreach (Tuple<int, int> coord in adjList)
+        {
+            Debug.Log("Triangle Allies: " + coord.Item1 + ", " + coord.Item2);
+        }
         var lvlModel = GridManager.Instance.levelModel;
         if (adjList != null)
         {

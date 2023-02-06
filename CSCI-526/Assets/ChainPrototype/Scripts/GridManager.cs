@@ -205,9 +205,11 @@ public class GridManager : MonoBehaviour
             Debug.Log("Return False Capture Triangle: " + coord);
             return false;
         }
+        this.levelModel.TryMoveUnit(storedCoord, coord);
         _pieces[coord] = piece;
         _pieces[storedCoord] = null;
         piece.transform.position = new Vector3(coord.Item1, coord.Item2, piece.transform.position.z);
+
         return true;
     }
 
