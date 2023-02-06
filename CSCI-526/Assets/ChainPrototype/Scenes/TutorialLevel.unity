@@ -2084,6 +2084,7 @@ MonoBehaviour:
   _abilityUseObject: {fileID: 1998378514}
   _endTurnObject: {fileID: 377944448}
   _objectiveContent: {fileID: 2035138802}
+  _slackObject: {fileID: 2125925410}
 --- !u!4 &2024726068
 Transform:
   m_ObjectHideFlags: 0
