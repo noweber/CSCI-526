@@ -50,6 +50,15 @@ namespace Assets.Scripts.Levels
                 units[toPosition.Item1, toPosition.Item2] = units[fromPosition.Item1, fromPosition.Item2];
                 units[fromPosition.Item1, fromPosition.Item2] = null;
             }
+            else if (units[fromPosition.Item1, fromPosition.Item2] != null && units[toPosition.Item1, toPosition.Item2] != null)
+            {
+                if (units[fromPosition.Item1, fromPosition.Item2].Item1 !=
+                    units[toPosition.Item1, toPosition.Item2].Item1)
+                {
+                    units[toPosition.Item1, toPosition.Item2] = units[fromPosition.Item1, fromPosition.Item2];
+                    units[fromPosition.Item1, fromPosition.Item2] = null;
+                }
+            }
         }
 
         public LevelModel(int gridWidth, int gridHeight, Dictionary<Tuple<int, int>, Tuple<bool, UnitType>> playerUnits = null)
