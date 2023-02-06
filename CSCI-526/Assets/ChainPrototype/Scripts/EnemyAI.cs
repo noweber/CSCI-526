@@ -103,6 +103,7 @@ public class EnemyAI : MonoBehaviour
             {
                 GameManagerChain.Instance.MovedPieces.Add(piece);
                 GameManagerChain.Instance.NumMoves += 1;
+                MenuManager.Instance.ShowNumMovesInfo();
             }
         }        
 
