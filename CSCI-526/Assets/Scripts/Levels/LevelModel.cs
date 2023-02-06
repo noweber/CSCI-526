@@ -43,6 +43,8 @@ namespace Assets.Scripts.Levels
         public void TryMoveUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition)
         {
             // TODO: Validate inputs.
+            UnityEngine.Debug.Log("From: " + fromPosition.Item1 + ", " + fromPosition.Item2);
+            UnityEngine.Debug.Log("To: " + toPosition.Item1 + ", " + toPosition.Item2);
             if (units[fromPosition.Item1, fromPosition.Item2] != null && units[toPosition.Item1, toPosition.Item2] == null)
             {
                 units[toPosition.Item1, toPosition.Item2] = units[fromPosition.Item1, fromPosition.Item2];

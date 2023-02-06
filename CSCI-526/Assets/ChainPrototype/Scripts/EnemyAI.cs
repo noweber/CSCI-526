@@ -36,7 +36,7 @@ public class EnemyAI : MonoBehaviour
         {
             for (int y = 0; y < GridManager.Instance._height; y++)
             {
-                if (lvlModel.TryGetUnit(x, y) != null && lvlModel.TryGetUnit(x, y).Item1 != true)
+                if (lvlModel.TryGetUnit(x, y) != null && lvlModel.TryGetUnit(x, y).Item1 != true && lvlModel.TryGetUnit(x, y).Item2 != UnitType.Triangle)
                 {
                     allEnemyPieces.Add(new Tuple<int, int>(x, y));
                 }
@@ -49,23 +49,39 @@ public class EnemyAI : MonoBehaviour
         GetPieces();
         var pieces = GridManager.Instance._pieces; 
         bool checkMove = true;
-        int countFalse = 0;
         while (checkMove == true)
         {
             int index = Random.Range(0, allEnemyPieces.Count);
-            if (pieces.ContainsKey(allEnemyPieces[index]) && pieces[allEnemyPieces[index]].unitName != "Triangle" && pieces[allEnemyPieces[index]].hasMoved != true)
+            if (pieces.ContainsKey(allEnemyPieces[index]) && pieces[allEnemyPieces[index]] != null)
             {
-                checkMove = false;
-                return pieces[allEnemyPieces[index]];
+                Debug.Log("ContainsKey");
+                if (pieces[allEnemyPieces[index]].unitName != "Triangle")
+                {
+                    Debug.Log("not Triangle");
+                    if (pieces[allEnemyPieces[index]].hasMoved != true)
+                    {
+                        Debug.Log("hasMoved");
+                        checkMove = false;
+                        GridManager.Instance.storedCoord = allEnemyPieces[index];
+                        pieces[allEnemyPieces[index]].hasMoved = true;
+                        return pieces[allEnemyPieces[index]];
+                    }
+                }
             } else
             {
-                countFalse++;
+                if (allEnemyPieces.Count <= 2)
+                {
+                    foreach(var enemy in allEnemyPieces)
+                    {
+                        if (pieces[enemy].unitName == "Triangle" || pieces[enemy].hasMoved == true)
+                        {
+                            checkMove = false;
+                            break;
+                        } 
+                    }
+                }
             }
-
-            if (countFalse == allEnemyPieces.Count - 2)
-            {
-                break;
-            }
+            
         }
         return null;
     }
@@ -85,12 +101,17 @@ public class EnemyAI : MonoBehaviour
             int index = Random.Range(0, moves.Count);
             if (grid.MovePiece(moves[index], piece))
             {
+                GameManagerChain.Instance.MovedPieces.Add(piece);
                 GameManagerChain.Instance.NumMoves += 1;
             }
         }        
 
         if (GameManagerChain.Instance.NumMoves == 2)
         {
+            foreach (var pieces in GameManagerChain.Instance.MovedPieces)
+            {
+                pieces.hasMoved = false;
+            }
             StopAllCoroutines();
             GameManagerChain.Instance.NumMoves = 0;
             GameManagerChain.Instance.ChangeState(GameStateEnum.White);

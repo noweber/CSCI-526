@@ -165,7 +165,7 @@ public class GridManager : MonoBehaviour
         _camera.transform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
 
         GameManagerChain.Instance.ChangeState(GameStateEnum.White);
-        Debug.Log("Tiles Dictionary");
+        //Debug.Log("Tiles Dictionary");
     }
 
     public Tile GetTile(Tuple<int, int> coord)
@@ -202,14 +202,14 @@ public class GridManager : MonoBehaviour
         }
         if (GridManager.Instance.GetPiece(coord) != null && piece.unitName == "Triangle")
         {
-            Debug.Log("Return False Capture Triangle: " + coord);
+            //Debug.Log("Return False Capture Triangle: " + coord);
             return false;
         }
         this.levelModel.TryMoveUnit(storedCoord, coord);
         _pieces[coord] = piece;
         _pieces[storedCoord] = null;
         piece.transform.position = new Vector3(coord.Item1, coord.Item2, piece.transform.position.z);
-
+        storedCoord = new Tuple<int, int>(-1, -1);
         return true;
     }
 
