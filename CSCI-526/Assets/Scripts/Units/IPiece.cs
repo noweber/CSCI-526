@@ -14,7 +14,7 @@ namespace Assets.Scripts.Piece
 
         string Name();
 
-        string Summary();
+        string Info();
 
         List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition);
 

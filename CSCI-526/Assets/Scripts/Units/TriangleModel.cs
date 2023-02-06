@@ -16,6 +16,11 @@ namespace Assets.Scripts.Units
             return UnitType.Triangle.ToString();
         }
 
+        public override string Info()
+        {
+            return "Cannot move/capture. If next to Circle, can grant player an extra move (works once per turn).";
+        }
+
         public override List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
         {
             var adjacentList = new List<Tuple<int, int>>();

@@ -16,6 +16,11 @@ namespace Assets.Scripts.Units
             return UnitType.Diamond.ToString();
         }
 
+        public override string Info()
+        {
+            return "If adjacent to circle, circle gains range.";
+        }
+
         public override List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
         {
             var adjacentList = new List<Tuple<int, int>>();

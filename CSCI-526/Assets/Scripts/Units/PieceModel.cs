@@ -33,11 +33,8 @@ namespace Assets.Scripts.Piece
             return IsHumanUnit;
         }
 
-        public string Summary()
-        {
-            // TODO: Ask where this data should come from for the UI.
-            return "TODO";
-        }
+        // TODO: Move these strings back to the inspector via prefab?
+        public abstract string Info();
 
         public void UpdateLocation(Tuple<int, int> location)
         {

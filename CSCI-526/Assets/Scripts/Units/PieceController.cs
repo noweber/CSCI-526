@@ -61,7 +61,7 @@ public class PieceController : MonoBehaviour
 
     public string Summary()
     {
-        return pieceModel.Summary();
+        return pieceModel.Info();
     }
 
     public void UpdateLocation(Vector3 location)

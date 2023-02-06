@@ -15,6 +15,11 @@ namespace Assets.Scripts.Units
             return UnitType.Circle.ToString();
         }
 
+        public override string Info()
+        {
+            return "Upon Capture, get another turn.";
+        }
+
         public override List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
         {
             var adjacentList = new List<Tuple<int, int>>();

@@ -116,7 +116,7 @@ public class LevelController : MonoBehaviour
             }
         }
 
-        _camera.transform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
+        _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
     }
 
@@ -147,7 +147,7 @@ public class LevelController : MonoBehaviour
 
     public bool MovePiece(Tuple<int, int> coord, PieceController piece)
     {
-        var validMoves = piece.GetLegalMoves(_width, _height);
+        var validMoves = piece.GetLegalMoves(levelModel.GetWidth(), levelModel.GetHeight());
         if (!validMoves.Contains(new Tuple<int, int>(coord.Item1, coord.Item2)))
         {
             return false;

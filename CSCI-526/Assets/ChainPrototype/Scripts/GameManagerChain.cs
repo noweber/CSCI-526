@@ -22,6 +22,7 @@ public class GameManagerChain : MonoBehaviour
         Instance = this;
         
     }
+
     // Start is called before the first frame update
     void Start()
     {
