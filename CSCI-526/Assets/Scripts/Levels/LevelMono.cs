@@ -168,7 +168,7 @@ public class LevelMono : MonoBehaviour
         }
         _pieces[coord] = piece;
         piece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, piece.transform.position.z));
-        _pieces[storedCoord] = null;
+        _pieces.Remove(storedCoord);
         storedCoord = new Tuple<int, int>(-1, -1);
         return true;
     }

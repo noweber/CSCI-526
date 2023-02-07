@@ -51,6 +51,12 @@ public class Tile : MonoBehaviour
     {
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
         var clickedPiece = LevelMono.Instance.GetPiece(coord);
+        if (clickedPiece!=null)
+        {
+            Debug.Log(clickedPiece);
+            Debug.Log(clickedPiece.HasMoved());
+        }
+        
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
         // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
@@ -90,8 +96,8 @@ public class Tile : MonoBehaviour
                 foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
                 {
                     LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(true);
-                    if (tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
-                    if (tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+                    if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+                    if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
                 }
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
@@ -179,7 +185,15 @@ public class Tile : MonoBehaviour
         // turn logic
         if (GameManagerChain.Instance.NumMoves == 2)
         {
+            foreach (var piece in GameManagerChain.Instance.MovedPieces)
+            {
+                piece.SetMoveState(false);
+            }
+            GameManagerChain.Instance.UsedAbility = false;
+            GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
             GameManagerChain.Instance.NumMoves = 0;
+
+            
             if (turn == true)
             {
                 GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
@@ -200,12 +214,14 @@ public class Tile : MonoBehaviour
         {
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
+        /*
         foreach (var piece in GameManagerChain.Instance.MovedPieces)
         {
             piece.SetMoveState(false);
         }
         GameManagerChain.Instance.UsedAbility = false;
         GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
+        */
     }
 
     // "Slacking off" text for 3 seconds, then change state to white

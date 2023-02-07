@@ -59,7 +59,7 @@ namespace Assets.Scripts.Units
                         var availableMove = new Tuple<int, int>(i, j);
                         if (lvlModel.TryGetUnit(availableMove) != null)
                         {
-                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman()) { continue; }
+                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == this.IsControlledByHuman()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -70,7 +70,7 @@ namespace Assets.Scripts.Units
                         var availableMove = new Tuple<int, int>(i, j);
                         if (lvlModel.TryGetUnit(availableMove) != null)
                         {
-                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman()) { continue; }
+                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman()  == this.IsControlledByHuman()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -79,7 +79,7 @@ namespace Assets.Scripts.Units
                         var availableMove = new Tuple<int, int>(i, j);
                         if (lvlModel.TryGetUnit(availableMove) != null)
                         {
-                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman()) { continue; }
+                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == this.IsControlledByHuman()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }

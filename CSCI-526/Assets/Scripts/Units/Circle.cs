@@ -63,11 +63,11 @@ namespace Assets.Scripts.Units
                 for (int i = 1; i <= range; i++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1 - i, Position.Item2);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
@@ -80,11 +80,11 @@ namespace Assets.Scripts.Units
                 for (int i = 1; i <= range; i++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1 + i, Position.Item2);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
@@ -97,11 +97,11 @@ namespace Assets.Scripts.Units
                 for (int j = 1; j <= range; j++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1, Position.Item2 + j);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
@@ -114,11 +114,11 @@ namespace Assets.Scripts.Units
                 for (int j = 1; j <= range; j++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1, Position.Item2 - j);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
@@ -132,11 +132,11 @@ namespace Assets.Scripts.Units
                 for (int i = 1; i <= range; i++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1 - i, Position.Item2 + i);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
@@ -150,11 +150,11 @@ namespace Assets.Scripts.Units
                 for (int i = 1; i <= range; i++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1 + i, Position.Item2 + i);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
@@ -168,11 +168,11 @@ namespace Assets.Scripts.Units
                 for (int i = 1; i <= range; i++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1 - i, Position.Item2 - i);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
@@ -186,11 +186,11 @@ namespace Assets.Scripts.Units
                 for (int i = 1; i <= range; i++)
                 {
                     var availableMove = new Tuple<int, int>(Position.Item1 + i, Position.Item2 - i);
-                    if (lvlModel.TryGetUnit(availableMove) != null && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(availableMove) != null && (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == base.IsControlledByHuman()))
                     {
                         break;
                     }
-                    else if (lvlModel.TryGetUnit(availableMove) != null && !lvlModel.TryGetUnit(availableMove).IsControlledByHuman())
+                    else if (lvlModel.TryGetUnit(availableMove) != null && (!lvlModel.TryGetUnit(availableMove).IsControlledByHuman() || (!base.IsControlledByHuman() && lvlModel.TryGetUnit(availableMove).IsControlledByHuman())))
                     {
                         legalSpots.Add(availableMove);
                         break;
