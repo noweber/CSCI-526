@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
+    [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public MenuManager()
     {
@@ -125,26 +128,61 @@ public class MenuManager : MonoBehaviour
         if (piece == null)
         {
             _selectedUnitObject.SetActive(false);
-            _selectUnitInfo.SetActive(false);
             return;
         }
         _selectedUnitObject.GetComponentInChildren<Text>().text = piece.Name();
         _selectUnitInfo.GetComponentInChildren<Text>().text = piece.Summary();
         _selectedUnitObject.SetActive(true);
-        _selectUnitInfo.SetActive(true);
     }
 
     public void HideUnitInfo(PieceController piece)
     {
-        if (piece == null)
+        if(piece == null)
         {
             _selectedUnitObject.SetActive(false);
-            _selectUnitInfo.SetActive(false);
             return;
         }
-        _selectedUnitObject.GetComponentInChildren<Text>().text = "Unit Name";
-        _selectUnitInfo.GetComponentInChildren<Text>().text = "Unit Info";
+        // Necessary?
+        unitInfo.text = "Unit Name";
+        unitAbility.text = "Unit Ability";
         _selectedUnitObject.SetActive(false);
-        _selectUnitInfo.SetActive(false);
+    }
+
+    public void UpdateObjectiveContent()
+    {
+        TextMeshProUGUI tmpro = _objectiveContent.GetComponent<TextMeshProUGUI>();
+
+        if(SceneManager.GetActiveScene().name == "TutorialLevel")
+        switch(GameManagerChain.Instance.TotalMoves)
+        {
+                case 0:     // First move -- player must move diamond to the circle
+                    tmpro.text = "Let's move the diamond next to the circle.";
+                    break;
+                case 1:     // Second move -- player must move circle next to triangle, directly in front of enemy
+                    tmpro.text = "The circle is the main attacker for your team, so let's move the circle closer to the enemy (blue) units.";
+                    break;
+                case 2:     // Free movement -- player freely maneuvers
+                    tmpro.text = "When the circle captures an enemy piece, you get another turn, once per round. Capture the enemy's pieces.";
+                    break;
+        }
+    }
+    public void SetSlackDialogue(bool status)
+    {
+        _slackObject.SetActive(status);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if(SceneManager.GetActiveScene().name == "TutorialLevel")
+        {
+            MenuManager.Instance.UpdateObjectiveContent();
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

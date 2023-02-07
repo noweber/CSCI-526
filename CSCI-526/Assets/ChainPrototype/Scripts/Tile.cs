@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Tile : MonoBehaviour
 {
@@ -54,17 +55,46 @@ public class Tile : MonoBehaviour
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
         var clickedPiece = LevelController.Instance.GetPiece(coord);
 		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
+
+        // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
+
+    
+        if (GridManager.Instance.levelModel.TryGetUnit(3,4) == null) 
+        {
+            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)");Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+
+        }
+        else if (GridManager.Instance.levelModel.TryGetUnit(3,4).Item1 == true)
+
+        {
+            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
+            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
+        }
+        
         if (clickedPiece != null) // selected piece is correct turn's color
         {
             if (LevelController.Instance.storedPiece == null && turn == clickedPiece.IsControlledByHuman() && clickedPiece.HasMoved() == false)
             {
                 //Selects Piece
-                LevelController.Instance.storedPiece = clickedPiece;
-                LevelController.Instance.storedCoord = coord;
+                Debug.Log(GameManagerChain.Instance.NumMoves);
+                Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
+                GridManager.Instance.storedPiece = clickedPiece;
+                GridManager.Instance.storedCoord = coord;
+ 
                 LevelController.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelController.Instance.LevelModel.GetWidth(), LevelController.Instance.LevelModel.GetHeight());
+                
+                if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.unitName == "Circle") 
+                {
+                    GridManager.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(1, 1));
+                    GridManager.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(2, 2));
+                } 
+                
                 foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
                 {
                     LevelController.Instance.tiles[tileCoords]._highlight.SetActive(true);
+                    if (tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1 ) { GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+                    if (tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1 ) { GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200,100,70,255); }
                 }
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
@@ -82,6 +112,14 @@ public class Tile : MonoBehaviour
 							// Capturing Piece 
                         	// Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
+                            GameManagerChain.Instance.TotalMoves += 1;
+                            
+
+                            if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                            {
+                                MenuManager.Instance.UpdateObjectiveContent();
+                            }
+
                             MenuManager.Instance.ShowNumMovesInfo();
                             //If Unit that Captured a piece is Circle, gain another turn
                             if (LevelController.Instance.storedPiece.Name() != "Circle")
@@ -96,6 +134,8 @@ public class Tile : MonoBehaviour
 					foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
 					{
 						LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        LevelController.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
+                            new Color32(255, 255, 255, 100);
                     }
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(LevelController.Instance.storedPiece);
@@ -117,6 +157,8 @@ public class Tile : MonoBehaviour
                     foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
                     {
                         LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        LevelController.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
+                            new Color32(255, 255, 255, 100);
                         //fix hover unhighlight while selected
                     }
                     MenuManager.Instance.HideAbilityButton();
@@ -124,7 +166,14 @@ public class Tile : MonoBehaviour
                     LevelController.Instance.storedPiece = null;
                     LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                     GameManagerChain.Instance.NumMoves += 1;
+                    GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
+                
+
+                    if(SceneManager.GetActiveScene().name == "TutorialLevel")
+                    {
+                        MenuManager.Instance.UpdateObjectiveContent();
+                    }
                     //unhighlight after move.
                 }
             }
@@ -133,12 +182,22 @@ public class Tile : MonoBehaviour
 		// turn logic
 		if (GameManagerChain.Instance.NumMoves == 2) 
 		{
-			
 			GameManagerChain.Instance.NumMoves = 0;
 			if (turn == true) 
 			{
 				GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
 			} else
+                if(SceneManager.GetActiveScene().name == "TutorialLevel")
+                {
+                    // Delayed switch back from black for tutorial
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+                    StartCoroutine(DelayedChangeState());
+                }
+                else
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+                }
+            } else
 			{
 				GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
 			}
@@ -160,6 +219,17 @@ public class Tile : MonoBehaviour
 
         //extra: highlight valid spots to move for specific piece
         //_highlight.SetActive(true)?
+        
+    }
+
+    // "Slacking off" text for 3 seconds, then change state to white
+    private IEnumerator DelayedChangeState()
+    {
+        MenuManager.Instance.SetSlackDialogue(true);
+        yield return new WaitForSeconds(2);
+        MenuManager.Instance.SetSlackDialogue(false);
+        GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+        yield return null;
     }
 
     // Start is called before the first frame update

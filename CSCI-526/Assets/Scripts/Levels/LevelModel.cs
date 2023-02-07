@@ -64,6 +64,16 @@ namespace Assets.Scripts.Levels
                 units.Remove(fromPosition);
                 return true;
             }
+            /*
+            else if (units[fromPosition.Item1, fromPosition.Item2] != null && units[toPosition.Item1, toPosition.Item2] != null)
+            {
+                if (units[fromPosition.Item1, fromPosition.Item2].Item1 !=
+                    units[toPosition.Item1, toPosition.Item2].Item1)
+                {
+                    units[toPosition.Item1, toPosition.Item2] = units[fromPosition.Item1, fromPosition.Item2];
+                    units[fromPosition.Item1, fromPosition.Item2] = null;
+                }*/
+            }
             else if (units.ContainsKey(fromPosition) && units.ContainsKey(toPosition))
             {
                 // Then the unit may need to be captured:

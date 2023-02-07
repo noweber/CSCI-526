@@ -4,6 +4,7 @@ using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManagerChain : MonoBehaviour
 {
@@ -13,13 +14,21 @@ public class GameManagerChain : MonoBehaviour
 
     public int NumMoves;
 
+    public int TotalMoves;
+
     public bool UsedAbility = false;
 
     public List<PieceController> MovedPieces;
+    public string SceneName;
+
+    public List<Piece> MovedPieces;
+
+    public string playTestID;
 
     void Awake()
     {
         Instance = this;
+        SceneName = SceneManager.GetActiveScene().name;
         
     }
 
@@ -28,8 +37,14 @@ public class GameManagerChain : MonoBehaviour
     {
         NumMoves = 0;
         MovedPieces = new List<PieceController>();
+
+        TotalMoves = 0;
+        MovedPieces = new List<Piece>();
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
+
+        playTestID = System.Guid.NewGuid().ToString();
+
     }
 
     // Update is called once per frame
@@ -41,21 +56,38 @@ public class GameManagerChain : MonoBehaviour
     public void ChangeState(GameStateEnum newState)
     {
         GameStateEnum = newState;
+        
         switch (newState)
         {
             case GameStateEnum.GenerateGrid:
-                LevelController.Instance.LoadLevel(LevelOne());
+                if (SceneName == "TutorialLevel")
+                {
+                    GridManager.Instance.GenerateTutorialGrid();
+                }
+                else
+                {
+                    LevelController.Instance.LoadLevel(LevelOne());
+                }
                 break;
             case GameStateEnum.Human:
                 break;
             case GameStateEnum.AI:
-                EnemyAI.Instance.MovePiece();
+            case GameStateEnum.Black:
+                if (SceneName == "TutorialLevel")
+                {
+                    // slacking off 
+                }
+                else
+                {
+                    EnemyAI.Instance.MovePiece();
+                }
                 break;
             //default:
             //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
         MenuManager.Instance.ShowTurnInfo();
         MenuManager.Instance.ShowNumMovesInfo();
+
     }
 
     private LevelData LevelOne()
