@@ -57,18 +57,18 @@ public class Tile : MonoBehaviour
 
         // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
 
-    
-        if (GridManager.Instance.levelModel.TryGetUnit(3,4) == null) 
+
+        if (GridManager.Instance.levelModel.TryGetUnit(3,4) == null && Analytics.Instance.flag == 0) 
         {
-            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
-            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)");Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null ) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.flag = 1 ; Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.flag = 1 ;Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
 
         }
-        else if (GridManager.Instance.levelModel.TryGetUnit(3,4).Item1 == true)
+        else if (GridManager.Instance.levelModel.TryGetUnit(3,4)?.Item1 == true && Analytics.Instance.flag == 0)
 
         {
-            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
-            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
+            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.flag = 1 ; Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
+            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.flag = 1 ; Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
         }
         
 

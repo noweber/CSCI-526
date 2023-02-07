@@ -10,6 +10,7 @@ public class Analytics : MonoBehaviour
     private long _sessionID;
     private int _totalMoves;
     public static Analytics Instance;
+    public int flag=0;
 
     public Analytics()
     {
