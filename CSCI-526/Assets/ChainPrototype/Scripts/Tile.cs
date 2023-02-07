@@ -51,21 +51,17 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        var clickedPiece = LevelController.Instance.GetPiece(new Tuple<int, int>((int)this.transform.position.x,(int)this.transform.position.y));
-        Debug.Log(clickedPiece);
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
+        var clickedPiece = LevelController.Instance.GetPiece(coord);
 		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
-
         if (clickedPiece != null) // selected piece is correct turn's color
         {
             if (LevelController.Instance.storedPiece == null && turn == clickedPiece.IsControlledByHuman() && clickedPiece.HasMoved() == false)
             {
                 //Selects Piece
-                Debug.Log(GameManagerChain.Instance.NumMoves);
                 LevelController.Instance.storedPiece = clickedPiece;
                 LevelController.Instance.storedCoord = coord;
- 
-                LevelController.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelController.Instance._width, LevelController.Instance._height);
+                LevelController.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelController.Instance.LevelModel.GetWidth(), LevelController.Instance.LevelModel.GetHeight());
                 foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
                 {
                     LevelController.Instance.tiles[tileCoords]._highlight.SetActive(true);

@@ -14,7 +14,7 @@ public class PieceController : MonoBehaviour
 
     public bool IsHumanUnit;
 
-    // TODO: Ask what this is used for.
+    // TODO: Ask what this is used for. Maybe this is used in the tutorials
     public List<Tuple<int, int>> highlightedMoves = new();
 
     private void Awake()

@@ -31,10 +31,10 @@ public class EnemyAI : MonoBehaviour
     public void GetPieces()
     {
         allEnemyPieces = new List<Tuple<int, int>>();
-        var lvlModel = LevelController.Instance.levelModel;
-        for (int x = 0; x < LevelController.Instance._width; x++)
+        var lvlModel = LevelController.Instance.LevelModel;
+        for (int x = 0; x < LevelController.Instance.LevelModel.GetWidth(); x++)
         {
-            for (int y = 0; y < LevelController.Instance._height; y++)
+            for (int y = 0; y < LevelController.Instance.LevelModel.GetHeight(); y++)
             {
                 Tuple<int, int> position = new Tuple<int, int>(x, y);
                 if (lvlModel.TryGetUnit(position) != null && !lvlModel.TryGetUnit(position).IsControlledByHuman() && !string.Equals(lvlModel.TryGetUnit(position).Name(), UnitType.Triangle))
@@ -98,7 +98,7 @@ public class EnemyAI : MonoBehaviour
         var piece = SelectRandomPiece();
         if (piece != null)
         {
-            var moves = piece.GetLegalMoves(grid._width, grid._height);
+            var moves = piece.GetLegalMoves(grid.LevelModel.GetWidth(), grid.LevelModel.GetHeight());
             int index = Random.Range(0, moves.Count);
             if (grid.MovePiece(moves[index], piece))
             {

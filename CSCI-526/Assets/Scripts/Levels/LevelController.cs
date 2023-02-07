@@ -1,5 +1,4 @@
 using Assets.Scripts.Levels;
-using Assets.Scripts.Piece;
 using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ public class LevelController : MonoBehaviour
 {
     public static LevelController Instance { get; private set; }
 
-    [SerializeField] public int _width = 6, _height = 6;
+    //[SerializeField] public int _width = 6, _height = 6;
 
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private PieceController humanTriangleUnitPrefab;
@@ -27,7 +26,7 @@ public class LevelController : MonoBehaviour
     public PieceController storedPiece = null;
     public Tuple<int, int> storedCoord = new Tuple<int, int>(-1, -1);
 
-    public ILevelModel levelModel;
+    public ILevelModel LevelModel { get; private set; }
 
     private void Awake()
     {
@@ -44,7 +43,7 @@ public class LevelController : MonoBehaviour
     public void LoadLevel(LevelData level)
     {
         UnloadLevel();
-        levelModel = new LevelModel(level.Width, level.Height, level.Units);
+        LevelModel = new LevelModel(level.Width, level.Height, level.Units);
         CreateSceneObjects(level);
     }
 
@@ -63,7 +62,7 @@ public class LevelController : MonoBehaviour
         {
             for (int y = 0; y < level.Height; y++)
             {
-                var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity);
+                var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity, transform);
                 tile.name = $"Tile {x} {y}";
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
@@ -72,10 +71,10 @@ public class LevelController : MonoBehaviour
                 var coord = new Tuple<int, int>(x, y);
                 tiles[coord] = tile;
 
-                if (levelModel.TryGetUnit(coord) != null)
+                if (LevelModel.TryGetUnit(coord) != null)
                 {
-                    bool isHumanUnit = levelModel.TryGetUnit(coord).IsControlledByHuman();
-                    switch (Enum.Parse(typeof(UnitType), levelModel.TryGetUnit(coord).Name()))
+                    bool isHumanUnit = LevelModel.TryGetUnit(coord).IsControlledByHuman();
+                    switch (Enum.Parse(typeof(UnitType), LevelModel.TryGetUnit(coord).Name()))
                     {
                         case UnitType.Circle:
                             if (isHumanUnit)
@@ -147,7 +146,7 @@ public class LevelController : MonoBehaviour
 
     public bool MovePiece(Tuple<int, int> coord, PieceController piece)
     {
-        var validMoves = piece.GetLegalMoves(levelModel.GetWidth(), levelModel.GetHeight());
+        var validMoves = piece.GetLegalMoves(LevelModel.GetWidth(), LevelModel.GetHeight());
         if (!validMoves.Contains(new Tuple<int, int>(coord.Item1, coord.Item2)))
         {
             return false;
@@ -157,10 +156,21 @@ public class LevelController : MonoBehaviour
             //Debug.Log("Return False Capture Triangle: " + coord);
             return false;
         }
-        this.levelModel.TryMoveUnit(storedCoord, coord);
+        if (!this.LevelModel.TryMoveUnit(storedCoord, coord))
+        {
+            if (this.LevelModel.TryCaptureUnit(storedCoord, coord))
+            {
+                // TODO: Should this be destroyed here?
+                Destroy(_pieces[coord].gameObject);
+                _pieces.Remove(coord);
+
+                // TODO: Don't use this direct call to update the AI's piece set:
+                EnemyAI.Instance.GetPieces();
+            }
+        }
         _pieces[coord] = piece;
-        _pieces[storedCoord] = null;
         piece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, piece.transform.position.z));
+        _pieces[storedCoord] = null;
         storedCoord = new Tuple<int, int>(-1, -1);
         return true;
     }

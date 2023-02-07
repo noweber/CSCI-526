@@ -30,7 +30,7 @@ namespace Assets.Scripts.Units
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
             var adjAlly = new List<Tuple<int, int>>();
-            var lvlModel = LevelController.Instance.levelModel;
+            var lvlModel = LevelController.Instance.LevelModel;
             foreach (Tuple<int, int> coord in adjacentList)
             {
                 if (lvlModel.TryGetUnit(coord).IsControlledByHuman())
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Units
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
-            var lvlModel = LevelController.Instance.levelModel;
+            var lvlModel = LevelController.Instance.LevelModel;
 
             for (int i = 0; i < boardWidth; i++)
             {

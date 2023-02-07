@@ -52,7 +52,7 @@ namespace Assets.Scripts.Levels
             }
         }
 
-        public void TryMoveUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition)
+        public bool TryMoveUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition)
         {
             // TODO: Validate inputs.
             UnityEngine.Debug.Log("From: " + fromPosition.Item1 + ", " + fromPosition.Item2);
@@ -62,11 +62,29 @@ namespace Assets.Scripts.Levels
             {
                 units.Add(toPosition, units[fromPosition]);
                 units.Remove(fromPosition);
+                return true;
             }
             else if (units.ContainsKey(fromPosition) && units.ContainsKey(toPosition))
             {
-                // TODO: handle capture?
+                // Then the unit may need to be captured:
+                return false;
             }
+            return false;
+        }
+
+        public bool TryCaptureUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition)
+        {
+            if (units.ContainsKey(fromPosition) && units.ContainsKey(toPosition))
+            {
+                if (units[fromPosition].IsControlledByHuman() != units[toPosition].IsControlledByHuman())
+                {
+                    units.Remove(toPosition);
+                    units.Add(toPosition, units[fromPosition]);
+                    units.Remove(fromPosition);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public LevelModel(int gridWidth, int gridHeight, Dictionary<Tuple<int, int>, IPiece> playerUnits = null)

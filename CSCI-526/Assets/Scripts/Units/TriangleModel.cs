@@ -30,10 +30,10 @@ namespace Assets.Scripts.Units
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
             var adjAlly = new List<Tuple<int, int>>();
-            var lvlModel = LevelController.Instance.levelModel;
+            var lvlModel = LevelController.Instance.LevelModel;
             foreach (Tuple<int, int> coord in adjacentList)
             {
-                if (coord.Item1 >= 0 && coord.Item1 < LevelController.Instance._width && coord.Item2 >= 0 && coord.Item2 < LevelController.Instance._height)
+                if (coord.Item1 >= 0 && coord.Item1 < LevelController.Instance.LevelModel.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelController.Instance.LevelModel.GetHeight())
                 {
                     if (lvlModel.TryGetUnit(coord) != null && lvlModel.TryGetUnit(coord).IsControlledByHuman())
                     {
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Units
             {
                 Debug.Log("Triangle Allies: " + coord.Item1 + ", " + coord.Item2);
             }*/
-            var lvlModel = LevelController.Instance.levelModel;
+            var lvlModel = LevelController.Instance.LevelModel;
             if (adjList != null)
             {
                 foreach (Tuple<int, int> coord in adjList)

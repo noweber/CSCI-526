@@ -14,6 +14,8 @@ namespace Assets.Scripts.Levels
 
         void PutUnit(Tuple<int, int> position, IPiece playerUnit);
 
-        void TryMoveUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition);
+        bool TryMoveUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition);
+
+        bool TryCaptureUnit(Tuple<int, int> fromPosition, Tuple<int, int> toPosition);
     }
 }
