@@ -55,6 +55,23 @@ public class Tile : MonoBehaviour
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
 		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.White ? true : false;
 
+        // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
+
+    
+        if (GridManager.Instance.levelModel.TryGetUnit(3,4) == null) 
+        {
+            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)");Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+
+        }
+        else if (GridManager.Instance.levelModel.TryGetUnit(3,4).Item1 == true)
+
+        {
+            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
+            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
+        }
+        
+
         if (clickedPiece != null) // selected piece is correct turn's color
         {
             if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
@@ -100,7 +117,7 @@ public class Tile : MonoBehaviour
                         	Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
                             GameManagerChain.Instance.TotalMoves += 1;
-                            Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);
+                            
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
                             {
@@ -155,7 +172,7 @@ public class Tile : MonoBehaviour
                     GameManagerChain.Instance.NumMoves += 1;
                     GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
-                    Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);
+                
 
                     if(SceneManager.GetActiveScene().name == "TutorialLevel")
                     {
@@ -206,8 +223,6 @@ public class Tile : MonoBehaviour
         //extra: highlight valid spots to move for specific piece
         //_highlight.SetActive(true)?
         
-        //Adding the below line for 'Sending Analytics' on each click. TODO: Reduce the Sheet clutter by moving it to appropriate place where Moves is actually changing.
-        //Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);
     }
 
     // "Slacking off" text for 3 seconds, then change state to white
