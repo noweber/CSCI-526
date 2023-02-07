@@ -17,10 +17,10 @@ public class EnemyAI : MonoBehaviour
     private List<Tuple<int, int>> GetPieces()
     {
         List<Tuple<int, int>> allEnemyPieces = new();
-        var lvlModel = LevelController.Instance.LevelModel;
-        for (int x = 0; x < LevelController.Instance.LevelModel.GetWidth(); x++)
+        var lvlModel = LevelMono.Instance.LevelModel;
+        for (int x = 0; x < LevelMono.Instance.LevelModel.GetWidth(); x++)
         {
-            for (int y = 0; y < LevelController.Instance.LevelModel.GetHeight(); y++)
+            for (int y = 0; y < LevelMono.Instance.LevelModel.GetHeight(); y++)
             {
                 Tuple<int, int> position = new(x, y);
                 if (lvlModel.TryGetUnit(position) != null && !lvlModel.TryGetUnit(position).IsControlledByHuman() && !string.Equals(lvlModel.TryGetUnit(position).Name(), UnitType.Triangle))
@@ -32,10 +32,10 @@ public class EnemyAI : MonoBehaviour
         return allEnemyPieces;
     }
 
-    public PieceController SelectRandomPiece()
+    public PieceMono SelectRandomPiece()
     {
         var allEnemyPieces = GetPieces();
-        var allPieces = LevelController.Instance._pieces;
+        var allPieces = LevelMono.Instance._pieces;
         if (allEnemyPieces.Count < 2)
         {
             foreach (var enemy in allEnemyPieces)
@@ -50,7 +50,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         int attempts = 0;
-        PieceController result = null;
+        PieceMono result = null;
         while (result == null && attempts < allEnemyPieces.Count)
         {
             var randomPiece = allEnemyPieces[Random.Range(0, allEnemyPieces.Count)];
@@ -60,7 +60,7 @@ public class EnemyAI : MonoBehaviour
                 if (allPieces[randomPiece].HasMoved() != true)
                 {
                     result = allPieces[randomPiece];
-                    LevelController.Instance.storedCoord = randomPiece;
+                    LevelMono.Instance.storedCoord = randomPiece;
                     allPieces[randomPiece].SetMoveState(true);
                 }
             }
@@ -80,9 +80,9 @@ public class EnemyAI : MonoBehaviour
         var piece = SelectRandomPiece();
         if (piece != null)
         {
-            var moves = piece.GetLegalMoves(LevelController.Instance.LevelModel.GetWidth(), LevelController.Instance.LevelModel.GetHeight());
+            var moves = piece.GetLegalMoves(LevelMono.Instance.LevelModel.GetWidth(), LevelMono.Instance.LevelModel.GetHeight());
             int index = Random.Range(0, moves.Count);
-            if (LevelController.Instance.MovePiece(moves[index], piece))
+            if (LevelMono.Instance.MovePiece(moves[index], piece))
             {
                 GameManagerChain.Instance.MovedPieces.Add(piece);
                 GameManagerChain.Instance.NumMoves += 1;

@@ -23,13 +23,13 @@ public class Tile : MonoBehaviour
     {
         _highlight.SetActive(true);
     }
-    
+
     void OnMouseExit()
     {
-        if(LevelController.Instance.storedPiece != null)
+        if (LevelMono.Instance.storedPiece != null)
         {
             // TODO: reconfigure this with IPiece
-            var highlightTiles = LevelController.Instance.storedPiece.highlightedMoves;
+            var highlightTiles = LevelMono.Instance.storedPiece.highlightedMoves;
             //Vector3 mousePos = Input.mousePosition;
             if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
             {
@@ -53,67 +53,67 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
-        var clickedPiece = LevelController.Instance.GetPiece(coord);
-		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
+        var clickedPiece = LevelMono.Instance.GetPiece(coord);
+        var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
         // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
 
-    
-        if (GridManager.Instance.levelModel.TryGetUnit(3,4) == null) 
+        /*
+        if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 4)) == null)
         {
-            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
-            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)");Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+            if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+            else if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)).HasMoved() == true) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
 
         }
-        else if (GridManager.Instance.levelModel.TryGetUnit(3,4).Item1 == true)
+        else if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 4)).HasMoved() == true)
 
         {
-            if (GridManager.Instance.levelModel.TryGetUnit(3,5) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
-            else if (GridManager.Instance.levelModel.TryGetUnit(3,5).Item1 == true ) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);}
-        }
-        
+            if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+            else if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)).HasMoved() == true) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
+        }*/
+
         if (clickedPiece != null) // selected piece is correct turn's color
         {
-            if (LevelController.Instance.storedPiece == null && turn == clickedPiece.IsControlledByHuman() && clickedPiece.HasMoved() == false)
+            if (LevelMono.Instance.storedPiece == null && turn == clickedPiece.IsControlledByHuman() && clickedPiece.HasMoved() == false)
             {
                 //Selects Piece
                 Debug.Log(GameManagerChain.Instance.NumMoves);
                 Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
-                GridManager.Instance.storedPiece = clickedPiece;
-                GridManager.Instance.storedCoord = coord;
- 
-                LevelController.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelController.Instance.LevelModel.GetWidth(), LevelController.Instance.LevelModel.GetHeight());
-                
-                if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.unitName == "Circle") 
+                LevelMono.Instance.storedPiece = clickedPiece;
+                LevelMono.Instance.storedCoord = coord;
+
+                LevelMono.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelMono.Instance.LevelModel.GetWidth(), LevelMono.Instance.LevelModel.GetHeight());
+
+                if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.Name() == "Circle")
                 {
-                    GridManager.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(1, 1));
-                    GridManager.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(2, 2));
-                } 
-                
-                foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
+                    LevelMono.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(1, 1));
+                    LevelMono.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(2, 2));
+                }
+
+                foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
                 {
-                    LevelController.Instance.tiles[tileCoords]._highlight.SetActive(true);
-                    if (tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1 ) { GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
-                    if (tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1 ) { GridManager.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200,100,70,255); }
+                    LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(true);
+                    if (tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+                    if (tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
                 }
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
             }
             else
             {
-                if (LevelController.Instance.storedPiece != null)
+                if (LevelMono.Instance.storedPiece != null)
                 {
                     // Possible to capture clickedPiece
-                    if (LevelController.Instance.storedPiece != clickedPiece && LevelController.Instance.storedPiece.IsControlledByHuman() != clickedPiece.IsControlledByHuman()) 
-					{
-                    	if (LevelController.Instance.MovePiece(coord, LevelController.Instance.storedPiece))
-                    	{
+                    if (LevelMono.Instance.storedPiece != clickedPiece && LevelMono.Instance.storedPiece.IsControlledByHuman() != clickedPiece.IsControlledByHuman())
+                    {
+                        if (LevelMono.Instance.MovePiece(coord, LevelMono.Instance.storedPiece))
+                        {
                             //TODO: add LEVELMODEL update for capture
-							// Capturing Piece 
-                        	// Destroy(clickedPiece.gameObject);
-                        	GameManagerChain.Instance.NumMoves += 1;
+                            // Capturing Piece 
+                            // Destroy(clickedPiece.gameObject);
+                            GameManagerChain.Instance.NumMoves += 1;
                             GameManagerChain.Instance.TotalMoves += 1;
-                            
+
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
                             {
@@ -122,55 +122,55 @@ public class Tile : MonoBehaviour
 
                             MenuManager.Instance.ShowNumMovesInfo();
                             //If Unit that Captured a piece is Circle, gain another turn
-                            if (LevelController.Instance.storedPiece.Name() != "Circle")
+                            if (LevelMono.Instance.storedPiece.Name() != "Circle")
                             {
                                 Debug.Log("Piece that captured is NOT a circle");
-                                LevelController.Instance.storedPiece.SetMoveState(true);
+                                LevelMono.Instance.storedPiece.SetMoveState(true);
                             }
 
                             //GridManager.Instance.storedPiece.hasMoved = true;
                         }
                     }
-					foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
-					{
-						LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                        LevelController.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
+                    foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
+                    {
+                        LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
                             new Color32(255, 255, 255, 100);
                     }
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(LevelController.Instance.storedPiece);
-                    LevelController.Instance.storedPiece = null;
-                    LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+                    MenuManager.Instance.HideUnitInfo(LevelMono.Instance.storedPiece);
+                    LevelMono.Instance.storedPiece = null;
+                    LevelMono.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                 }
-			}
+            }
         }
         else
         {
-            Debug.Log(LevelController.Instance.storedPiece);
+            Debug.Log(LevelMono.Instance.storedPiece);
             Debug.Log(clickedPiece);
-            if (LevelController.Instance.storedPiece != null)
+            if (LevelMono.Instance.storedPiece != null)
             {
                 //Move Piece
-                if (LevelController.Instance.MovePiece(coord, LevelController.Instance.storedPiece))
+                if (LevelMono.Instance.MovePiece(coord, LevelMono.Instance.storedPiece))
                 {
-                    LevelController.Instance.storedPiece.SetMoveState(true);
-                    foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
+                    LevelMono.Instance.storedPiece.SetMoveState(true);
+                    foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
                     {
-                        LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                        LevelController.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
+                        LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
                             new Color32(255, 255, 255, 100);
                         //fix hover unhighlight while selected
                     }
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(LevelController.Instance.storedPiece);
-                    LevelController.Instance.storedPiece = null;
-                    LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+                    MenuManager.Instance.HideUnitInfo(LevelMono.Instance.storedPiece);
+                    LevelMono.Instance.storedPiece = null;
+                    LevelMono.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                     GameManagerChain.Instance.NumMoves += 1;
                     GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
-                
 
-                    if(SceneManager.GetActiveScene().name == "TutorialLevel")
+
+                    if (SceneManager.GetActiveScene().name == "TutorialLevel")
                     {
                         MenuManager.Instance.UpdateObjectiveContent();
                     }
@@ -179,47 +179,36 @@ public class Tile : MonoBehaviour
             }
         }
 
-		// turn logic
-		if (GameManagerChain.Instance.NumMoves == 2) 
-		{
-			GameManagerChain.Instance.NumMoves = 0;
-			if (turn == true) 
-			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
-			} else
-                if(SceneManager.GetActiveScene().name == "TutorialLevel")
-                {
-                    // Delayed switch back from black for tutorial
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
-                    StartCoroutine(DelayedChangeState());
-                }
-                else
-                {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
-                }
-            } else
-			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
-			}
-			foreach (var piece in GameManagerChain.Instance.MovedPieces) 
-			{
-				piece.SetMoveState(false);
-			}
-			GameManagerChain.Instance.UsedAbility = false;
-			GameManagerChain.Instance.MovedPieces = new List<PieceController>();
+        // turn logic
+        if (GameManagerChain.Instance.NumMoves == 2)
+        {
+            GameManagerChain.Instance.NumMoves = 0;
+            if (turn == true)
+            {
+                GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+            }
+            else
+                if (SceneManager.GetActiveScene().name == "TutorialLevel")
+            {
+                // Delayed switch back from black for tutorial
+                GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                StartCoroutine(DelayedChangeState());
+            }
+            else
+            {
+                GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+            }
         }
-        //Finds valid piece (done)
-        //Calls GridManager/sends to GridManager --> initialize some function to prepare for movement/store the piece
-        //Piece in GridManager--> var selectedPiece = piece or null --> set as True. if itself, then set null/cancel action
-
-        //next click = move? --> if selectedPiece == true, means we can move
-        //update GridManager Dictionaries
-        //update stored piece = null
-
-
-        //extra: highlight valid spots to move for specific piece
-        //_highlight.SetActive(true)?
-        
+        else
+        {
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+        }
+        foreach (var piece in GameManagerChain.Instance.MovedPieces)
+        {
+            piece.SetMoveState(false);
+        }
+        GameManagerChain.Instance.UsedAbility = false;
+        GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
     }
 
     // "Slacking off" text for 3 seconds, then change state to white
@@ -228,19 +217,12 @@ public class Tile : MonoBehaviour
         MenuManager.Instance.SetSlackDialogue(true);
         yield return new WaitForSeconds(2);
         MenuManager.Instance.SetSlackDialogue(false);
-        GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+        GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         yield return null;
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
+
+
+
+
+

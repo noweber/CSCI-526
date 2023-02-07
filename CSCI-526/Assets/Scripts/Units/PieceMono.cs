@@ -4,7 +4,7 @@ using System;
 using Assets.Scripts.Units;
 using Assets.Scripts.Piece;
 
-public class PieceController : MonoBehaviour
+public class PieceMono : MonoBehaviour
 {
     public Color UnitColor;
 
@@ -22,9 +22,9 @@ public class PieceController : MonoBehaviour
         Tuple<int, int> position = new((int)transform.position.x, (int)transform.position.y);
         pieceModel = TypeOfUnit switch
         {
-            UnitType.Circle => new CircleModel(position, IsHumanUnit),
-            UnitType.Diamond => new DiamondModel(position, IsHumanUnit),
-            _ => new TriangleModel(position, IsHumanUnit),
+            UnitType.Circle => new Circle(position, IsHumanUnit),
+            UnitType.Diamond => new Diamond(position, IsHumanUnit),
+            _ => new Triangle(position, IsHumanUnit),
         };
         gameObject.GetComponent<SpriteRenderer>().color = UnitColor;
     }

@@ -18,10 +18,9 @@ public class GameManagerChain : MonoBehaviour
 
     public bool UsedAbility = false;
 
-    public List<PieceController> MovedPieces;
+    public List<PieceMono> MovedPieces;
     public string SceneName;
 
-    public List<Piece> MovedPieces;
 
     public string playTestID;
 
@@ -29,17 +28,16 @@ public class GameManagerChain : MonoBehaviour
     {
         Instance = this;
         SceneName = SceneManager.GetActiveScene().name;
-        
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
         NumMoves = 0;
-        MovedPieces = new List<PieceController>();
+        MovedPieces = new List<PieceMono>();
 
         TotalMoves = 0;
-        MovedPieces = new List<Piece>();
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
 
@@ -50,29 +48,28 @@ public class GameManagerChain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-    
+
     public void ChangeState(GameStateEnum newState)
     {
         GameStateEnum = newState;
-        
+
         switch (newState)
         {
             case GameStateEnum.GenerateGrid:
                 if (SceneName == "TutorialLevel")
                 {
-                    GridManager.Instance.GenerateTutorialGrid();
+                    LevelMono.Instance.LoadLevel(TutorialLevel());
                 }
                 else
                 {
-                    LevelController.Instance.LoadLevel(LevelOne());
+                    LevelMono.Instance.LoadLevel(LevelOne());
                 }
                 break;
             case GameStateEnum.Human:
                 break;
             case GameStateEnum.AI:
-            case GameStateEnum.Black:
                 if (SceneName == "TutorialLevel")
                 {
                     // slacking off 
@@ -82,15 +79,57 @@ public class GameManagerChain : MonoBehaviour
                     EnemyAI.Instance.MovePiece();
                 }
                 break;
-            //default:
-            //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
+                //default:
+                //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
         MenuManager.Instance.ShowTurnInfo();
         MenuManager.Instance.ShowNumMovesInfo();
 
     }
 
-    private LevelData LevelOne()
+    private LoadLevelData TutorialLevel()
+    {
+        int _width = 5;
+        int _height = 13;
+        Dictionary<Tuple<int, int>, IPiece> units = new();
+
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                var position = new Tuple<int, int>(x, y);
+                if (x == 2 && y == 3)
+                {
+                    units.Add(position, new Triangle(position, true));
+
+                }
+
+                if (x == 0 && y == 0)
+                {
+                    units.Add(position, new Circle(position, true));
+                }
+
+                if (x == 3 && y == 0)
+                {
+                    units.Add(position, new Diamond(position, true));
+                }
+
+                // enemies
+                if (x == 3 && y == _height - 4 || x == 3 && y == _height - 3)
+                {
+                    units.Add(position, new Circle(position, false));
+                }
+            }
+        }
+        return new LoadLevelData()
+        {
+            Width = _width,
+            Height = _height,
+            Units = units
+        };
+    }
+
+    private LoadLevelData LevelOne()
     {
         int _width = 8;
         int _height = 10;
@@ -102,37 +141,37 @@ public class GameManagerChain : MonoBehaviour
                 Tuple<int, int> position = new(x, y);
                 if (x == 2 && y == 3 || x == _width - 3 && y == 3)
                 {
-                    units.Add(position, new TriangleModel(position, true));
+                    units.Add(position, new Triangle(position, true));
                 }
 
                 if (x == 0 && y == 0 || x == _width - 1 && y == 0)
                 {
-                    units.Add(position, new CircleModel(position, true));
+                    units.Add(position, new Circle(position, true));
                 }
 
                 if (x == 3 && y == 0 || x == 4 && y == 0)
                 {
-                    units.Add(position, new DiamondModel(position, true));
+                    units.Add(position, new Diamond(position, true));
                 }
 
                 if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
                 {
-                    units.Add(position, new TriangleModel(position, false));
+                    units.Add(position, new Triangle(position, false));
 
                 }
 
                 if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
                 {
-                    units.Add(position, new CircleModel(position, false));
+                    units.Add(position, new Circle(position, false));
                 }
 
                 if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
                 {
-                    units.Add(position, new DiamondModel(position, false));
+                    units.Add(position, new Diamond(position, false));
                 }
             }
         }
-        return new LevelData()
+        return new LoadLevelData()
         {
             Width = _width,
             Height = _height,

@@ -4,7 +4,7 @@ using System;
 
 namespace Assets.Scripts.Levels
 {
-    public interface ILevelModel
+    public interface ILevel
     {
         int GetWidth();
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Levels
 {
-    public class LevelModel : ILevelModel
+    public class Level : ILevel
     {
         private int width;
 
@@ -72,8 +72,8 @@ namespace Assets.Scripts.Levels
                 {
                     units[toPosition.Item1, toPosition.Item2] = units[fromPosition.Item1, fromPosition.Item2];
                     units[fromPosition.Item1, fromPosition.Item2] = null;
-                }*/
-            }
+                }
+            }*/
             else if (units.ContainsKey(fromPosition) && units.ContainsKey(toPosition))
             {
                 // Then the unit may need to be captured:
@@ -97,7 +97,7 @@ namespace Assets.Scripts.Levels
             return false;
         }
 
-        public LevelModel(int gridWidth, int gridHeight, Dictionary<Tuple<int, int>, IPiece> playerUnits = null)
+        public Level(int gridWidth, int gridHeight, Dictionary<Tuple<int, int>, IPiece> playerUnits = null)
         {
             if (gridWidth <= 0)
             {

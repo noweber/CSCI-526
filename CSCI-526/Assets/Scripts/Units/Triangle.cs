@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Units
 {
-    public class TriangleModel : PieceModel
+    public class Triangle : Piece.Piece
     {
-        public TriangleModel(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer) : base(piecePosition, isControlledByHumanPlayer)
+        public Triangle(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer) : base(piecePosition, isControlledByHumanPlayer)
         {
         }
 
@@ -30,10 +30,10 @@ namespace Assets.Scripts.Units
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
             var adjAlly = new List<Tuple<int, int>>();
-            var lvlModel = LevelController.Instance.LevelModel;
+            var lvlModel = LevelMono.Instance.LevelModel;
             foreach (Tuple<int, int> coord in adjacentList)
             {
-                if (coord.Item1 >= 0 && coord.Item1 < LevelController.Instance.LevelModel.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelController.Instance.LevelModel.GetHeight())
+                if (coord.Item1 >= 0 && coord.Item1 < LevelMono.Instance.LevelModel.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelMono.Instance.LevelModel.GetHeight())
                 {
                     if (lvlModel.TryGetUnit(coord) != null && lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman())
                     {
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Units
             {
                 Debug.Log("Triangle Allies: " + coord.Item1 + ", " + coord.Item2);
             }*/
-            var lvlModel = LevelController.Instance.LevelModel;
+            var lvlModel = LevelMono.Instance.LevelModel;
             if (adjList != null)
             {
                 foreach (Tuple<int, int> coord in adjList)

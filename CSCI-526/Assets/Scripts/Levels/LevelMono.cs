@@ -4,29 +4,27 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelController : MonoBehaviour
+public class LevelMono : MonoBehaviour
 {
-    public static LevelController Instance { get; private set; }
-
-    //[SerializeField] public int _width = 6, _height = 6;
+    public static LevelMono Instance { get; private set; }
 
     [SerializeField] private Tile _tilePrefab;
-    [SerializeField] private PieceController humanTriangleUnitPrefab;
-    [SerializeField] private PieceController humanDiamondUnitPrefab;
-    [SerializeField] private PieceController humanCircleUnitPrefab;
-    [SerializeField] private PieceController aiTriangleUnitPrefab;
-    [SerializeField] private PieceController aiDiamondUnitPrefab;
-    [SerializeField] private PieceController aiCircleUnitPrefab;
+    [SerializeField] private PieceMono humanTriangleUnitPrefab;
+    [SerializeField] private PieceMono humanDiamondUnitPrefab;
+    [SerializeField] private PieceMono humanCircleUnitPrefab;
+    [SerializeField] private PieceMono aiTriangleUnitPrefab;
+    [SerializeField] private PieceMono aiDiamondUnitPrefab;
+    [SerializeField] private PieceMono aiCircleUnitPrefab;
 
     [SerializeField] private Transform _camera;
 
     public Dictionary<Tuple<int, int>, Tile> tiles;
-    public Dictionary<Tuple<int, int>, PieceController> _pieces;
+    public Dictionary<Tuple<int, int>, PieceMono> _pieces;
 
-    public PieceController storedPiece = null;
+    public PieceMono storedPiece = null;
     public Tuple<int, int> storedCoord = new Tuple<int, int>(-1, -1);
 
-    public ILevelModel LevelModel { get; private set; }
+    public ILevel LevelModel { get; private set; }
 
     private void Awake()
     {
@@ -40,10 +38,10 @@ public class LevelController : MonoBehaviour
         }
     }
 
-    public void LoadLevel(LevelData level)
+    public void LoadLevel(LoadLevelData level)
     {
         UnloadLevel();
-        LevelModel = new LevelModel(level.Width, level.Height, level.Units);
+        LevelModel = new Level(level.Width, level.Height, level.Units);
         CreateSceneObjects(level);
     }
 
@@ -54,10 +52,10 @@ public class LevelController : MonoBehaviour
         // TODO: Ensure any elements of the previous level are removed from the scene.
     }
 
-    private void CreateSceneObjects(LevelData level)
+    private void CreateSceneObjects(LoadLevelData level)
     {
         tiles = new Dictionary<Tuple<int, int>, Tile>();
-        _pieces = new Dictionary<Tuple<int, int>, PieceController>();
+        _pieces = new Dictionary<Tuple<int, int>, PieceMono>();
         for (int x = 0; x < level.Width; x++)
         {
             for (int y = 0; y < level.Height; y++)
@@ -129,7 +127,7 @@ public class LevelController : MonoBehaviour
         return null;
     }
 
-    public PieceController GetPiece(Tuple<int, int> coord)
+    public PieceMono GetPiece(Tuple<int, int> coord)
     {
         if (_pieces.TryGetValue(coord, out var piece))
         {
@@ -139,19 +137,19 @@ public class LevelController : MonoBehaviour
         return null;
     }
 
-    public LevelController()
+    public LevelMono()
     {
         Instance = this;
     }
 
-    public bool MovePiece(Tuple<int, int> coord, PieceController piece)
+    public bool MovePiece(Tuple<int, int> coord, PieceMono piece)
     {
         var validMoves = piece.GetLegalMoves(LevelModel.GetWidth(), LevelModel.GetHeight());
         if (!validMoves.Contains(new Tuple<int, int>(coord.Item1, coord.Item2)))
         {
             return false;
         }
-        if (LevelController.Instance.GetPiece(coord) != null && string.Equals(piece.Name(), UnitType.Triangle.ToString()))
+        if (LevelMono.Instance.GetPiece(coord) != null && string.Equals(piece.Name(), UnitType.Triangle.ToString()))
         {
             //Debug.Log("Return False Capture Triangle: " + coord);
             return false;

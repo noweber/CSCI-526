@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Levels
 {
-    public class LevelData
+    public class LoadLevelData
     {
         // TODO: add a constructor and make all setters private
 

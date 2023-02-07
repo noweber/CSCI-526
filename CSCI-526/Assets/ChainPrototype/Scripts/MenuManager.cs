@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public MenuManager()
@@ -67,7 +67,7 @@ public class MenuManager : MonoBehaviour
         {
             piece.SetMoveState(false);
         }
-        GameManagerChain.Instance.MovedPieces = new List<PieceController>();
+        GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
         GameManagerChain.Instance.NumMoves = 0;
         GameManagerChain.Instance.UsedAbility = false;
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
@@ -81,18 +81,18 @@ public class MenuManager : MonoBehaviour
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
-		if (LevelController.Instance.storedPiece != null && LevelController.Instance.storedPiece.highlightedMoves.Count > 0) 
+		if (LevelMono.Instance.storedPiece != null && LevelMono.Instance.storedPiece.highlightedMoves.Count > 0) 
 		{
-			foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
+			foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
     		{
-       			LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
+       			LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
     		}
 		}	
-        if (LevelController.Instance.storedPiece != null)
+        if (LevelMono.Instance.storedPiece != null)
         {
-            LevelController.Instance.storedPiece.highlightedMoves.Clear();
-            LevelController.Instance.storedPiece = null;
-            LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+            LevelMono.Instance.storedPiece.highlightedMoves.Clear();
+            LevelMono.Instance.storedPiece = null;
+            LevelMono.Instance.storedCoord = new Tuple<int, int>(-1, -1);
         }
     }
 
@@ -123,19 +123,24 @@ public class MenuManager : MonoBehaviour
         this.HideAbilityButton();
     }
 
-    public void ShowUnitInfo(PieceController piece)
+    public void ShowUnitInfo(PieceMono piece)
     {
         if (piece == null)
         {
             _selectedUnitObject.SetActive(false);
             return;
         }
-        _selectedUnitObject.GetComponentInChildren<Text>().text = piece.Name();
-        _selectUnitInfo.GetComponentInChildren<Text>().text = piece.Summary();
-        _selectedUnitObject.SetActive(true);
+        if (_selectedUnitObject != null)
+        {
+            _selectedUnitObject.GetComponentInChildren<TextMeshProUGUI>().text = piece.Name();
+            _selectedUnitObject.SetActive(true);
+        }
+        if (_selectUnitInfo != null) {
+            _selectUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.Summary();
+        }
     }
 
-    public void HideUnitInfo(PieceController piece)
+    public void HideUnitInfo(PieceMono piece)
     {
         if(piece == null)
         {

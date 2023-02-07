@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Units
 {
-    public class DiamondModel : PieceModel
+    public class Diamond : Piece.Piece
     {
-        public DiamondModel(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer) : base(piecePosition, isControlledByHumanPlayer)
+        public Diamond(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer) : base(piecePosition, isControlledByHumanPlayer)
         {
         }
 
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Units
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
             var adjAlly = new List<Tuple<int, int>>();
-            var lvlModel = LevelController.Instance.LevelModel;
+            var lvlModel = LevelMono.Instance.LevelModel;
             foreach (Tuple<int, int> coord in adjacentList)
             {
                 if (lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman())
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Units
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
-            var lvlModel = LevelController.Instance.LevelModel;
+            var lvlModel = LevelMono.Instance.LevelModel;
 
             for (int i = 0; i < boardWidth; i++)
             {
@@ -84,6 +84,19 @@ namespace Assets.Scripts.Units
                         legalSpots.Add(availableMove);
                     }
                 }
+            }
+
+            if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0)
+            {
+                // first move of tutorial
+                Debug.Log("FIRST MOVE");
+                var availableMove = new Tuple<int, int>(1, 0);
+                legalSpots.Clear();
+                legalSpots.Add(availableMove);
+            }
+            else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1)
+            {
+                legalSpots.Clear();
             }
 
             return legalSpots;

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Units
 {
-    public class CircleModel : PieceModel
+    public class Circle : Piece.Piece
     {
-        public CircleModel(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer) : base(piecePosition, isControlledByHumanPlayer)
+        public Circle(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer) : base(piecePosition, isControlledByHumanPlayer)
         {
         }
 
@@ -29,10 +29,10 @@ namespace Assets.Scripts.Units
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
 
             var adjAlly = new List<Tuple<int, int>>();
-            var lvlModel = LevelController.Instance.LevelModel;
+            var lvlModel = LevelMono.Instance.LevelModel;
             foreach (Tuple<int, int> coord in adjacentList)
             {
-                if (coord.Item1 >= 0 && coord.Item1 < LevelController.Instance.LevelModel.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelController.Instance.LevelModel.GetHeight())
+                if (coord.Item1 >= 0 && coord.Item1 < LevelMono.Instance.LevelModel.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelMono.Instance.LevelModel.GetHeight())
                 {
                     if (lvlModel.TryGetUnit(coord) != null && lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman())
                     {
@@ -54,7 +54,7 @@ namespace Assets.Scripts.Units
 
             //Circle moves like a king (delta(x) + delta(y) <= 2)
             bool changeMovement = CircleMovementCheck(Position);
-            var lvlModel = LevelController.Instance.LevelModel;
+            var lvlModel = LevelMono.Instance.LevelModel;
             if (changeMovement == true)
             {
                 int maxRange = 3;
@@ -225,13 +225,37 @@ namespace Assets.Scripts.Units
 
             }
 
+            if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0)
+            {
+                // Diamond moves first, circle must not
+                legalSpots.Clear();
+            }
+            else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1)
+            {
+                // Circle must move closer to enemies
+                legalSpots.Clear();
+                var availableMove = new Tuple<int, int>(3, 3);
+                legalSpots.Add(availableMove);
+            }
+            else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
+            {
+                // Circle must capture an enemy
+                legalSpots.Clear();
+                var availableMove = new Tuple<int, int>(3, 4);
+                legalSpots.Add(availableMove);
+            }
+            else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
+            {
+                // Free form movement for last capture.
+            }
+
             return legalSpots;
         }
 
         private bool CircleMovementCheck(Tuple<int, int> pos)
         {
             var adjList = this.AdjacentAllies(new Tuple<int, int>(pos.Item1, pos.Item2));
-            var lvlModel = LevelController.Instance.LevelModel;
+            var lvlModel = LevelMono.Instance.LevelModel;
             if (adjList != null)
             {
                 foreach (Tuple<int, int> coord in adjList)
