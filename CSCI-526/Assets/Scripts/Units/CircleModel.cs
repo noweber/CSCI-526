@@ -34,7 +34,7 @@ namespace Assets.Scripts.Units
             {
                 if (coord.Item1 >= 0 && coord.Item1 < LevelController.Instance.LevelModel.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelController.Instance.LevelModel.GetHeight())
                 {
-                    if (lvlModel.TryGetUnit(coord) != null && lvlModel.TryGetUnit(coord).IsControlledByHuman())
+                    if (lvlModel.TryGetUnit(coord) != null && lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman())
                     {
                         adjAlly.Add(coord);
                     }
@@ -237,7 +237,7 @@ namespace Assets.Scripts.Units
                 foreach (Tuple<int, int> coord in adjList)
                 {
                     //Debug.Log("" + coord.Item1 + " " + coord.Item2);
-                    if (lvlModel.TryGetUnit(coord) != null && string.Equals(lvlModel.TryGetUnit(coord).Name(), Assets.Scripts.Units.UnitType.Diamond))
+                    if (lvlModel.TryGetUnit(coord) != null && string.Equals(lvlModel.TryGetUnit(coord).Name(), UnitType.Diamond.ToString()))
                     {
                         //Debug.Log("Make Circle move like Queen");
                         return true;

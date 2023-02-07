@@ -33,7 +33,7 @@ namespace Assets.Scripts.Units
             var lvlModel = LevelController.Instance.LevelModel;
             foreach (Tuple<int, int> coord in adjacentList)
             {
-                if (lvlModel.TryGetUnit(coord).IsControlledByHuman())
+                if (lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman())
                 {
                     adjAlly.Add(coord);
                 }
