@@ -58,7 +58,7 @@ public class Tile : MonoBehaviour
 
         // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
 
-        /*
+        /* TODO: Fix this issue where there is a null reference.
         if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 4)) == null)
         {
             if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
