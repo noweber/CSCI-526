@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Units;
+using Assets.Scripts.Piece;
 using System;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,8 @@ public class EnemyAI : MonoBehaviour
     public static EnemyAI Instance;
 
     private List<Tuple<int, int>> allEnemyPieces;
+    
+    private List<IPiece> movedPieces;
 
     void Awake()
     {
@@ -42,7 +45,7 @@ public class EnemyAI : MonoBehaviour
                     Debug.Log(lvlModel.TryGetUnit(position).Name());
                 }
                
-                if (lvlModel.TryGetUnit(position) != null && !lvlModel.TryGetUnit(position).IsControlledByHuman() && !string.Equals(lvlModel.TryGetUnit(position).Name(), UnitType.Triangle.ToString()))
+                if (lvlModel.TryGetUnit(position) != null && !lvlModel.TryGetUnit(position).IsControlledByHuman() && lvlModel.TryGetUnit(position).HasMoved() == false && !string.Equals(lvlModel.TryGetUnit(position).Name(), UnitType.Triangle.ToString()))
                 {
                     allEnemyPieces.Add(new Tuple<int, int>(x, y));
                 }
@@ -50,10 +53,27 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public PieceController SelectRandomPiece()
+    public IPiece SelectRandomPiece()
     {
-        GetPieces();
+        var lvlModel = LevelController.Instance.LevelModel;
+        List<IPiece> pieces = new List<IPiece>();
         
+        if (allEnemyPieces.Count == 0)
+        {
+            return null;
+        }
+        
+        foreach (var coord in allEnemyPieces)
+        {
+            if (lvlModel.TryGetUnit(coord).HasMoved() == false)
+            {
+                pieces.Add(lvlModel.TryGetUnit(coord));
+            }
+        }
+        int index = Random.Range(0, pieces.Count);
+        
+        return pieces[index];
+
         /*
         var pieces = LevelController.Instance._pieces;
         bool canMove = true;
@@ -95,33 +115,40 @@ public class EnemyAI : MonoBehaviour
     public void MovePiece()
     {
         //StartCoroutine(DelayEnemyStart());
+        GetPieces();
         var lvlModel = LevelController.Instance.LevelModel;
-        if (lvlModel.CountEnemies() <= 2)
+
+        if (allEnemyPieces.Count == 0)
+        {
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+            return;
+        }
+        
+        // first turn
+        if (allEnemyPieces.Count == 1)
         {
             PerformTurn();
-            foreach (var pieces in GameManagerChain.Instance.MovedPieces)
+           
+            //StopAllCoroutines();
+            GameManagerChain.Instance.NumMoves = 0;
+            foreach (var pieces in movedPieces)
             {
                 pieces.SetMoveState(false);
             }
-            //StopAllCoroutines();
-            GameManagerChain.Instance.NumMoves = 0;
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+            return;
         }
-        else
+        
+        // second turn
+        PerformTurn();
+        PerformTurn();
+        //StopAllCoroutines();
+        GameManagerChain.Instance.NumMoves = 0;
+        foreach (var pieces in movedPieces)
         {
-            PerformTurn();
-            PerformTurn();
-            if (GameManagerChain.Instance.NumMoves == 2)
-            {
-                foreach (var pieces in GameManagerChain.Instance.MovedPieces)
-                {
-                    pieces.SetMoveState(false);
-                }
-                //StopAllCoroutines();
-                GameManagerChain.Instance.NumMoves = 0;
-                GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
-            }
+            pieces.SetMoveState(false);
         }
+        GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
     }
 
     private void PerformTurn()
@@ -143,12 +170,13 @@ public class EnemyAI : MonoBehaviour
 
         if (piece != null)
         {
-            var moves = piece.GetLegalMoves(grid.LevelModel.GetWidth(), grid.LevelModel.GetHeight());
+            var moves = piece.LegalMoves(grid.LevelModel.GetWidth(), grid.LevelModel.GetHeight());
             int index = Random.Range(0, moves.Count);
             if (grid.MovePiece(moves[index], piece))
             {
-                GameManagerChain.Instance.MovedPieces.Add(piece);
+                movedPieces.Add(piece);
                 GameManagerChain.Instance.NumMoves += 1;
+                piece.SetMoveState(true);
                 MenuManager.Instance.ShowNumMovesInfo();
             }
         }

@@ -74,17 +74,13 @@ public class Tile : MonoBehaviour
                 if (LevelController.Instance.storedPiece != null)
                 {
                     // Possible to capture clickedPiece
-                    if (LevelController.Instance.storedPiece != clickedPiece && LevelController.Instance.storedPiece.IsControlledByHuman() == clickedPiece.IsControlledByHuman())
-                    {
-
-                    }
-                    else if (LevelController.Instance.storedPiece != clickedPiece && LevelController.Instance.storedPiece.IsControlledByHuman() != clickedPiece.IsControlledByHuman()) 
+                    if (LevelController.Instance.storedPiece != clickedPiece && LevelController.Instance.storedPiece.IsControlledByHuman() != clickedPiece.IsControlledByHuman()) 
 					{
                     	if (LevelController.Instance.MovePiece(coord, LevelController.Instance.storedPiece))
                     	{
                             //TODO: add LEVELMODEL update for capture
 							// Capturing Piece 
-                        	Destroy(clickedPiece.gameObject);
+                        	// Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
                             //If Unit that Captured a piece is Circle, gain another turn

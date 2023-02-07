@@ -165,7 +165,7 @@ public class LevelController : MonoBehaviour
                 _pieces.Remove(coord);
 
                 // TODO: Don't use this direct call to update the AI's piece set:
-                EnemyAI.Instance.GetPieces();
+                // EnemyAI.Instance.GetPieces();
             }
         }
         _pieces[coord] = piece;
