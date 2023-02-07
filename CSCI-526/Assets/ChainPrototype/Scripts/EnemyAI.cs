@@ -55,7 +55,7 @@ public class EnemyAI : MonoBehaviour
         GetPieces();
         var pieces = LevelController.Instance._pieces;
         bool checkMove = true;
-        if (allEnemyPieces.Count <= 2)
+        if (allEnemyPieces.Count < 2)
         {
             foreach (var enemy in allEnemyPieces)
             {
@@ -63,7 +63,6 @@ public class EnemyAI : MonoBehaviour
                 {
                     checkMove = false;
                     return null;
-                    break;
                 }
             }
             checkMove = false;
@@ -91,7 +90,9 @@ public class EnemyAI : MonoBehaviour
 
     public void MovePiece()
     {
-        StartCoroutine(DelayEnemyStart());
+        //StartCoroutine(DelayEnemyStart());
+        PerformTurn();
+        PerformTurn();
     }
 
     private void PerformTurn()
