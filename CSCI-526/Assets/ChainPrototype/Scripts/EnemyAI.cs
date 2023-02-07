@@ -53,22 +53,25 @@ public class EnemyAI : MonoBehaviour
     public PieceController SelectRandomPiece()
     {
         GetPieces();
+        
+        /*
         var pieces = LevelController.Instance._pieces;
-        bool checkMove = true;
+        bool canMove = true;
         if (allEnemyPieces.Count < 2)
         {
             foreach (var enemy in allEnemyPieces)
             {
                 if (pieces[enemy].HasMoved() == true)
                 {
-                    checkMove = false;
+                    canMove = false;
                     return null;
                 }
             }
-            checkMove = false;
+            canMove = false;
             return null;
         }
-        while (checkMove == true)
+
+        while (canMove == true)
         {
             int index = Random.Range(0, allEnemyPieces.Count);
             if (pieces.ContainsKey(allEnemyPieces[index]) && pieces[allEnemyPieces[index]] != null)
@@ -77,7 +80,7 @@ public class EnemyAI : MonoBehaviour
                 if (pieces[allEnemyPieces[index]].HasMoved() != true) 
                 {
                     //Debug.Log("hasMoved");
-                    checkMove = false;
+                    canMove = false;
                     LevelController.Instance.storedCoord = allEnemyPieces[index];
                     pieces[allEnemyPieces[index]].SetMoveState(true);
                     return pieces[allEnemyPieces[index]];
@@ -86,31 +89,57 @@ public class EnemyAI : MonoBehaviour
             
         }
         return null;
+        */
     }
 
     public void MovePiece()
     {
         //StartCoroutine(DelayEnemyStart());
-        PerformTurn();
-        PerformTurn();
+        var lvlModel = LevelController.Instance.LevelModel;
+        if (lvlModel.CountEnemies() <= 2)
+        {
+            PerformTurn();
+            foreach (var pieces in GameManagerChain.Instance.MovedPieces)
+            {
+                pieces.SetMoveState(false);
+            }
+            //StopAllCoroutines();
+            GameManagerChain.Instance.NumMoves = 0;
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+        }
+        else
+        {
+            PerformTurn();
+            PerformTurn();
+            if (GameManagerChain.Instance.NumMoves == 2)
+            {
+                foreach (var pieces in GameManagerChain.Instance.MovedPieces)
+                {
+                    pieces.SetMoveState(false);
+                }
+                //StopAllCoroutines();
+                GameManagerChain.Instance.NumMoves = 0;
+                GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+            }
+        }
     }
 
     private void PerformTurn()
     {
         var grid = LevelController.Instance;
         var piece = SelectRandomPiece();
-
+        /*
         if (piece == null || GameManagerChain.Instance.NumMoves == 2)
         {
             foreach (var pieces in GameManagerChain.Instance.MovedPieces)
             {
                 pieces.SetMoveState(false);
             }
-            StopAllCoroutines();
+            //StopAllCoroutines();
             GameManagerChain.Instance.NumMoves = 0;
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
             return;
-        }
+        }*/
 
         if (piece != null)
         {
