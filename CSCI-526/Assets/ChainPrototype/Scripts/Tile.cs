@@ -203,6 +203,9 @@ public class Tile : MonoBehaviour
 
         //extra: highlight valid spots to move for specific piece
         //_highlight.SetActive(true)?
+        
+        //Adding the below line for 'Sending Analytics' on each click. TODO: Reduce the Sheet clutter by moving it to appropriate place where Moves is actually changing.
+        Analytics.Instance.Send(GameManagerChain.Instance.TotalMoves);
     }
 
     // "Slacking off" text for 3 seconds, then change state to white

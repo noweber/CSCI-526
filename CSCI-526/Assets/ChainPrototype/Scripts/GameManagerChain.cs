@@ -74,6 +74,7 @@ public class GameManagerChain : MonoBehaviour
         }
         MenuManager.Instance.ShowTurnInfo();
         MenuManager.Instance.ShowNumMovesInfo();
+
     }
 }
 
