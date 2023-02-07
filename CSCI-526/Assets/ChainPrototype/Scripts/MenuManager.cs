@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,12 +27,12 @@ public class MenuManager : MonoBehaviour
     }
     public void ShowTurnInfo()
     {
-        if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.White)
-        {
-            _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
-        } else
+        if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human)
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Blue Turn";
+        } else
+        {
+            _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
         }
     }
 
@@ -62,32 +62,35 @@ public class MenuManager : MonoBehaviour
         Debug.Log("End Turn Event");
         foreach (var piece in GameManagerChain.Instance.MovedPieces)
         {
-            piece.hasMoved = false;
+            piece.SetMoveState(false);
         }
-        GameManagerChain.Instance.MovedPieces = new List<Piece>();
+        GameManagerChain.Instance.MovedPieces = new List<PieceController>();
         GameManagerChain.Instance.NumMoves = 0;
         GameManagerChain.Instance.UsedAbility = false;
-        var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.White ? true : false;
+        var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
         if (turn == true)
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+            GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
         }
         else
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
-		if (GridManager.Instance.storedPiece.highlightedMoves.Count > 0) 
+		if (LevelController.Instance.storedPiece != null && LevelController.Instance.storedPiece.highlightedMoves.Count > 0) 
 		{
-			foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+			foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
     		{
-       			GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+       			LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
     		}
 		}	
-		GridManager.Instance.storedPiece.highlightedMoves.Clear();
-		GridManager.Instance.storedPiece = null;
-        GridManager.Instance.storedCoord = new Vector2(-1, -1);
+        if (LevelController.Instance.storedPiece != null)
+        {
+            LevelController.Instance.storedPiece.highlightedMoves.Clear();
+            LevelController.Instance.storedPiece = null;
+            LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+        }
     }
 
     public void ShowAbilityButton()
@@ -117,7 +120,7 @@ public class MenuManager : MonoBehaviour
         this.HideAbilityButton();
     }
 
-    public void ShowUnitInfo(Piece piece)
+    public void ShowUnitInfo(PieceController piece)
     {
         if (piece == null)
         {
@@ -125,13 +128,13 @@ public class MenuManager : MonoBehaviour
             _selectUnitInfo.SetActive(false);
             return;
         }
-        _selectedUnitObject.GetComponentInChildren<Text>().text = piece.unitName;
-        _selectUnitInfo.GetComponentInChildren<Text>().text = piece.unitInfo;
+        _selectedUnitObject.GetComponentInChildren<Text>().text = piece.Name();
+        _selectUnitInfo.GetComponentInChildren<Text>().text = piece.Summary();
         _selectedUnitObject.SetActive(true);
         _selectUnitInfo.SetActive(true);
     }
 
-    public void HideUnitInfo(Piece piece)
+    public void HideUnitInfo(PieceController piece)
     {
         if (piece == null)
         {
@@ -143,50 +146,5 @@ public class MenuManager : MonoBehaviour
         _selectUnitInfo.GetComponentInChildren<Text>().text = "Unit Info";
         _selectedUnitObject.SetActive(false);
         _selectUnitInfo.SetActive(false);
-    }
-
-    /*
-    public void ShowTileInfo(Tile tile)
-    {
-
-        if (tile == null)
-        {
-            _tileObject.SetActive(false);
-            _tileUnitObject.SetActive(false);
-            return;
-        }
-
-        _tileObject.GetComponentInChildren<Text>().text = tile.TileName;
-        _tileObject.SetActive(true);
-
-        if (tile.OccupiedUnit)
-        {
-            _tileUnitObject.GetComponentInChildren<Text>().text = tile.OccupiedUnit.UnitName;
-            _tileUnitObject.SetActive(true);
-        }
-    }
-
-    public void ShowSelectedHero(BaseHero hero)
-    {
-        if (hero == null)
-        {
-            _selectedHeroObject.SetActive(false);
-            return;
-        }
-
-        _selectedHeroObject.GetComponentInChildren<Text>().text = hero.UnitName;
-        _selectedHeroObject.SetActive(true);
-    }
-    */
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db09c311db4edce4b8ef140dc248d3a3, type: 3}
+  m_Name: DiamondPlayer
+  m_EditorClassIdentifier: 
+  Faction: 0
+  UnitPrefab: {fileID: 1182704519935292955, guid: 5b2b3f5f24aa643afaacb3b505f663ec, type: 3}

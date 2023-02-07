@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,11 +25,12 @@ public class Tile : MonoBehaviour
     
     void OnMouseExit()
     {
-        if(GridManager.Instance.storedPiece != null)
+        if(LevelController.Instance.storedPiece != null)
         {
-            var highlightTiles = GridManager.Instance.storedPiece.highlightedMoves;
+            // TODO: reconfigure this with IPiece
+            var highlightTiles = LevelController.Instance.storedPiece.highlightedMoves;
             //Vector3 mousePos = Input.mousePosition;
-            if (highlightTiles.Contains(new Vector2(this.transform.position.x, this.transform.position.y)))
+            if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
             {
                 //Debug.Log("IN THE ARRAY");
                 _highlight.SetActive(true);
@@ -38,6 +40,7 @@ public class Tile : MonoBehaviour
                 //Debug.Log("NOT IN THE ARRAY");
                 _highlight.SetActive(false);
             }
+            _highlight.SetActive(false);
         }
         else
         {
@@ -48,83 +51,78 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        var clickedPiece = GridManager.Instance.GetPiece(new Vector2(this.transform.position.x, this.transform.position.y));
-        var coord = new Vector2(this.transform.position.x, this.transform.position.y);
-		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.White ? true : false;
-
+        var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
+        var clickedPiece = LevelController.Instance.GetPiece(coord);
+		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
         if (clickedPiece != null) // selected piece is correct turn's color
         {
-            if (GridManager.Instance.storedPiece == null && turn == clickedPiece.isWhite && clickedPiece.hasMoved == false)
+            if (LevelController.Instance.storedPiece == null && turn == clickedPiece.IsControlledByHuman() && clickedPiece.HasMoved() == false)
             {
                 //Selects Piece
-                Debug.Log(GameManagerChain.Instance.NumMoves);
-                GridManager.Instance.storedPiece = clickedPiece;
-                GridManager.Instance.storedCoord = coord;
- 
-                GridManager.Instance.storedPiece.highlightedMoves = clickedPiece.LegalMoves(GridManager.Instance._width, GridManager.Instance._height);
-                foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+                LevelController.Instance.storedPiece = clickedPiece;
+                LevelController.Instance.storedCoord = coord;
+                LevelController.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelController.Instance.LevelModel.GetWidth(), LevelController.Instance.LevelModel.GetHeight());
+                foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
                 {
-                    GridManager.Instance.tiles[tileCoords]._highlight.SetActive(true);
+                    LevelController.Instance.tiles[tileCoords]._highlight.SetActive(true);
                 }
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
             }
             else
             {
-                if (GridManager.Instance.storedPiece != null)
+                if (LevelController.Instance.storedPiece != null)
                 {
                     // Possible to capture clickedPiece
-                    if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite == clickedPiece.isWhite)
-                    {
-
-                    }
-                    else if (GridManager.Instance.storedPiece != clickedPiece && GridManager.Instance.storedPiece.isWhite != clickedPiece.isWhite) 
+                    if (LevelController.Instance.storedPiece != clickedPiece && LevelController.Instance.storedPiece.IsControlledByHuman() != clickedPiece.IsControlledByHuman()) 
 					{
-                    	if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
+                    	if (LevelController.Instance.MovePiece(coord, LevelController.Instance.storedPiece))
                     	{
-							// Capturing Piece
-                        	Destroy(clickedPiece.gameObject);
+                            //TODO: add LEVELMODEL update for capture
+							// Capturing Piece 
+                        	// Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
                             //If Unit that Captured a piece is Circle, gain another turn
-                            if (GridManager.Instance.storedPiece.unitName != "Circle")
+                            if (LevelController.Instance.storedPiece.Name() != "Circle")
                             {
                                 Debug.Log("Piece that captured is NOT a circle");
-                                GridManager.Instance.storedPiece.hasMoved = true;
+                                LevelController.Instance.storedPiece.SetMoveState(true);
                             }
+
                             //GridManager.Instance.storedPiece.hasMoved = true;
                         }
                     }
-					foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+					foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
 					{
-						GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+						LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
                     }
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
-                    GridManager.Instance.storedPiece = null;
-                    GridManager.Instance.storedCoord = new Vector2(-1, -1);
+                    MenuManager.Instance.HideUnitInfo(LevelController.Instance.storedPiece);
+                    LevelController.Instance.storedPiece = null;
+                    LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                 }
 			}
         }
         else
         {
-            Debug.Log(GridManager.Instance.storedPiece);
+            Debug.Log(LevelController.Instance.storedPiece);
             Debug.Log(clickedPiece);
-            if (GridManager.Instance.storedPiece != null)
+            if (LevelController.Instance.storedPiece != null)
             {
                 //Move Piece
-                if (GridManager.Instance.MovePiece(coord, GridManager.Instance.storedPiece))
+                if (LevelController.Instance.MovePiece(coord, LevelController.Instance.storedPiece))
                 {
-                    GridManager.Instance.storedPiece.hasMoved = true;
-                    foreach (Vector2 tileCoords in GridManager.Instance.storedPiece.highlightedMoves)
+                    LevelController.Instance.storedPiece.SetMoveState(true);
+                    foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
                     {
-                        GridManager.Instance.tiles[tileCoords]._highlight.SetActive(false);
+                        LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
                         //fix hover unhighlight while selected
                     }
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(GridManager.Instance.storedPiece);
-                    GridManager.Instance.storedPiece = null;
-                    GridManager.Instance.storedCoord = new Vector2(-1, -1);
+                    MenuManager.Instance.HideUnitInfo(LevelController.Instance.storedPiece);
+                    LevelController.Instance.storedPiece = null;
+                    LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
                     GameManagerChain.Instance.NumMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
                     //unhighlight after move.
@@ -139,17 +137,17 @@ public class Tile : MonoBehaviour
 			GameManagerChain.Instance.NumMoves = 0;
 			if (turn == true) 
 			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.Black);
+				GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
 			} else
 			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.White);
+				GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
 			}
 			foreach (var piece in GameManagerChain.Instance.MovedPieces) 
 			{
-				piece.hasMoved = false;
+				piece.SetMoveState(false);
 			}
 			GameManagerChain.Instance.UsedAbility = false;
-			GameManagerChain.Instance.MovedPieces = new List<Piece>();
+			GameManagerChain.Instance.MovedPieces = new List<PieceController>();
         }
         //Finds valid piece (done)
         //Calls GridManager/sends to GridManager --> initialize some function to prepare for movement/store the piece
