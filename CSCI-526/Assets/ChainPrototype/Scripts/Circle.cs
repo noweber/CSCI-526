@@ -193,19 +193,31 @@ public class Circle : Piece
 
         }
 
-		
-		if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1) 
+        if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0)
+        {
+            // Diamond moves first, circle must not
+            legalSpots.Clear();
+        }
+        else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1) 
 		{
+            // Circle must move closer to enemies
 			legalSpots.Clear();
 			var availableMove = new Tuple<int, int>(3, 3);
 			legalSpots.Add(availableMove);
 		} 
 		else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
 		{
-			// designate move
+            // Circle must capture an enemy
+            legalSpots.Clear();
+            var availableMove = new Tuple<int, int>(3, 4);
+            legalSpots.Add(availableMove);
 		} 
+        else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
+        {
+            // Free form movement for last capture.
+        }
 
-        return legalSpots;
+            return legalSpots;
     }
 
     public override List<Tuple<int, int>> adjacentAllies(Tuple<int, int> unitPosition)
