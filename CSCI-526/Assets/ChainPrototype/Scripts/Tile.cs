@@ -100,6 +100,7 @@ public class Tile : MonoBehaviour
                         	Destroy(clickedPiece.gameObject);
                         	GameManagerChain.Instance.NumMoves += 1;
                             GameManagerChain.Instance.TotalMoves += 1;
+                            Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
                             {
@@ -154,6 +155,7 @@ public class Tile : MonoBehaviour
                     GameManagerChain.Instance.NumMoves += 1;
                     GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
+                    Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);
 
                     if(SceneManager.GetActiveScene().name == "TutorialLevel")
                     {
@@ -205,7 +207,7 @@ public class Tile : MonoBehaviour
         //_highlight.SetActive(true)?
         
         //Adding the below line for 'Sending Analytics' on each click. TODO: Reduce the Sheet clutter by moving it to appropriate place where Moves is actually changing.
-        Analytics.Instance.Send(GameManagerChain.Instance.TotalMoves);
+        //Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves);
     }
 
     // "Slacking off" text for 3 seconds, then change state to white

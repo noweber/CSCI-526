@@ -16,13 +16,13 @@ public class Analytics : MonoBehaviour
         Instance = this;
     }
 
-    public void Send(int totalmovesfromGMC) 
+    public void Send(string sessionID,int totalmovesfromGMC) 
     {   
         Debug.Log("Analytics Send method started");
-        _sessionID = Random.Range(15000,100000);
+        //_sessionID = Random.Range(15000,100000);
         //_totalMoves = Random.Range(1,40);
 
-        StartCoroutine(Post(_sessionID.ToString(), totalmovesfromGMC.ToString()));
+        StartCoroutine(Post( sessionID, totalmovesfromGMC.ToString()));
     }
 
     private IEnumerator Post(string sessionID, string totalMoves)

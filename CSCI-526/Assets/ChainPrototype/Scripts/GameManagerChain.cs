@@ -19,6 +19,8 @@ public class GameManagerChain : MonoBehaviour
 
     public List<Piece> MovedPieces;
 
+    public string playTestID;
+
     void Awake()
     {
         Instance = this;
@@ -33,6 +35,9 @@ public class GameManagerChain : MonoBehaviour
         MovedPieces = new List<Piece>();
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
+
+        playTestID = System.Guid.NewGuid().ToString();
+
     }
 
     // Update is called once per frame
