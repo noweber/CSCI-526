@@ -33,21 +33,18 @@ public class Tile : MonoBehaviour
             //Vector3 mousePos = Input.mousePosition;
             if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
             {
-                //Debug.Log("IN THE ARRAY");
                 _highlight.SetActive(true);
             }
             else
             {
-                //Debug.Log("NOT IN THE ARRAY");
                 _highlight.SetActive(false);
             }
-            _highlight.SetActive(false);
         }
         else
         {
             _highlight.SetActive(false);
         }
-        //_highlight.SetActive(false);
+
     }
 
     private void OnMouseDown()
