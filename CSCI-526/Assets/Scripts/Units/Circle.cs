@@ -249,23 +249,14 @@ namespace Assets.Scripts.Units
             {
                 // Free form movement for last capture.
             }
-            var trianglePosition = inTriangleRange(Position);
-            if (trianglePosition != null)
+            var triangleLegal = inTriangleRange(Position);
+            if (triangleLegal != null)
             {
                 UnityEngine.Debug.Log("Unlimited movement around triangle");
-                var adjacentList = new List<Tuple<int, int>>();
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1 + 1, trianglePosition.Item2)); //right
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1 - 1, trianglePosition.Item2)); //left
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1, trianglePosition.Item2 + 1)); //up
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1, trianglePosition.Item2 - 1)); //down
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1 + 1, trianglePosition.Item2 + 1)); //right up diag
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1 - 1, trianglePosition.Item2 + 1)); //left  up diag
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1 + 1, trianglePosition.Item2 - 1)); //right down diag
-                adjacentList.Add(new Tuple<int, int>(trianglePosition.Item1 - 1, trianglePosition.Item2 - 1)); //left down diag
-
-                foreach (var adj in adjacentList)
+                foreach (var adj in triangleLegal)
                 {
-                    legalSpots.Add(adj);
+                    if (!legalSpots.Contains(adj))
+                        legalSpots.Add(adj);
                 }
             }
 
@@ -291,7 +282,7 @@ namespace Assets.Scripts.Units
             return false;
         }
 
-        private Tuple<int, int> inTriangleRange(Tuple<int,int> unitPosition)
+        private List<Tuple<int, int>> inTriangleRange(Tuple<int, int> unitPosition)
         {
             var adjacentList = new List<Tuple<int, int>>();
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
@@ -310,7 +301,16 @@ namespace Assets.Scripts.Units
                 {
                     if (lvlModel.TryGetUnit(coord) != null && lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman() && string.Equals(lvlModel.TryGetUnit(coord).Name(), UnitType.Triangle.ToString()))
                     {
-                        return coord;
+                        var triangleRange = new List<Tuple<int, int>>();
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1 + 1, coord.Item2)); //right
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1 - 1, coord.Item2)); //left
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1, coord.Item2 + 1)); //up
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1, coord.Item2 - 1)); //down
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1 + 1, coord.Item2 + 1)); //right up diag
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1 - 1, coord.Item2 + 1)); //left  up diag
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1 + 1, coord.Item2 - 1)); //right down diag
+                        triangleRange.Add(new Tuple<int, int>(coord.Item1 - 1, coord.Item2 - 1)); //left down diag
+                        return triangleRange;
                     }
                 }
             }
