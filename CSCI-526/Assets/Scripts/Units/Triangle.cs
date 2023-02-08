@@ -24,10 +24,14 @@ namespace Assets.Scripts.Units
         public override List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
         {
             var adjacentList = new List<Tuple<int, int>>();
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2));
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1));
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2)); //left
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1)); //up
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1)); //down
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 + 1)); //right up diag
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 + 1)); //left  up diag
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 - 1)); //right down diag
+            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 - 1)); //left down diag
 
             var adjAlly = new List<Tuple<int, int>>();
             var lvlModel = LevelMono.Instance.LevelModel;
@@ -49,37 +53,31 @@ namespace Assets.Scripts.Units
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
-            bool triangleAbilityCheck = this.TriangleAbilityCheck(Position);
-            if (triangleAbilityCheck == true && GameManagerChain.Instance.UsedAbility != true)
+            PieceMono triangleAbilityCheck = this.TriangleAbilityCheck(Position);
+            if (triangleAbilityCheck != null)// && GameManagerChain.Instance.UsedAbility != true)
             {
-                //enable some ability option to add another movement turn
-                //MenuManager Option pops up
-                MenuManager.Instance.ShowAbilityButton();
-                //if option is selected, ignore triangle legal moves + add 1 to NumMoves?
+                //MenuManager.Instance.ShowAbilityButton();
             }
             return legalSpots;
         }
 
-        private bool TriangleAbilityCheck(Tuple<int, int> position)
+        private PieceMono TriangleAbilityCheck(Tuple<int, int> position)
         {
             var adjList = this.AdjacentAllies(new Tuple<int, int>(position.Item1, position.Item2));
-            /*foreach (Tuple<int, int> coord in adjList)
-            {
-                Debug.Log("Triangle Allies: " + coord.Item1 + ", " + coord.Item2);
-            }*/
             var lvlModel = LevelMono.Instance.LevelModel;
             if (adjList != null)
             {
                 foreach (Tuple<int, int> coord in adjList)
                 {
-                    if (lvlModel.TryGetUnit(coord) != null && string.Equals(lvlModel.TryGetUnit(coord).Name(), UnitType.Circle.ToString()))
+                    if (lvlModel.TryGetUnit(coord) != null)// && string.Equals(lvlModel.TryGetUnit(coord).Name(), UnitType.Circle.ToString()))
                     {
                         Debug.Log("Set Triangle Ability True");
-                        return true;
+                        //return true;
+                        return LevelMono.Instance._pieces[coord];
                     }
                 }
             }
-            return false;
+            return null;
         }
     }
 }

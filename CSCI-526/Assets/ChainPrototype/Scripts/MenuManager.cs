@@ -57,7 +57,13 @@ public class MenuManager : MonoBehaviour
     }
     public void ShowEndTurnButton()
     {
+        _endTurnObject.SetActive(true);
         _endTurnObject.GetComponentInChildren<Button>().onClick.AddListener(() => EndTurnEvent());
+    }
+
+    public void HideEndTurnButton()
+    {
+        _endTurnObject.SetActive(false);
     }
 
     public void EndTurnEvent()//(Piece triangle, Piece other)

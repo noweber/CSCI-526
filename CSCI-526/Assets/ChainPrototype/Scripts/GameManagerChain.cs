@@ -68,6 +68,7 @@ public class GameManagerChain : MonoBehaviour
                 }
                 break;
             case GameStateEnum.Human:
+                MenuManager.Instance.ShowEndTurnButton();
                 break;
             case GameStateEnum.AI:
                 if (SceneName == "TutorialLevel")
@@ -76,6 +77,7 @@ public class GameManagerChain : MonoBehaviour
                 }
                 else
                 {
+                    MenuManager.Instance.HideEndTurnButton();
                     EnemyAI.Instance.MovePiece();
                 }
                 break;
