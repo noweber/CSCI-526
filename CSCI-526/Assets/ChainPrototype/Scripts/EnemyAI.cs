@@ -31,6 +31,7 @@ public class EnemyAI : MonoBehaviour
                 movableEnemies.Add(coord);
             }
         }
+        if (movableEnemies.Count == 0) { return null; }
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
