@@ -71,6 +71,8 @@ public class GameManagerChain : MonoBehaviour
                 MenuManager.Instance.ShowEndTurnButton();
                 break;
             case GameStateEnum.AI:
+                MenuManager.Instance.ShowTurnInfo();
+                MenuManager.Instance.HideEndTurnButton();
                 if (SceneName == "TutorialLevel")
                 {
                     // slacking off 
@@ -78,7 +80,7 @@ public class GameManagerChain : MonoBehaviour
                 else
                 {
                     MenuManager.Instance.HideEndTurnButton();
-                    EnemyAI.Instance.MovePiece();
+                    EnemyAI.Instance.PerformTurn();
                 }
                 break;
                 //default:

@@ -35,14 +35,14 @@ public class EnemyAI : MonoBehaviour
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
-    public void MovePiece()
+    public void PerformTurn()
     {
         StartCoroutine(DelayEnemyStart());
         // PerformTurn();
         // PerformTurn();
     }
 
-    private void PerformTurn()
+    private void MovePiece()
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectRandomPiece();
@@ -80,7 +80,7 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator DelayEnemyStart()
     {
         yield return new WaitForSeconds(1f);
-        PerformTurn();
+        MovePiece();
         yield return new WaitForSeconds(1f);
         StartCoroutine(DelayEnemyStart());
     }

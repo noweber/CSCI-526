@@ -87,6 +87,7 @@ public class MenuManager : MonoBehaviour
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
+        ShowTurnInfo();
 		// if (LevelMono.Instance.storedPiece != null && LevelMono.Instance.storedPiece.highlightedMoves.Count > 0) 
 		// {
 		// 	foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
