@@ -6,6 +6,12 @@ namespace Assets.Scripts.Units
 {
     public class Circle : PieceMono
     { 
+        //public string unitInfo = "Upon Capture, Circle can move again.";
+        public override string getUnitInfo()
+        {
+            return "Upon Capture, Circle can move again.";
+        }
+
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();

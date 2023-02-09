@@ -12,7 +12,9 @@ public abstract class PieceMono : MonoBehaviour
 
 	protected string unitName;
 
-    protected string unitInfo;
+	//public abstract string unitInfo;
+
+    public abstract string getUnitInfo();
     //public bool hasAbility = false;
 
 	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
@@ -34,8 +36,6 @@ public abstract class PieceMono : MonoBehaviour
 	public bool IsDiamond() { return this.unitName == "Diamond"; }
 
 	public string GetName() { return this.unitName; }
-
-	public string GetInfo() { return this.unitInfo; }
 
 	protected List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
 	{

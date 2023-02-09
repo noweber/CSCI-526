@@ -7,6 +7,11 @@ namespace Assets.Scripts.Units
 {
     public class Triangle : PieceMono
     {
+        public override string getUnitInfo()
+        {
+            return "Cannot move. Allies can move without cost when in Range of Triangle.";
+        }
+
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();

@@ -133,6 +133,7 @@ public class MenuManager : MonoBehaviour
         if (piece == null)
         {
             _selectedUnitObject.SetActive(false);
+            _selectUnitInfo.SetActive(false);
             return;
         }
         if (_selectedUnitObject != null)
@@ -141,7 +142,8 @@ public class MenuManager : MonoBehaviour
             _selectedUnitObject.SetActive(true);
         }
         if (_selectUnitInfo != null) {
-            _selectUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetInfo();
+            _selectUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.getUnitInfo();
+            _selectUnitInfo.SetActive(true);
         }
     }
 
@@ -150,12 +152,14 @@ public class MenuManager : MonoBehaviour
         if(piece == null)
         {
             _selectedUnitObject.SetActive(false);
+            _selectUnitInfo.SetActive(false);
             return;
         }
         // Necessary?
         unitInfo.text = "Unit Name";
         unitAbility.text = "Unit Ability";
         _selectedUnitObject.SetActive(false);
+        _selectUnitInfo.SetActive(false);
     }
 
     public void UpdateObjectiveContent()
