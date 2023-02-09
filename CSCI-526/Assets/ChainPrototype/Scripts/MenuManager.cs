@@ -28,6 +28,7 @@ public class MenuManager : MonoBehaviour
             Instance = this;
         }
     }
+
     public void ShowTurnInfo()
     {
         if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human)
@@ -73,21 +74,11 @@ public class MenuManager : MonoBehaviour
         {
             piece.SetMoveState(false);
         }
-        GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
         GameManagerChain.Instance.NumMoves = 0;
+        GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
         GameManagerChain.Instance.UsedAbility = false;
-        var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
-        if (turn == true)
-        {
-            Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
-        }
-        else
-        {
-            Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
-        }
-        ShowTurnInfo();
+        GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+        this.ShowTurnInfo();
 		// if (LevelMono.Instance.storedPiece != null && LevelMono.Instance.storedPiece.highlightedMoves.Count > 0) 
 		// {
 		// 	foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
