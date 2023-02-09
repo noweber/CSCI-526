@@ -38,10 +38,10 @@ public class Tile : MonoBehaviour
                 _highlight.SetActive(false);
             }
         }
-        // else
-        // {
-        //     _highlight.SetActive(false);
-        // }
+        else
+        {
+            _highlight.SetActive(false);
+        }
 
     }
 
@@ -99,6 +99,7 @@ public class Tile : MonoBehaviour
                         Debug.Log("FAILED TO CAPTURE");
                         // lvlMono.ResetPiece();
                     }
+
                     lvlMono.RemoveHighlight();
                     lvlMono.ResetPiece();
                     
