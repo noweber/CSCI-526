@@ -69,7 +69,8 @@ namespace Assets.Scripts.Units
                 legalSpots.Clear();
             }
 
-            /*var triangleLegal = inTriangleRange(Position);
+            var Position = new Tuple<int, int>(x, y);
+            var triangleLegal = inTriangleRange(Position);
             if (triangleLegal != null)
             {
                 UnityEngine.Debug.Log("Unlimited movement around triangle");
@@ -78,12 +79,12 @@ namespace Assets.Scripts.Units
                     if (!legalSpots.Contains(adj))
                         legalSpots.Add(adj);
                 }
-            }*/
+            }
 
             return legalSpots;
         }
 
-        /*private List<Tuple<int, int>> inTriangleRange(Tuple<int, int> unitPosition)
+        private List<Tuple<int, int>> inTriangleRange(Tuple<int, int> unitPosition)
         {
             var adjacentList = new List<Tuple<int, int>>();
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
@@ -95,12 +96,12 @@ namespace Assets.Scripts.Units
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 - 1)); //right down diag
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 - 1)); //left down diag
 
-            var lvlModel = LevelMono.Instance.LevelModel;
+            var lvlMono = LevelMono.Instance;
             foreach (Tuple<int, int> coord in adjacentList)
             {
-                if (coord.Item1 >= 0 && coord.Item1 < LevelMono.Instance.LevelModel.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelMono.Instance.LevelModel.GetHeight())
+                if (coord.Item1 >= 0 && coord.Item1 < LevelMono.Instance.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelMono.Instance.GetHeight())
                 {
-                    if (lvlModel.TryGetUnit(coord) != null && lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman() && string.Equals(lvlModel.TryGetUnit(coord).Name(), UnitType.Triangle.ToString()))
+                    if (lvlMono.GetPiece(coord) != null && !this.IsEnemyOf(lvlMono.GetPiece(coord)) && lvlMono.GetPiece(coord).IsTriangle())
                     {
                         var triangleRange = new List<Tuple<int, int>>();
                         triangleRange.Add(new Tuple<int, int>(coord.Item1 + 1, coord.Item2)); //right
@@ -114,8 +115,8 @@ namespace Assets.Scripts.Units
                         return triangleRange;
                     }
                 }
-            }
+            }    
             return null;
-        }*/
+        }
     }
 }
