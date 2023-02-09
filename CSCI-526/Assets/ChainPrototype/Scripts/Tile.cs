@@ -12,6 +12,8 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _highlight;
 
+    [SerializeField] public GameObject _legal;
+
     //[SerializeField] private GameObject _useAbility;
 
     public void Init(bool isOffset)
@@ -26,6 +28,8 @@ public class Tile : MonoBehaviour
 
     void OnMouseExit()
     {
+        _highlight.SetActive(false);
+        /*
         if (LevelMono.Instance.HasSelectedPiece())
         {
             var highlightTiles = LevelMono.Instance.highlightedMoves;
@@ -42,6 +46,7 @@ public class Tile : MonoBehaviour
         {
             _highlight.SetActive(false);
         }
+        */
 
     }
 

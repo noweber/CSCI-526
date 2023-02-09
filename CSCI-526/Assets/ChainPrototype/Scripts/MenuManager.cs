@@ -42,18 +42,7 @@ public class MenuManager : MonoBehaviour
 
     public void ShowNumMovesInfo()
     {
-        
         _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.NumMoves) + " Moves Left";
-        /*
-        if ((2 - GameManagerChain.Instance.NumMoves) != 0)
-        {
-            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.NumMoves) + " Moves Left";
-        }
-        else
-        {
-            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2) + " Moves Left";
-        }
-        */
 
     }
     public void ShowEndTurnButton()
@@ -79,17 +68,6 @@ public class MenuManager : MonoBehaviour
         GameManagerChain.Instance.UsedAbility = false;
         GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
         this.ShowTurnInfo();
-		// if (LevelMono.Instance.storedPiece != null && LevelMono.Instance.storedPiece.highlightedMoves.Count > 0) 
-		// {
-		// 	foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
-  //   		{
-  //      			LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
-  //   		}
-		// }	
-
-        var lvlMono = LevelMono.Instance;
-        lvlMono.RemoveHighlight();
-        lvlMono.ResetPiece();
     }
 
     public void ShowAbilityButton()
