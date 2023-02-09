@@ -29,25 +29,6 @@ public class Tile : MonoBehaviour
     void OnMouseExit()
     {
         _highlight.SetActive(false);
-        /*
-        if (LevelMono.Instance.HasSelectedPiece())
-        {
-            var highlightTiles = LevelMono.Instance.highlightedMoves;
-            if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
-            {
-                _highlight.SetActive(true);
-            }
-            else
-            {
-                _highlight.SetActive(false);
-            }
-        }
-        else
-        {
-            _highlight.SetActive(false);
-        }
-        */
-
     }
 
     private void OnMouseDown()
@@ -100,7 +81,6 @@ public class Tile : MonoBehaviour
                     }
                     else
                     {
-                        
                         Debug.Log("FAILED TO CAPTURE");
                         // lvlMono.ResetPiece();
                     }

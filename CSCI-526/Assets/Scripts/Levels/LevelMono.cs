@@ -193,7 +193,7 @@ public class LevelMono : MonoBehaviour
         }
 
 		this.selectedPiece.SetMoveState(true);
-        if (this.GetPiece(coord) != null) // CAPTURE TAKES PLACE HERE
+        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) // CAPTURE TAKES PLACE HERE
         {
 			Debug.Log("SOMETHING WAS CAPTURED");
 			Destroy(this.GetPiece(coord).gameObject);
