@@ -24,7 +24,7 @@ public class LevelMono : MonoBehaviour
 
     public PieceMono selectedPiece = null;
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
-	public List<Tuple<int, int>> highlightedMoves;
+	public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
 
 	private int Width;
 
@@ -201,7 +201,7 @@ public class LevelMono : MonoBehaviour
         }
 		this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         _pieces[coord] = this.selectedPiece;
-		Debug.Log("PIECE REMOVED: " + _pieces.Remove(selectedCoord));
+		_pieces.Remove(selectedCoord);
         this.selectedCoord = new Tuple<int, int>(-1, -1);
 		this.selectedPiece = null;
         return true;
