@@ -36,7 +36,9 @@ public class EnemyAI : MonoBehaviour
 
     public void MovePiece()
     {
-        StartCoroutine(DelayEnemyStart());
+        //StartCoroutine(DelayEnemyStart());
+        PerformTurn();
+        PerformTurn();
     }
 
     private void PerformTurn()

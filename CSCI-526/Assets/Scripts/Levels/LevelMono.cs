@@ -64,7 +64,6 @@ public class LevelMono : MonoBehaviour
 
     private void CreateSceneObjects(LoadLevelData level)
     {
-		
 		var units = level.Units;
         this.tiles = new Dictionary<Tuple<int, int>, Tile>();
         this._pieces = new Dictionary<Tuple<int, int>, PieceMono>();
@@ -90,27 +89,32 @@ public class LevelMono : MonoBehaviour
 			if (unit.IsCircle()) 
 			{
 				var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+				circle.SetName("Circle");		
 				circle.SetHuman(unit.IsHuman());
 				circle.SetMoveState(false);
 				circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
-				_pieces.Add(coord, circle);
+				_pieces[coord] = circle;
 			} 
 			else if (unit.IsTriangle()) 
 			{
 				var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+				triangle.SetName("Triangle");
 				triangle.SetHuman(unit.IsHuman());
 				triangle.SetMoveState(false);
 				triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
-				_pieces.Add(coord, triangle);
+				_pieces[coord] = triangle;
 			} 
 			else
 			{
 				var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+				diamond.SetName("Diamond");
 				diamond.SetHuman(unit.IsHuman());
 				diamond.SetMoveState(false);
 				diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
-				_pieces.Add(coord, diamond);
+				_pieces[coord] = diamond;
 			}
+			Debug.Log(_pieces[coord].IsHuman());
+
 		}
 
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
@@ -130,8 +134,10 @@ public class LevelMono : MonoBehaviour
 	public List<Tuple<int, int>> GetEnemyPieceCoords() 
 	{
 		List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
+		Debug.Log(_pieces.Count);
 		foreach (var piece in _pieces) 
 		{
+			
 			if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
 		}
 		return enemyPieces;
@@ -189,12 +195,13 @@ public class LevelMono : MonoBehaviour
 		this.selectedPiece.SetMoveState(true);
         if (this.GetPiece(coord) != null) // CAPTURE TAKES PLACE HERE
         {
+			Debug.Log("SOMETHING WAS CAPTURED");
 			Destroy(this.GetPiece(coord).gameObject);
 			if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
         }
 		this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         _pieces[coord] = this.selectedPiece;
-		_pieces[selectedCoord] = null;
+		Debug.Log("PIECE REMOVED: " + _pieces.Remove(selectedCoord));
         this.selectedCoord = new Tuple<int, int>(-1, -1);
 		this.selectedPiece = null;
         return true;

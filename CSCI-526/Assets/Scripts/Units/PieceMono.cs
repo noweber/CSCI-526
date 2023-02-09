@@ -17,6 +17,8 @@ public abstract class PieceMono : MonoBehaviour
 
 	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
 
+	public void SetName(string name) { this.unitName = name; }
+
 	public void SetMoveState(bool state) { this.hasMoved = state; }
 
 	public bool IsEnemyOf(PieceMono piece) { return this.IsHuman() != piece.IsHuman(); }

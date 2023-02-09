@@ -245,7 +245,7 @@ namespace Assets.Scripts.Units
                     //Debug.Log("" + coord.Item1 + " " + coord.Item2);
                     if (lvlMono.GetPiece(coord) != null && lvlMono.GetPiece(coord).IsDiamond())
                     {
-                        //Debug.Log("Make Circle move like Queen");
+                        // Debug.Log("Make Circle move like Queen");
                         return true;
                     }
                 }

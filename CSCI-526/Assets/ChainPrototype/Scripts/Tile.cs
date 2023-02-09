@@ -117,7 +117,7 @@ public class Tile : MonoBehaviour
                     else
                     {
                         Debug.Log("FAILED TO CAPTURE");
-                        lvlMono.ResetPiece();
+                        // lvlMono.ResetPiece();
                     }
                     lvlMono.RemoveHighlight(); 
                     
@@ -150,7 +150,7 @@ public class Tile : MonoBehaviour
                 }
                 else
                 {
-                    lvlMono.ResetPiece();
+                    // lvlMono.ResetPiece();
                     Debug.Log("FAILED TO MOVE");
                 }
             }
@@ -166,27 +166,19 @@ public class Tile : MonoBehaviour
             GameManagerChain.Instance.UsedAbility = false;
             GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
             GameManagerChain.Instance.NumMoves = 0;
-
             
             if (turn == true)
             {
-                GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
-            }
-            else
                 if (SceneManager.GetActiveScene().name == "TutorialLevel")
-            {
-                // Delayed switch back from black for tutorial
-                GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
-                StartCoroutine(DelayedChangeState());
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    StartCoroutine(DelayedChangeState());
+                }
+                else
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);   
+                }
             }
-            else
-            {
-                GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
-            }
-        }
-        else
-        {
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
         /*
         foreach (var piece in GameManagerChain.Instance.MovedPieces)
