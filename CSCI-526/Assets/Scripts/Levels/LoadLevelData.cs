@@ -12,6 +12,6 @@ namespace Assets.Scripts.Levels
 
         public int Height;
 
-        public Dictionary<Tuple<int, int>, IPiece> Units;
+        public List<PieceInfo> Units;
     }
 }

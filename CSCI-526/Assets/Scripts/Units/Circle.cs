@@ -14,7 +14,7 @@ namespace Assets.Scripts.Units
 			var pos = this.transform.position;
 			int x = (int)pos.x;
 			int y = (int)pos.y;
-            bool changeMovement = CircleMovementCheck(Position);
+            bool changeMovement = this.CircleMovementCheck();
             var lvlMono = LevelMono.Instance;
 
             if (changeMovement == true)
@@ -233,9 +233,10 @@ namespace Assets.Scripts.Units
             return legalSpots;
         }
 
-        private bool CircleMovementCheck(Tuple<int, int> pos)
+        private bool CircleMovementCheck()
         {
-            var adjList = this.AdjacentAllies(new Tuple<int, int>(pos.Item1, pos.Item2));
+			var pos = this.transform.position;
+            var adjList = this.AdjacentAllies(new Tuple<int, int>((int)pos.x, (int)pos.y));
             var lvlMono = LevelMono.Instance;
             if (adjList != null)
             {

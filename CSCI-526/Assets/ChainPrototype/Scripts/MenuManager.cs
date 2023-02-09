@@ -87,19 +87,17 @@ public class MenuManager : MonoBehaviour
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
-		if (LevelMono.Instance.storedPiece != null && LevelMono.Instance.storedPiece.highlightedMoves.Count > 0) 
-		{
-			foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
-    		{
-       			LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
-    		}
-		}	
-        if (LevelMono.Instance.storedPiece != null)
-        {
-            LevelMono.Instance.storedPiece.highlightedMoves.Clear();
-            LevelMono.Instance.storedPiece = null;
-            LevelMono.Instance.storedCoord = new Tuple<int, int>(-1, -1);
-        }
+		// if (LevelMono.Instance.storedPiece != null && LevelMono.Instance.storedPiece.highlightedMoves.Count > 0) 
+		// {
+		// 	foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
+  //   		{
+  //      			LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
+  //   		}
+		// }	
+
+        var lvlMono = LevelMono.Instance;
+        lvlMono.RemoveHighlight();
+        lvlMono.ResetPiece();
     }
 
     public void ShowAbilityButton()
@@ -138,11 +136,11 @@ public class MenuManager : MonoBehaviour
         }
         if (_selectedUnitObject != null)
         {
-            _selectedUnitObject.GetComponentInChildren<TextMeshProUGUI>().text = piece.Name();
+            _selectedUnitObject.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetName();
             _selectedUnitObject.SetActive(true);
         }
         if (_selectUnitInfo != null) {
-            _selectUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.Summary();
+            _selectUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetInfo();
         }
     }
 

@@ -14,60 +14,24 @@ public class EnemyAI : MonoBehaviour
         Instance = this;
     }
 
-    private List<Tuple<int, int>> GetPieces()
+    public Tuple<int, int> SelectRandomPiece()
     {
-        List<Tuple<int, int>> allEnemyPieces = new();
-        var lvlModel = LevelMono.Instance.LevelModel;
-        for (int x = 0; x < LevelMono.Instance.LevelModel.GetWidth(); x++)
+        var lvlMono = LevelMono.Instance;
+        var enemyPieceCoords = lvlMono.GetEnemyPieceCoords();
+        if (enemyPieceCoords.Count == 0)
         {
-            for (int y = 0; y < LevelMono.Instance.LevelModel.GetHeight(); y++)
+            return null;
+        }
+        
+        List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
+        foreach (var coord in enemyPieceCoords)
+        {
+            if (lvlMono.GetPiece(coord).CanMove())
             {
-                Tuple<int, int> position = new(x, y);
-                if (lvlModel.TryGetUnit(position) != null && !lvlModel.TryGetUnit(position).IsControlledByHuman() && !string.Equals(lvlModel.TryGetUnit(position).Name(), UnitType.Triangle))
-                {
-                    allEnemyPieces.Add(new Tuple<int, int>(x, y));
-                }
+                movableEnemies.Add(coord);
             }
         }
-        return allEnemyPieces;
-    }
-
-    public PieceMono SelectRandomPiece()
-    {
-        var allEnemyPieces = GetPieces();
-        var allPieces = LevelMono.Instance._pieces;
-        if (allEnemyPieces.Count < 2)
-        {
-            foreach (var enemy in allEnemyPieces)
-            {
-                if (!string.Equals(allPieces[enemy].Name(), UnitType.Triangle.ToString()) || allPieces[enemy].HasMoved() == true)
-                {
-                    allPieces[enemy].SetMoveState(false);
-                    return null;
-                }
-                return allPieces[enemy];
-            }
-        }
-
-        int attempts = 0;
-        PieceMono result = null;
-        while (result == null && attempts < allEnemyPieces.Count)
-        {
-            var randomPiece = allEnemyPieces[Random.Range(0, allEnemyPieces.Count)];
-
-            if (!string.Equals(allPieces[randomPiece].Name(), UnitType.Triangle.ToString()))
-            {
-                if (allPieces[randomPiece].HasMoved() != true)
-                {
-                    result = allPieces[randomPiece];
-                    LevelMono.Instance.storedCoord = randomPiece;
-                    allPieces[randomPiece].SetMoveState(true);
-                }
-            }
-            attempts++;
-        }
-
-        return result;
+        return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
     public void MovePiece()
@@ -77,20 +41,28 @@ public class EnemyAI : MonoBehaviour
 
     private void PerformTurn()
     {
-        var piece = SelectRandomPiece();
-        if (piece != null)
+        var lvlMono = LevelMono.Instance;
+        var aiCoord = SelectRandomPiece();
+        if (aiCoord != null)
         {
-            var moves = piece.GetLegalMoves(LevelMono.Instance.LevelModel.GetWidth(), LevelMono.Instance.LevelModel.GetHeight());
+            var aiPiece = lvlMono.GetPiece(aiCoord);
+            var moves = aiPiece.LegalMoves(lvlMono.GetWidth(), lvlMono.GetHeight());
             int index = Random.Range(0, moves.Count);
-            if (LevelMono.Instance.MovePiece(moves[index], piece))
+            lvlMono.SelectPiece(aiPiece, aiCoord);
+            if (lvlMono.MovePiece(moves[index]))
             {
-                GameManagerChain.Instance.MovedPieces.Add(piece);
+                GameManagerChain.Instance.MovedPieces.Add(aiPiece);
                 GameManagerChain.Instance.NumMoves += 1;
                 MenuManager.Instance.ShowNumMovesInfo();
             }
+            else
+            {
+                lvlMono.ResetPiece();
+                Debug.Log("AI FAILED TO MOVE");
+            }
         }
 
-        if (GameManagerChain.Instance.NumMoves == 2 || piece == null)
+        if (GameManagerChain.Instance.NumMoves == 2 || aiCoord == null)
         {
             foreach (var pieces in GameManagerChain.Instance.MovedPieces)
             {

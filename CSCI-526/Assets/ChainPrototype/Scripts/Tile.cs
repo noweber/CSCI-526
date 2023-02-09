@@ -26,10 +26,10 @@ public class Tile : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (LevelMono.Instance.storedPiece != null)
+        if (LevelMono.Instance.HasSelectedPiece())
         {
             // TODO: reconfigure this with IPiece
-            var highlightTiles = LevelMono.Instance.storedPiece.highlightedMoves;
+            var highlightTiles = LevelMono.Instance.highlightedMoves;
             //Vector3 mousePos = Input.mousePosition;
             if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
             {
@@ -50,13 +50,8 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
-        var clickedPiece = LevelMono.Instance.GetPiece(coord);
-        if (clickedPiece!=null)
-        {
-            Debug.Log(clickedPiece);
-            Debug.Log(clickedPiece.HasMoved());
-        }
-        
+        var lvlMono = LevelMono.Instance;
+        var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
         // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
@@ -77,107 +72,86 @@ public class Tile : MonoBehaviour
 
         if (clickedPiece != null) // selected piece is correct turn's color
         {
-            if (LevelMono.Instance.storedPiece == null && turn == clickedPiece.IsControlledByHuman() && clickedPiece.HasMoved() == false)
+            if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
                 //Selects Piece
                 Debug.Log(GameManagerChain.Instance.NumMoves);
                 Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
-                LevelMono.Instance.storedPiece = clickedPiece;
-                LevelMono.Instance.storedCoord = coord;
-
-                LevelMono.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelMono.Instance.LevelModel.GetWidth(), LevelMono.Instance.LevelModel.GetHeight());
-
-                if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.Name() == "Circle")
+                lvlMono.SelectPiece(clickedPiece, coord);
+                    
+                if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.IsCircle())
                 {
-                    LevelMono.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(1, 1));
-                    LevelMono.Instance.storedPiece.highlightedMoves.Add(new Tuple<int, int>(2, 2));
+                    lvlMono.highlightedMoves.Add(new Tuple<int, int>(1, 1));
+                    lvlMono.highlightedMoves.Add(new Tuple<int, int>(2, 2));
                 }
 
-                foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
-                {
-                    LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(true);
-                    if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
-                    if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
-                }
+                lvlMono.HighlightMoves();    
+                
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
             }
             else
             {
-                if (LevelMono.Instance.storedPiece != null)
+                if (lvlMono.HasSelectedPiece())
                 {
                     // Possible to capture clickedPiece
-                    if (LevelMono.Instance.storedPiece != clickedPiece && LevelMono.Instance.storedPiece.IsControlledByHuman() != clickedPiece.IsControlledByHuman())
+                    if (lvlMono.selectedPiece.IsEnemyOf(clickedPiece))
                     {
-                        if (LevelMono.Instance.MovePiece(coord, LevelMono.Instance.storedPiece))
+                        if (lvlMono.MovePiece(coord))
                         {
                             //TODO: add LEVELMODEL update for capture
                             // Capturing Piece 
                             // Destroy(clickedPiece.gameObject);
                             GameManagerChain.Instance.NumMoves += 1;
                             GameManagerChain.Instance.TotalMoves += 1;
-
-
+                            
+                            MenuManager.Instance.ShowNumMovesInfo();
+                            
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
                             {
                                 MenuManager.Instance.UpdateObjectiveContent();
                             }
-
-                            MenuManager.Instance.ShowNumMovesInfo();
-                            //If Unit that Captured a piece is Circle, gain another turn
-                            if (LevelMono.Instance.storedPiece.Name() != "Circle")
-                            {
-                                Debug.Log("Piece that captured is NOT a circle");
-                                LevelMono.Instance.storedPiece.SetMoveState(true);
-                            }
-
                             //GridManager.Instance.storedPiece.hasMoved = true;
                         }
                     }
-                    foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
+                    else
                     {
-                        LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                        LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
-                            new Color32(255, 255, 255, 100);
+                        Debug.Log("FAILED TO CAPTURE");
+                        lvlMono.ResetPiece();
                     }
+                    lvlMono.RemoveHighlight(); 
+                    
+                    // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(LevelMono.Instance.storedPiece);
-                    LevelMono.Instance.storedPiece = null;
-                    LevelMono.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+                    MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
                 }
             }
         }
         else
         {
-            Debug.Log(LevelMono.Instance.storedPiece);
-            Debug.Log(clickedPiece);
-            if (LevelMono.Instance.storedPiece != null)
+            if (lvlMono.HasSelectedPiece())
             {
                 //Move Piece
-                if (LevelMono.Instance.MovePiece(coord, LevelMono.Instance.storedPiece))
+                if (lvlMono.MovePiece(coord))
                 {
-                    LevelMono.Instance.storedPiece.SetMoveState(true);
-                    foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
-                    {
-                        LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                        LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color =
-                            new Color32(255, 255, 255, 100);
-                        //fix hover unhighlight while selected
-                    }
+                    lvlMono.RemoveHighlight(); 
+                    
+                    // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(LevelMono.Instance.storedPiece);
-                    LevelMono.Instance.storedPiece = null;
-                    LevelMono.Instance.storedCoord = new Tuple<int, int>(-1, -1);
+                    MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
                     GameManagerChain.Instance.NumMoves += 1;
                     GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
-
-
+                    
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
                     {
                         MenuManager.Instance.UpdateObjectiveContent();
                     }
-                    //unhighlight after move.
+                }
+                else
+                {
+                    lvlMono.ResetPiece();
+                    Debug.Log("FAILED TO MOVE");
                 }
             }
         }

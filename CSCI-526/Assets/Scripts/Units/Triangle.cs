@@ -10,17 +10,17 @@ namespace Assets.Scripts.Units
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
-            var pos = this.transform;
-            if (this.TriangleAbilityCheck(new Tuple<int, int>((int)pos.x, (int)pos.y)))
+            var pos = this.transform.position;
+            if (this.TriangleAbilityCheck())
             {
                 MenuManager.Instance.ShowAbilityButton();
             }
             return legalSpots;
         }
 
-        private bool TriangleAbilityCheck(Tuple<int, int> position)
+        private bool TriangleAbilityCheck()
         {
-			var pos = this.transform;
+			var pos = this.transform.position;
             var adjList = this.AdjacentAllies(new Tuple<int, int>((int)pos.x, (int)pos.y));
             var lvlMono = LevelMono.Instance;
             if (adjList != null)

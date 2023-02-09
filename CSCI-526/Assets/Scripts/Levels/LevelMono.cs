@@ -22,10 +22,15 @@ public class LevelMono : MonoBehaviour
     public Dictionary<Tuple<int, int>, Tile> tiles;
     public Dictionary<Tuple<int, int>, PieceMono> _pieces;
 
-    public PieceMono storedPiece = null;
-    public Tuple<int, int> storedCoord = new Tuple<int, int>(-1, -1);
+    public PieceMono selectedPiece = null;
+    public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
+	public List<Tuple<int, int>> highlightedMoves;
 
-    public ILevel LevelModel { get; private set; }
+	private int Width;
+
+   	private int Height;
+
+    // public ILevel LevelModel { get; private set; }
 
     private void Awake()
     {
@@ -39,10 +44,14 @@ public class LevelMono : MonoBehaviour
         }
     }
 
+	public int GetWidth() { return this.Width; }
+
+	public int GetHeight() { return this.Height; }
+
     public void LoadLevel(LoadLevelData level)
     {
         UnloadLevel();
-        LevelModel = new Level(level.Width, level.Height, level.Units);
+        // LevelModel = new Level(level.Width, level.Height, level.Units);
         CreateSceneObjects(level);
     }
 
@@ -55,8 +64,12 @@ public class LevelMono : MonoBehaviour
 
     private void CreateSceneObjects(LoadLevelData level)
     {
-        tiles = new Dictionary<Tuple<int, int>, Tile>();
-        _pieces = new Dictionary<Tuple<int, int>, PieceMono>();
+		
+		var units = level.Units;
+        this.tiles = new Dictionary<Tuple<int, int>, Tile>();
+        this._pieces = new Dictionary<Tuple<int, int>, PieceMono>();
+		this.Width = level.Width;
+		this.Height = level.Height;
         for (int x = 0; x < level.Width; x++)
         {
             for (int y = 0; y < level.Height; y++)
@@ -69,63 +82,39 @@ public class LevelMono : MonoBehaviour
 
                 var coord = new Tuple<int, int>(x, y);
                 tiles[coord] = tile;
-
-                if (LevelModel.TryGetUnit(coord) != null)
-                {
-                    bool isHumanUnit = LevelModel.TryGetUnit(coord).IsControlledByHuman();
-                    switch (Enum.Parse(typeof(UnitType), LevelModel.TryGetUnit(coord).Name()))
-                    {
-                        case UnitType.Circle:
-                            if (isHumanUnit)
-                            {
-                                _pieces.Add(coord, Instantiate(humanCircleUnitPrefab, new Vector3(x, y, -1), Quaternion.identity));
-                            }
-                            else
-                            {
-
-                                _pieces.Add(coord, Instantiate(aiCircleUnitPrefab, new Vector3(x, y, -1), Quaternion.identity));
-                            }
-                            break;
-                        case UnitType.Diamond:
-                            if (isHumanUnit)
-                            {
-                                _pieces.Add(coord, Instantiate(humanDiamondUnitPrefab, new Vector3(x, y, -1), Quaternion.identity));
-                            }
-                            else
-                            {
-
-                                _pieces.Add(coord, Instantiate(aiDiamondUnitPrefab, new Vector3(x, y, -1), Quaternion.identity));
-                            }
-                            break;
-                        case UnitType.Triangle:
-                        default:
-                            if (isHumanUnit)
-                            {
-                                _pieces.Add(coord, Instantiate(humanTriangleUnitPrefab, new Vector3(x, y, -1), Quaternion.identity));
-                            }
-                            else
-                            {
-
-                                _pieces.Add(coord, Instantiate(aiTriangleUnitPrefab, new Vector3(x, y, -1), Quaternion.identity));
-                            }
-                            break;
-                    }
-                }
             }
         }
 
+		foreach (var unit in units) {
+			var coord = unit.GetPosition();
+			if (unit.IsCircle()) 
+			{
+				var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+				circle.SetHuman(unit.IsHuman());
+				circle.SetMoveState(false);
+				circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
+				_pieces.Add(coord, circle);
+			} 
+			else if (unit.IsTriangle()) 
+			{
+				var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+				triangle.SetHuman(unit.IsHuman());
+				triangle.SetMoveState(false);
+				triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
+				_pieces.Add(coord, triangle);
+			} 
+			else
+			{
+				var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+				diamond.SetHuman(unit.IsHuman());
+				diamond.SetMoveState(false);
+				diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
+				_pieces.Add(coord, diamond);
+			}
+		}
+
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
-    }
-
-    public Tile GetTile(Tuple<int, int> coord)
-    {
-        if (tiles.TryGetValue(coord, out var tile))
-        {
-            return tile;
-        }
-
-        return null;
     }
 
     public PieceMono GetPiece(Tuple<int, int> coord)
@@ -138,39 +127,76 @@ public class LevelMono : MonoBehaviour
         return null;
     }
 
+	public List<Tuple<int, int>> GetEnemyPieceCoords() 
+	{
+		List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
+		foreach (var piece in _pieces) 
+		{
+			if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
+		}
+		return enemyPieces;
+	}
+
     public LevelMono()
     {
         Instance = this;
     }
 
-    public bool MovePiece(Tuple<int, int> coord, PieceMono piece)
-    {
-        var validMoves = piece.GetLegalMoves(LevelModel.GetWidth(), LevelModel.GetHeight());
-        if (!validMoves.Contains(new Tuple<int, int>(coord.Item1, coord.Item2)))
-        {
-            return false;
-        }
-        if (LevelMono.Instance.GetPiece(coord) != null && string.Equals(piece.Name(), UnitType.Triangle.ToString()))
-        {
-            //Debug.Log("Return False Capture Triangle: " + coord);
-            return false;
-        }
-        if (!this.LevelModel.TryMoveUnit(storedCoord, coord))
-        {
-            if (this.LevelModel.TryCaptureUnit(storedCoord, coord))
-            {
-                // TODO: Should this be destroyed here?
-                Destroy(_pieces[coord].gameObject);
-                _pieces.Remove(coord);
+	public bool HasSelectedPiece() 
+	{
+		return this.selectedPiece != null;
+	}
 
-                // TODO: Don't use this direct call to update the AI's piece set:
-                // EnemyAI.Instance.GetPieces();
-            }
+	public void SelectPiece(PieceMono piece, Tuple<int, int> coord) 
+	{
+		this.selectedPiece = piece;
+		this.selectedCoord = coord;
+		if (piece.IsHuman()) { this.highlightedMoves = piece.LegalMoves(this.Width, this.Height); }
+	}
+
+	public void ResetPiece() {
+		this.selectedCoord = new Tuple<int, int>(-1, -1);
+		this.selectedPiece = null;
+		this.highlightedMoves.Clear();
+	}
+
+	public void HighlightMoves() 
+	{
+		foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
+      	{
+        	this.tiles[tileCoords]._highlight.SetActive(true);
+            if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+            if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
         }
-        _pieces[coord] = piece;
-        piece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, piece.transform.position.z));
-        _pieces.Remove(storedCoord);
-        storedCoord = new Tuple<int, int>(-1, -1);
+	}
+
+	public void RemoveHighlight() {
+		foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
+        {
+         	this.tiles[tileCoords]._highlight.SetActive(false);
+        	this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
+    	}	
+	}
+
+    public bool MovePiece(Tuple<int, int> coord)
+    {
+        var validMoves = this.selectedPiece.LegalMoves(this.Width, this.Height);
+        if (!validMoves.Contains(coord))
+        {
+            return false;
+        }
+
+		this.selectedPiece.SetMoveState(true);
+        if (this.GetPiece(coord) != null) // CAPTURE TAKES PLACE HERE
+        {
+			Destroy(this.GetPiece(coord).gameObject);
+			if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
+        }
+		this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
+        _pieces[coord] = this.selectedPiece;
+		_pieces[selectedCoord] = null;
+        this.selectedCoord = new Tuple<int, int>(-1, -1);
+		this.selectedPiece = null;
         return true;
     }
 }

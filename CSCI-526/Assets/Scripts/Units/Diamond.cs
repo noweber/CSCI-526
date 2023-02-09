@@ -33,7 +33,7 @@ namespace Assets.Scripts.Units
                     }
 
                     //get +1 to cardinal directions
-                    if (Mathf.Abs(i - Position.Item1) == 2 && Mathf.Abs(j - Position.Item2) == 0)
+                    if (Mathf.Abs(i - x) == 2 && Mathf.Abs(j - y) == 0)
                     {
                         var availableMove = new Tuple<int, int>(i, j);
                         var availablePiece = lvlMono.GetPiece(availableMove);
@@ -43,7 +43,7 @@ namespace Assets.Scripts.Units
                         }
                         legalSpots.Add(availableMove);
                     }
-                    if (Mathf.Abs(i - Position.Item1) == 0 && Mathf.Abs(j - Position.Item2) == 2)
+                    if (Mathf.Abs(i - x) == 0 && Mathf.Abs(j - y) == 2)
                     {
                         var availableMove = new Tuple<int, int>(i, j);
                         var availablePiece = lvlMono.GetPiece(availableMove);

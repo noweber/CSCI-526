@@ -6,13 +6,13 @@ using Assets.Scripts.Piece;
 
 public abstract class PieceMono : MonoBehaviour
 {
-	private bool isHuman;
+	protected bool isHuman;
 	
-	private bool hasMoved;
+	protected bool hasMoved;
 
-	private string unitName;
+	protected string unitName;
 
-    private string unitInfo;
+    protected string unitInfo;
     //public bool hasAbility = false;
 
 	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
@@ -21,23 +21,21 @@ public abstract class PieceMono : MonoBehaviour
 
 	public bool IsEnemyOf(PieceMono piece) { return this.IsHuman() != piece.IsHuman(); }
 
-	public bool CanMove() { return hasMoved; }
+	public bool CanMove() { return !this.hasMoved; }
 
-	public bool IsHuman() { return isHuman; }
+	public bool IsHuman() { return this.isHuman; }
 
-	public bool IsCircle() { return unitName == "Circle"; }
+	public bool IsCircle() { return this.unitName == "Circle"; }
 
-	public bool IsTriangle() { return unitName == "Triangle"; }
+	public bool IsTriangle() { return this.unitName == "Triangle"; }
 
-	public bool IsDiamond() { return unitName == "Diamond"; }
+	public bool IsDiamond() { return this.unitName == "Diamond"; }
 
-	public string GetName() { return unitName; }
+	public string GetName() { return this.unitName; }
 
-	public string GetInfo() { return unitInfo; }
+	public string GetInfo() { return this.unitInfo; }
 
-    public List<Vector2> highlightedMoves;
-
-	public List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
+	protected List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
 	{
 		var adjacentList = new List<Tuple<int, int>>();
         adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
