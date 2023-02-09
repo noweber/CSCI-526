@@ -180,7 +180,7 @@ public class LevelMono : MonoBehaviour
 		foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
          	this.tiles[tileCoords]._highlight.SetActive(false);
-        	this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
+        	//this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
     	}	
 	}
 

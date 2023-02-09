@@ -28,9 +28,7 @@ public class Tile : MonoBehaviour
     {
         if (LevelMono.Instance.HasSelectedPiece())
         {
-            // TODO: reconfigure this with IPiece
             var highlightTiles = LevelMono.Instance.highlightedMoves;
-            //Vector3 mousePos = Input.mousePosition;
             if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
             {
                 _highlight.SetActive(true);
@@ -40,10 +38,10 @@ public class Tile : MonoBehaviour
                 _highlight.SetActive(false);
             }
         }
-        else
-        {
-            _highlight.SetActive(false);
-        }
+        // else
+        // {
+        //     _highlight.SetActive(false);
+        // }
 
     }
 
@@ -53,22 +51,6 @@ public class Tile : MonoBehaviour
         var lvlMono = LevelMono.Instance;
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
-
-        // Endgame logic - TODO: We can probably apply a reverse logic to clean the redundant inner IF-ELSE-IF loop
-
-        /* TODO: Fix this issue where there is a null reference.
-        if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 4)) == null)
-        {
-            if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
-            else if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)).HasMoved() == true) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
-
-        }
-        else if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 4)).HasMoved() == true)
-
-        {
-            if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)) == null) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
-            else if (LevelController.Instance.LevelModel.TryGetUnit(new Tuple<int, int>(3, 5)).HasMoved() == true) { Debug.Log("TUTORIAL_END)"); Analytics.Instance.Send(GameManagerChain.Instance.playTestID, GameManagerChain.Instance.TotalMoves); }
-        }*/
 
         if (clickedPiece != null) // selected piece is correct turn's color
         {
@@ -99,12 +81,9 @@ public class Tile : MonoBehaviour
                     {
                         if (lvlMono.MovePiece(coord))
                         {
-                            //TODO: add LEVELMODEL update for capture
-                            // Capturing Piece 
-                            // Destroy(clickedPiece.gameObject);
+                            
                             GameManagerChain.Instance.NumMoves += 1;
                             GameManagerChain.Instance.TotalMoves += 1;
-                            
                             MenuManager.Instance.ShowNumMovesInfo();
                             
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -116,10 +95,12 @@ public class Tile : MonoBehaviour
                     }
                     else
                     {
+                        
                         Debug.Log("FAILED TO CAPTURE");
                         // lvlMono.ResetPiece();
                     }
-                    lvlMono.RemoveHighlight(); 
+                    lvlMono.RemoveHighlight();
+                    lvlMono.ResetPiece();
                     
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
@@ -134,8 +115,6 @@ public class Tile : MonoBehaviour
                 //Move Piece
                 if (lvlMono.MovePiece(coord))
                 {
-                    lvlMono.RemoveHighlight(); 
-                    
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
@@ -150,9 +129,11 @@ public class Tile : MonoBehaviour
                 }
                 else
                 {
-                    // lvlMono.ResetPiece();
+                    
                     Debug.Log("FAILED TO MOVE");
                 }
+                lvlMono.RemoveHighlight();
+                lvlMono.ResetPiece();
             }
         }
 
