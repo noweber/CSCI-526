@@ -5,61 +5,29 @@ using UnityEngine;
 
 namespace Assets.Scripts.Units
 {
-    public class Diamond : Piece.Piece
+    public class Diamond : PieceMono
     {
-        public Diamond(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer) : base(piecePosition, isControlledByHumanPlayer)
-        {
-        }
-
-        public override string Name()
-        {
-            return UnitType.Diamond.ToString();
-        }
-
-        public override string Info()
-        {
-            return "If adjacent to circle, circle gains range.";
-        }
-
-        public override List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
-        {
-            var adjacentList = new List<Tuple<int, int>>();
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2));
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1));
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
-
-            var adjAlly = new List<Tuple<int, int>>();
-            var lvlModel = LevelMono.Instance.LevelModel;
-            foreach (Tuple<int, int> coord in adjacentList)
-            {
-                if (lvlModel.TryGetUnit(coord).IsControlledByHuman() == base.IsControlledByHuman())
-                {
-                    adjAlly.Add(coord);
-                }
-            }
-            if (adjAlly.Count == 0)
-                return null;
-            return adjAlly;
-        }
-
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
-            var lvlModel = LevelMono.Instance.LevelModel;
+            var lvlMono = LevelMono.Instance;
+			var pos = this.transform.position;
+			int x = (int)pos.x;
+			int y = (int)pos.y;
 
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
                 {
                     //get diagonals - those are ok
-                    if (Mathf.Abs(i - Position.Item1) == 1 && Mathf.Abs(j - Position.Item2) == 1)
+                    if (Mathf.Abs(i - x) == 1 && Mathf.Abs(j - y) == 1)
                     {
                         var availableMove = new Tuple<int, int>(i, j);
-                        if (lvlModel.TryGetUnit(availableMove) != null)
+						var availablePiece = lvlMono.GetPiece(availableMove);
+                        if (availablePiece != null)
                         {
-                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == this.IsControlledByHuman()) { continue; }
+                            if (!this.IsEnemyOf(availablePiece)) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -68,18 +36,20 @@ namespace Assets.Scripts.Units
                     if (Mathf.Abs(i - Position.Item1) == 2 && Mathf.Abs(j - Position.Item2) == 0)
                     {
                         var availableMove = new Tuple<int, int>(i, j);
-                        if (lvlModel.TryGetUnit(availableMove) != null)
+                        var availablePiece = lvlMono.GetPiece(availableMove);
+                        if (availablePiece != null)
                         {
-                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman()  == this.IsControlledByHuman()) { continue; }
+                            if (!this.IsEnemyOf(availablePiece)) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
                     if (Mathf.Abs(i - Position.Item1) == 0 && Mathf.Abs(j - Position.Item2) == 2)
                     {
                         var availableMove = new Tuple<int, int>(i, j);
-                        if (lvlModel.TryGetUnit(availableMove) != null)
+                        var availablePiece = lvlMono.GetPiece(availableMove);
+                        if (availablePiece != null)
                         {
-                            if (lvlModel.TryGetUnit(availableMove).IsControlledByHuman() == this.IsControlledByHuman()) { continue; }
+                            if (!this.IsEnemyOf(availablePiece)) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -99,7 +69,7 @@ namespace Assets.Scripts.Units
                 legalSpots.Clear();
             }
 
-            var triangleLegal = inTriangleRange(Position);
+            /*var triangleLegal = inTriangleRange(Position);
             if (triangleLegal != null)
             {
                 UnityEngine.Debug.Log("Unlimited movement around triangle");
@@ -108,12 +78,12 @@ namespace Assets.Scripts.Units
                     if (!legalSpots.Contains(adj))
                         legalSpots.Add(adj);
                 }
-            }
+            }*/
 
             return legalSpots;
         }
 
-        private List<Tuple<int, int>> inTriangleRange(Tuple<int, int> unitPosition)
+        /*private List<Tuple<int, int>> inTriangleRange(Tuple<int, int> unitPosition)
         {
             var adjacentList = new List<Tuple<int, int>>();
             adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
@@ -146,6 +116,6 @@ namespace Assets.Scripts.Units
                 }
             }
             return null;
-        }
+        }*/
     }
 }

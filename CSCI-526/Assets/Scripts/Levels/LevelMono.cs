@@ -9,14 +9,15 @@ public class LevelMono : MonoBehaviour
     public static LevelMono Instance { get; private set; }
 
     [SerializeField] private Tile _tilePrefab;
-    [SerializeField] private PieceMono humanTriangleUnitPrefab;
-    [SerializeField] private PieceMono humanDiamondUnitPrefab;
-    [SerializeField] private PieceMono humanCircleUnitPrefab;
-    [SerializeField] private PieceMono aiTriangleUnitPrefab;
-    [SerializeField] private PieceMono aiDiamondUnitPrefab;
-    [SerializeField] private PieceMono aiCircleUnitPrefab;
+
+	[SerializeField] private Triangle _trianglePrefab;
+	[SerializeField] private Diamond _diamondPrefab;
+	[SerializeField] private Circle _circlePrefab;
 
     [SerializeField] private Transform _camera;
+
+	public Color playerColor;
+	public Color enemyColor;
 
     public Dictionary<Tuple<int, int>, Tile> tiles;
     public Dictionary<Tuple<int, int>, PieceMono> _pieces;

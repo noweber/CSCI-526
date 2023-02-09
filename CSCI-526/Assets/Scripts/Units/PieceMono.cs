@@ -4,69 +4,62 @@ using System;
 using Assets.Scripts.Units;
 using Assets.Scripts.Piece;
 
-public class PieceMono : MonoBehaviour
+public abstract class PieceMono : MonoBehaviour
 {
-    public Color UnitColor;
+	private bool isHuman;
+	
+	private bool hasMoved;
 
-    private IPiece pieceModel;
+	private string unitName;
 
-    public UnitType TypeOfUnit;
+    private string unitInfo;
+    //public bool hasAbility = false;
 
-    public bool IsHumanUnit;
+	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
 
-    // TODO: Ask what this is used for. Maybe this is used in the tutorials
-    public List<Tuple<int, int>> highlightedMoves = new();
+	public void SetMoveState(bool state) { this.hasMoved = state; }
 
-    private void Awake()
-    {
-        Tuple<int, int> position = new((int)transform.position.x, (int)transform.position.y);
-        pieceModel = TypeOfUnit switch
+	public bool IsEnemyOf(PieceMono piece) { return this.IsHuman() != piece.IsHuman(); }
+
+	public bool CanMove() { return hasMoved; }
+
+	public bool IsHuman() { return isHuman; }
+
+	public bool IsCircle() { return unitName == "Circle"; }
+
+	public bool IsTriangle() { return unitName == "Triangle"; }
+
+	public bool IsDiamond() { return unitName == "Diamond"; }
+
+	public string GetName() { return unitName; }
+
+	public string GetInfo() { return unitInfo; }
+
+    public List<Vector2> highlightedMoves;
+
+	public List<Tuple<int, int>> AdjacentAllies(Tuple<int, int> unitPosition)
+	{
+		var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1));
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1));
+
+        var adjAlly = new List<Tuple<int, int>>();
+        var lvlMono = LevelMono.Instance;
+        foreach (Tuple<int, int> coord in adjacentList)
         {
-            UnitType.Circle => new Circle(position, IsHumanUnit),
-            UnitType.Diamond => new Diamond(position, IsHumanUnit),
-            _ => new Triangle(position, IsHumanUnit),
-        };
-        gameObject.GetComponent<SpriteRenderer>().color = UnitColor;
-    }
+			if (lvlMono.GetPiece(coord) != null && !this.IsEnemyOf(lvlMono.GetPiece(coord)))
+            {
+            	adjAlly.Add(coord);
+            }
+        }    
+        return adjAlly;
+	}
 
-    public List<Tuple<int, int>> GetAdjacentAllies(Tuple<int, int> unitPosition)
-    {
-        return pieceModel.AdjacentAllies(unitPosition);
-    }
+    // public abstract bool IsMoveLegal(Vector2 destination);
 
-    public List<Tuple<int, int>> GetLegalMoves(int boardWidth, int boardHeight)
-    {
-        return pieceModel.LegalMoves(boardWidth, boardHeight);
-    }
+    public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
 
-    public bool HasMoved()
-    {
-        return pieceModel.HasMoved();
-    }
-
-    public void SetMoveState(bool state)
-    {
-        pieceModel.SetMoveState(state);
-    }
-
-    public bool IsControlledByHuman()
-    {
-        return pieceModel.IsControlledByHuman();
-    }
-
-    public virtual string Name()
-    {
-        return pieceModel.Name();
-    }
-
-    public string Summary()
-    {
-        return pieceModel.Info();
-    }
-
-    public void UpdateLocation(Vector3 location)
-    {
-        this.transform.position = location;
-        pieceModel.UpdateLocation(new Tuple<int, int>((int)location.x, (int)location.y));
-    }
+    public void UpdateLocation(Vector3 location) { this.transform.position = location; }
 }
