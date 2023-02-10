@@ -12,17 +12,20 @@ public class GameManagerChain : MonoBehaviour
 
     public GameStateEnum GameStateEnum;
 
-    public int NumMoves;
-
     public int TotalMoves;
 
     public bool UsedAbility = false;
 
-    public List<PieceMono> MovedPieces;
     public string SceneName;
 
-
     public string playTestID;
+
+    private int numberOfMovesMade;
+
+    /// <summary>
+    /// This is the set of pieces which have been moved during a given turn state.
+    /// </summary>
+    private List<PieceMono> movedPieces;
 
     void Awake()
     {
@@ -34,25 +37,97 @@ public class GameManagerChain : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NumMoves = 0;
-        MovedPieces = new List<PieceMono>();
-
+        numberOfMovesMade = 0;
         TotalMoves = 0;
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
-
-        playTestID = System.Guid.NewGuid().ToString();
-
+        playTestID = Guid.NewGuid().ToString();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// This method resets the move state of the list of any previously moved units and then clears the list.
+    /// </summary>
+    public void ClearMovedPieces()
     {
-
+        SetAllMovedPiecesMoveState(false);
+        movedPieces = new List<PieceMono>();
     }
 
+    /// <summary>
+    /// Adds a piece to the list of moved units this turn.
+    /// </summary>
+    /// <param name="pieceThatMoved">A reference to the piece that made their move already.</param>
+    public void AddMovedPiece(PieceMono pieceThatMoved)
+    {
+        // This assumes there is no need to ever try to move a null piece.
+        if (pieceThatMoved == null)
+        {
+            return;
+        }
+
+        // This ensures the list will always exist when called:
+        if (movedPieces == null)
+        {
+            ClearMovedPieces();
+        }
+
+        movedPieces.Add(pieceThatMoved);
+    }
+
+    /// <summary>
+    /// Resets the number of moves made this turn to 0.
+    /// </summary>
+    public void ResetNumberOfMovesMade()
+    {
+        numberOfMovesMade = 0;
+    }
+
+    /// <summary>
+    /// Returns the number of moves made this turn.
+    /// </summary>
+    /// <returns>Returns an integer [0, n].</returns>
+    public int GetNumberOfMovesMade()
+    {
+        return numberOfMovesMade;
+    }
+
+    /// <summary>
+    /// Increases the number of moves made this turn (aka, decrease the number of moves remainig).
+    /// </summary>
+    /// <param name="amount">The number of moves made.</param>
+    public void AddToNumberOfMovesMade(int amount = 1)
+    {
+        // Check if the the game is over now that number of available moves decreased during play:
+        if (!LevelMono.Instance.DoesAiPlayerHaveUnitsRemaining())
+        {
+            // TODO: Transition to a win state per open tasks once designed.
+        }
+        else if (!LevelMono.Instance.DoesHumanPlayerHaveUnitsRemaining())
+        {
+            // TODO: Transition to a lose state.
+        }
+        numberOfMovesMade += amount;
+    }
+
+    /// <summary>
+    /// Decreases the count of the number of moves made this turn.
+    /// </summary>
+    /// <param name="amount">The number to subtract.</param>
+    public void SubtractFromNumberOfMovesMade(int amount = 1)
+    {
+        numberOfMovesMade -= amount;
+    }
+
+    /// <summary>
+    /// Changes the current game state.
+    /// </summary>
+    /// <param name="newState">The game state to transition to.</param>
     public void ChangeState(GameStateEnum newState)
     {
+        GameManagerChain.Instance.ClearMovedPieces();
+        GameManagerChain.Instance.ResetNumberOfMovesMade();
+        GameManagerChain.Instance.UsedAbility = false;
+
         GameStateEnum = newState;
 
         switch (newState)
@@ -83,14 +158,21 @@ public class GameManagerChain : MonoBehaviour
                     EnemyAI.Instance.PerformTurn();
                 }
                 break;
-                //default:
-                //   throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
+            case GameStateEnum.Victory:
+            case GameStateEnum.Loss:
+                // TODO: Add victory and loss game state logic. This currently just resets the game.
+                ReloadScene.Instance.ReloadCurrentScene();
+                break;
         }
         MenuManager.Instance.ShowTurnInfo();
         MenuManager.Instance.ShowNumMovesInfo();
 
     }
 
+    /// <summary>
+    /// A method representing the tutorial level's data.
+    /// </summary>
+    /// <returns>Returns the tutorial level's data.</returns>
     private LoadLevelData TutorialLevel()
     {
         int _width = 5;
@@ -132,6 +214,10 @@ public class GameManagerChain : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// A method representing the first level's data.
+    /// </summary>
+    /// <returns>Returns the first level's data.</returns>
     private LoadLevelData LevelOne()
     {
         int _width = 8;
@@ -182,11 +268,30 @@ public class GameManagerChain : MonoBehaviour
             Units = units
         };
     }
+
+    /// <summary>
+    /// This method sets/resets all of the moved pieces move state.
+    /// </summary>
+    /// <param name="state">True or false for whether the unit can still move or not.</param>
+    private void SetAllMovedPiecesMoveState(bool state)
+    {
+        if (movedPieces == null || movedPieces.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var piece in movedPieces)
+        {
+            piece.SetMoveState(state);
+        }
+    }
 }
 
 public enum GameStateEnum
 {
     GenerateGrid = 0,
     Human = 1,
-    AI = 2
+    AI = 2,
+    Victory = 3,
+    Loss = 4
 }
