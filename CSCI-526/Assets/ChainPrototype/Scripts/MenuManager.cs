@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +6,6 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    //[SerializeField] private GameObject _selectedHeroObject, _tileObject, _tileUnitObject, _turnInfoObject;
     [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
@@ -33,7 +30,8 @@ public class MenuManager : MonoBehaviour
         if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human)
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Blue Turn";
-        } else
+        }
+        else
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
         }
@@ -41,19 +39,8 @@ public class MenuManager : MonoBehaviour
 
     public void ShowNumMovesInfo()
     {
-        
-        _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.NumMoves) + " Moves Left";
-        /*
-        if ((2 - GameManagerChain.Instance.NumMoves) != 0)
-        {
-            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.NumMoves) + " Moves Left";
-        }
-        else
-        {
-            _numTurnObject.GetComponentInChildren<Text>().text = "" + (2) + " Moves Left";
-        }
-        */
 
+        _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.GetNumberOfMovesMade()) + " Moves Left";
     }
     public void ShowEndTurnButton()
     {
@@ -69,13 +56,6 @@ public class MenuManager : MonoBehaviour
     public void EndTurnEvent()//(Piece triangle, Piece other)
     {
         Debug.Log("End Turn Event");
-        foreach (var piece in GameManagerChain.Instance.MovedPieces)
-        {
-            piece.SetMoveState(false);
-        }
-        GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
-        GameManagerChain.Instance.NumMoves = 0;
-        GameManagerChain.Instance.UsedAbility = false;
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
         if (turn == true)
         {
@@ -88,14 +68,6 @@ public class MenuManager : MonoBehaviour
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
         ShowTurnInfo();
-		// if (LevelMono.Instance.storedPiece != null && LevelMono.Instance.storedPiece.highlightedMoves.Count > 0) 
-		// {
-		// 	foreach (Tuple<int, int> tileCoords in LevelMono.Instance.storedPiece.highlightedMoves)
-  //   		{
-  //      			LevelMono.Instance.tiles[tileCoords]._highlight.SetActive(false);
-  //   		}
-		// }	
-
         var lvlMono = LevelMono.Instance;
         lvlMono.RemoveHighlight();
         lvlMono.ResetPiece();
@@ -121,7 +93,7 @@ public class MenuManager : MonoBehaviour
         Debug.Log("BUTTON WORKS");
         if (GameManagerChain.Instance.UsedAbility == false)
         {
-            GameManagerChain.Instance.NumMoves -= 1;
+            GameManagerChain.Instance.SubtractFromNumberOfMovesMade(1);
             GameManagerChain.Instance.UsedAbility = true;
             this.ShowNumMovesInfo();
         }
@@ -140,14 +112,15 @@ public class MenuManager : MonoBehaviour
             _selectedUnitObject.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetName();
             _selectedUnitObject.SetActive(true);
         }
-        if (_selectUnitInfo != null) {
+        if (_selectUnitInfo != null)
+        {
             _selectUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetInfo();
         }
     }
 
     public void HideUnitInfo(PieceMono piece)
     {
-        if(piece == null)
+        if (piece == null)
         {
             _selectedUnitObject.SetActive(false);
             return;
@@ -162,9 +135,9 @@ public class MenuManager : MonoBehaviour
     {
         TextMeshProUGUI tmpro = _objectiveContent.GetComponent<TextMeshProUGUI>();
 
-        if(SceneManager.GetActiveScene().name == "TutorialLevel")
-        switch(GameManagerChain.Instance.TotalMoves)
-        {
+        if (SceneManager.GetActiveScene().name == "TutorialLevel")
+            switch (GameManagerChain.Instance.TotalMoves)
+            {
                 case 0:     // First move -- player must move diamond to the circle
                     tmpro.text = "Let's move the diamond next to the circle.";
                     break;
@@ -174,7 +147,7 @@ public class MenuManager : MonoBehaviour
                 case 2:     // Free movement -- player freely maneuvers
                     tmpro.text = "When the circle captures an enemy piece, you get another turn, once per round. Capture the enemy's pieces.";
                     break;
-        }
+            }
     }
     public void SetSlackDialogue(bool status)
     {
@@ -184,7 +157,7 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(SceneManager.GetActiveScene().name == "TutorialLevel")
+        if (SceneManager.GetActiveScene().name == "TutorialLevel")
         {
             MenuManager.Instance.UpdateObjectiveContent();
         }
@@ -193,6 +166,6 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

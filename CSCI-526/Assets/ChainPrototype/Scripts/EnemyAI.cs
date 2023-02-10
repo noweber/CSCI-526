@@ -22,7 +22,7 @@ public class EnemyAI : MonoBehaviour
         {
             return null;
         }
-        
+
         List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
         foreach (var coord in enemyPieceCoords)
         {
@@ -38,8 +38,6 @@ public class EnemyAI : MonoBehaviour
     public void PerformTurn()
     {
         StartCoroutine(DelayEnemyStart());
-        // PerformTurn();
-        // PerformTurn();
     }
 
     private void MovePiece()
@@ -54,8 +52,8 @@ public class EnemyAI : MonoBehaviour
             lvlMono.SelectPiece(aiPiece, aiCoord);
             if (lvlMono.MovePiece(moves[index]))
             {
-                GameManagerChain.Instance.MovedPieces.Add(aiPiece);
-                GameManagerChain.Instance.NumMoves += 1;
+                GameManagerChain.Instance.AddMovedPiece(aiPiece);
+                GameManagerChain.Instance.AddToNumberOfMovesMade(1);
                 MenuManager.Instance.ShowNumMovesInfo();
             }
             else
@@ -65,14 +63,14 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (GameManagerChain.Instance.NumMoves == 2 || aiCoord == null)
+        if (!LevelMono.Instance.DoesHumanPlayerHaveUnitsRemaining())
         {
-            foreach (var pieces in GameManagerChain.Instance.MovedPieces)
-            {
-                pieces.SetMoveState(false);
-            }
             StopAllCoroutines();
-            GameManagerChain.Instance.NumMoves = 0;
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
+        }
+        else if (GameManagerChain.Instance.GetNumberOfMovesMade() == 2 || aiCoord == null)
+        {
+            StopAllCoroutines();
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
     }
