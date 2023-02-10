@@ -137,7 +137,6 @@ public class LevelMono : MonoBehaviour
 		Debug.Log(_pieces.Count);
 		foreach (var piece in _pieces) 
 		{
-			
 			if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
 		}
 		return enemyPieces;
@@ -205,36 +204,9 @@ public class LevelMono : MonoBehaviour
 		_pieces.Remove(selectedCoord);
 
         //if in range triangle -1 to numMoves + setMoveState(false)
-        if (inTriangleRange(coord, this.selectedPiece))
-        {
-            GameManagerChain.Instance.NumMoves -= 1;
-            this.selectedPiece.SetMoveState(false);
-        }
-
+        
         this.selectedCoord = new Tuple<int, int>(-1, -1);
         this.selectedPiece = null;
         return true;
-    }
-
-    private bool inTriangleRange(Tuple<int, int> unitPosition, PieceMono piece)
-    {
-        var adjacentList = new List<Tuple<int, int>>();
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2)); //left
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1)); //up
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1)); //down
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 + 1)); //right up diag
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 + 1)); //left  up diag
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 - 1)); //right down diag
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 - 1)); //left down diag
-
-        foreach (Tuple<int, int> coord in adjacentList)
-        {
-            if (GetPiece(coord)!= null && GetPiece(coord).IsTriangle() && !GetPiece(coord).IsEnemyOf(piece))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

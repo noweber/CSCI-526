@@ -70,6 +70,11 @@ public class Tile : MonoBehaviour
                             
                             GameManagerChain.Instance.NumMoves += 1;
                             GameManagerChain.Instance.TotalMoves += 1;
+                            if (this.inTriangleRange(coord))
+                            {
+                                GameManagerChain.Instance.NumMoves -= 1;
+                                lvlMono.GetPiece(coord).SetMoveState(false);
+                            }
                             MenuManager.Instance.ShowNumMovesInfo();
                             
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -106,7 +111,13 @@ public class Tile : MonoBehaviour
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
                     GameManagerChain.Instance.NumMoves += 1;
                     GameManagerChain.Instance.TotalMoves += 1;
+                    if (this.inTriangleRange(coord))
+                    {
+                        GameManagerChain.Instance.NumMoves -= 1;
+                        lvlMono.GetPiece(coord).SetMoveState(false);
+                    }
                     MenuManager.Instance.ShowNumMovesInfo();
+
                     
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
                     {
@@ -165,6 +176,29 @@ public class Tile : MonoBehaviour
         MenuManager.Instance.SetSlackDialogue(false);
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         yield return null;
+    }
+
+    private bool inTriangleRange(Tuple<int, int> unitPosition)
+    {
+        var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2)); //left
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1)); //up
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1)); //down
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 + 1)); //right up diag
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 + 1)); //left  up diag
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 - 1)); //right down diag
+        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 - 1)); //left down diag
+        var lvlMono = LevelMono.Instance;
+        foreach (Tuple<int, int> coord in adjacentList)
+        {
+            var piece = lvlMono.GetPiece(coord);
+            if (piece != null && piece.IsTriangle() && !lvlMono.GetPiece(unitPosition).IsEnemyOf(piece))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
