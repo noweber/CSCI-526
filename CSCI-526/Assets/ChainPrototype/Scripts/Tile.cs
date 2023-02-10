@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,20 +42,20 @@ public class Tile : MonoBehaviour
             if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
                 //Selects Piece
-                Debug.Log(GameManagerChain.Instance.NumMoves);
+                Debug.Log(GameManagerChain.Instance.GetNumberOfMovesMade());
                 Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
                 lvlMono.SelectPiece(clickedPiece, coord);
-                    
+
                 if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.IsCircle())
                 {
                     lvlMono.highlightedMoves.Add(new Tuple<int, int>(1, 1));
                     lvlMono.highlightedMoves.Add(new Tuple<int, int>(2, 2));
                 }
 
-                lvlMono.HighlightMoves();    
-                
+                lvlMono.HighlightMoves();
+
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
-                GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
+                GameManagerChain.Instance.AddMovedPiece(clickedPiece);
             }
             else
             {
@@ -67,16 +66,16 @@ public class Tile : MonoBehaviour
                     {
                         if (lvlMono.MovePiece(coord))
                         {
-                            
-                            GameManagerChain.Instance.NumMoves += 1;
+
+                            GameManagerChain.Instance.AddToNumberOfMovesMade(1);
                             GameManagerChain.Instance.TotalMoves += 1;
                             if (this.inTriangleRange(coord))
                             {
-                                GameManagerChain.Instance.NumMoves -= 1;
+                                GameManagerChain.Instance.SubtractFromNumberOfMovesMade(1);
                                 lvlMono.GetPiece(coord).SetMoveState(false);
                             }
                             MenuManager.Instance.ShowNumMovesInfo();
-                            
+
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
                             {
                                 MenuManager.Instance.UpdateObjectiveContent();
@@ -86,13 +85,14 @@ public class Tile : MonoBehaviour
                     }
                     else
                     {
+
                         Debug.Log("FAILED TO CAPTURE");
                         // lvlMono.ResetPiece();
                     }
 
                     lvlMono.RemoveHighlight();
                     lvlMono.ResetPiece();
-                    
+
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
@@ -109,16 +109,15 @@ public class Tile : MonoBehaviour
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
-                    GameManagerChain.Instance.NumMoves += 1;
+                    GameManagerChain.Instance.AddToNumberOfMovesMade(1);
                     GameManagerChain.Instance.TotalMoves += 1;
                     if (this.inTriangleRange(coord))
                     {
-                        GameManagerChain.Instance.NumMoves -= 1;
+                        GameManagerChain.Instance.SubtractFromNumberOfMovesMade(1);
                         lvlMono.GetPiece(coord).SetMoveState(false);
                     }
                     MenuManager.Instance.ShowNumMovesInfo();
 
-                    
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
                     {
                         MenuManager.Instance.UpdateObjectiveContent();
@@ -126,7 +125,7 @@ public class Tile : MonoBehaviour
                 }
                 else
                 {
-                    
+
                     Debug.Log("FAILED TO MOVE");
                 }
                 lvlMono.RemoveHighlight();
@@ -134,17 +133,15 @@ public class Tile : MonoBehaviour
             }
         }
 
+
         // turn logic
-        if (GameManagerChain.Instance.NumMoves == 2)
+        if (!LevelMono.Instance.DoesAiPlayerHaveUnitsRemaining())
         {
-            foreach (var piece in GameManagerChain.Instance.MovedPieces)
-            {
-                piece.SetMoveState(false);
-            }
-            GameManagerChain.Instance.UsedAbility = false;
-            GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
-            GameManagerChain.Instance.NumMoves = 0;
-            
+            StopAllCoroutines();
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Victory);
+        }
+        else if (GameManagerChain.Instance.GetNumberOfMovesMade() == 2)
+        {
             if (turn == true)
             {
                 if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -154,18 +151,10 @@ public class Tile : MonoBehaviour
                 }
                 else
                 {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);   
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                 }
             }
         }
-        /*
-        foreach (var piece in GameManagerChain.Instance.MovedPieces)
-        {
-            piece.SetMoveState(false);
-        }
-        GameManagerChain.Instance.UsedAbility = false;
-        GameManagerChain.Instance.MovedPieces = new List<PieceMono>();
-        */
     }
 
     // "Slacking off" text for 3 seconds, then change state to white

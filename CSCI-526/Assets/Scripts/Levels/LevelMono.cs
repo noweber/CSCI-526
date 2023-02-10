@@ -2,6 +2,7 @@ using Assets.Scripts.Levels;
 using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelMono : MonoBehaviour
@@ -10,25 +11,25 @@ public class LevelMono : MonoBehaviour
 
     [SerializeField] private Tile _tilePrefab;
 
-	[SerializeField] private Triangle _trianglePrefab;
-	[SerializeField] private Diamond _diamondPrefab;
-	[SerializeField] private Circle _circlePrefab;
+    [SerializeField] private Triangle _trianglePrefab;
+    [SerializeField] private Diamond _diamondPrefab;
+    [SerializeField] private Circle _circlePrefab;
 
     [SerializeField] private Transform _camera;
 
-	public Color playerColor;
-	public Color enemyColor;
+    public Color playerColor;
+    public Color enemyColor;
 
     public Dictionary<Tuple<int, int>, Tile> tiles;
     public Dictionary<Tuple<int, int>, PieceMono> _pieces;
 
     public PieceMono selectedPiece = null;
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
-	public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
+    public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
 
-	private int Width;
+    private int Width;
 
-   	private int Height;
+    private int Height;
 
     // public ILevel LevelModel { get; private set; }
 
@@ -44,9 +45,9 @@ public class LevelMono : MonoBehaviour
         }
     }
 
-	public int GetWidth() { return this.Width; }
+    public int GetWidth() { return this.Width; }
 
-	public int GetHeight() { return this.Height; }
+    public int GetHeight() { return this.Height; }
 
     public void LoadLevel(LoadLevelData level)
     {
@@ -64,11 +65,11 @@ public class LevelMono : MonoBehaviour
 
     private void CreateSceneObjects(LoadLevelData level)
     {
-		var units = level.Units;
+        var units = level.Units;
         this.tiles = new Dictionary<Tuple<int, int>, Tile>();
         this._pieces = new Dictionary<Tuple<int, int>, PieceMono>();
-		this.Width = level.Width;
-		this.Height = level.Height;
+        this.Width = level.Width;
+        this.Height = level.Height;
         for (int x = 0; x < level.Width; x++)
         {
             for (int y = 0; y < level.Height; y++)
@@ -84,38 +85,39 @@ public class LevelMono : MonoBehaviour
             }
         }
 
-		foreach (var unit in units) {
-			var coord = unit.GetPosition();
-			if (unit.IsCircle()) 
-			{
-				var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-				circle.SetName("Circle");		
-				circle.SetHuman(unit.IsHuman());
-				circle.SetMoveState(false);
-				circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
-				_pieces[coord] = circle;
-			} 
-			else if (unit.IsTriangle()) 
-			{
-				var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-				triangle.SetName("Triangle");
-				triangle.SetHuman(unit.IsHuman());
-				triangle.SetMoveState(false);
-				triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
-				_pieces[coord] = triangle;
-			} 
-			else
-			{
-				var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-				diamond.SetName("Diamond");
-				diamond.SetHuman(unit.IsHuman());
-				diamond.SetMoveState(false);
-				diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
-				_pieces[coord] = diamond;
-			}
-			Debug.Log(_pieces[coord].IsHuman());
+        foreach (var unit in units)
+        {
+            var coord = unit.GetPosition();
+            if (unit.IsCircle())
+            {
+                var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+                circle.SetName("Circle");
+                circle.SetHuman(unit.IsHuman());
+                circle.SetMoveState(false);
+                circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
+                _pieces[coord] = circle;
+            }
+            else if (unit.IsTriangle())
+            {
+                var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+                triangle.SetName("Triangle");
+                triangle.SetHuman(unit.IsHuman());
+                triangle.SetMoveState(false);
+                triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
+                _pieces[coord] = triangle;
+            }
+            else
+            {
+                var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+                diamond.SetName("Diamond");
+                diamond.SetHuman(unit.IsHuman());
+                diamond.SetMoveState(false);
+                diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
+                _pieces[coord] = diamond;
+            }
+            Debug.Log(_pieces[coord].IsHuman());
 
-		}
+        }
 
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
@@ -131,57 +133,60 @@ public class LevelMono : MonoBehaviour
         return null;
     }
 
-	public List<Tuple<int, int>> GetEnemyPieceCoords() 
-	{
-		List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
-		Debug.Log(_pieces.Count);
-		foreach (var piece in _pieces) 
-		{
-			if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
-		}
-		return enemyPieces;
-	}
+    public List<Tuple<int, int>> GetEnemyPieceCoords()
+    {
+        List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
+        Debug.Log(_pieces.Count);
+        foreach (var piece in _pieces)
+        {
+
+            if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
+        }
+        return enemyPieces;
+    }
 
     public LevelMono()
     {
         Instance = this;
     }
 
-	public bool HasSelectedPiece() 
-	{
-		return this.selectedPiece != null;
-	}
+    public bool HasSelectedPiece()
+    {
+        return this.selectedPiece != null;
+    }
 
-	public void SelectPiece(PieceMono piece, Tuple<int, int> coord) 
-	{
-		this.selectedPiece = piece;
-		this.selectedCoord = coord;
-		if (piece.IsHuman()) { this.highlightedMoves = piece.LegalMoves(this.Width, this.Height); }
-	}
+    public void SelectPiece(PieceMono piece, Tuple<int, int> coord)
+    {
+        this.selectedPiece = piece;
+        this.selectedCoord = coord;
+        if (piece.IsHuman()) { this.highlightedMoves = piece.LegalMoves(this.Width, this.Height); }
+    }
 
-	public void ResetPiece() {
-		this.selectedCoord = new Tuple<int, int>(-1, -1);
-		this.selectedPiece = null;
-		this.highlightedMoves.Clear();
-	}
+    public void ResetPiece()
+    {
+        this.selectedCoord = new Tuple<int, int>(-1, -1);
+        this.selectedPiece = null;
+        this.highlightedMoves.Clear();
+    }
 
-	public void HighlightMoves() 
-	{
-		foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
-      	{
-			this.tiles[tileCoords]._legal.SetActive(true);
-			if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
-			if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+    public void HighlightMoves()
+    {
+        foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
+        {
+            this.tiles[tileCoords]._highlight.SetActive(true);
+            if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
+            if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
         }
-	}
+    }
 
-	public void RemoveHighlight() {
-		foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
+    public void RemoveHighlight()
+    {
+        foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
          	this.tiles[tileCoords]._legal.SetActive(false);
         	//this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
-    	}	
-	}
+    	  }	
+	  }
 
     public bool MovePiece(Tuple<int, int> coord)
     {
@@ -191,22 +196,44 @@ public class LevelMono : MonoBehaviour
             return false;
         }
 
-		this.selectedPiece.SetMoveState(true);
+		    this.selectedPiece.SetMoveState(true);
         if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) // CAPTURE TAKES PLACE HERE
         {
-			Debug.Log("SOMETHING WAS CAPTURED");
-			Destroy(this.GetPiece(coord).gameObject);
-			if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
+            Debug.Log("SOMETHING WAS CAPTURED");
+            Destroy(this.GetPiece(coord).gameObject);
+            if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
         }
-
-		this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
+        this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         _pieces[coord] = this.selectedPiece;
-		_pieces.Remove(selectedCoord);
-
-        //if in range triangle -1 to numMoves + setMoveState(false)
-        
+        _pieces.Remove(selectedCoord);
         this.selectedCoord = new Tuple<int, int>(-1, -1);
         this.selectedPiece = null;
         return true;
+    }
+
+    public bool DoesHumanPlayerHaveUnitsRemaining()
+    {
+        return GetNumberOfUnitsRemainingForPlayer(true) > 0;
+    }
+
+    public bool DoesAiPlayerHaveUnitsRemaining()
+    {
+        return GetNumberOfUnitsRemainingForPlayer(false) > 0;
+    }
+
+    /// <summary>
+    /// This method return checks for the number of units which remain in the level for a given play.
+    /// </summary>
+    /// <param name="checkHumanPlayer">Whether to check the human player or the AI player.</param>
+    /// <returns>Returns the number of units [0, n].</returns>
+    private int GetNumberOfUnitsRemainingForPlayer(bool checkHumanPlayer)
+    {
+        if (_pieces == null)
+        {
+            return 0;
+        }
+
+        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer) select piece).Count();
+        return result;
     }
 }
