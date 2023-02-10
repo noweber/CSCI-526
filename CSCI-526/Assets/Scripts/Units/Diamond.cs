@@ -7,6 +7,11 @@ namespace Assets.Scripts.Units
 {
     public class Diamond : PieceMono
     {
+        public override string getUnitInfo()
+        {
+            return "Can Capture Enemies. When adjacent to Circle, Circle gains increased range.";
+        }
+
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();

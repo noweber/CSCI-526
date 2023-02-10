@@ -143,6 +143,7 @@ public class GameManagerChain : MonoBehaviour
                 }
                 break;
             case GameStateEnum.Human:
+                MenuManager.Instance.ShowTurnInfo();
                 MenuManager.Instance.ShowEndTurnButton();
                 break;
             case GameStateEnum.AI:
@@ -154,6 +155,7 @@ public class GameManagerChain : MonoBehaviour
                 }
                 else
                 {
+                    MenuManager.Instance.ShowTurnInfo();
                     MenuManager.Instance.HideEndTurnButton();
                     EnemyAI.Instance.PerformTurn();
                 }

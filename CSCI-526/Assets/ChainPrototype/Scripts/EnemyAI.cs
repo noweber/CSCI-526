@@ -8,10 +8,12 @@ using Random = UnityEngine.Random;
 public class EnemyAI : MonoBehaviour
 {
     public static EnemyAI Instance;
+    private bool isRunning;
 
     void Awake()
     {
         Instance = this;
+        isRunning = false;
     }
 
     public Tuple<int, int> SelectRandomPiece()
@@ -36,8 +38,11 @@ public class EnemyAI : MonoBehaviour
     }
 
     public void PerformTurn()
-    {
-        StartCoroutine(DelayEnemyStart());
+    {       
+        if (!isRunning)
+            StartCoroutine(DelayEnemyStart());
+        // PerformTurn();
+        // PerformTurn();
     }
 
     private void MovePiece()
@@ -71,12 +76,14 @@ public class EnemyAI : MonoBehaviour
         else if (GameManagerChain.Instance.GetNumberOfMovesMade() == 2 || aiCoord == null)
         {
             StopAllCoroutines();
+            isRunning = false;
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
     }
 
     private IEnumerator DelayEnemyStart()
     {
+        isRunning = true;
         yield return new WaitForSeconds(1f);
         MovePiece();
         yield return new WaitForSeconds(1f);

@@ -183,9 +183,10 @@ public class LevelMono : MonoBehaviour
     {
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
-            this.tiles[tileCoords]._highlight.SetActive(false);
-        }
-    }
+         	this.tiles[tileCoords]._legal.SetActive(false);
+        	//this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
+    	  }	
+	  }
 
     public bool MovePiece(Tuple<int, int> coord)
     {
@@ -195,8 +196,8 @@ public class LevelMono : MonoBehaviour
             return false;
         }
 
-        this.selectedPiece.SetMoveState(true);
-        if (this.GetPiece(coord) != null) // CAPTURE TAKES PLACE HERE
+		    this.selectedPiece.SetMoveState(true);
+        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) // CAPTURE TAKES PLACE HERE
         {
             Debug.Log("SOMETHING WAS CAPTURED");
             Destroy(this.GetPiece(coord).gameObject);
