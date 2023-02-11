@@ -16,21 +16,21 @@ public class Analytics : MonoBehaviour
         Instance = this;
     }
 
-    public void Send(string sessionID,int totalmovesfromGMC) 
+    public void Send(string sessionID,int totalmovesfromGMC , string level, float time) 
     {   
         Debug.Log("Analytics Send method started");
-        //_sessionID = Random.Range(15000,100000);
-        //_totalMoves = Random.Range(1,40);
 
-        StartCoroutine(Post( sessionID, totalmovesfromGMC.ToString()));
+        StartCoroutine(Post( sessionID, totalmovesfromGMC.ToString(), level.ToString() , time.ToString() ));
     }
 
-    private IEnumerator Post(string sessionID, string totalMoves)
+    private IEnumerator Post(string sessionID, string totalMoves, string level ,string time)
     {   
         Debug.Log("Post Coroutine started");
         WWWForm form = new WWWForm();
         form.AddField("entry.1379325124", sessionID);
         form.AddField("entry.1367608849", totalMoves);
+        form.AddField("entry.1700549212", level);
+        form.AddField("entry.589367142", time);
         
         using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
         {

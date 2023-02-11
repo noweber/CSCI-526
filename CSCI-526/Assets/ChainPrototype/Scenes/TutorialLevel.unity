@@ -1316,8 +1316,8 @@ MonoBehaviour:
   _diamondPrefab: {fileID: -2407875458895566835, guid: 25d78e865f02248f4af66875889e1384, type: 3}
   _circlePrefab: {fileID: 4121908883811533435, guid: 88faaf480b95a451fb31740047228ead, type: 3}
   _camera: {fileID: 494762420}
-  playerColor: {r: 0.16470587, g: 0.17254902, b: 0.7372549, a: 1}
-  enemyColor: {r: 0.69803923, g: 0.06274509, b: 0.16862746, a: 1}
+  playerColor: {r: 0.003921569, g: 0, b: 0.7372549, a: 1}
+  enemyColor: {r: 0.54901963, g: 0, b: 0, a: 1}
   selectedPiece: {fileID: 0}
 --- !u!4 &1305261819
 Transform:

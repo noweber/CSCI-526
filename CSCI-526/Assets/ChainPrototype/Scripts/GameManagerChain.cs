@@ -19,6 +19,7 @@ public class GameManagerChain : MonoBehaviour
     public string SceneName;
 
     public string playTestID;
+    private float playStartTime;
 
     private int numberOfMovesMade;
 
@@ -42,6 +43,8 @@ public class GameManagerChain : MonoBehaviour
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
         playTestID = Guid.NewGuid().ToString();
+        playStartTime = Time.realtimeSinceStartup;
+
     }
 
     /// <summary>
@@ -163,8 +166,11 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Victory:
             case GameStateEnum.Loss:
                 // TODO: Add victory and loss game state logic. This currently just resets the game.
-                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves);
                 Scene scene = SceneManager.GetActiveScene();
+                
+                float time_level = (Time.realtimeSinceStartup - playStartTime)/60 ;
+                //Debug.Log("time"+  time_level);
+                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves, scene.name , time_level );
                 SceneManager.LoadScene(scene.name);
                 break;
         }
