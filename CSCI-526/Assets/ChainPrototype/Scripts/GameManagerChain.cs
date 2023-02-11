@@ -167,6 +167,8 @@ public class GameManagerChain : MonoBehaviour
                 }
                 break;
             case GameStateEnum.Victory:
+				Debug.Log("VICTORY");
+				break;
             case GameStateEnum.Loss:
                 // TODO: Add victory and loss game state logic. This currently just resets the game.
                 Scene scene = SceneManager.GetActiveScene();
