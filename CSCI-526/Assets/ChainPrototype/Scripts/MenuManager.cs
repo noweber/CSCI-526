@@ -40,7 +40,7 @@ public class MenuManager : MonoBehaviour
 
     public void ShowNumMovesInfo()
     {
-        _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.GetNumberOfMovesMade()) + " Moves Left";
+        _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.GetMovesMade()) + " Moves Left";
     }
     public void ShowEndTurnButton()
     {
@@ -93,7 +93,7 @@ public class MenuManager : MonoBehaviour
         Debug.Log("BUTTON WORKS");
         if (GameManagerChain.Instance.UsedAbility == false)
         {
-            GameManagerChain.Instance.SubtractFromNumberOfMovesMade(1);
+            GameManagerChain.Instance.DecrementMoves(1);
             GameManagerChain.Instance.UsedAbility = true;
             this.ShowNumMovesInfo();
         }

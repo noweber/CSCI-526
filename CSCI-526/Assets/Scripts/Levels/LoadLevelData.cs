@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Piece;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Levels
 {
@@ -13,5 +14,7 @@ namespace Assets.Scripts.Levels
         public int Height;
 
         public List<PieceInfo> Units;
+
+        public Dictionary<Vector2Int, OverlayTile> map;
     }
 }

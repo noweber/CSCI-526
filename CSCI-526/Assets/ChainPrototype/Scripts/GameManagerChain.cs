@@ -19,8 +19,9 @@ public class GameManagerChain : MonoBehaviour
     public string SceneName;
 
     public string playTestID;
+    private float playStartTime;
 
-    private int numberOfMovesMade;
+    private int movesMade;
 
     /// <summary>
     /// This is the set of pieces which have been moved during a given turn state.
@@ -37,11 +38,13 @@ public class GameManagerChain : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        numberOfMovesMade = 0;
+        movesMade = 0;
         TotalMoves = 0;
         ChangeState(GameStateEnum.GenerateGrid);
         MenuManager.Instance.ShowEndTurnButton();
         playTestID = Guid.NewGuid().ToString();
+        playStartTime = Time.realtimeSinceStartup;
+
     }
 
     /// <summary>
@@ -77,45 +80,48 @@ public class GameManagerChain : MonoBehaviour
     /// <summary>
     /// Resets the number of moves made this turn to 0.
     /// </summary>
-    public void ResetNumberOfMovesMade()
+    public void ResetMovesMade()
     {
-        numberOfMovesMade = 0;
+        movesMade = 0;
     }
 
     /// <summary>
     /// Returns the number of moves made this turn.
     /// </summary>
     /// <returns>Returns an integer [0, n].</returns>
-    public int GetNumberOfMovesMade()
+    public int GetMovesMade()
     {
-        return numberOfMovesMade;
+        return movesMade;
     }
 
     /// <summary>
-    /// Increases the number of moves made this turn (aka, decrease the number of moves remainig).
+    /// Increases the number of moves made this turn (aka, decrease the number of moves remaining).
     /// </summary>
     /// <param name="amount">The number of moves made.</param>
-    public void AddToNumberOfMovesMade(int amount = 1)
+    public void IncrementMoves(int amount = 1)
     {
+        movesMade += amount;
+
         // Check if the the game is over now that number of available moves decreased during play:
-        if (!LevelMono.Instance.DoesAiPlayerHaveUnitsRemaining())
+        if (!LevelMono.Instance.DoEnemiesRemain())
         {
             // TODO: Transition to a win state per open tasks once designed.
+            this.ChangeState(GameStateEnum.Victory);
         }
-        else if (!LevelMono.Instance.DoesHumanPlayerHaveUnitsRemaining())
+        else if (!LevelMono.Instance.DoHumansRemain())
         {
             // TODO: Transition to a lose state.
+            this.ChangeState(GameStateEnum.Loss);
         }
-        numberOfMovesMade += amount;
     }
 
     /// <summary>
     /// Decreases the count of the number of moves made this turn.
     /// </summary>
     /// <param name="amount">The number to subtract.</param>
-    public void SubtractFromNumberOfMovesMade(int amount = 1)
+    public void DecrementMoves(int amount = 1)
     {
-        numberOfMovesMade -= amount;
+        movesMade -= amount;
     }
 
     /// <summary>
@@ -125,7 +131,7 @@ public class GameManagerChain : MonoBehaviour
     public void ChangeState(GameStateEnum newState)
     {
         GameManagerChain.Instance.ClearMovedPieces();
-        GameManagerChain.Instance.ResetNumberOfMovesMade();
+        GameManagerChain.Instance.ResetMovesMade();
         GameManagerChain.Instance.UsedAbility = false;
 
         GameStateEnum = newState;
@@ -161,10 +167,15 @@ public class GameManagerChain : MonoBehaviour
                 }
                 break;
             case GameStateEnum.Victory:
+                Debug.Log("VICTORY");
+                break;
             case GameStateEnum.Loss:
                 // TODO: Add victory and loss game state logic. This currently just resets the game.
-                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves);
                 Scene scene = SceneManager.GetActiveScene();
+
+                float time_level = (Time.realtimeSinceStartup - playStartTime) / 60;
+                //Debug.Log("time"+  time_level);
+                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves, scene.name, time_level);
                 SceneManager.LoadScene(scene.name);
                 break;
         }
@@ -180,7 +191,7 @@ public class GameManagerChain : MonoBehaviour
     private LoadLevelData TutorialLevel()
     {
         int _width = 5;
-        int _height = 13;
+        int _height = 8;
         List<PieceInfo> units = new List<PieceInfo>();
 
         for (int x = 0; x < _width; x++)
@@ -232,7 +243,7 @@ public class GameManagerChain : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                Tuple<int, int> position = new(x, y);
+                Tuple<int, int> position = new (x, y);
                 if (x == 2 && y == 3 || x == _width - 3 && y == 3)
                 {
                     units.Add(new PieceInfo(position, true, "Triangle"));

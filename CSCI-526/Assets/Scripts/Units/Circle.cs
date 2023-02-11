@@ -245,7 +245,7 @@ namespace Assets.Scripts.Units
         private bool CircleMovementCheck()
         {
 			var pos = this.transform.position;
-            var adjList = this.AdjacentAllies(new Tuple<int, int>((int)pos.x, (int)pos.y));
+            var adjList = this.AdjacentAllies();
             var lvlMono = LevelMono.Instance;
             if (adjList != null)
             {
