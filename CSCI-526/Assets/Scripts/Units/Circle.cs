@@ -224,20 +224,11 @@ namespace Assets.Scripts.Units
             {
                 // Free form movement for last capture.
             }
-            //var pos = this.transform.position;
-			//int x = (int)pos.x;
-			//int y = (int)pos.y;
-            var Position = new Tuple<int, int>(x, y);
-            var triangleLegal = inTriangleRange(Position);
-            if (triangleLegal != null)
-            {
-                UnityEngine.Debug.Log("Unlimited movement around triangle");
-                foreach (var adj in triangleLegal)
-                {
-                    if (!legalSpots.Contains(adj))
-                        legalSpots.Add(adj);
-                }
-            }
+            
+            // var triangleLegal = this.inTriangleRange();
+            // if (triangleLegal)
+            // {
+            // }
 
             return legalSpots;
         }
@@ -245,7 +236,7 @@ namespace Assets.Scripts.Units
         private bool CircleMovementCheck()
         {
 			var pos = this.transform.position;
-            var adjList = this.AdjacentAllies(new Tuple<int, int>((int)pos.x, (int)pos.y));
+            var adjList = this.AdjacentAllies();
             var lvlMono = LevelMono.Instance;
             if (adjList != null)
             {
@@ -260,41 +251,6 @@ namespace Assets.Scripts.Units
                 }
             }
             return false;
-        }
-
-        private List<Tuple<int, int>> inTriangleRange(Tuple<int, int> unitPosition)
-        {
-            var adjacentList = new List<Tuple<int, int>>();
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2)); //left
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1)); //up
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1)); //down
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 + 1)); //right up diag
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 + 1)); //left  up diag
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 - 1)); //right down diag
-            adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 - 1)); //left down diag
-
-            var lvlMono = LevelMono.Instance;
-            foreach (Tuple<int, int> coord in adjacentList)
-            {
-                if (coord.Item1 >= 0 && coord.Item1 < LevelMono.Instance.GetWidth() && coord.Item2 >= 0 && coord.Item2 < LevelMono.Instance.GetHeight())
-                {
-                    if (lvlMono.GetPiece(coord) != null && !this.IsEnemyOf(lvlMono.GetPiece(coord)) && lvlMono.GetPiece(coord).IsTriangle())
-                    {
-                        var triangleRange = new List<Tuple<int, int>>();
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1 + 1, coord.Item2)); //right
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1 - 1, coord.Item2)); //left
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1, coord.Item2 + 1)); //up
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1, coord.Item2 - 1)); //down
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1 + 1, coord.Item2 + 1)); //right up diag
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1 - 1, coord.Item2 + 1)); //left  up diag
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1 + 1, coord.Item2 - 1)); //right down diag
-                        triangleRange.Add(new Tuple<int, int>(coord.Item1 - 1, coord.Item2 - 1)); //left down diag
-                        return triangleRange;
-                    }
-                }
-            }    
-            return null;
         }
     }
 }

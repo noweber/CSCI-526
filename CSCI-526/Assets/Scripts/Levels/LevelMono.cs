@@ -196,9 +196,10 @@ public class LevelMono : MonoBehaviour
             return false;
         }
 
-		    this.selectedPiece.SetMoveState(true);
-        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) // CAPTURE TAKES PLACE HERE
+        this.selectedPiece.SetMoveState(true);
+        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) 
         {
+            // CAPTURE TAKES PLACE HERE
             Debug.Log("SOMETHING WAS CAPTURED");
             Destroy(this.GetPiece(coord).gameObject);
             if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
@@ -206,17 +207,26 @@ public class LevelMono : MonoBehaviour
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
-        this.selectedCoord = new Tuple<int, int>(-1, -1);
-        this.selectedPiece = null;
+        
+        if (this.selectedPiece.inTriangleRange())
+        {
+            // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
+            Debug.Log("MOVED INTO RANGE OF TRIANGLE");
+            this.selectedPiece.SetMoveState(false);
+            GameManagerChain.Instance.DecrementMoves(1);
+        }
+
+        this.RemoveHighlight();
+        this.ResetPiece();
         return true;
     }
 
-    public bool DoesHumanPlayerHaveUnitsRemaining()
+    public bool DoHumansRemain()
     {
         return GetNumberOfUnitsRemainingForPlayer(true) > 0;
     }
 
-    public bool DoesAiPlayerHaveUnitsRemaining()
+    public bool DoEnemiesRemain()
     {
         return GetNumberOfUnitsRemainingForPlayer(false) > 0;
     }
@@ -233,7 +243,7 @@ public class LevelMono : MonoBehaviour
             return 0;
         }
 
-        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer) select piece).Count();
+        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && !piece.IsTriangle()) select piece).Count();
         return result;
     }
 }

@@ -43,8 +43,7 @@ public class Tile : MonoBehaviour
         {
             if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
-                //Selects Piece
-                Debug.Log(GameManagerChain.Instance.GetNumberOfMovesMade());
+                // SELECTING CLICKED PIECE AS SELECTEDPIECE
                 Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
                 lvlMono.SelectPiece(clickedPiece, coord);
 
@@ -63,19 +62,14 @@ public class Tile : MonoBehaviour
             {
                 if (lvlMono.HasSelectedPiece())
                 {
-                    // Possible to capture clickedPiece
                     if (lvlMono.selectedPiece.IsEnemyOf(clickedPiece))
                     {
+						// LEVELMONO SELECTEDPIECE CAPTURING
                         if (lvlMono.MovePiece(coord))
                         {
-
-                            GameManagerChain.Instance.AddToNumberOfMovesMade(1);
-                            GameManagerChain.Instance.TotalMoves += 1;
-                            if (this.inTriangleRange(coord))
-                            {
-                                GameManagerChain.Instance.SubtractFromNumberOfMovesMade(1);
-                                lvlMono.GetPiece(coord).SetMoveState(false);
-                            }
+                            
+        					GameManagerChain.Instance.IncrementMoves(1); 
+							GameManagerChain.Instance.TotalMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -105,19 +99,14 @@ public class Tile : MonoBehaviour
         {
             if (lvlMono.HasSelectedPiece())
             {
-                //Move Piece
+                // LEVELMONO SELECTEDPIECE MOVING
                 if (lvlMono.MovePiece(coord))
                 {
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
-                    GameManagerChain.Instance.AddToNumberOfMovesMade(1);
-                    GameManagerChain.Instance.TotalMoves += 1;
-                    if (this.inTriangleRange(coord))
-                    {
-                        GameManagerChain.Instance.SubtractFromNumberOfMovesMade(1);
-                        lvlMono.GetPiece(coord).SetMoveState(false);
-                    }
+        			GameManagerChain.Instance.IncrementMoves(1); 
+					GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
 
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -127,7 +116,6 @@ public class Tile : MonoBehaviour
                 }
                 else
                 {
-
                     Debug.Log("FAILED TO MOVE");
                 }
                 lvlMono.RemoveHighlight();
@@ -137,12 +125,14 @@ public class Tile : MonoBehaviour
 
 
         // turn logic
+		/*
         if (!LevelMono.Instance.DoesAiPlayerHaveUnitsRemaining())
         {
             StopAllCoroutines();
             GameManagerChain.Instance.ChangeState(GameStateEnum.Victory);
         }
-        else if (GameManagerChain.Instance.GetNumberOfMovesMade() == 2)
+		*/
+        if (GameManagerChain.Instance.GetMovesMade() == 2)
         {
             if (turn == true)
             {
@@ -159,7 +149,7 @@ public class Tile : MonoBehaviour
         }
     }
 
-    // "Slacking off" text for 3 seconds, then change state to white
+    // "Slacking off" text for 2 seconds, then change state to white
     private IEnumerator DelayedChangeState()
     {
         MenuManager.Instance.SetSlackDialogue(true);
@@ -167,29 +157,6 @@ public class Tile : MonoBehaviour
         MenuManager.Instance.SetSlackDialogue(false);
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         yield return null;
-    }
-
-    private bool inTriangleRange(Tuple<int, int> unitPosition)
-    {
-        var adjacentList = new List<Tuple<int, int>>();
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2)); //right
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2)); //left
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 + 1)); //up
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1, unitPosition.Item2 - 1)); //down
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 + 1)); //right up diag
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 + 1)); //left  up diag
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 + 1, unitPosition.Item2 - 1)); //right down diag
-        adjacentList.Add(new Tuple<int, int>(unitPosition.Item1 - 1, unitPosition.Item2 - 1)); //left down diag
-        var lvlMono = LevelMono.Instance;
-        foreach (Tuple<int, int> coord in adjacentList)
-        {
-            var piece = lvlMono.GetPiece(coord);
-            if (piece != null && piece.IsTriangle() && !lvlMono.GetPiece(unitPosition).IsEnemyOf(piece))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }
 

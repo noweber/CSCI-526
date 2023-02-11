@@ -18,7 +18,7 @@ namespace Assets.Scripts.Units
             var pos = this.transform.position;
             if (this.TriangleAbilityCheck())
             {
-                MenuManager.Instance.ShowAbilityButton();
+                // MenuManager.Instance.ShowAbilityButton();
             }
             return legalSpots;
         }
@@ -26,7 +26,7 @@ namespace Assets.Scripts.Units
         private bool TriangleAbilityCheck()
         {
 			var pos = this.transform.position;
-            var adjList = this.AdjacentAllies(new Tuple<int, int>((int)pos.x, (int)pos.y));
+            var adjList = this.AdjacentAllies();
             var lvlMono = LevelMono.Instance;
             if (adjList != null)
             {

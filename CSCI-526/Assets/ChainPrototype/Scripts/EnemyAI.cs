@@ -58,12 +58,7 @@ public class EnemyAI : MonoBehaviour
             if (lvlMono.MovePiece(moves[index]))
             {
                 GameManagerChain.Instance.AddMovedPiece(aiPiece);
-                GameManagerChain.Instance.AddToNumberOfMovesMade(1);
-                if (this.inTriangleRange(moves[index]))
-                {
-                    GameManagerChain.Instance.SubtractFromNumberOfMovesMade(1);
-                    lvlMono.GetPiece(moves[index]).SetMoveState(false);
-                }
+                GameManagerChain.Instance.IncrementMoves(1);
                 MenuManager.Instance.ShowNumMovesInfo();
             }
             else
@@ -73,12 +68,14 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (!LevelMono.Instance.DoesHumanPlayerHaveUnitsRemaining())
+/*
+        if (!LevelMono.Instance.DoHumansRemain())
         {
             StopAllCoroutines();
             GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
         }
-        else if (GameManagerChain.Instance.GetNumberOfMovesMade() == 2 || aiCoord == null)
+*/
+        if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
         {
             StopAllCoroutines();
             isRunning = false;
