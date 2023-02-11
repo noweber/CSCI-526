@@ -46,13 +46,6 @@ public class Tile : MonoBehaviour
                 // SELECTING CLICKED PIECE AS SELECTEDPIECE
                 Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
                 lvlMono.SelectPiece(clickedPiece, coord);
-
-                if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && clickedPiece.IsCircle())
-                {
-                    lvlMono.highlightedMoves.Add(new Tuple<int, int>(1, 1));
-                    lvlMono.highlightedMoves.Add(new Tuple<int, int>(2, 2));
-                }
-
                 lvlMono.HighlightMoves();
 
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
