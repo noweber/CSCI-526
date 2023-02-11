@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitObject, _selectUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public MenuManager()
@@ -104,18 +104,15 @@ public class MenuManager : MonoBehaviour
     {
         if (piece == null)
         {
-            _selectedUnitObject.SetActive(false);
-            _selectUnitInfo.SetActive(false);
+            _selectedUnitInfo.SetActive(false);
             return;
         }
-        if (_selectedUnitObject != null)
+        if (_selectedUnitInfo != null)
         {
-            _selectedUnitObject.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetName();
-            _selectedUnitObject.SetActive(true);
-        }
-        if (_selectUnitInfo != null) {
-            _selectUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.getUnitInfo();
-            _selectUnitInfo.SetActive(true);
+            _selectedUnitInfo.SetActive(true);
+            _selectedUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetName();
+            _selectedUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.getUnitInfo();
+
         }
     }
 
@@ -123,15 +120,13 @@ public class MenuManager : MonoBehaviour
     {
         if (piece == null)
         {
-            _selectedUnitObject.SetActive(false);
-            _selectUnitInfo.SetActive(false);
+            _selectedUnitInfo.SetActive(false);
             return;
         }
         // Necessary?
         unitInfo.text = "Unit Name";
         unitAbility.text = "Unit Ability";
-        _selectedUnitObject.SetActive(false);
-        _selectUnitInfo.SetActive(false);
+        _selectedUnitInfo.SetActive(false);
     }
 
     public void UpdateObjectiveContent()
@@ -145,7 +140,7 @@ public class MenuManager : MonoBehaviour
                     tmpro.text = "Let's move the diamond next to the circle.";
                     break;
                 case 1:     // Second move -- player must move circle next to triangle, directly in front of enemy
-                    tmpro.text = "The circle is the main attacker for your team, so let's move the circle closer to the enemy (blue) units.";
+                    tmpro.text = "The circle is the main attacker for your team, so let's move the circle closer to the enemy (red) units.";
                     break;
                 case 2:     // Free movement -- player freely maneuvers
                     tmpro.text = "When the circle captures an enemy piece, you get another turn, once per round. Capture the enemy's pieces.";
