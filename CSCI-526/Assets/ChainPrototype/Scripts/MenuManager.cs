@@ -110,9 +110,8 @@ public class MenuManager : MonoBehaviour
         if (_selectedUnitInfo != null)
         {
             _selectedUnitInfo.SetActive(true);
-            _selectedUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.GetName();
-            _selectedUnitInfo.GetComponentInChildren<TextMeshProUGUI>().text = piece.getUnitInfo();
-
+            unitInfo.text = piece.GetName();
+            unitAbility.text = piece.getUnitInfo();
         }
     }
 
