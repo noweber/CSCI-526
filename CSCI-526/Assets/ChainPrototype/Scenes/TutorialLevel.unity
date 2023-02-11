@@ -2185,8 +2185,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _turnInfoObject: {fileID: 1739581767}
-  _selectedUnitObject: {fileID: 1364112311}
-  _selectUnitInfo: {fileID: 0}
+  _selectedUnitObject: {fileID: 1285843363}
+  _selectUnitInfo: {fileID: 704446019}
   _numTurnObject: {fileID: 1946213038}
   _abilityUseObject: {fileID: 1998378514}
   _endTurnObject: {fileID: 377944448}

@@ -189,7 +189,7 @@ public class GameManagerChain : MonoBehaviour
     private LoadLevelData TutorialLevel()
     {
         int _width = 5;
-        int _height = 13;
+        int _height = 8;
         List<PieceInfo> units = new List<PieceInfo>();
 
         for (int x = 0; x < _width; x++)
