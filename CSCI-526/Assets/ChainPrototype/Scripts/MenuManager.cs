@@ -232,17 +232,18 @@ public class MenuManager : MonoBehaviour
             _objectiveObject.SetActive(true);
             MenuManager.Instance.UpdateObjectiveContent();
             StartCoroutine(FingerBlink());
+            _endTurnObject.SetActive(false);
         }
         else
         {
             _objectiveObject.SetActive(false);
+            _endTurnObject.SetActive(true);
         }
         SetVictoryScreen(false);
         _turnInfoObject.SetActive(true);
         _selectedUnitInfo.SetActive(false);
         _numTurnObject.SetActive(true);
         _abilityUseObject.SetActive(false);
-        _endTurnObject.SetActive(true);
         _slackObject.SetActive(false);
         _pauseObject.SetActive(true);
 
