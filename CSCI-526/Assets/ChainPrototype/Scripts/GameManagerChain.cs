@@ -47,7 +47,10 @@ public class GameManagerChain : MonoBehaviour
         playStartTime = Time.realtimeSinceStartup;
 
     }
-
+    public void LoadNextLevel(String inputLevelName)
+    {
+        SceneManager.LoadScene(inputLevelName);
+    }
     public void RestartLevel()
     {
         SceneManager.LoadScene(SceneName);
@@ -174,6 +177,7 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.Victory:
 				Debug.Log("VICTORY");
+                MenuManager.Instance.SetVictoryScreen(true);
 				break;
             case GameStateEnum.Loss:
                 // TODO: Add victory and loss game state logic. This currently just resets the game.

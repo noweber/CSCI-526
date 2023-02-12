@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveContent, _slackObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject;
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public MenuManager()
@@ -151,13 +151,44 @@ public class MenuManager : MonoBehaviour
         _slackObject.SetActive(status);
     }
 
+    public void SetVictoryScreen(bool status)
+    {
+        _victoryObject.SetActive(status);
+
+        //Set every other UI elements to inactive
+        _turnInfoObject.SetActive(false);
+        _selectedUnitInfo.SetActive(false);
+        _numTurnObject.SetActive(false);
+        _abilityUseObject.SetActive(false);
+        _endTurnObject.SetActive(false);
+        _objectiveContent.SetActive(false);
+        _slackObject.SetActive(false);
+        _pauseObject.SetActive(false);
+        _objectiveObject.SetActive(false);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         if (SceneManager.GetActiveScene().name == "TutorialLevel")
         {
+            _objectiveContent.SetActive(true);
+            _objectiveObject.SetActive(true);
             MenuManager.Instance.UpdateObjectiveContent();
         }
+        else
+        {
+            _objectiveContent.SetActive(false);
+            _objectiveObject.SetActive(false);
+        }
+        _turnInfoObject.SetActive(true);
+        _selectedUnitInfo.SetActive(false);
+        _numTurnObject.SetActive(true);
+        _abilityUseObject.SetActive(false);
+        _endTurnObject.SetActive(true);
+        _slackObject.SetActive(false);
+        _pauseObject.SetActive(true);
+
     }
 
     // Update is called once per frame
