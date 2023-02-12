@@ -1,4 +1,5 @@
 using Assets.Scripts.Units;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +10,9 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject, _pointerObject;
+
+
+    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject, _pointerObject;
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public MenuManager()
@@ -138,25 +141,16 @@ public class MenuManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "TutorialLevel")
             switch (GameManagerChain.Instance.TotalMoves)
             {
-                // 0
-                // Click the diamond to select it.
-                // Click the highlighted region to move the diamond to a legal position.
-
-                // 1
-                // The diamond increased the circle's movement ability. Move the circle to the triangle.
-
-                // The circle is the main attacker for your team. Use it to capture the nearest enemy (red) unit.
-                // 2
-                // Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.
-
                 case 0:     // First move -- player must move diamond to the circle
                     //Position 3.25,-0.25, -2
                     tmpro.text = "Click the diamond to select it.";
+                    _pointerObject.gameObject.SetActive(true);
+
                     _pointerObject.transform.position = new Vector3(3.25f, -0.25f, -2f);
                     if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsDiamond())
                     {
                         _pointerObject.transform.position = new Vector3(1.25f, -0.25f, -2f);
-                        tmpro.text = "Click the highlighted region to move the diamond to a legal position.";
+                        tmpro.text = "Click the highlighted region to move the diamond to a legal position. Each unit may only move once, without the help of an ability.";
                     }
                     break;
                 case 1:     // Second move -- player must move circle next to triangle, directly in front of enemy
@@ -169,8 +163,13 @@ public class MenuManager : MonoBehaviour
                     }
                     break;
                 case 2:     // Free movement -- player freely maneuvers
-                    _pointerObject.transform.position = new Vector3(3.25f, 3.75f, -2f);
-                    tmpro.text = "Any unit that moves adjacent to a triangle may move infinitely. Use the circle again to capture the nearest enemy(red) unit.";
+                    tmpro.text = "Click the circle again to select it.";
+                    if(LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
+                    {
+                        _pointerObject.transform.position = new Vector3(3.25f, 3.75f, -2f);
+                        tmpro.text = "Any unit that moves adjacent to a triangle may move infinitely. Use the circle again to capture the nearest enemy(red) unit.";
+                    }
+
                     break;
                 case 3:
                     _pointerObject.SetActive(false);
@@ -188,31 +187,57 @@ public class MenuManager : MonoBehaviour
         _victoryObject.SetActive(status);
 
         //Set every other UI elements to inactive
-        _turnInfoObject.SetActive(false);
-        _selectedUnitInfo.SetActive(false);
-        _numTurnObject.SetActive(false);
-        _abilityUseObject.SetActive(false);
-        _endTurnObject.SetActive(false);
-        _objectiveContent.SetActive(false);
-        _slackObject.SetActive(false);
-        _pauseObject.SetActive(false);
-        _objectiveObject.SetActive(false);
+        if(status)
+        {
+            _turnInfoObject.SetActive(false);
+            _selectedUnitInfo.SetActive(false);
+            _numTurnObject.SetActive(false);
+            _abilityUseObject.SetActive(false);
+            _endTurnObject.SetActive(false);
+            _slackObject.SetActive(false);
+            _pauseObject.SetActive(false);
+
+            if (SceneManager.GetActiveScene().name == "TutorialLevel")
+            {
+                _objectiveObject.SetActive(false);
+            }
+        }
+
     }
 
+    private IEnumerator FingerBlink()
+    {
+        while(_pointerObject.activeInHierarchy == true)
+        {
+         _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);      // Visible
+         yield return new WaitForSeconds(0.5f);
+         _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 0);      // Invisible
+         yield return new WaitForSeconds(0.5f);
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator LateStart()
+    {
+        yield return new WaitForSeconds(0.1f);      // Right after start, set position to JUST in front of the grid
+        this.transform.position = new Vector3(LevelMono.Instance.transform.position.x, LevelMono.Instance.transform.position.y, -10);
+
+    }
     // Start is called before the first frame update
     void Start()
     {
         if (SceneManager.GetActiveScene().name == "TutorialLevel")
         {
-            _objectiveContent.SetActive(true);
             _objectiveObject.SetActive(true);
             MenuManager.Instance.UpdateObjectiveContent();
+            StartCoroutine(FingerBlink());
         }
         else
         {
-            _objectiveContent.SetActive(false);
             _objectiveObject.SetActive(false);
         }
+        SetVictoryScreen(false);
         _turnInfoObject.SetActive(true);
         _selectedUnitInfo.SetActive(false);
         _numTurnObject.SetActive(true);
@@ -221,12 +246,12 @@ public class MenuManager : MonoBehaviour
         _slackObject.SetActive(false);
         _pauseObject.SetActive(true);
 
+        StartCoroutine(LateStart());
     }
 
     // Update is called once per frame
     void Update()
     {
-        // TODO: REMOVE FROM UPDATE
         if (SceneManager.GetActiveScene().name == "TutorialLevel")
         {
             UpdateObjectiveContent();

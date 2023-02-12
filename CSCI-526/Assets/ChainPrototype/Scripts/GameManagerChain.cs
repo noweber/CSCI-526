@@ -3,6 +3,7 @@ using Assets.Scripts.Piece;
 using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,6 +43,7 @@ public class GameManagerChain : MonoBehaviour
         movesMade = 0;
         TotalMoves = 0;
         ChangeState(GameStateEnum.GenerateGrid);
+
         MenuManager.Instance.ShowEndTurnButton();
         playTestID = Guid.NewGuid().ToString();
         playStartTime = Time.realtimeSinceStartup;
@@ -156,6 +158,7 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(LevelOne());
                 }
+                MenuManager.Instance.SetVictoryScreen(false);
                 break;
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
