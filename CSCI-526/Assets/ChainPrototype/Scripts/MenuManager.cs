@@ -1,7 +1,10 @@
+using Assets.Scripts.Units;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class MenuManager : MonoBehaviour
 {
@@ -135,14 +138,34 @@ public class MenuManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "TutorialLevel")
             switch (GameManagerChain.Instance.TotalMoves)
             {
+                // 0
+                // Click the diamond to select it.
+                // Click the highlighted region to move the diamond to a legal position.
+
+                // 1
+                // The diamond increased the circle's movement ability. Move the circle to the triangle.
+
+                // The circle is the main attacker for your team. Use it to capture the nearest enemy (red) unit.
+                // 2
+                // Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.
+
                 case 0:     // First move -- player must move diamond to the circle
-                    tmpro.text = "Let's move the diamond next to the circle.";
+                    tmpro.text = "Click the diamond to select it.";
+
+                    if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsDiamond())
+                    {
+                        tmpro.text = "Click the highlighted region to move the diamond to a legal position.";
+                    }
                     break;
                 case 1:     // Second move -- player must move circle next to triangle, directly in front of enemy
-                    tmpro.text = "The circle is the main attacker for your team, so let's move the circle closer to the enemy (red) units.";
+                    tmpro.text = "The diamond increased the circle's movement ability. Move the circle to the triangle.";
+
                     break;
                 case 2:     // Free movement -- player freely maneuvers
-                    tmpro.text = "When the circle captures an enemy piece, you get another turn, once per round. Capture the enemy's pieces.";
+                    tmpro.text = "Any unit that moves adjacent to a triangle may move infinitely. Use the circle again to capture the nearest enemy(red) unit.";
+                    break;
+                case 3:
+                    tmpro.text = "Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.";
                     break;
             }
     }
@@ -194,6 +217,10 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // TODO: REMOVE FROM UPDATE
+        if (SceneManager.GetActiveScene().name == "TutorialLevel")
+        {
+            UpdateObjectiveContent();
+        }
     }
 }
