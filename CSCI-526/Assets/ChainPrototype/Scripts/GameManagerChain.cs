@@ -3,6 +3,7 @@ using Assets.Scripts.Piece;
 using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -45,6 +46,11 @@ public class GameManagerChain : MonoBehaviour
         playTestID = Guid.NewGuid().ToString();
         playStartTime = Time.realtimeSinceStartup;
 
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneName);
     }
 
     /// <summary>
@@ -171,12 +177,12 @@ public class GameManagerChain : MonoBehaviour
 				break;
             case GameStateEnum.Loss:
                 // TODO: Add victory and loss game state logic. This currently just resets the game.
-                Scene scene = SceneManager.GetActiveScene();
+                // Scene scene = SceneManager.GetActiveScene();
                 
                 float time_level = (Time.realtimeSinceStartup - playStartTime)/60 ;
                 //Debug.Log("time"+  time_level);
-                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves, scene.name , time_level );
-                SceneManager.LoadScene(scene.name);
+                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves, SceneName , time_level );
+                SceneManager.LoadScene(SceneName);
                 break;
         }
         MenuManager.Instance.ShowTurnInfo();
