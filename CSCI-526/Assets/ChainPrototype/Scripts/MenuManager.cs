@@ -9,7 +9,7 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    [SerializeField] public GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject;
+    [SerializeField] public GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject, _pointerObject;
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public MenuManager()
@@ -150,21 +150,30 @@ public class MenuManager : MonoBehaviour
                 // Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.
 
                 case 0:     // First move -- player must move diamond to the circle
+                    //Position 3.25,-0.25, -2
                     tmpro.text = "Click the diamond to select it.";
-
+                    _pointerObject.transform.position = new Vector3(3.25f, -0.25f, -2f);
                     if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsDiamond())
                     {
+                        _pointerObject.transform.position = new Vector3(1.25f, -0.25f, -2f);
                         tmpro.text = "Click the highlighted region to move the diamond to a legal position.";
                     }
                     break;
                 case 1:     // Second move -- player must move circle next to triangle, directly in front of enemy
-                    tmpro.text = "The diamond increased the circle's movement ability. Move the circle to the triangle.";
-
+                    _pointerObject.transform.position = new Vector3(0.25f, -0.25f, -2f);
+                    tmpro.text = "The diamond increased the circle's movement ability. Click the circle to select it.";
+                    if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
+                    {
+                        _pointerObject.transform.position = new Vector3(3.25f, 2.75f, -2f);
+                        tmpro.text = " Move the circle to the triangle.";
+                    }
                     break;
                 case 2:     // Free movement -- player freely maneuvers
+                    _pointerObject.transform.position = new Vector3(3.25f, 3.75f, -2f);
                     tmpro.text = "Any unit that moves adjacent to a triangle may move infinitely. Use the circle again to capture the nearest enemy(red) unit.";
                     break;
                 case 3:
+                    _pointerObject.SetActive(false);
                     tmpro.text = "Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.";
                     break;
             }
