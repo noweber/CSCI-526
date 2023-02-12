@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ChainPrototype/Scenes/TutorialLevel.unity
     guid: 5807e4acbd4384d789e6e85706a8d86c
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/ChainPrototype.unity
+    guid: a5fc7124fe9e747c6b220966cffad0fb
   m_configObjects: {}
