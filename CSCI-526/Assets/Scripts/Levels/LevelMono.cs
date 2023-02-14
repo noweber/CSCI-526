@@ -31,6 +31,9 @@ public class LevelMono : MonoBehaviour
     public Color playerColor;
     public Color enemyColor;
 
+    public List<PieceMono> enemies;
+    public List<PieceMono> players;
+
     public Dictionary<Tuple<int, int>, Overlay> overlayTiles;
     public Dictionary<Tuple<int, int>, Tile> tiles;
     public Dictionary<Tuple<int, int>, PieceMono> _pieces;
@@ -93,14 +96,14 @@ public class LevelMono : MonoBehaviour
                 _tileMap.SetTile(new Vector3Int(y, x, 0), (TileBase)_tile);
                 //var y1 = y - 6;
                 //var x1 = x - 5;
-                Debug.Log("" + y + ", " + x + ", " + 0);
+                //Debug.Log("" + y + ", " + x + ", " + 0);
             }
         }
 
         
         foreach (var tm in tileMaps)
         {
-            Debug.Log(tm);
+            //Debug.Log(tm);
             BoundsInt bounds = tm.cellBounds;
 
             for (int y = 0; y < level.Height; y++)
@@ -124,9 +127,10 @@ public class LevelMono : MonoBehaviour
                                 var enemyCircle = Instantiate(_enemycirclePrefab, overlayContainer.transform);
                                 enemyCircle.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 2);
                                 enemyCircle.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder + 2;
-                                //enemyCircle.gameObject.GetComponent<CharacterInfo>().standingOnTile = overlayTile.gameObject.GetComponent<OverlayTile>();
+                                enemyCircle.gameObject.GetComponent<PieceMono>().standingOnTile = overlayTile.gameObject.GetComponent<Overlay>();
+                                enemyCircle.gameObject.GetComponent<PieceMono>().SetName("Circle");
                                 //enemyLocations.Add(new Vector3Int(x, y, z));
-                                //enemies.Add(enemyCircle.gameObject.GetComponent<CharacterInfo>());
+                                enemies.Add(enemyCircle.gameObject.GetComponent<PieceMono>());
 
                             }
 
@@ -135,9 +139,10 @@ public class LevelMono : MonoBehaviour
                                 var circle = Instantiate(_circlePrefab, overlayContainer.transform);
                                 circle.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 2);
                                 circle.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder + 2;
-                                //circle.gameObject.GetComponent<CharacterInfo>().standingOnTile = overlayTile.gameObject.GetComponent<OverlayTile>();
+                                circle.gameObject.GetComponent<PieceMono>().standingOnTile = overlayTile.gameObject.GetComponent<Overlay>();
+                                circle.gameObject.GetComponent<PieceMono>().SetName("Circle");
                                 //playerLocations.Add(new Vector3Int(x, y, z));
-                                //players.Add(circle.gameObject.GetComponent<CharacterInfo>());
+                                players.Add(circle.gameObject.GetComponent<PieceMono>());
                             }
 
                             if (x == 9 && y == 3 || x == 9 && y == 4)
@@ -145,9 +150,10 @@ public class LevelMono : MonoBehaviour
                                 var enemyDiamond = Instantiate(_enemydiamondPrefab, overlayContainer.transform);
                                 enemyDiamond.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 2);
                                 enemyDiamond.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder + 2;
-                                //enemyDiamond.gameObject.GetComponent<CharacterInfo>().standingOnTile = overlayTile.gameObject.GetComponent<OverlayTile>();
+                                enemyDiamond.gameObject.GetComponent<PieceMono>().standingOnTile = overlayTile.gameObject.GetComponent<Overlay>();
+                                enemyDiamond.gameObject.GetComponent<PieceMono>().SetName("Diamond");
                                 //enemyLocations.Add(new Vector3Int(x, y, z));
-                                //enemies.Add(enemyDiamond.gameObject.GetComponent<CharacterInfo>());
+                                enemies.Add(enemyDiamond.gameObject.GetComponent<PieceMono>());
                             }
 
                             if (x == 3 && y == 0 || x == 4 && y == 0)
@@ -155,9 +161,10 @@ public class LevelMono : MonoBehaviour
                                 var diamond = Instantiate(_diamondPrefab, overlayContainer.transform);
                                 diamond.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 2);
                                 diamond.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder + 2;
-                                //diamond.gameObject.GetComponent<CharacterInfo>().standingOnTile = overlayTile.gameObject.GetComponent<OverlayTile>();
+                                diamond.gameObject.GetComponent<PieceMono>().standingOnTile = overlayTile.gameObject.GetComponent<Overlay>();
+                                diamond.gameObject.GetComponent<PieceMono>().SetName("Diamond");
                                 //playerLocations.Add(new Vector3Int(x, y, z));
-                                //players.Add(diamond.gameObject.GetComponent<CharacterInfo>());
+                                players.Add(diamond.gameObject.GetComponent<PieceMono>());
                             }
 
                             if (x == 2 && y == 6 || x == 5 && y == 6)
@@ -165,9 +172,10 @@ public class LevelMono : MonoBehaviour
                                 var enemyTriangle = Instantiate(_enemytrianglePrefab, overlayContainer.transform);
                                 enemyTriangle.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 2);
                                 enemyTriangle.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder + 2;
-                                //enemyTriangle.gameObject.GetComponent<CharacterInfo>().standingOnTile = overlayTile.gameObject.GetComponent<OverlayTile>();
+                                enemyTriangle.gameObject.GetComponent<PieceMono>().standingOnTile = overlayTile.gameObject.GetComponent<Overlay>();
+                                enemyTriangle.gameObject.GetComponent<PieceMono>().SetName("Triangle");
                                 //enemyLocations.Add(new Vector3Int(x, y, z));
-                                //enemies.Add(enemyTriangle.gameObject.GetComponent<CharacterInfo>());
+                                enemies.Add(enemyTriangle.gameObject.GetComponent<PieceMono>());
                             }
 
                             if (x == 2 && y == 3 || x == 5 && y == 3)
@@ -175,15 +183,19 @@ public class LevelMono : MonoBehaviour
                                 var triangle = Instantiate(_trianglePrefab, overlayContainer.transform);
                                 triangle.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 2);
                                 triangle.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder + 2;
-                                //triangle.gameObject.GetComponent<CharacterInfo>().standingOnTile = overlayTile.gameObject.GetComponent<OverlayTile>();
+                                triangle.gameObject.GetComponent<PieceMono>().standingOnTile = overlayTile.gameObject.GetComponent<Overlay>();
+                                triangle.gameObject.GetComponent<PieceMono>().SetName("Triangle");
                                 //playerLocations.Add(new Vector3Int(x, y, z));
-                                //players.Add(triangle.gameObject.GetComponent<CharacterInfo>());
+                                players.Add(triangle.gameObject.GetComponent<PieceMono>());
                             }
                         }
                     }
                 }
             }
             
+        }
+        foreach (var x in players){
+            Debug.Log("" + x.GetName() + ": " + x.standingOnTile.gridLocation);
         }
         
         _camera.transform.position = new Vector3((float)level.Width / 6 - 0.5f, (float)level.Height / 3 - 0.5f, -10);
@@ -203,7 +215,7 @@ public class LevelMono : MonoBehaviour
     public List<Tuple<int, int>> GetEnemyPieceCoords()
     {
         List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
-        Debug.Log(_pieces.Count);
+        //Debug.Log(_pieces.Count);
         foreach (var piece in _pieces)
         {
 
@@ -272,7 +284,7 @@ public class LevelMono : MonoBehaviour
         if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece))
         {
             // CAPTURE TAKES PLACE HERE
-            Debug.Log("SOMETHING WAS CAPTURED");
+            //Debug.Log("SOMETHING WAS CAPTURED");
             Destroy(this.GetPiece(coord).gameObject);
             if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
         }
@@ -283,7 +295,7 @@ public class LevelMono : MonoBehaviour
         if (this.selectedPiece.inTriangleRange())
         {
             // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
-            Debug.Log("MOVED INTO RANGE OF TRIANGLE");
+            //Debug.Log("MOVED INTO RANGE OF TRIANGLE");
             this.selectedPiece.SetMoveState(false);
             GameManagerChain.Instance.DecrementMoves(1);
         }

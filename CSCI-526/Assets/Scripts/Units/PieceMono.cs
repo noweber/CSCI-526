@@ -12,6 +12,8 @@ public abstract class PieceMono : MonoBehaviour
 
     protected string unitName;
 
+    public Overlay standingOnTile;
+
     //public abstract string unitInfo;
 
     public abstract string getUnitInfo();
