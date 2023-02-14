@@ -1,10 +1,6 @@
 using Assets.Scripts.Levels;
-using Assets.Scripts.Piece;
-using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
