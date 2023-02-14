@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Piece
 {
-    public abstract class PieceModel : IPiece
+    public abstract class Piece : IPiece
     {
         protected Tuple<int, int> Position;
 
@@ -11,7 +11,7 @@ namespace Assets.Scripts.Piece
 
         protected bool IsHumanUnit;
 
-        public PieceModel(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer)
+        public Piece(Tuple<int, int> piecePosition, bool isControlledByHumanPlayer)
         {
             Position = piecePosition;
             HasUnitMoved = false;

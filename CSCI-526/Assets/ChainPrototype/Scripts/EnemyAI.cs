@@ -8,104 +8,86 @@ using Random = UnityEngine.Random;
 public class EnemyAI : MonoBehaviour
 {
     public static EnemyAI Instance;
+    private bool isRunning;
 
     void Awake()
     {
         Instance = this;
+        isRunning = false;
     }
 
-    private List<Tuple<int, int>> GetPieces()
+    public Tuple<int, int> SelectRandomPiece()
     {
-        List<Tuple<int, int>> allEnemyPieces = new();
-        var lvlModel = LevelController.Instance.LevelModel;
-        for (int x = 0; x < LevelController.Instance.LevelModel.GetWidth(); x++)
+        var lvlMono = LevelMono.Instance;
+        var enemyPieceCoords = lvlMono.GetEnemyPieceCoords();
+        if (enemyPieceCoords.Count == 0)
         {
-            for (int y = 0; y < LevelController.Instance.LevelModel.GetHeight(); y++)
-            {
-                Tuple<int, int> position = new(x, y);
-                if (lvlModel.TryGetUnit(position) != null && !lvlModel.TryGetUnit(position).IsControlledByHuman() && !string.Equals(lvlModel.TryGetUnit(position).Name(), UnitType.Triangle))
-                {
-                    allEnemyPieces.Add(new Tuple<int, int>(x, y));
-                }
-            }
-        }
-        return allEnemyPieces;
-    }
-
-    public PieceController SelectRandomPiece()
-    {
-        var allEnemyPieces = GetPieces();
-        var allPieces = LevelController.Instance._pieces;
-        if (allEnemyPieces.Count < 2)
-        {
-            foreach (var enemy in allEnemyPieces)
-            {
-                if (!string.Equals(allPieces[enemy].Name(), UnitType.Triangle.ToString()) || allPieces[enemy].HasMoved() == true)
-                {
-                    allPieces[enemy].SetMoveState(false);
-                    return null;
-                }
-                return allPieces[enemy];
-            }
+            return null;
         }
 
-        int attempts = 0;
-        PieceController result = null;
-        while (result == null && attempts < allEnemyPieces.Count)
+        List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
+        foreach (var coord in enemyPieceCoords)
         {
-            var randomPiece = allEnemyPieces[Random.Range(0, allEnemyPieces.Count)];
-
-            if (!string.Equals(allPieces[randomPiece].Name(), UnitType.Triangle.ToString()))
+            if (lvlMono.GetPiece(coord).CanMove())
             {
-                if (allPieces[randomPiece].HasMoved() != true)
-                {
-                    result = allPieces[randomPiece];
-                    LevelController.Instance.storedCoord = randomPiece;
-                    allPieces[randomPiece].SetMoveState(true);
-                }
+                movableEnemies.Add(coord);
             }
-            attempts++;
         }
-
-        return result;
+        if (movableEnemies.Count == 0) { return null; }
+        return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
-    public void MovePiece()
-    {
-        StartCoroutine(DelayEnemyStart());
+    public void PerformTurn()
+    {       
+        if (!isRunning)
+            StartCoroutine(DelayEnemyStart());
+        // PerformTurn();
+        // PerformTurn();
     }
 
-    private void PerformTurn()
+    private void MovePiece()
     {
-        var piece = SelectRandomPiece();
-        if (piece != null)
+        var lvlMono = LevelMono.Instance;
+        var aiCoord = SelectRandomPiece();
+        if (aiCoord != null)
         {
-            var moves = piece.GetLegalMoves(LevelController.Instance.LevelModel.GetWidth(), LevelController.Instance.LevelModel.GetHeight());
+            var aiPiece = lvlMono.GetPiece(aiCoord);
+            var moves = aiPiece.LegalMoves(lvlMono.GetWidth(), lvlMono.GetHeight());
             int index = Random.Range(0, moves.Count);
-            if (LevelController.Instance.MovePiece(moves[index], piece))
+            lvlMono.SelectPiece(aiPiece, aiCoord);
+            if (lvlMono.MovePiece(moves[index]))
             {
-                GameManagerChain.Instance.MovedPieces.Add(piece);
-                GameManagerChain.Instance.NumMoves += 1;
+                GameManagerChain.Instance.AddMovedPiece(aiPiece);
+                GameManagerChain.Instance.IncrementMoves(1);
                 MenuManager.Instance.ShowNumMovesInfo();
             }
+            else
+            {
+                lvlMono.ResetPiece();
+                Debug.Log("AI FAILED TO MOVE");
+            }
         }
 
-        if (GameManagerChain.Instance.NumMoves == 2 || piece == null)
+/*
+        if (!LevelMono.Instance.DoHumansRemain())
         {
-            foreach (var pieces in GameManagerChain.Instance.MovedPieces)
-            {
-                pieces.SetMoveState(false);
-            }
             StopAllCoroutines();
-            GameManagerChain.Instance.NumMoves = 0;
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
+        }
+*/
+        if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
+        {
+            StopAllCoroutines();
+            isRunning = false;
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
     }
 
     private IEnumerator DelayEnemyStart()
     {
+        isRunning = true;
         yield return new WaitForSeconds(1f);
-        PerformTurn();
+        MovePiece();
         yield return new WaitForSeconds(1f);
         StartCoroutine(DelayEnemyStart());
     }

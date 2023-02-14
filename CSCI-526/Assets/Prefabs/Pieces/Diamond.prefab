@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3948055355563052478
+--- !u!1 &8023415673045836245
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4967982436456613717}
-  - component: {fileID: 3726126107720656838}
-  - component: {fileID: 4644458566182940093}
+  - component: {fileID: 347390766195376045}
+  - component: {fileID: 1843026898210113948}
+  - component: {fileID: -2407875458895566835}
   m_Layer: 0
   m_Name: Diamond
   m_TagString: Untagged
@@ -18,28 +18,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4967982436456613717
+--- !u!4 &347390766195376045
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3948055355563052478}
+  m_GameObject: {fileID: 8023415673045836245}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.8092678, y: 0.50509244, z: 0}
+  m_LocalPosition: {x: 1.9364755, y: -0.22590849, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3726126107720656838
+--- !u!212 &1843026898210113948
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3948055355563052478}
+  m_GameObject: {fileID: 8023415673045836245}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -85,18 +85,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4644458566182940093
+--- !u!114 &-2407875458895566835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3948055355563052478}
+  m_GameObject: {fileID: 8023415673045836245}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6fc82b35651442f88b63874dcad279f, type: 3}
+  m_Script: {fileID: 11500000, guid: e2c5428618023384a90786ac98e1d5b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitColor: {r: 0.20784314, g: 0.19215687, b: 0.58431375, a: 1}
-  TypeOfUnit: 1
-  IsHumanUnit: 1

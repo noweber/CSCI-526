@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Linq;
+using System.Collections.Generic;
 
 public class Tile : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class Tile : MonoBehaviour
     [SerializeField] private SpriteRenderer _renderer;
 
     [SerializeField] public GameObject _highlight;
+
+    [SerializeField] public GameObject _legal;
 
     //[SerializeField] private GameObject _useAbility;
 
@@ -22,155 +26,134 @@ public class Tile : MonoBehaviour
     {
         _highlight.SetActive(true);
     }
-    
+
     void OnMouseExit()
     {
-        if(LevelController.Instance.storedPiece != null)
-        {
-            // TODO: reconfigure this with IPiece
-            var highlightTiles = LevelController.Instance.storedPiece.highlightedMoves;
-            //Vector3 mousePos = Input.mousePosition;
-            if (highlightTiles.Contains(new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)))
-            {
-                //Debug.Log("IN THE ARRAY");
-                _highlight.SetActive(true);
-            }
-            else
-            {
-                //Debug.Log("NOT IN THE ARRAY");
-                _highlight.SetActive(false);
-            }
-            _highlight.SetActive(false);
-        }
-        else
-        {
-            _highlight.SetActive(false);
-        }
-        //_highlight.SetActive(false);
+        _highlight.SetActive(false);
     }
 
     private void OnMouseDown()
     {
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
-        var clickedPiece = LevelController.Instance.GetPiece(coord);
-		var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
+        var lvlMono = LevelMono.Instance;
+        var clickedPiece = lvlMono.GetPiece(coord);
+        var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
+
         if (clickedPiece != null) // selected piece is correct turn's color
         {
-            if (LevelController.Instance.storedPiece == null && turn == clickedPiece.IsControlledByHuman() && clickedPiece.HasMoved() == false)
+            if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
-                //Selects Piece
-                LevelController.Instance.storedPiece = clickedPiece;
-                LevelController.Instance.storedCoord = coord;
-                LevelController.Instance.storedPiece.highlightedMoves = clickedPiece.GetLegalMoves(LevelController.Instance.LevelModel.GetWidth(), LevelController.Instance.LevelModel.GetHeight());
-                foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
-                {
-                    LevelController.Instance.tiles[tileCoords]._highlight.SetActive(true);
-                }
+                // SELECTING CLICKED PIECE AS SELECTEDPIECE
+                Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
+                lvlMono.SelectPiece(clickedPiece, coord);
+                lvlMono.HighlightMoves();
+
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
-                GameManagerChain.Instance.MovedPieces.Add(clickedPiece);
+                GameManagerChain.Instance.AddMovedPiece(clickedPiece);
             }
             else
             {
-                if (LevelController.Instance.storedPiece != null)
+                if (lvlMono.HasSelectedPiece())
                 {
-                    // Possible to capture clickedPiece
-                    if (LevelController.Instance.storedPiece != clickedPiece && LevelController.Instance.storedPiece.IsControlledByHuman() != clickedPiece.IsControlledByHuman()) 
-					{
-                    	if (LevelController.Instance.MovePiece(coord, LevelController.Instance.storedPiece))
-                    	{
-                            //TODO: add LEVELMODEL update for capture
-							// Capturing Piece 
-                        	// Destroy(clickedPiece.gameObject);
-                        	GameManagerChain.Instance.NumMoves += 1;
+                    if (lvlMono.selectedPiece.IsEnemyOf(clickedPiece))
+                    {
+						// LEVELMONO SELECTEDPIECE CAPTURING
+                        if (lvlMono.MovePiece(coord))
+                        {
+                            
+        					GameManagerChain.Instance.IncrementMoves(1); 
+							GameManagerChain.Instance.TotalMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
-                            //If Unit that Captured a piece is Circle, gain another turn
-                            if (LevelController.Instance.storedPiece.Name() != "Circle")
-                            {
-                                Debug.Log("Piece that captured is NOT a circle");
-                                LevelController.Instance.storedPiece.SetMoveState(true);
-                            }
 
+                            if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                            {
+                                MenuManager.Instance.UpdateObjectiveContent();
+                            }
                             //GridManager.Instance.storedPiece.hasMoved = true;
                         }
                     }
-					foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
-					{
-						LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                    }
-                    MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(LevelController.Instance.storedPiece);
-                    LevelController.Instance.storedPiece = null;
-                    LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
-                }
-			}
-        }
-        else
-        {
-            Debug.Log(LevelController.Instance.storedPiece);
-            Debug.Log(clickedPiece);
-            if (LevelController.Instance.storedPiece != null)
-            {
-                //Move Piece
-                if (LevelController.Instance.MovePiece(coord, LevelController.Instance.storedPiece))
-                {
-                    LevelController.Instance.storedPiece.SetMoveState(true);
-                    foreach (Tuple<int, int> tileCoords in LevelController.Instance.storedPiece.highlightedMoves)
+                    else
                     {
-                        LevelController.Instance.tiles[tileCoords]._highlight.SetActive(false);
-                        //fix hover unhighlight while selected
+
+                        Debug.Log("FAILED TO CAPTURE");
+                        // lvlMono.ResetPiece();
                     }
+
+                    lvlMono.RemoveHighlight();
+                    lvlMono.ResetPiece();
+
+                    // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(LevelController.Instance.storedPiece);
-                    LevelController.Instance.storedPiece = null;
-                    LevelController.Instance.storedCoord = new Tuple<int, int>(-1, -1);
-                    GameManagerChain.Instance.NumMoves += 1;
-                    MenuManager.Instance.ShowNumMovesInfo();
-                    //unhighlight after move.
+                    MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
                 }
             }
         }
+        else
+        {
+            if (lvlMono.HasSelectedPiece())
+            {
+                // LEVELMONO SELECTEDPIECE MOVING
+                if (lvlMono.MovePiece(coord))
+                {
+                    // UI/Analytics
+                    MenuManager.Instance.HideAbilityButton();
+                    MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
+        			GameManagerChain.Instance.IncrementMoves(1); 
+					GameManagerChain.Instance.TotalMoves += 1;
+                    MenuManager.Instance.ShowNumMovesInfo();
 
-		// turn logic
-		if (GameManagerChain.Instance.NumMoves == 2) 
-		{
-			
-			GameManagerChain.Instance.NumMoves = 0;
-			if (turn == true) 
-			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
-			} else
-			{
-				GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
-			}
-			foreach (var piece in GameManagerChain.Instance.MovedPieces) 
-			{
-				piece.SetMoveState(false);
-			}
-			GameManagerChain.Instance.UsedAbility = false;
-			GameManagerChain.Instance.MovedPieces = new List<PieceController>();
+                    if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                    {
+                        MenuManager.Instance.UpdateObjectiveContent();
+                    }
+                }
+                else
+                {
+                    Debug.Log("FAILED TO MOVE");
+                }
+                lvlMono.RemoveHighlight();
+                lvlMono.ResetPiece();
+            }
         }
-        //Finds valid piece (done)
-        //Calls GridManager/sends to GridManager --> initialize some function to prepare for movement/store the piece
-        //Piece in GridManager--> var selectedPiece = piece or null --> set as True. if itself, then set null/cancel action
-
-        //next click = move? --> if selectedPiece == true, means we can move
-        //update GridManager Dictionaries
-        //update stored piece = null
 
 
-        //extra: highlight valid spots to move for specific piece
-        //_highlight.SetActive(true)?
+        // turn logic
+		/*
+        if (!LevelMono.Instance.DoesAiPlayerHaveUnitsRemaining())
+        {
+            StopAllCoroutines();
+            GameManagerChain.Instance.ChangeState(GameStateEnum.Victory);
+        }
+		*/
+        if (GameManagerChain.Instance.GetMovesMade() == 2)
+        {
+            if (turn == true)
+            {
+                if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    StartCoroutine(DelayedChangeState());
+                }
+                else
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                }
+            }
+        }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    // "Slacking off" text for 2 seconds, then change state to white
+    private IEnumerator DelayedChangeState()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        MenuManager.Instance.SetSlackDialogue(true);
+        yield return new WaitForSeconds(2);
+        MenuManager.Instance.SetSlackDialogue(false);
+        GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+        yield return null;
     }
 }
+
+
+
+
+

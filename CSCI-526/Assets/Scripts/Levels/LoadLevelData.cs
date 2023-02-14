@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Levels
 {
-    public class LevelData
+    public class LoadLevelData
     {
         // TODO: add a constructor and make all setters private
 
@@ -12,6 +12,6 @@ namespace Assets.Scripts.Levels
 
         public int Height;
 
-        public Dictionary<Tuple<int, int>, IPiece> Units;
+        public List<PieceInfo> Units;
     }
 }
