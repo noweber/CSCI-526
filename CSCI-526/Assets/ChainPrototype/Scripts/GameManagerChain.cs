@@ -1,10 +1,6 @@
 using Assets.Scripts.Levels;
-using Assets.Scripts.Piece;
-using Assets.Scripts.Units;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -181,14 +177,14 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Victory:
 				Debug.Log("VICTORY");
                 MenuManager.Instance.SetVictoryScreen(true);
+                float time_level1 = (Time.realtimeSinceStartup - playStartTime)/60 ;
+                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves, SceneName , time_level1 );
+
 				break;
             case GameStateEnum.Loss:
-                // TODO: Add victory and loss game state logic. This currently just resets the game.
-                // Scene scene = SceneManager.GetActiveScene();
-                
-                float time_level = (Time.realtimeSinceStartup - playStartTime)/60 ;
-                //Debug.Log("time"+  time_level);
-                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves, SceneName , time_level );
+                Debug.Log("LOSS");
+                float time_level2 = (Time.realtimeSinceStartup - playStartTime)/60 ;
+                Analytics.Instance.Send(playTestID, GameManagerChain.Instance.TotalMoves, SceneName , time_level2 );
                 SceneManager.LoadScene(SceneName);
                 break;
         }
