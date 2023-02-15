@@ -12,50 +12,56 @@ namespace Assets.Scripts.Units
             return "Can Capture Enemies. When adjacent to Circle, Circle gains increased range.";
         }
 
-        public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
+        public override List<Tuple<int, int>> LegalMoves(int boardHeight, int boardWidth)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
             var lvlMono = LevelMono.Instance;
-			var pos = this.transform.position;
-			int x = (int)pos.x;
-			int y = (int)pos.y;
+			var pos = this.standingOnTile.gridLocation;//this.transform.position;
+            int x = (int)pos.x;
+            int y = (int)pos.y;
 
-            for (int i = 0; i < boardWidth; i++)
+            for (int i = 0; i < boardHeight; i++)
             {
-                for (int j = 0; j < boardHeight; j++)
+                for (int j = 0; j < boardWidth; j++)
                 {
                     //get diagonals - those are ok
                     if (Mathf.Abs(i - x) == 1 && Mathf.Abs(j - y) == 1)
                     {
+                        Debug.Log("forward: " + i + ", " + j);
                         var availableMove = new Tuple<int, int>(i, j);
 						var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
                             if (!this.IsEnemyOf(availablePiece)) { continue; }
                         }
+                        //Debug.Log("Diamond coord Check: " + i + ", " + j);
                         legalSpots.Add(availableMove);
                     }
 
                     //get +1 to cardinal directions
                     if (Mathf.Abs(i - x) == 2 && Mathf.Abs(j - y) == 0)
                     {
+                        Debug.Log("forward: " + i + ", " + j);
                         var availableMove = new Tuple<int, int>(i, j);
                         var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
                             if (!this.IsEnemyOf(availablePiece)) { continue; }
                         }
+                        //Debug.Log("Diamond coord Check: " + i + ", " + j);
                         legalSpots.Add(availableMove);
                     }
                     if (Mathf.Abs(i - x) == 0 && Mathf.Abs(j - y) == 2)
                     {
+                        Debug.Log("forward: " + i + ", " + j);
                         var availableMove = new Tuple<int, int>(i, j);
                         var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
                             if (!this.IsEnemyOf(availablePiece)) { continue; }
                         }
+                        //Debug.Log("Diamond coord Check: " + i + ", " + j);
                         legalSpots.Add(availableMove);
                     }
                 }
@@ -83,6 +89,14 @@ namespace Assets.Scripts.Units
                 {
                     if (!legalSpots.Contains(adj))
                         legalSpots.Add(adj);
+                }
+            }
+            var posCheck = this.standingOnTile.gridLocation;//this.transform.position;
+            if (!legalSpots.Contains(new Tuple<int,int>(posCheck.x, posCheck.y + 2)))
+            {
+                if (posCheck.x > 0 && posCheck.x < boardHeight && posCheck.y > 0 && posCheck.y < boardWidth)
+                {
+                    legalSpots.Add(new Tuple<int, int>(posCheck.x, posCheck.y + 2));
                 }
             }
 

@@ -54,21 +54,15 @@ public class MouseController : MonoBehaviour
                     Debug.Log("Selected " + unit.GetName());
                     if (unit.GetName() != "Triangle")
                     {
-                        //Debug.Log("here");
                         var legal = unit.LegalMoves(LevelMono.Instance.GetHeight(), LevelMono.Instance.GetWidth());
-                        //foreach (Tuple<int, int> l in legal)
-                        //{
-                        //    Debug.Log("Legal: " + l.Item1 + ", " + l.Item2);
-                        //}
                         var coord = new Tuple<int, int>(unit.standingOnTile.gridLocation.x, unit.standingOnTile.gridLocation.y);
                         LevelMono.Instance.SelectPiece(unit, coord);
-                        //LevelMono.Instance.HighlightMoves();
                         Debug.Log("Selected Coord: " + LevelMono.Instance.selectedCoord);
                         foreach (var highlight in LevelMono.Instance.highlightedMoves)
                         {
                             Debug.Log("Should Highlight: " + highlight);
-                        //    var hlight = new Tuple<int, int>(highlight.Item2, highlight.Item1);
-                        //    LevelMono.Instance.overlayTiles[hlight].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                            var hlight = new Tuple<int, int>(highlight.Item1, highlight.Item2);
+                            LevelMono.Instance.overlayTiles[hlight].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
                         }
 
                     }

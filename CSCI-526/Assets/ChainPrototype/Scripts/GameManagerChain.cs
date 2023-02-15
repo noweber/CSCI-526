@@ -239,17 +239,17 @@ public class GameManagerChain : MonoBehaviour
         int _height = 10;
         List<PieceInfo> units = new List<PieceInfo>();
 
-        for (int x = 0; x < _width; x++)
+        for (int x = 0; x < _height; x++)
         {
-            for (int y = 0; y < _height; y++)
+            for (int y = 0; y < _width; y++)
             {
                 Tuple<int, int> position = new (x, y);
-                if (x == 2 && y == 3 || x == _width - 3 && y == 3)
+                if (x == 2 && y == 3 || x == _height - 3 && y == 3)
                 {
                     units.Add(new PieceInfo(position, true, "Triangle"));
                 }
 
-                if (x == 0 && y == 0 || x == _width - 1 && y == 0)
+                if (x == 0 && y == 0 || x == _height - 1 && y == 0)
                 {
                     units.Add(new PieceInfo(position, true, "Circle"));
                 }
@@ -259,18 +259,18 @@ public class GameManagerChain : MonoBehaviour
                     units.Add(new PieceInfo(position, true, "Diamond"));
                 }
 
-                if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
+                if (x == 2 && y == _width - 4 || x == _height - 3 && y == _width - 4)
                 {
                     units.Add(new PieceInfo(position, false, "Triangle"));
 
                 }
 
-                if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
+                if (x == 0 && y == _width - 1 || x == _height - 1 && y == _width - 1)
                 {
                     units.Add(new PieceInfo(position, false, "Circle"));
                 }
 
-                if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
+                if (x == 3 && y == _width - 1 || x == 4 && y == _width - 1)
                 {
                     units.Add(new PieceInfo(position, false, "Diamond"));
                 }
