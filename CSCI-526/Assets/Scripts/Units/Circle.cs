@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Piece;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Units
 {
@@ -17,10 +18,12 @@ namespace Assets.Scripts.Units
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
             //Circle moves like a king (delta(x) + delta(y) <= 2)
-			var pos = this.transform.position;
+            var pos = this.standingOnTile.gridLocation;//this.transform.position;
+            Debug.Log("Circle: " + pos);
 			int x = (int)pos.x;
 			int y = (int)pos.y;
             bool changeMovement = this.CircleMovementCheck();
+            Debug.Log("Circle Check: " + changeMovement);
             var lvlMono = LevelMono.Instance;
 
             if (changeMovement == true)

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 public class MouseController : MonoBehaviour
 {
     public GameObject cursor;
     private PieceMono unit;
+    private bool isMoving;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,17 +22,63 @@ public class MouseController : MonoBehaviour
 
         if (hit.HasValue)
         {
-            GameObject overlayTile = hit.Value.collider.gameObject;
+            Overlay overlayTile = hit.Value.collider.gameObject.GetComponent<Overlay>(); ;
             cursor.transform.position = overlayTile.transform.position;
             cursor.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
 
             if (Input.GetMouseButtonDown(0))
             {
                 overlayTile.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-                if (unit == null){
-                    unit = overlayTile.GetComponent<PieceMono>();
+                if (unit != null && unit.standingOnTile.gridLocation == overlayTile.gridLocation)
+                {
+                    unit = null;
+                    //isMoving = false;
+                    overlayTile.HideTile();
+                    foreach (var highlight in LevelMono.Instance.highlightedMoves)
+                    {
+                        var hlight = new Tuple<int, int>(highlight.Item2, highlight.Item1);
+                        LevelMono.Instance.overlayTiles[hlight].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+                    }
+                }
+                else if (LevelMono.Instance.playersLocations.Contains(overlayTile.gridLocation) && unit == null)
+                {
+                    foreach (var player in LevelMono.Instance.players)
+                    {
+                        //Debug.Log(player.gameObject.GetComponent<CharacterInfo>().standingOnTile.gridLocation);
+                        if (player.gameObject.GetComponent<PieceMono>().standingOnTile.gridLocation == overlayTile.gridLocation)
+                        {
+                            unit = player;
+                            break;
+                        }
+                    }
+                    Debug.Log("Selected " + unit.GetName());
+                    if (unit.GetName() != "Triangle")
+                    {
+                        //Debug.Log("here");
+                        var legal = unit.LegalMoves(LevelMono.Instance.GetHeight(), LevelMono.Instance.GetWidth());
+                        //foreach (Tuple<int, int> l in legal)
+                        //{
+                        //    Debug.Log("Legal: " + l.Item1 + ", " + l.Item2);
+                        //}
+                        var coord = new Tuple<int, int>(unit.standingOnTile.gridLocation.x, unit.standingOnTile.gridLocation.y);
+                        LevelMono.Instance.SelectPiece(unit, coord);
+                        //LevelMono.Instance.HighlightMoves();
+                        Debug.Log("Selected Coord: " + LevelMono.Instance.selectedCoord);
+                        foreach (var highlight in LevelMono.Instance.highlightedMoves)
+                        {
+                            Debug.Log("Should Highlight: " + highlight);
+                        //    var hlight = new Tuple<int, int>(highlight.Item2, highlight.Item1);
+                        //    LevelMono.Instance.overlayTiles[hlight].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                        }
+
+                    }
                 }
             }
+            //else
+            //{
+            //    isMoving = true;
+            //    overlayTile.HideTile();
+            //}
         }
     }
 

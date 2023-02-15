@@ -33,6 +33,8 @@ public class LevelMono : MonoBehaviour
 
     public List<PieceMono> enemies;
     public List<PieceMono> players;
+    public List<Vector3Int> enemiesLocations;
+    public List<Vector3Int> playersLocations;
 
     public Dictionary<Tuple<int, int>, Overlay> overlayTiles;
     public Dictionary<Tuple<int, int>, Tile> tiles;
@@ -131,6 +133,8 @@ public class LevelMono : MonoBehaviour
                                 enemyCircle.gameObject.GetComponent<PieceMono>().SetName("Circle");
                                 //enemyLocations.Add(new Vector3Int(x, y, z));
                                 enemies.Add(enemyCircle.gameObject.GetComponent<PieceMono>());
+                                enemiesLocations.Add(enemyCircle.gameObject.GetComponent<PieceMono>().standingOnTile.gridLocation);
+                                _pieces.Add(new Tuple<int, int>(x, y), enemyCircle);
 
                             }
 
@@ -143,9 +147,11 @@ public class LevelMono : MonoBehaviour
                                 circle.gameObject.GetComponent<PieceMono>().SetName("Circle");
                                 //playerLocations.Add(new Vector3Int(x, y, z));
                                 players.Add(circle.gameObject.GetComponent<PieceMono>());
+                                playersLocations.Add(circle.gameObject.GetComponent<PieceMono>().standingOnTile.gridLocation);
+                                _pieces.Add(new Tuple<int, int>(x, y), circle);
                             }
 
-                            if (x == 9 && y == 3 || x == 9 && y == 4)
+                            if (x == 3 && y == 9 || x == 4 && y == 9)
                             {
                                 var enemyDiamond = Instantiate(_enemydiamondPrefab, overlayContainer.transform);
                                 enemyDiamond.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 2);
@@ -154,6 +160,8 @@ public class LevelMono : MonoBehaviour
                                 enemyDiamond.gameObject.GetComponent<PieceMono>().SetName("Diamond");
                                 //enemyLocations.Add(new Vector3Int(x, y, z));
                                 enemies.Add(enemyDiamond.gameObject.GetComponent<PieceMono>());
+                                enemiesLocations.Add(enemyDiamond.gameObject.GetComponent<PieceMono>().standingOnTile.gridLocation);
+                                _pieces.Add(new Tuple<int, int>(x, y), enemyDiamond);
                             }
 
                             if (x == 3 && y == 0 || x == 4 && y == 0)
@@ -165,6 +173,8 @@ public class LevelMono : MonoBehaviour
                                 diamond.gameObject.GetComponent<PieceMono>().SetName("Diamond");
                                 //playerLocations.Add(new Vector3Int(x, y, z));
                                 players.Add(diamond.gameObject.GetComponent<PieceMono>());
+                                playersLocations.Add(diamond.gameObject.GetComponent<PieceMono>().standingOnTile.gridLocation);
+                                _pieces.Add(new Tuple<int, int>(x, y), diamond);
                             }
 
                             if (x == 2 && y == 6 || x == 5 && y == 6)
@@ -176,6 +186,8 @@ public class LevelMono : MonoBehaviour
                                 enemyTriangle.gameObject.GetComponent<PieceMono>().SetName("Triangle");
                                 //enemyLocations.Add(new Vector3Int(x, y, z));
                                 enemies.Add(enemyTriangle.gameObject.GetComponent<PieceMono>());
+                                enemiesLocations.Add(enemyTriangle.gameObject.GetComponent<PieceMono>().standingOnTile.gridLocation);
+                                _pieces.Add(new Tuple<int, int>(x, y), enemyTriangle);
                             }
 
                             if (x == 2 && y == 3 || x == 5 && y == 3)
@@ -187,6 +199,8 @@ public class LevelMono : MonoBehaviour
                                 triangle.gameObject.GetComponent<PieceMono>().SetName("Triangle");
                                 //playerLocations.Add(new Vector3Int(x, y, z));
                                 players.Add(triangle.gameObject.GetComponent<PieceMono>());
+                                playersLocations.Add(triangle.gameObject.GetComponent<PieceMono>().standingOnTile.gridLocation);
+                                _pieces.Add(new Tuple<int, int>(x, y), triangle);
                             }
                         }
                     }
@@ -238,11 +252,15 @@ public class LevelMono : MonoBehaviour
     {
         this.selectedPiece = piece;
         this.selectedCoord = coord;
-        if (piece.IsHuman()) { this.highlightedMoves = piece.LegalMoves(this.Width, this.Height); }
+        if (piece.IsHuman()) { this.highlightedMoves = piece.LegalMoves(this.Height, this.Width); }
         if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 1 && this.selectedPiece.IsCircle())
         {
             this.highlightedMoves.Add(new Tuple<int, int>(1, 1));
             this.highlightedMoves.Add(new Tuple<int, int>(2, 2));
+        }
+        foreach (var highlight in this.highlightedMoves)
+        {
+            Debug.Log("Should Highlight: " + highlight);
         }
     }
 
