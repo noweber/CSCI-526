@@ -251,44 +251,78 @@ public class GameManagerChain : MonoBehaviour
         int _width = 8;
         int _height = 10;
         List<PieceInfo> units = new List<PieceInfo>();
-
-        for (int x = 0; x < _width; x++)
+        for (int y = 0; y < _height; y++)
         {
-            for (int y = 0; y < _height; y++)
+            for (int x = 0; x < _width; x++)
             {
-                Tuple<int, int> position = new(x, y);
-                if (x == 2 && y == 3 || x == _width - 3 && y == 3)
+                Tuple<int, int> position = new (y, x);
+                if (x == 7 && y == 9 || x == 0 && y == 9)
                 {
-                    units.Add(new PieceInfo(position, true, "Triangle"));
+                    units.Add(new PieceInfo(position, false, "Circle"));
                 }
-
-                if (x == 0 && y == 0 || x == _width - 1 && y == 0)
+                if (x == 0 && y == 0 || x == 7 && y == 0)
                 {
                     units.Add(new PieceInfo(position, true, "Circle"));
                 }
-
+                if (x == 3 && y == 9 || x == 4 && y == 9)
+                {
+                    units.Add(new PieceInfo(position, false, "Diamond"));
+                }
                 if (x == 3 && y == 0 || x == 4 && y == 0)
                 {
                     units.Add(new PieceInfo(position, true, "Diamond"));
                 }
-
-                if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
+                if (x == 2 && y == 6 || x == 5 && y == 6)
                 {
                     units.Add(new PieceInfo(position, false, "Triangle"));
-
                 }
-
-                if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
+                if (x == 2 && y == 3 || x == 5 && y == 3)
                 {
-                    units.Add(new PieceInfo(position, false, "Circle"));
-                }
-
-                if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
-                {
-                    units.Add(new PieceInfo(position, false, "Diamond"));
+                    units.Add(new PieceInfo(position, true, "Triangle"));
                 }
             }
         }
+
+                    /*
+
+                    for (int x = 0; x < _width; x++)
+                    {
+                        for (int y = 0; y < _height; y++)
+                        {
+                            Tuple<int, int> position = new(x, y);
+                            if (x == 2 && y == 3 || x == _width - 3 && y == 3)
+                            {
+                                units.Add(new PieceInfo(position, true, "Triangle"));
+                            }
+
+                            if (x == 0 && y == 0 || x == _width - 1 && y == 0)
+                            {
+                                units.Add(new PieceInfo(position, true, "Circle"));
+                            }
+
+                            if (x == 3 && y == 0 || x == 4 && y == 0)
+                            {
+                                units.Add(new PieceInfo(position, true, "Diamond"));
+                            }
+
+                            if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
+                            {
+                                units.Add(new PieceInfo(position, false, "Triangle"));
+
+                            }
+
+                            if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
+                            {
+                                units.Add(new PieceInfo(position, false, "Circle"));
+                            }
+
+                            if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
+                            {
+                                units.Add(new PieceInfo(position, false, "Diamond"));
+                            }
+                        }
+                    }
+                    */
         return new LoadLevelData()
         {
             Width = _width,

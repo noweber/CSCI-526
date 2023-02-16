@@ -17,8 +17,8 @@ namespace Assets.Scripts.Units
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
             var lvlMono = LevelMono.Instance;
-			var pos = this.transform.position;
-			int x = (int)pos.x;
+            var pos = this.standingOnTile.gridLocation;//this.transform.position;
+            int x = (int)pos.x;
 			int y = (int)pos.y;
 
             for (int i = 0; i < boardWidth; i++)

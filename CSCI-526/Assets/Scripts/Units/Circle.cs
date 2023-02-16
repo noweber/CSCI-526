@@ -17,8 +17,8 @@ namespace Assets.Scripts.Units
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
             //Circle moves like a king (delta(x) + delta(y) <= 2)
-			var pos = this.transform.position;
-			int x = (int)pos.x;
+            var pos = this.standingOnTile.gridLocation;//this.transform.position;
+            int x = (int)pos.x;
 			int y = (int)pos.y;
             bool changeMovement = this.CircleMovementCheck();
             var lvlMono = LevelMono.Instance;
