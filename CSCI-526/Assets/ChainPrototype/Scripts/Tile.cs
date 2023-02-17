@@ -15,6 +15,8 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _legal;
 
+    [SerializeField] public GameObject _fog;
+
     private bool isVisible;
 
     //[SerializeField] private GameObject _useAbility;
@@ -37,6 +39,7 @@ public class Tile : MonoBehaviour
     public void SetVisibility(bool visibility)
     {
         this.isVisible = visibility;
+        _fog.SetActive(!visibility);
     }
     
     public bool GetVisibility()
