@@ -87,9 +87,15 @@ public class LevelMono : MonoBehaviour
             {
                 tiles[coord].SetVisibility(visibility);
                 var piece = this.GetPiece(coord);
-                if (piece != null && !piece.IsTriangle() && !piece.IsHuman())
+                
+                if (visibility == VisibilityState.Player && piece != null && !piece.IsHuman() && !piece.IsTriangle())
                 {
-                    piece.gameObject.SetActive(visibility == VisibilityState.Player);
+                    piece.gameObject.SetActive(true);
+                } 
+                else if (visibility != VisibilityState.Player && piece != null && !piece.IsHuman() &&
+                           !piece.IsTriangle())
+                {
+                    piece.gameObject.SetActive(false);
                 }
             }
         }
@@ -263,11 +269,7 @@ public class LevelMono : MonoBehaviour
 
         this.selectedPiece.SetMoveState(true);
         var tile = this.tiles[coord];
-        
-        // Setting inactive if on neutral or enemy territory
-        this.selectedPiece.gameObject.SetActive(tile.GetVisibility() == VisibilityState.Player);
-        
-        
+
         if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) 
         {
             // CAPTURE TAKES PLACE HERE
@@ -289,6 +291,16 @@ public class LevelMono : MonoBehaviour
             tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
             var v = currentPlayer ? VisibilityState.Player : VisibilityState.Enemy;
             this.SetRangeVisibility(towerCoord, 2, v);
+        }
+
+        // Setting inactive if on neutral or enemy territory
+        if (!this.selectedPiece.IsHuman() && tile.GetVisibility() == VisibilityState.Player)
+        {
+            this.selectedPiece.gameObject.SetActive(true);
+        } 
+        else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() != VisibilityState.Player)
+        {
+            this.selectedPiece.gameObject.SetActive(false);
         }
 
         this.RemoveHighlight();
