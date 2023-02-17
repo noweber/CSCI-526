@@ -63,24 +63,22 @@ public class LevelMono : MonoBehaviour
         // TODO: Ensure any elements of the previous level are removed from the scene.
     }
 
-    private void SetRangeVisibility(Tuple<int, int> center, int range, bool visibility)
+    private void SetRangeVisibility(Tuple<int, int> center, int range, VisibilityState visibility)
     {
         int x = center.Item1;
         int y = center.Item2;
         var adjacentList = new List<Tuple<int, int>>();
-        adjacentList.Add(center);
-        for (int i = 1; i <= range; i++)
+        for (int i = x - range; i <= x + range; i++)
         {
-            adjacentList.Add(new Tuple<int, int>(x + i, y)); //right
-            adjacentList.Add(new Tuple<int, int>(x - i, y)); //left
-            adjacentList.Add(new Tuple<int, int>(x, y + i)); //up
-            adjacentList.Add(new Tuple<int, int>(x, y - i)); //down
-            adjacentList.Add(new Tuple<int, int>(x + i, y + i)); //right up diag
-            adjacentList.Add(new Tuple<int, int>(x - i, y + i)); //left  up diag
-            adjacentList.Add(new Tuple<int, int>(x + i, y - i)); //right down diag
-            adjacentList.Add(new Tuple<int, int>(x - i, y - i)); //left down diag
+            for (int j = y - range; j <= y + range; j++)
+            {
+                if (i >= 0 && i < Width && j >= 0 && j < Height)
+                {
+                    adjacentList.Add(new Tuple<int, int>(i, j));  
+                } 
+            }
         }
-
+        
         foreach (var coord in adjacentList)
         {
             x = coord.Item1;
@@ -105,13 +103,14 @@ public class LevelMono : MonoBehaviour
             {
                 var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity, transform);
                 tile.name = $"Tile {x} {y}";
-                tile.SetVisibility(false);
+                
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 tile.Init(isOffset);
 
                 var coord = new Tuple<int, int>(x, y);
                 tiles[coord] = tile;
+                tile.SetVisibility(VisibilityState.Neutral);
             }
         }
         
@@ -123,11 +122,18 @@ public class LevelMono : MonoBehaviour
 
             if (unit.IsTriangle())
             {
+                Debug.Log("FOUND TRIANGLE");
                 var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 triangle.SetName("Triangle");
                 triangle.SetHuman(unit.IsHuman());
                 triangle.gameObject.SetActive(true);
-                this.SetRangeVisibility(coord, 2, unit.IsHuman());
+                if (unit.IsHuman())
+                {
+                    this.SetRangeVisibility(coord, 2, VisibilityState.Player);
+                }
+                else
+                {
+                    this.SetRangeVisibility(coord, 2, VisibilityState.Enemy); }
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = triangle;
@@ -144,7 +150,7 @@ public class LevelMono : MonoBehaviour
                 var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 circle.SetName("Circle");
                 circle.SetHuman(unit.IsHuman());
-                circle.gameObject.SetActive(unit.IsHuman() || tile.GetVisibility());
+                circle.gameObject.SetActive(unit.IsHuman());
                 circle.SetMoveState(false);
                 circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = circle;
@@ -154,14 +160,11 @@ public class LevelMono : MonoBehaviour
                 var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 diamond.SetName("Diamond");
                 diamond.SetHuman(unit.IsHuman());
-                diamond.gameObject.SetActive(unit.IsHuman() || tile.GetVisibility());
+                diamond.gameObject.SetActive(unit.IsHuman());
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = diamond;
             }
-            
-            Debug.Log(_pieces[coord].IsHuman());
-
         }
 
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
@@ -263,13 +266,13 @@ public class LevelMono : MonoBehaviour
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
         
-        if (this.selectedPiece.inTriangleRange())
-        {
-            // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
-            Debug.Log("MOVED INTO RANGE OF TRIANGLE");
-            this.selectedPiece.SetMoveState(false);
-            GameManagerChain.Instance.DecrementMoves(1);
-        }
+        // if (this.selectedPiece.inTriangleRange())
+        // {
+        //     // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
+        //     Debug.Log("MOVED INTO RANGE OF TRIANGLE");
+        //     this.selectedPiece.SetMoveState(false);
+        //     GameManagerChain.Instance.DecrementMoves(1);
+        // }
 
         this.RemoveHighlight();
         this.ResetPiece();

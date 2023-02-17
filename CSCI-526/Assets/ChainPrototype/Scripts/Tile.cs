@@ -17,7 +17,7 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _fog;
 
-    private bool isVisible;
+    private VisibilityState visibility; // true or false
 
     //[SerializeField] private GameObject _useAbility;
 
@@ -36,15 +36,16 @@ public class Tile : MonoBehaviour
         _highlight.SetActive(false);
     }
 
-    public void SetVisibility(bool visibility)
+    public void SetVisibility(VisibilityState visibility)
     {
-        this.isVisible = visibility;
-        _fog.SetActive(!visibility);
+        this.visibility = visibility;
+        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
+        else { _fog.SetActive(true); }
     }
     
-    public bool GetVisibility()
+    public VisibilityState GetVisibility()
     {
-        return this.isVisible;
+        return this.visibility;
     }
 
     private void OnMouseDown()
@@ -168,7 +169,12 @@ public class Tile : MonoBehaviour
     }
 }
 
-
+public enum VisibilityState
+{
+    Player = 0,
+    Enemy = 1,
+    Neutral = 2,
+}
 
 
 
