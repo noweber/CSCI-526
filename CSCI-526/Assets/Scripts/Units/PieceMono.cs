@@ -71,24 +71,53 @@ public abstract class PieceMono : MonoBehaviour
         }    
         return adjAlly;
 	}
+	
+	protected List<Tuple<int, int>> AdjacentEnemies()
+	{
+		var lvlMono = LevelMono.Instance;
+		var pos = this.transform.position;
+		int x = (int)pos.x;
+		int y = (int)pos.y;
+
+		var adjacentList = new List<Tuple<int, int>>();
+		adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
+		adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
+		adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
+		adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
+		adjacentList.Add(new Tuple<int, int>(x + 1, y + 1)); //right up diag
+		adjacentList.Add(new Tuple<int, int>(x - 1, y + 1)); //left  up diag
+		adjacentList.Add(new Tuple<int, int>(x + 1, y - 1)); //right down diag
+		adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); //left down diag
+
+		var adjAlly = new List<Tuple<int, int>>();
+		
+		foreach (Tuple<int, int> coord in adjacentList)
+		{
+			if (lvlMono.GetPiece(coord) != null && this.IsEnemyOf(lvlMono.GetPiece(coord)))
+			{
+				adjAlly.Add(coord);
+			}
+		}    
+		return adjAlly;
+	}
 
 	// Checks if piece gameobject is near a triangle
-	public bool inTriangleRange()
+	public Tuple<int, int> InTowerRange()
     {
 		var lvlMono = LevelMono.Instance;
 		var pos = this.transform.position;
 		int x = (int)pos.x;
 		int y = (int)pos.y;
 		
-		var adjacentList = this.AdjacentAllies();
+		var adjacentList = this.AdjacentEnemies();
 
         foreach (Tuple<int, int> coord in adjacentList)
         {
 			if (lvlMono.GetPiece(coord).IsTriangle())
             {	
-            	return true;
+            	return coord;
         	}
 		}    
-        return false;
+        return null;
 	}
 }

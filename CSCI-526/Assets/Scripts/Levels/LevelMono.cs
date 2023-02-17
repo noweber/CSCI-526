@@ -86,6 +86,11 @@ public class LevelMono : MonoBehaviour
             if (x >= 0 && x < this.Width && y >= 0 && y < this.Height)
             {
                 tiles[coord].SetVisibility(visibility);
+                var piece = this.GetPiece(coord);
+                if (piece != null && !piece.IsTriangle() && !piece.IsHuman())
+                {
+                    piece.gameObject.SetActive(visibility == VisibilityState.Player);
+                }
             }
         }
     }
@@ -133,7 +138,8 @@ public class LevelMono : MonoBehaviour
                 }
                 else
                 {
-                    this.SetRangeVisibility(coord, 2, VisibilityState.Enemy); }
+                    this.SetRangeVisibility(coord, 2, VisibilityState.Enemy); 
+                }
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = triangle;
@@ -249,12 +255,19 @@ public class LevelMono : MonoBehaviour
     public bool MovePiece(Tuple<int, int> coord)
     {
         var validMoves = this.selectedPiece.LegalMoves(this.Width, this.Height);
+        bool currentPlayer = this.selectedPiece.IsHuman(); // true or false; human or AI
         if (!validMoves.Contains(coord))
         {
             return false;
         }
 
         this.selectedPiece.SetMoveState(true);
+        var tile = this.tiles[coord];
+        
+        // Setting inactive if on neutral or enemy territory
+        this.selectedPiece.gameObject.SetActive(tile.GetVisibility() == VisibilityState.Player);
+        
+        
         if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) 
         {
             // CAPTURE TAKES PLACE HERE
@@ -265,14 +278,18 @@ public class LevelMono : MonoBehaviour
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
-        
-        // if (this.selectedPiece.inTriangleRange())
-        // {
-        //     // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
-        //     Debug.Log("MOVED INTO RANGE OF TRIANGLE");
-        //     this.selectedPiece.SetMoveState(false);
-        //     GameManagerChain.Instance.DecrementMoves(1);
-        // }
+
+        var towerCoord = this.selectedPiece.InTowerRange();
+        if (towerCoord != null)
+        {
+            // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
+            Debug.Log("MOVED INTO RANGE OF ENEMY TOWER");
+            var tower = _pieces[towerCoord];
+            tower.SetHuman(currentPlayer);
+            tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
+            var v = currentPlayer ? VisibilityState.Player : VisibilityState.Enemy;
+            this.SetRangeVisibility(towerCoord, 2, v);
+        }
 
         this.RemoveHighlight();
         this.ResetPiece();

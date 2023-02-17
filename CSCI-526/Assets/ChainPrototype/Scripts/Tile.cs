@@ -17,7 +17,7 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _fog;
 
-    private VisibilityState visibility; // true or false
+    private VisibilityState visibility; 
 
     //[SerializeField] private GameObject _useAbility;
 
