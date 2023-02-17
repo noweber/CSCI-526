@@ -15,6 +15,8 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _legal;
 
+    private bool isVisible;
+
     //[SerializeField] private GameObject _useAbility;
 
     public void Init(bool isOffset)
@@ -30,6 +32,16 @@ public class Tile : MonoBehaviour
     void OnMouseExit()
     {
         _highlight.SetActive(false);
+    }
+
+    public void SetVisibility(bool visibility)
+    {
+        this.isVisible = visibility;
+    }
+    
+    public bool GetVisibility()
+    {
+        return this.isVisible;
     }
 
     private void OnMouseDown()

@@ -63,6 +63,35 @@ public class LevelMono : MonoBehaviour
         // TODO: Ensure any elements of the previous level are removed from the scene.
     }
 
+    private void SetRangeVisibility(Tuple<int, int> center, int range, bool visibility)
+    {
+        int x = center.Item1;
+        int y = center.Item2;
+        var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(center);
+        for (int i = 1; i <= range; i++)
+        {
+            adjacentList.Add(new Tuple<int, int>(x + i, y)); //right
+            adjacentList.Add(new Tuple<int, int>(x - i, y)); //left
+            adjacentList.Add(new Tuple<int, int>(x, y + i)); //up
+            adjacentList.Add(new Tuple<int, int>(x, y - i)); //down
+            adjacentList.Add(new Tuple<int, int>(x + i, y + i)); //right up diag
+            adjacentList.Add(new Tuple<int, int>(x - i, y + i)); //left  up diag
+            adjacentList.Add(new Tuple<int, int>(x + i, y - i)); //right down diag
+            adjacentList.Add(new Tuple<int, int>(x - i, y - i)); //left down diag
+        }
+
+        foreach (var coord in adjacentList)
+        {
+            x = coord.Item1;
+            y = coord.Item2;
+            if (x >= 0 && x < this.Width && y >= 0 && y < this.Height)
+            {
+                tiles[coord].SetVisibility(visibility);
+            }
+        }
+    }
+    
     private void CreateSceneObjects(LoadLevelData level)
     {
         var units = level.Units;
@@ -76,6 +105,7 @@ public class LevelMono : MonoBehaviour
             {
                 var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity, transform);
                 tile.name = $"Tile {x} {y}";
+                tile.SetVisibility(false);
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 tile.Init(isOffset);
@@ -84,37 +114,52 @@ public class LevelMono : MonoBehaviour
                 tiles[coord] = tile;
             }
         }
-
+        
+        // Set what is visible to player
         foreach (var unit in units)
         {
             var coord = unit.GetPosition();
+            var tile = this.tiles[coord];
+
+            if (unit.IsTriangle())
+            {
+                var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+                triangle.SetName("Triangle");
+                triangle.SetHuman(unit.IsHuman());
+                triangle.gameObject.SetActive(unit.IsHuman());
+                this.SetRangeVisibility(coord, 2, unit.IsHuman());
+                triangle.SetMoveState(false);
+                triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
+                _pieces[coord] = triangle;
+            }
+        }
+
+        // Create units based on visibility
+        foreach (var unit in units)
+        {
+            var coord = unit.GetPosition();
+            var tile = this.tiles[coord];
             if (unit.IsCircle())
             {
                 var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 circle.SetName("Circle");
                 circle.SetHuman(unit.IsHuman());
+                circle.gameObject.SetActive(tile.GetVisibility());
                 circle.SetMoveState(false);
                 circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = circle;
             }
-            else if (unit.IsTriangle())
-            {
-                var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-                triangle.SetName("Triangle");
-                triangle.SetHuman(unit.IsHuman());
-                triangle.SetMoveState(false);
-                triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
-                _pieces[coord] = triangle;
-            }
-            else
+            else if (unit.IsDiamond())
             {
                 var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 diamond.SetName("Diamond");
                 diamond.SetHuman(unit.IsHuman());
+                diamond.gameObject.SetActive(tile.GetVisibility());
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = diamond;
             }
+            
             Debug.Log(_pieces[coord].IsHuman());
 
         }

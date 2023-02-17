@@ -42,7 +42,7 @@ public abstract class PieceMono : MonoBehaviour
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
 
     public void UpdateLocation(Vector3 location) { this.transform.position = location; }
-
+    
 	protected List<Tuple<int, int>> AdjacentAllies()
 	{
 		var lvlMono = LevelMono.Instance;
