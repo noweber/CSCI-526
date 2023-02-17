@@ -253,7 +253,7 @@ public class GameManagerChain : MonoBehaviour
             for (int y = 0; y < _height; y++)
             {
                 Tuple<int, int> position = new(x, y);
-                if (x == 2 && y == 3 || x == _width - 3 && y == 3)
+                if (x == 2 && y == 2 || x == _width - 3 && y == 2)
                 {
                     units.Add(new PieceInfo(position, true, "Triangle"));
                 }
@@ -268,7 +268,7 @@ public class GameManagerChain : MonoBehaviour
                     units.Add(new PieceInfo(position, true, "Diamond"));
                 }
 
-                if (x == 2 && y == _height - 4 || x == _width - 3 && y == _height - 4)
+                if (x == 2 && y == _height - 3 || x == _width - 3 && y == _height - 3)
                 {
                     units.Add(new PieceInfo(position, false, "Triangle"));
 

@@ -126,7 +126,7 @@ public class LevelMono : MonoBehaviour
                 var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 triangle.SetName("Triangle");
                 triangle.SetHuman(unit.IsHuman());
-                triangle.gameObject.SetActive(unit.IsHuman());
+                triangle.gameObject.SetActive(true);
                 this.SetRangeVisibility(coord, 2, unit.IsHuman());
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
@@ -144,7 +144,7 @@ public class LevelMono : MonoBehaviour
                 var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 circle.SetName("Circle");
                 circle.SetHuman(unit.IsHuman());
-                circle.gameObject.SetActive(tile.GetVisibility());
+                circle.gameObject.SetActive(unit.IsHuman() || tile.GetVisibility());
                 circle.SetMoveState(false);
                 circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = circle;
@@ -154,7 +154,7 @@ public class LevelMono : MonoBehaviour
                 var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 diamond.SetName("Diamond");
                 diamond.SetHuman(unit.IsHuman());
-                diamond.gameObject.SetActive(tile.GetVisibility());
+                diamond.gameObject.SetActive(unit.IsHuman() || tile.GetVisibility());
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = diamond;
