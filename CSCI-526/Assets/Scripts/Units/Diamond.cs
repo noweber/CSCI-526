@@ -32,7 +32,7 @@ namespace Assets.Scripts.Units
 						var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
-                            if (!this.IsEnemyOf(availablePiece)) { continue; }
+                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Units
                         var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
-                            if (!this.IsEnemyOf(availablePiece)) { continue; }
+                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -54,7 +54,7 @@ namespace Assets.Scripts.Units
                         var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
-                            if (!this.IsEnemyOf(availablePiece)) { continue; }
+                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
