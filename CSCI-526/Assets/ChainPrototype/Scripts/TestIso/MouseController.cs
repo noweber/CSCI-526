@@ -9,6 +9,7 @@ public class MouseController : MonoBehaviour
     public GameObject cursor;
     private PieceMono unit;
     private bool isMoving;
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +23,8 @@ public class MouseController : MonoBehaviour
 
         if (hit.HasValue)
         {
-            Overlay overlayTile = hit.Value.collider.gameObject.GetComponent<Overlay>(); ;
+            Overlay overlayTile = hit.Value.collider.gameObject.GetComponent<Overlay>();
+            //Debug.Log("Target pos: " + overlayTile.gridLocation);
             cursor.transform.position = overlayTile.transform.position;
             cursor.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
 
@@ -67,6 +69,24 @@ public class MouseController : MonoBehaviour
                         }
 
                     }
+                } else if (unit != null && unit.standingOnTile.gridLocation != overlayTile.gridLocation)
+                {
+                    Debug.Log("HEREEEE");
+                    Debug.Log("Unit Pos: " + unit.standingOnTile.gridLocation);
+                    Debug.Log("Target pos: " + overlayTile.gridLocation);
+                    Debug.Log("");
+                    var step = speed * Time.deltaTime;
+                    float zIndex = overlayTile.transform.position.z;
+                    //var unitPos = new Vector3(unit.standingOnTile.gridLocation.x, unit.standingOnTile.gridLocation.y, 0);
+                    var targetPos = new Vector3(overlayTile.transform.position.x, overlayTile.transform.position.y + 2, overlayTile.transform.position.z);
+                    Debug.Log("Unit Transform pos: " + unit.transform.position);
+                    Debug.Log("overlayTile Transform pos: " + overlayTile.transform.position);
+                    Debug.Log("Target pos: " + targetPos);
+                    unit.transform.position = Vector2.MoveTowards(unit.transform.position, overlayTile.transform.position, step);
+                    unit.transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, zIndex);
+                    //unit.standingOnTile.gridLocation = new Vector3Int((int)targetPos.x, (int)targetPos.y, 0);
+                    //unit.transform.position = new Vector3(unit.standingOnTile.gridLocation.x, unit.standingOnTile.gridLocation.y, 0);
+                    //Debug.Log("Unit Pos After move: " + unit.standingOnTile.gridLocation);
                 }
             }
             //else
