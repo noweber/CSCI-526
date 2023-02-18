@@ -31,6 +31,9 @@ public class LevelMono : MonoBehaviour
 
     private int Height;
 
+    //[SerializeField] private GameObject fogObject;
+    public bool debug;
+
     // public ILevel LevelModel { get; private set; }
 
     private void Awake()
@@ -42,6 +45,7 @@ public class LevelMono : MonoBehaviour
         else
         {
             Instance = this;
+            //this.debug = false;
         }
     }
 
@@ -85,24 +89,36 @@ public class LevelMono : MonoBehaviour
             y = coord.Item2;
             if (x >= 0 && x < this.Width && y >= 0 && y < this.Height)
             {
-                tiles[coord].SetVisibility(visibility);
+                //1
+                if (this.debug==false)
+                {
+                    tiles[coord].SetVisibility(visibility);
+                }
                 var piece = this.GetPiece(coord);
-                
+
                 if (visibility == VisibilityState.Player && piece != null && !piece.IsHuman() && !piece.IsTriangle())
                 {
                     piece.gameObject.SetActive(true);
-                } 
+                }
                 else if (visibility != VisibilityState.Player && piece != null && !piece.IsHuman() &&
-                           !piece.IsTriangle())
+                            !piece.IsTriangle())
                 {
                     piece.gameObject.SetActive(false);
                 }
+                
+                if (this.debug==true && piece != null)
+                {
+                    piece.gameObject.SetActive(true);
+                }
+                
+                
             }
         }
     }
     
     private void CreateSceneObjects(LoadLevelData level)
     {
+        Debug.Log("check debug: " + this.debug);
         var units = level.Units;
         this.tiles = new Dictionary<Tuple<int, int>, Tile>();
         this._pieces = new Dictionary<Tuple<int, int>, PieceMono>();
@@ -121,7 +137,11 @@ public class LevelMono : MonoBehaviour
 
                 var coord = new Tuple<int, int>(x, y);
                 tiles[coord] = tile;
-                tile.SetVisibility(VisibilityState.Neutral);
+                if (!this.debug)
+                {
+                    tile.SetVisibility(VisibilityState.Neutral);
+                }
+                
             }
         }
         
@@ -138,13 +158,16 @@ public class LevelMono : MonoBehaviour
                 triangle.SetName("Triangle");
                 triangle.SetHuman(unit.IsHuman());
                 triangle.gameObject.SetActive(true);
-                if (unit.IsHuman())
+                if (!this.debug)
                 {
-                    this.SetRangeVisibility(coord, 2, VisibilityState.Player);
-                }
-                else
-                {
-                    this.SetRangeVisibility(coord, 2, VisibilityState.Enemy); 
+                    if (unit.IsHuman())
+                    {
+                        this.SetRangeVisibility(coord, 2, VisibilityState.Player);
+                    }
+                    else
+                    {
+                        this.SetRangeVisibility(coord, 2, VisibilityState.Enemy);
+                    }
                 }
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
@@ -162,7 +185,10 @@ public class LevelMono : MonoBehaviour
                 var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 circle.SetName("Circle");
                 circle.SetHuman(unit.IsHuman());
-                circle.gameObject.SetActive(unit.IsHuman());
+                if (!this.debug)
+                {
+                    circle.gameObject.SetActive(unit.IsHuman());
+                }
                 circle.SetMoveState(false);
                 circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = circle;
@@ -172,7 +198,11 @@ public class LevelMono : MonoBehaviour
                 var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 diamond.SetName("Diamond");
                 diamond.SetHuman(unit.IsHuman());
-                diamond.gameObject.SetActive(unit.IsHuman());
+                if (!this.debug)
+                {
+                    diamond.gameObject.SetActive(unit.IsHuman());
+                }
+                //diamond.gameObject.SetActive(unit.IsHuman());
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = diamond;
@@ -290,17 +320,24 @@ public class LevelMono : MonoBehaviour
             tower.SetHuman(currentPlayer);
             tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
             var v = currentPlayer ? VisibilityState.Player : VisibilityState.Enemy;
-            this.SetRangeVisibility(towerCoord, 2, v);
+            if (this.debug == false)
+            {
+                this.SetRangeVisibility(towerCoord, 2, v);
+            }
+            
         }
 
         // Setting inactive if on neutral or enemy territory
-        if (!this.selectedPiece.IsHuman() && tile.GetVisibility() == VisibilityState.Player)
+        if (this.debug == false)
         {
-            this.selectedPiece.gameObject.SetActive(true);
-        } 
-        else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() != VisibilityState.Player)
-        {
-            this.selectedPiece.gameObject.SetActive(false);
+            if (!this.selectedPiece.IsHuman() && tile.GetVisibility() == VisibilityState.Player)
+            {
+                this.selectedPiece.gameObject.SetActive(true);
+            }
+            else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() != VisibilityState.Player)
+            {
+                this.selectedPiece.gameObject.SetActive(false);
+            }
         }
 
         this.RemoveHighlight();

@@ -41,6 +41,11 @@ public class Tile : MonoBehaviour
         this.visibility = visibility;
         if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
         else { _fog.SetActive(true); }
+        
+        if (LevelMono.Instance.debug == true)
+        {
+            _fog.SetActive(false);
+        }
     }
     
     public VisibilityState GetVisibility()
