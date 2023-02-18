@@ -2085,6 +2085,7 @@ MonoBehaviour:
   playerColor: {r: 0.003921569, g: 0, b: 0.7372549, a: 1}
   enemyColor: {r: 0.54901963, g: 0, b: 0, a: 1}
   selectedPiece: {fileID: 0}
+  debug: 1
 --- !u!4 &1305261819
 Transform:
   m_ObjectHideFlags: 0
