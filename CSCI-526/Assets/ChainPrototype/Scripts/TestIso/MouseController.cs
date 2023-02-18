@@ -8,12 +8,22 @@ public class MouseController : MonoBehaviour
 {
     public GameObject cursor;
     private PieceMono unit;
+
+    private PathFinder pathFinder;
+    private RangeFinder rangeFinder;
+    private List<Overlay> path;
+    private List<Overlay> rangeFinderTiles;
     private bool isMoving;
     public float speed;
     // Start is called before the first frame update
     void Start()
     {
+        pathFinder = new PathFinder();
+        rangeFinder = new RangeFinder();
 
+        path = new List<Overlay>();
+        isMoving = false;
+        rangeFinderTiles = new List<Overlay>();
     }
 
     // Update is called once per frame
@@ -89,11 +99,11 @@ public class MouseController : MonoBehaviour
                     //Debug.Log("Unit Pos After move: " + unit.standingOnTile.gridLocation);
                 }
             }
-            //else
-            //{
-            //    isMoving = true;
-            //    overlayTile.HideTile();
-            //}
+            else
+            {
+                isMoving = true;
+                overlayTile.HideTile();
+            }
         }
     }
 
@@ -110,5 +120,15 @@ public class MouseController : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void GetInRangeTiles()
+    {
+        rangeFinderTiles = rangeFinder.GetTilesInRange(new Tuple<int,int>(unit.standingOnTile.gridLocation.x, unit.standingOnTile.gridLocation.y), 3);
+
+        foreach (var item in rangeFinderTiles)
+        {
+            item.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        }
     }
 }

@@ -126,6 +126,8 @@ public class LevelMono : MonoBehaviour
                             overlayTile.gameObject.GetComponent<Overlay>().gridLocation = new Vector3Int(y, x, 0);
 
                             overlayTiles.Add(new Tuple<int, int>(y, x), overlayTile.gameObject.GetComponent<Overlay>());
+                            //var coord = new Tuple<int, int>(y, x);
+                            tiles.Add(new Tuple<int, int>(y, x), overlayTile.gameObject.GetComponent<Tile>());
                         }
                     }
                 }
@@ -352,6 +354,41 @@ public class LevelMono : MonoBehaviour
     public bool DoEnemiesRemain()
     {
         return GetNumberOfUnitsRemainingForPlayer(false) > 0;
+    }
+    public List<Overlay> GetSurroundingTiles(Tuple<int,int> originTile)
+    {
+        var surroundingTiles = new List<Overlay>();
+
+
+        Tuple<int, int> TileToCheck = new Tuple<int, int>(originTile.Item1 + 1, originTile.Item2);
+        if (overlayTiles.ContainsKey(TileToCheck))
+        {
+            if (Mathf.Abs(overlayTiles[TileToCheck].transform.position.z - overlayTiles[originTile].transform.position.z) <= 1)
+                surroundingTiles.Add(overlayTiles[TileToCheck]);
+        }
+
+        TileToCheck = new Tuple<int, int>(originTile.Item1 - 1, originTile.Item2);
+        if (overlayTiles.ContainsKey(TileToCheck))
+        {
+            if (Mathf.Abs(overlayTiles[TileToCheck].transform.position.z - overlayTiles[originTile].transform.position.z) <= 1)
+                surroundingTiles.Add(overlayTiles[TileToCheck]);
+        }
+
+        TileToCheck = new Tuple<int, int>(originTile.Item1, originTile.Item2 + 1);
+        if (overlayTiles.ContainsKey(TileToCheck))
+        {
+            if (Mathf.Abs(overlayTiles[TileToCheck].transform.position.z - overlayTiles[originTile].transform.position.z) <= 1)
+                surroundingTiles.Add(overlayTiles[TileToCheck]);
+        }
+
+        TileToCheck = new Tuple<int, int>(originTile.Item1, originTile.Item2 - 1);
+        if (overlayTiles.ContainsKey(TileToCheck))
+        {
+            if (Mathf.Abs(overlayTiles[TileToCheck].transform.position.z - overlayTiles[originTile].transform.position.z) <= 1)
+                surroundingTiles.Add(overlayTiles[TileToCheck]);
+        }
+
+        return surroundingTiles;
     }
 
     /// <summary>
