@@ -73,6 +73,11 @@ namespace Assets.Scripts.Units
             {
                 legalSpots.Clear();
             }
+            else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
+            {
+                legalSpots.Clear();
+            }
+
 
             // var Position = new Tuple<int, int>(x, y);
             // var triangleLegal = inTriangleRange(Position);
