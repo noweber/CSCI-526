@@ -120,4 +120,31 @@ public abstract class PieceMono : MonoBehaviour
 		}    
         return null;
 	}
+
+
+	public bool IsAdjacentToAllyCircle()
+    {
+		var list = this.AdjacentAllies();
+		foreach (var ally in list)
+        {
+			if (LevelMono.Instance.GetPiece(ally).IsCircle())
+            {
+				return true;
+			}
+        }
+		return false;
+    }
+
+	public bool IsAdjacentToAllyDiamond()
+	{
+		var list = this.AdjacentAllies();
+		foreach (var ally in list)
+		{
+			if (LevelMono.Instance.GetPiece(ally).IsDiamond())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
