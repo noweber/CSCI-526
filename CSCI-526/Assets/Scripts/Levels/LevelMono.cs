@@ -269,6 +269,7 @@ public class LevelMono : MonoBehaviour
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
             this.tiles[tileCoords]._legal.SetActive(true);
+            this.tiles[tileCoords].ShowVisibility();
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
 
@@ -284,6 +285,7 @@ public class LevelMono : MonoBehaviour
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
          	this.tiles[tileCoords]._legal.SetActive(false);
+            this.tiles[tileCoords].HideVisibility();
         	//this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
     	  }	
 	  }
