@@ -311,12 +311,14 @@ public class LevelMono : MonoBehaviour
 
         this.selectedPiece.SetMoveState(true);
         var tile = this.tiles[coord];
-
+        bool captured = false;
         if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) 
         {
             // CAPTURE TAKES PLACE HERE
             Debug.Log("SOMETHING WAS CAPTURED");
             Destroy(this.GetPiece(coord).gameObject);
+            //this.selectedPiece.gameObject.SetActive(true);
+            captured = true;
             if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
         }
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
@@ -346,7 +348,11 @@ public class LevelMono : MonoBehaviour
         // Setting inactive if on neutral or enemy territory
         if (this.debug == false)
         {
-            if (!this.selectedPiece.IsHuman() && tile.GetVisibility() == VisibilityState.Player)
+            if (captured)
+            {
+                this.selectedPiece.gameObject.SetActive(true);
+            }
+            else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() == VisibilityState.Player)
             {
                 this.selectedPiece.gameObject.SetActive(true);
             }
@@ -354,6 +360,7 @@ public class LevelMono : MonoBehaviour
             {
                 this.selectedPiece.gameObject.SetActive(false);
             }
+            
         }
 
         this.RemoveHighlight();

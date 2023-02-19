@@ -198,7 +198,7 @@ public class EnemyAI : MonoBehaviour
     //Ranking Movement:
     //1. Diamond to Circle synergy
     //2. "PickBestMove" --> prioritize captures
-    //3. 
+    //3. move to Enemy Towers
     private void MovePiece()
     {
         var lvlMono = LevelMono.Instance;
