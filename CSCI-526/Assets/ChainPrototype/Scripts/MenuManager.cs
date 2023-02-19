@@ -38,7 +38,7 @@ public class MenuManager : MonoBehaviour
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Blue Turn";
         }
-        else
+        else if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.AI)
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
         }
