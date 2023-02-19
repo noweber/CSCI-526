@@ -15,7 +15,9 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _legal;
 
-    [SerializeField] public GameObject _fog;
+    [SerializeField] public GameObject _fog, _redFog;
+
+    [SerializeField] private GameObject closeEye, openEye;
 
     private VisibilityState visibility; 
 
@@ -39,9 +41,23 @@ public class Tile : MonoBehaviour
     public void SetVisibility(VisibilityState visibility)
     {
         this.visibility = visibility;
-        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
-        else { _fog.SetActive(true); }
-        
+/*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
+        else { _fog.SetActive(true); }*/
+        switch(visibility)
+        {
+            case VisibilityState.Player:
+                _fog.SetActive(false);
+                // _redFog.SetActive(false);
+                break;
+            case VisibilityState.Enemy:
+                _fog.SetActive(true);
+                // _redFog.SetActive(true);
+                break;
+            case VisibilityState.Neutral:
+                _fog.SetActive(true);
+                // _redFog.SetActive(false);
+                break;
+        }
         if (LevelMono.Instance.debug == true)
         {
             _fog.SetActive(false);
@@ -51,6 +67,28 @@ public class Tile : MonoBehaviour
     public VisibilityState GetVisibility()
     {
         return this.visibility;
+    }
+
+    public void ShowVisibility()
+    {
+        if(SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
+        switch (visibility)
+        {
+            case VisibilityState.Player:
+                openEye.SetActive(true);
+                closeEye.SetActive(false);
+                break;
+            case VisibilityState.Enemy:
+            case VisibilityState.Neutral:
+                closeEye.SetActive(true);
+                openEye.SetActive(false);
+                break;
+        }
+    }
+    public void HideVisibility()
+    {
+        openEye.SetActive(false);
+        closeEye.SetActive(false);
     }
 
     private void OnMouseDown()
