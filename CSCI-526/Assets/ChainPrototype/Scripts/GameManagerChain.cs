@@ -171,7 +171,7 @@ public class GameManagerChain : MonoBehaviour
                 {
                     // slacking off 
                 }
-                if (SceneName == "TutorialFogOfWar")
+                else if (SceneName == "TutorialFogOfWar")
                 {
                     // slacking off
                 }
