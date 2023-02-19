@@ -164,10 +164,10 @@ public class MenuManager : MonoBehaviour
                     break;
                 case 2:     // Free movement -- player freely maneuvers
                     tmpro.text = "Click the circle again to select it.";
-                    if(LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
+                    if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
                     {
                         _pointerObject.transform.position = new Vector3(3.25f, 3.75f, -2f);
-                        tmpro.text = "Any unit that moves adjacent to a triangle may move infinitely. Use the circle again to capture the nearest enemy(red) unit.";
+                        tmpro.text = "Use the circle again to capture the nearest enemy (red) unit.";
                     }
 
                     break;
@@ -176,6 +176,18 @@ public class MenuManager : MonoBehaviour
                     tmpro.text = "Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.";
                     break;
             }
+        if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+        {
+            if (!LevelMono.Instance.capturedTower)
+            {
+                tmpro.text = "The triangle grants vision to the team that owns it. To capture the enemy triangle, move any of your units to a tile adjacent to it.";
+            }
+            else
+            {
+                tmpro.text = "Now that you own the triangle, you have vision of the enemy. Capture the enemy units.";
+            }
+        }
+            
     }
     public void SetSlackDialogue(bool status)
     {
@@ -197,7 +209,7 @@ public class MenuManager : MonoBehaviour
             _slackObject.SetActive(false);
             _pauseObject.SetActive(false);
 
-            if (SceneManager.GetActiveScene().name == "TutorialLevel")
+            if (SceneManager.GetActiveScene().name == "TutorialLevel" || SceneManager.GetActiveScene().name == "TutorialFogOfWar")
             {
                 _objectiveObject.SetActive(false);
             }
@@ -234,6 +246,12 @@ public class MenuManager : MonoBehaviour
             StartCoroutine(FingerBlink());
             _endTurnObject.SetActive(false);
         }
+        if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+        {
+            _objectiveObject.SetActive(true);
+            MenuManager.Instance.UpdateObjectiveContent();
+            _endTurnObject.SetActive(false);
+        }
         else
         {
             _objectiveObject.SetActive(false);
@@ -253,7 +271,7 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "TutorialLevel")
+        if (SceneManager.GetActiveScene().name == "TutorialLevel" || SceneManager.GetActiveScene().name == "TutorialFogOfWar")
         {
             UpdateObjectiveContent();
         }

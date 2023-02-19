@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelMono : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class LevelMono : MonoBehaviour
     [SerializeField] private Diamond _diamondPrefab;
     [SerializeField] private Circle _circlePrefab;
 
-    [SerializeField] private Transform _camera;
+    [SerializeField] private Camera _camera;
 
     public Color playerColor;
     public Color enemyColor;
@@ -34,6 +35,7 @@ public class LevelMono : MonoBehaviour
     //[SerializeField] private GameObject fogObject;
     public bool debug;
 
+    public bool capturedTower = false;       // For TutorialFogOfWar objective in MenuManager.cs
     // public ILevel LevelModel { get; private set; }
 
     private void Awake()
@@ -210,6 +212,11 @@ public class LevelMono : MonoBehaviour
         }
 
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
+       
+        if(SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+        {
+            _camera.orthographicSize = 6;
+        }
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
     }
 
@@ -316,7 +323,11 @@ public class LevelMono : MonoBehaviour
         var towerCoord = this.selectedPiece.InTowerRange();
         if (towerCoord != null)
         {
-            // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
+            // CAPTURE TOWER
+            if(SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+            {
+                capturedTower = true;
+            }
             Debug.Log("MOVED INTO RANGE OF ENEMY TOWER");
             var tower = _pieces[towerCoord];
             tower.SetHuman(currentPlayer);

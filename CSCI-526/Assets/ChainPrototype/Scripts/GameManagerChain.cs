@@ -150,6 +150,10 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(TutorialLevel());
                 }
+                else if (SceneName == "TutorialFogOfWar")
+                {
+                    LevelMono.Instance.LoadLevel(TutorialFogOfWarLevel());
+                }
                 else
                 {
                     LevelMono.Instance.LoadLevel(LevelOne());
@@ -166,6 +170,10 @@ public class GameManagerChain : MonoBehaviour
                 if (SceneName == "TutorialLevel")
                 {
                     // slacking off 
+                }
+                if (SceneName == "TutorialFogOfWar")
+                {
+                    // slacking off
                 }
                 else
                 {
@@ -238,6 +246,52 @@ public class GameManagerChain : MonoBehaviour
         };
     }
 
+    private LoadLevelData TutorialFogOfWarLevel()
+    {
+        int _width = 5;
+        int _height = 10;       // Display the visibility of 2 triangles: 1 per team
+        List<PieceInfo> units = new List<PieceInfo>();
+
+        for(int x = 0; x < _width; x++)
+        {
+            for(int y = 0; y < _height; y++)
+            {
+                var position = new Tuple<int, int>(x, y);
+                if (x == 0 && y == 0)
+                {
+                    units.Add(new PieceInfo(position, true, "Circle"));
+                }
+                if (x == 3 && y == 0)
+                {
+                    units.Add(new PieceInfo(position, true, "Diamond"));
+                }
+                if (x == 2 && y == 2)
+                {
+                    units.Add(new PieceInfo(position, true, "Triangle"));
+                }
+
+                // Enemies
+                if (x == 4 && y == 9)
+                {
+                    units.Add(new PieceInfo(position, false, "Circle"));
+                }
+                if (x == 1 && y == 9)
+                {
+                    units.Add(new PieceInfo(position, false, "Diamond"));
+                }
+                if (x == 2 && y == 7)
+                {
+                    units.Add(new PieceInfo(position, false, "Triangle"));
+                }
+            }
+        }
+        return new LoadLevelData()
+        {
+            Width = _width,
+            Height = _height,
+            Units = units
+        };
+    }
     /// <summary>
     /// A method representing the first level's data.
     /// </summary>

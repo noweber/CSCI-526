@@ -193,6 +193,11 @@ public class Tile : MonoBehaviour
                     GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
+                if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    StartCoroutine(DelayedChangeState());
+                }
                 else
                 {
                     GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
