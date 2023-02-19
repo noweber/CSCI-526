@@ -28,6 +28,8 @@ public class LevelMono : MonoBehaviour
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
     public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
 
+    public List<Tuple<int, int>> towerLocations = new List<Tuple<int, int>>();
+
     private int Width;
 
     private int Height;
@@ -174,6 +176,7 @@ public class LevelMono : MonoBehaviour
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = triangle;
+                towerLocations.Add(coord);
             }
         }
 

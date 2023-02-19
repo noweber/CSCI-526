@@ -147,7 +147,9 @@ public class EnemyAI : MonoBehaviour
     {
         //TODO: account for enemy visibility
         var pieceAtDestination = LevelMono.Instance.GetPiece(destination);
-        if (pieceAtDestination != null && pieceAtDestination.IsHuman())
+
+        //If piece at destination not null and is Player and AI has visibility
+        if (pieceAtDestination != null && pieceAtDestination.IsHuman() && LevelMono.Instance.tiles[destination].GetVisibility() == VisibilityState.Enemy)
         {
             return true;
         }
@@ -156,14 +158,47 @@ public class EnemyAI : MonoBehaviour
 
     private int PickBestMove(List<Tuple<int, int>> moves)
     {
+        int bestMove = -1;
+        int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
         for (int i=0; i<moves.Count; i++)
         {
-            if (IsACapturingMove(moves[i]))
-                return i;
+            //If AI has visibility AND the move is a capturing move
+            if (LevelMono.Instance.tiles[moves[i]].GetVisibility() == VisibilityState.Enemy && IsACapturingMove(moves[i]))
+                bestMove = i;
         }
-        return Random.Range(0, moves.Count);
+
+        if (bestMove == -1)
+        {
+            for (int i = 0; i < moves.Count; i++)
+            {
+                foreach (var tower in LevelMono.Instance.towerLocations)
+                {
+                    if (LevelMono.Instance.GetPiece(tower).IsHuman())
+                    {
+                        var distance = CalculateDistance(tower, moves[i]);
+                        if (distance < minDistance)
+                        {
+                            bestMove = i;
+                            minDistance = distance;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (bestMove == -1)
+        {
+            bestMove = Random.Range(0, moves.Count);
+        }
+        return bestMove;
     }
 
+
+
+    //Ranking Movement:
+    //1. Diamond to Circle synergy
+    //2. "PickBestMove" --> prioritize captures
+    //3. 
     private void MovePiece()
     {
         var lvlMono = LevelMono.Instance;
