@@ -52,7 +52,6 @@ public class MenuManager : MonoBehaviour
     public void ShowEndTurnButton()
     {
         _endTurnObject.SetActive(true);
-        _endTurnObject.GetComponentInChildren<Button>().onClick.AddListener(() => EndTurnEvent());
     }
 
     public void HideEndTurnButton()
@@ -264,6 +263,7 @@ public class MenuManager : MonoBehaviour
         _abilityUseObject.SetActive(false);
         _slackObject.SetActive(false);
         _pauseObject.SetActive(true);
+        _endTurnObject.GetComponentInChildren<Button>().onClick.AddListener(() => EndTurnEvent());
 
         StartCoroutine(LateStart());
     }
@@ -275,5 +275,10 @@ public class MenuManager : MonoBehaviour
         {
             UpdateObjectiveContent();
         }
+    }
+
+    void OnDestroy()
+    {
+        _endTurnObject.GetComponentInChildren<Button>().onClick.RemoveListener(() => EndTurnEvent());
     }
 }

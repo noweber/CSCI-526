@@ -168,12 +168,15 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
+                MenuManager.Instance.ShowNumMovesInfo();
                 if(SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
                 {
                     MenuManager.Instance.ShowEndTurnButton();
                 }
                 break;
             case GameStateEnum.AI:
+                MenuManager.Instance.ShowTurnInfo();
+                MenuManager.Instance.ShowNumMovesInfo();
                 MenuManager.Instance.HideEndTurnButton();
                 if (SceneName == "TutorialLevel")
                 {
@@ -185,7 +188,6 @@ public class GameManagerChain : MonoBehaviour
                 }
                 else
                 {
-                    MenuManager.Instance.HideEndTurnButton();
                     EnemyAI.Instance.PerformTurn();
                 }
                 break;
@@ -203,9 +205,6 @@ public class GameManagerChain : MonoBehaviour
                 SceneManager.LoadScene(SceneName);
                 break;
         }
-        MenuManager.Instance.ShowTurnInfo();
-        MenuManager.Instance.ShowNumMovesInfo();
-
     }
 
     /// <summary>
