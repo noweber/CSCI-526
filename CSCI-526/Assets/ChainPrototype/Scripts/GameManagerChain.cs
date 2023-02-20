@@ -17,10 +17,20 @@ public class GameManagerChain : MonoBehaviour
     public int TotalMoves;
 
     /// <summary>
-    /// This value tracks the (x, y) positions of the game board which pieces move into along with a counter for analytics.
+    /// This field tracks the (x, y) positions of the game board which pieces move into along with a counter for analytics.
     /// This is used to produce a heat map of which parts of the board the players move into the most.
     /// </summary>
     private Dictionary<Tuple<int, int>, int> countOfTilesMovedTo;
+
+    /// <summary>
+    /// This field tracks the number of times the player moved a circle piece for end-of-level analytics.
+    /// </summary>
+    private int circlePiecessMovedByPlayer;
+
+    /// <summary>
+    /// This field tracks the number of times the player moved a diamond piece for end-of-level analytics.
+    /// </summary>
+    private int diamondPiecessMovedByPlayer;
 
     public bool UsedAbility = false;
 
@@ -50,7 +60,7 @@ public class GameManagerChain : MonoBehaviour
     void Start()
     {
         ChangeState(GameStateEnum.GenerateGrid);
-        if(SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
+        if (SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
         {
             MenuManager.Instance.ShowEndTurnButton();
         }
@@ -100,13 +110,26 @@ public class GameManagerChain : MonoBehaviour
         movedPieces.Add(pieceThatMoved);
 
         // Store the move made for sending the counts in analytics later:
-        if (countOfTilesMovedTo.ContainsKey(destination))
+        if (pieceThatMoved.IsHuman())
         {
-            countOfTilesMovedTo[destination]++;
-        }
-        else
-        {
-            countOfTilesMovedTo.TryAdd(destination, 1);
+            if (countOfTilesMovedTo.ContainsKey(destination))
+            {
+                countOfTilesMovedTo[destination]++;
+            }
+            else
+            {
+                countOfTilesMovedTo.TryAdd(destination, 1);
+            }
+
+            if (pieceThatMoved.IsCircle())
+            {
+                circlePiecessMovedByPlayer++;
+            }
+
+            if (pieceThatMoved.IsDiamond())
+            {
+                diamondPiecessMovedByPlayer++;
+            }
         }
     }
 
@@ -189,7 +212,7 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
                 MenuManager.Instance.ShowNumMovesInfo();
-                if(SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
+                if (SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
                 {
                     MenuManager.Instance.ShowEndTurnButton();
                 }
@@ -235,9 +258,18 @@ public class GameManagerChain : MonoBehaviour
             LevelMono.Instance.GetWidth(),
             LevelMono.Instance.GetHeight(),
             GameManagerChain.Instance.TotalMoves,
-            serializedMovesMadeHeat
+            serializedMovesMadeHeat,
+            circlePiecessMovedByPlayer,
+            diamondPiecessMovedByPlayer
             );
+        ResetAnalyticsCounters();
+    }
+
+    private void ResetAnalyticsCounters()
+    {
         countOfTilesMovedTo = new Dictionary<Tuple<int, int>, int>();
+        circlePiecessMovedByPlayer = 0;
+        diamondPiecessMovedByPlayer = 0;
     }
 
     /// <summary>

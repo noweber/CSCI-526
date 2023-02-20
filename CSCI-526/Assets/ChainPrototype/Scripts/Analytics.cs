@@ -18,7 +18,7 @@ public class Analytics : MonoBehaviour
         Instance = this;
     }
 
-    public void Send(string sessionID, float timePlayed, string levelName, int levelWidth, int levelHeight, int totalMovesMadeThisLevel, string movesMadeJson)
+    public void Send(string sessionID, float timePlayed, string levelName, int levelWidth, int levelHeight, int totalMovesMadeThisLevel, string movesMadeHeatJson, int circleMovesMade, int diamondMovesMade)
     {
         Debug.Log("Analytics Send method started");
 
@@ -29,10 +29,12 @@ public class Analytics : MonoBehaviour
             levelWidth,
             levelHeight,
             totalMovesMadeThisLevel.ToString(),
-            movesMadeJson));
+            movesMadeHeatJson,
+            circleMovesMade,
+            diamondMovesMade));
     }
 
-    private IEnumerator Post(string sessionID, string timePlayed, string levelName, int levelWidth, int levelHeight, string totalMoves, string movesMadeJson)
+    private IEnumerator Post(string sessionID, string timePlayed, string levelName, int levelWidth, int levelHeight, string totalMoves, string movesMadeJson, int circleMovesMade, int diamondMovesMade)
     {
         Debug.Log("Post Coroutine started");
         WWWForm form = new WWWForm();
@@ -43,8 +45,8 @@ public class Analytics : MonoBehaviour
         form.AddField("entry.1378155138", levelHeight);
         form.AddField("entry.1367608849", totalMoves);
         form.AddField("entry.812093032", movesMadeJson);
-        // TODO: form.AddField("entry.1687230251", circleMovesMade); // TODO: Add these for the rest of week 7's analytics.
-        // TODO: form.AddField("entry.1816303285", diamondMovesMade); // TODO: Add these for the rest of week 7's analytics.
+        form.AddField("entry.1687230251", circleMovesMade);
+        form.AddField("entry.1816303285", diamondMovesMade);
 
         using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
         {
