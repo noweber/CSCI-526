@@ -50,7 +50,10 @@ public class GameManagerChain : MonoBehaviour
     void Start()
     {
         ChangeState(GameStateEnum.GenerateGrid);
-        MenuManager.Instance.ShowEndTurnButton();
+        if(SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
+        {
+            MenuManager.Instance.ShowEndTurnButton();
+        }
         playTestID = Guid.NewGuid().ToString();
         playStartTime = Time.realtimeSinceStartup;
 
@@ -63,7 +66,10 @@ public class GameManagerChain : MonoBehaviour
     {
         SceneManager.LoadScene(SceneName);
     }
-
+    public void ToLevelSelect()
+    {
+        SceneManager.LoadScene("LevelSelection");
+    }
     /// <summary>
     /// This method resets the move state of the list of any previously moved units and then clears the list.
     /// </summary>
@@ -182,10 +188,15 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
-                MenuManager.Instance.ShowEndTurnButton();
+                MenuManager.Instance.ShowNumMovesInfo();
+                if(SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
+                {
+                    MenuManager.Instance.ShowEndTurnButton();
+                }
                 break;
             case GameStateEnum.AI:
                 MenuManager.Instance.ShowTurnInfo();
+                MenuManager.Instance.ShowNumMovesInfo();
                 MenuManager.Instance.HideEndTurnButton();
                 if (SceneName == "TutorialLevel")
                 {
@@ -197,8 +208,6 @@ public class GameManagerChain : MonoBehaviour
                 }
                 else
                 {
-                    MenuManager.Instance.ShowTurnInfo();
-                    MenuManager.Instance.HideEndTurnButton();
                     EnemyAI.Instance.PerformTurn();
                 }
                 break;
@@ -213,9 +222,6 @@ public class GameManagerChain : MonoBehaviour
                 SceneManager.LoadScene(SceneName);
                 break;
         }
-        MenuManager.Instance.ShowTurnInfo();
-        MenuManager.Instance.ShowNumMovesInfo();
-
     }
 
     private void SendEndOfLevelAnalytics()

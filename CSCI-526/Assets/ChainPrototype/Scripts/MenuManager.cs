@@ -40,6 +40,7 @@ public class MenuManager : MonoBehaviour
         }
         else if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.AI)
         {
+            Debug.Log("AI TURN");
             _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
         }
     }
@@ -51,7 +52,6 @@ public class MenuManager : MonoBehaviour
     public void ShowEndTurnButton()
     {
         _endTurnObject.SetActive(true);
-        _endTurnObject.GetComponentInChildren<Button>().onClick.AddListener(() => EndTurnEvent());
     }
 
     public void HideEndTurnButton()
@@ -73,7 +73,6 @@ public class MenuManager : MonoBehaviour
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
             GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
-        ShowTurnInfo();
         var lvlMono = LevelMono.Instance;
         lvlMono.RemoveHighlight();
         lvlMono.ResetPiece();
@@ -180,7 +179,7 @@ public class MenuManager : MonoBehaviour
         {
             if (!LevelMono.Instance.capturedTower)
             {
-                tmpro.text = "The triangle grants vision to the team that owns it. To capture the enemy triangle, move any of your units to a tile adjacent to it.";
+                tmpro.text = "The fog of war hinders your vision. The triangle grants vision to the team that owns it. Move any of your units to a tile adjacent to the enemy triangle to capture it.";
             }
             else
             {
@@ -246,7 +245,7 @@ public class MenuManager : MonoBehaviour
             StartCoroutine(FingerBlink());
             _endTurnObject.SetActive(false);
         }
-        if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+        else if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
         {
             _objectiveObject.SetActive(true);
             MenuManager.Instance.UpdateObjectiveContent();
@@ -264,6 +263,7 @@ public class MenuManager : MonoBehaviour
         _abilityUseObject.SetActive(false);
         _slackObject.SetActive(false);
         _pauseObject.SetActive(true);
+        _endTurnObject.GetComponentInChildren<Button>().onClick.AddListener(() => EndTurnEvent());
 
         StartCoroutine(LateStart());
     }
@@ -275,5 +275,10 @@ public class MenuManager : MonoBehaviour
         {
             UpdateObjectiveContent();
         }
+    }
+
+    void OnDestroy()
+    {
+        _endTurnObject.GetComponentInChildren<Button>().onClick.RemoveListener(() => EndTurnEvent());
     }
 }
