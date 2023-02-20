@@ -222,7 +222,7 @@ public class EnemyAI : MonoBehaviour
 
             if (lvlMono.MovePiece(destination))
             {
-                GameManagerChain.Instance.AddMovedPiece(aiPiece);
+                GameManagerChain.Instance.AddMovedPiece(aiPiece, destination);
                 GameManagerChain.Instance.IncrementMoves(1);
                 MenuManager.Instance.ShowNumMovesInfo();
             }

@@ -82,11 +82,11 @@ public class LevelMono : MonoBehaviour
             {
                 if (i >= 0 && i < Width && j >= 0 && j < Height)
                 {
-                    adjacentList.Add(new Tuple<int, int>(i, j));  
-                } 
+                    adjacentList.Add(new Tuple<int, int>(i, j));
+                }
             }
         }
-        
+
         foreach (var coord in adjacentList)
         {
             x = coord.Item1;
@@ -94,7 +94,7 @@ public class LevelMono : MonoBehaviour
             if (x >= 0 && x < this.Width && y >= 0 && y < this.Height)
             {
                 //1
-                if (this.debug==false)
+                if (this.debug == false)
                 {
                     tiles[coord].SetVisibility(visibility);
                 }
@@ -109,17 +109,17 @@ public class LevelMono : MonoBehaviour
                 {
                     piece.gameObject.SetActive(false);
                 }
-                
-                if (this.debug==true && piece != null)
+
+                if (this.debug == true && piece != null)
                 {
                     piece.gameObject.SetActive(true);
                 }
-                
-                
+
+
             }
         }
     }
-    
+
     private void CreateSceneObjects(LoadLevelData level)
     {
         Debug.Log("check debug: " + this.debug);
@@ -134,7 +134,7 @@ public class LevelMono : MonoBehaviour
             {
                 var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity, transform);
                 tile.name = $"Tile {x} {y}";
-                
+
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 tile.Init(isOffset);
@@ -145,10 +145,10 @@ public class LevelMono : MonoBehaviour
                 {
                     tile.SetVisibility(VisibilityState.Neutral);
                 }
-                
+
             }
         }
-        
+
         // Set what is visible to player
         foreach (var unit in units)
         {
@@ -215,8 +215,8 @@ public class LevelMono : MonoBehaviour
         }
 
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
-       
-        if(SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+
+        if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
         {
             _camera.orthographicSize = 6;
         }
@@ -294,11 +294,11 @@ public class LevelMono : MonoBehaviour
     {
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
-         	this.tiles[tileCoords]._legal.SetActive(false);
+            this.tiles[tileCoords]._legal.SetActive(false);
             this.tiles[tileCoords].HideVisibility();
-        	//this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
-    	  }	
-	  }
+            //this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
+        }
+    }
 
     public bool MovePiece(Tuple<int, int> coord)
     {
@@ -312,7 +312,7 @@ public class LevelMono : MonoBehaviour
         this.selectedPiece.SetMoveState(true);
         var tile = this.tiles[coord];
         bool captured = false;
-        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) 
+        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece))
         {
             // CAPTURE TAKES PLACE HERE
             Debug.Log("SOMETHING WAS CAPTURED");
@@ -329,7 +329,7 @@ public class LevelMono : MonoBehaviour
         if (towerCoord != null)
         {
             // CAPTURE TOWER
-            if(SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+            if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
             {
                 capturedTower = true;
             }
@@ -342,7 +342,7 @@ public class LevelMono : MonoBehaviour
             {
                 this.SetRangeVisibility(towerCoord, 2, v);
             }
-            
+
         }
 
         // Setting inactive if on neutral or enemy territory
@@ -360,7 +360,7 @@ public class LevelMono : MonoBehaviour
             {
                 this.selectedPiece.gameObject.SetActive(false);
             }
-            
+
         }
 
         this.RemoveHighlight();

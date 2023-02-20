@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Assets.Scripts.Units;
-using Assets.Scripts.Piece;
 
 public abstract class PieceMono : MonoBehaviour
 {
@@ -12,10 +10,7 @@ public abstract class PieceMono : MonoBehaviour
 
 	protected string unitName;
 
-	//public abstract string unitInfo;
-
     public abstract string getUnitInfo();
-    //public bool hasAbility = false;
 
 	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
 
@@ -36,8 +31,6 @@ public abstract class PieceMono : MonoBehaviour
 	public bool IsDiamond() { return this.unitName == "Diamond"; }
 
 	public string GetName() { return this.unitName; }
-
-	// public abstract bool IsMoveLegal(Vector2 destination);
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
 
@@ -120,7 +113,6 @@ public abstract class PieceMono : MonoBehaviour
 		}    
         return null;
 	}
-
 
 	public bool IsAdjacentToAllyCircle()
     {

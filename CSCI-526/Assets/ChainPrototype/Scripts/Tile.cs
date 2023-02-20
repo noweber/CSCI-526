@@ -19,9 +19,7 @@ public class Tile : MonoBehaviour
 
     [SerializeField] private GameObject closeEye, openEye;
 
-    private VisibilityState visibility; 
-
-    //[SerializeField] private GameObject _useAbility;
+    private VisibilityState visibility;
 
     public void Init(bool isOffset)
     {
@@ -41,9 +39,9 @@ public class Tile : MonoBehaviour
     public void SetVisibility(VisibilityState visibility)
     {
         this.visibility = visibility;
-/*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
-        else { _fog.SetActive(true); }*/
-        switch(visibility)
+        /*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
+                else { _fog.SetActive(true); }*/
+        switch (visibility)
         {
             case VisibilityState.Player:
                 _fog.SetActive(false);
@@ -63,7 +61,7 @@ public class Tile : MonoBehaviour
             _fog.SetActive(false);
         }
     }
-    
+
     public VisibilityState GetVisibility()
     {
         return this.visibility;
@@ -71,7 +69,7 @@ public class Tile : MonoBehaviour
 
     public void ShowVisibility()
     {
-        if(SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
+        if (SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
         switch (visibility)
         {
             case VisibilityState.Player:
@@ -108,7 +106,7 @@ public class Tile : MonoBehaviour
                 lvlMono.HighlightMoves();
 
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
-                GameManagerChain.Instance.AddMovedPiece(clickedPiece);
+                GameManagerChain.Instance.AddMovedPiece(clickedPiece, coord);
             }
             else
             {
@@ -116,12 +114,12 @@ public class Tile : MonoBehaviour
                 {
                     if (lvlMono.selectedPiece.IsEnemyOf(clickedPiece))
                     {
-						// LEVELMONO SELECTEDPIECE CAPTURING
+                        // LEVELMONO SELECTEDPIECE CAPTURING
                         if (lvlMono.MovePiece(coord))
                         {
-                            
-        					GameManagerChain.Instance.IncrementMoves(1); 
-							GameManagerChain.Instance.TotalMoves += 1;
+
+                            GameManagerChain.Instance.IncrementMoves(1);
+                            GameManagerChain.Instance.TotalMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -157,8 +155,8 @@ public class Tile : MonoBehaviour
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
-        			GameManagerChain.Instance.IncrementMoves(1); 
-					GameManagerChain.Instance.TotalMoves += 1;
+                    GameManagerChain.Instance.IncrementMoves(1);
+                    GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
 
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -177,7 +175,7 @@ public class Tile : MonoBehaviour
 
 
         // turn logic
-		/*
+        /*
         if (!LevelMono.Instance.DoesAiPlayerHaveUnitsRemaining())
         {
             StopAllCoroutines();
