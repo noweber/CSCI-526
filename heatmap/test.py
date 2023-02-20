@@ -43,19 +43,19 @@ def main():
     except:
         print('Some Error Occurred while fetching the response sheet')
 
-    # ##### Google Sheet heatmap data fetch and filter START ####
-    # listofall_5_10_maps=[]
-    # matching_cells = worksheet.findall('TutorialFogOfWar', in_column=4)
-    # matching_rows = []
-    # for cell in matching_cells:
-    #     row = worksheet.row_values(cell.row)
-    #     matching_rows.append(row)
+    ##### Google Sheet heatmap data fetch and filter START ####
+    listofall_5_10_maps=[]
+    matching_cells = worksheet.findall('TutorialFogOfWar', in_column=4)
+    matching_rows = []
+    for cell in matching_cells:
+        row = worksheet.row_values(cell.row)
+        matching_rows.append(row)
 
-    # for row in matching_rows:
-    #     listofall_5_10_maps.append(row[6])
-    # processthisshit(listofall_5_10_maps)
-    # print(heatmap_5_10)
-    # ##### Google Sheet heatmap data fetch and filter  END ####
+    for row in matching_rows:
+        listofall_5_10_maps.append(row[6])
+    processthisshit(listofall_5_10_maps)
+    print(heatmap_5_10)
+    ##### Google Sheet heatmap data fetch and filter  END ####
 
 
     #### Google Sheet % of moves by Circle START###
@@ -90,13 +90,13 @@ def main():
 
     
 
-    # # plot the heatmap
-    # fig, ax = plt.subplots()
-    # im = ax.imshow(heatmap_5_10, cmap='coolwarm')
-    # # set the colorbar
-    # cbar = ax.figure.colorbar(im, ax=ax)
-    # # show the plot
-    # plt.show()
+    # plot the heatmap
+    fig, ax = plt.subplots()
+    im = ax.imshow(heatmap_5_10, cmap='coolwarm')
+    # set the colorbar
+    cbar = ax.figure.colorbar(im, ax=ax)
+    # show the plot
+    plt.show()
 
 
 
