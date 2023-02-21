@@ -9,7 +9,7 @@ namespace Assets.Scripts.Units
     {
         public override string getUnitInfo()
         {
-            return "Cannot move. Allies can move without cost when in Range of Triangle.";
+            return "Cannot move. Grants a large amount of vision.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)

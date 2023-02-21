@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelMono : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class LevelMono : MonoBehaviour
     [SerializeField] private Diamond _diamondPrefab;
     [SerializeField] private Circle _circlePrefab;
 
-    [SerializeField] private Transform _camera;
+    [SerializeField] private Camera _camera;
 
     public Color playerColor;
     public Color enemyColor;
@@ -27,10 +28,16 @@ public class LevelMono : MonoBehaviour
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
     public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
 
+    public List<Tuple<int, int>> towerLocations = new List<Tuple<int, int>>();
+
     private int Width;
 
     private int Height;
 
+    //[SerializeField] private GameObject fogObject;
+    public bool debug;
+
+    public bool capturedTower = false;       // For TutorialFogOfWar objective in MenuManager.cs
     // public ILevel LevelModel { get; private set; }
 
     private void Awake()
@@ -42,6 +49,7 @@ public class LevelMono : MonoBehaviour
         else
         {
             Instance = this;
+            //this.debug = false;
         }
     }
 
@@ -63,8 +71,58 @@ public class LevelMono : MonoBehaviour
         // TODO: Ensure any elements of the previous level are removed from the scene.
     }
 
+    private void SetRangeVisibility(Tuple<int, int> center, int range, VisibilityState visibility)
+    {
+        int x = center.Item1;
+        int y = center.Item2;
+        var adjacentList = new List<Tuple<int, int>>();
+        for (int i = x - range; i <= x + range; i++)
+        {
+            for (int j = y - range; j <= y + range; j++)
+            {
+                if (i >= 0 && i < Width && j >= 0 && j < Height)
+                {
+                    adjacentList.Add(new Tuple<int, int>(i, j));
+                }
+            }
+        }
+
+        foreach (var coord in adjacentList)
+        {
+            x = coord.Item1;
+            y = coord.Item2;
+            if (x >= 0 && x < this.Width && y >= 0 && y < this.Height)
+            {
+                //1
+                if (this.debug == false)
+                {
+                    tiles[coord].SetVisibility(visibility);
+                }
+                var piece = this.GetPiece(coord);
+
+                if (visibility == VisibilityState.Player && piece != null && !piece.IsHuman() && !piece.IsTriangle())
+                {
+                    piece.gameObject.SetActive(true);
+                }
+                else if (visibility != VisibilityState.Player && piece != null && !piece.IsHuman() &&
+                            !piece.IsTriangle())
+                {
+                    piece.gameObject.SetActive(false);
+                }
+
+                if (this.debug == true && piece != null)
+                {
+                    piece.gameObject.SetActive(true);
+                }
+
+
+            }
+        }
+    }
+
     private void CreateSceneObjects(LoadLevelData level)
     {
+        Debug.Log("check debug: " + this.debug);
         var units = level.Units;
         this.tiles = new Dictionary<Tuple<int, int>, Tile>();
         this._pieces = new Dictionary<Tuple<int, int>, PieceMono>();
@@ -77,49 +135,91 @@ public class LevelMono : MonoBehaviour
                 var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity, transform);
                 tile.name = $"Tile {x} {y}";
 
+
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 tile.Init(isOffset);
 
                 var coord = new Tuple<int, int>(x, y);
                 tiles[coord] = tile;
+                if (!this.debug)
+                {
+                    tile.SetVisibility(VisibilityState.Neutral);
+                }
+
             }
         }
 
+        // Set what is visible to player
         foreach (var unit in units)
         {
             var coord = unit.GetPosition();
+            var tile = this.tiles[coord];
+
+            if (unit.IsTriangle())
+            {
+                Debug.Log("FOUND TRIANGLE");
+                var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+                triangle.SetName("Triangle");
+                triangle.SetHuman(unit.IsHuman());
+                triangle.gameObject.SetActive(true);
+                if (!this.debug)
+                {
+                    if (unit.IsHuman())
+                    {
+                        this.SetRangeVisibility(coord, 2, VisibilityState.Player);
+                    }
+                    else
+                    {
+                        this.SetRangeVisibility(coord, 2, VisibilityState.Enemy);
+                    }
+                }
+                triangle.SetMoveState(false);
+                triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
+                _pieces[coord] = triangle;
+                towerLocations.Add(coord);
+            }
+        }
+
+        // Create units based on visibility
+        foreach (var unit in units)
+        {
+            var coord = unit.GetPosition();
+            var tile = this.tiles[coord];
             if (unit.IsCircle())
             {
                 var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 circle.SetName("Circle");
                 circle.SetHuman(unit.IsHuman());
+                if (!this.debug)
+                {
+                    circle.gameObject.SetActive(unit.IsHuman());
+                }
                 circle.SetMoveState(false);
                 circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = circle;
             }
-            else if (unit.IsTriangle())
-            {
-                var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-                triangle.SetName("Triangle");
-                triangle.SetHuman(unit.IsHuman());
-                triangle.SetMoveState(false);
-                triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
-                _pieces[coord] = triangle;
-            }
-            else
+            else if (unit.IsDiamond())
             {
                 var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 diamond.SetName("Diamond");
                 diamond.SetHuman(unit.IsHuman());
+                if (!this.debug)
+                {
+                    diamond.gameObject.SetActive(unit.IsHuman());
+                }
+                //diamond.gameObject.SetActive(unit.IsHuman());
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = diamond;
             }
-            Debug.Log(_pieces[coord].IsHuman());
-
         }
 
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
+
+        if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+        {
+            _camera.orthographicSize = 6;
+        }
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
     }
 
@@ -179,6 +279,7 @@ public class LevelMono : MonoBehaviour
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
             this.tiles[tileCoords]._legal.SetActive(true);
+            this.tiles[tileCoords].ShowVisibility();
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
 
@@ -193,37 +294,73 @@ public class LevelMono : MonoBehaviour
     {
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
-         	this.tiles[tileCoords]._legal.SetActive(false);
-        	//this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
-    	  }	
-	  }
+            this.tiles[tileCoords]._legal.SetActive(false);
+            this.tiles[tileCoords].HideVisibility();
+            //this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
+        }
+    }
 
     public bool MovePiece(Tuple<int, int> coord)
     {
         var validMoves = this.selectedPiece.LegalMoves(this.Width, this.Height);
+        bool currentPlayer = this.selectedPiece.IsHuman(); // true or false; human or AI
         if (!validMoves.Contains(coord))
         {
             return false;
         }
 
         this.selectedPiece.SetMoveState(true);
-        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece)) 
+        var tile = this.tiles[coord];
+        bool captured = false;
+        if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece))
         {
             // CAPTURE TAKES PLACE HERE
             Debug.Log("SOMETHING WAS CAPTURED");
             Destroy(this.GetPiece(coord).gameObject);
+            //this.selectedPiece.gameObject.SetActive(true);
+            captured = true;
             if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
         }
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
-        
-        if (this.selectedPiece.inTriangleRange())
+
+        var towerCoord = this.selectedPiece.InTowerRange();
+        if (towerCoord != null)
         {
-            // GIVE ANOTHER MOVE IF GETS IN RANGE OF TRIANGLE
-            Debug.Log("MOVED INTO RANGE OF TRIANGLE");
-            this.selectedPiece.SetMoveState(false);
-            GameManagerChain.Instance.DecrementMoves(1);
+            // CAPTURE TOWER
+            if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+            {
+                capturedTower = true;
+            }
+            Debug.Log("MOVED INTO RANGE OF ENEMY TOWER");
+            var tower = _pieces[towerCoord];
+            tower.SetHuman(currentPlayer);
+            tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
+            var v = currentPlayer ? VisibilityState.Player : VisibilityState.Enemy;
+            if (this.debug == false)
+            {
+                this.SetRangeVisibility(towerCoord, 2, v);
+            }
+
+        }
+
+        // Setting inactive if on neutral or enemy territory
+        if (this.debug == false)
+        {
+            if (captured)
+            {
+                this.selectedPiece.gameObject.SetActive(true);
+            }
+            else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() == VisibilityState.Player)
+            {
+                this.selectedPiece.gameObject.SetActive(true);
+            }
+            else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() != VisibilityState.Player)
+            {
+                this.selectedPiece.gameObject.SetActive(false);
+            }
+
         }
 
         this.RemoveHighlight();

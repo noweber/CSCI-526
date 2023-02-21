@@ -32,7 +32,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x - i, y);
 					var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -50,7 +50,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x + i, y);
                     var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x, y + j);
                     var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -86,7 +86,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x, y - j);
                     var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -105,7 +105,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x - i, y + i);
                     var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -124,7 +124,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x + i, y + i);
                     var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -143,7 +143,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x - i, y - i);
                     var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -162,7 +162,7 @@ namespace Assets.Scripts.Units
                 {
                     var availableMove = new Tuple<int, int>(x + i, y - i);
                     var availablePiece = lvlMono.GetPiece(availableMove);
-                    if (availablePiece != null && !this.IsEnemyOf(availablePiece))
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
                     }
@@ -171,6 +171,7 @@ namespace Assets.Scripts.Units
                         legalSpots.Add(availableMove);
                         break;
                     }
+					
                     else { legalSpots.Add(availableMove); }
                 }
 
@@ -191,10 +192,10 @@ namespace Assets.Scripts.Units
                 {
                     if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
                     {
-                        if (lvlMono.GetPiece(move) != null && !this.IsEnemyOf(lvlMono.GetPiece(move)))
+                        if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
                         {
                             continue;
-                        }
+                        } 
                         legalSpots.Add(move);
                     }
                 }

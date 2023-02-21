@@ -1,14 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Google FORM URL "https://docs.google.com/forms/u/1/d/e/1FAIpQLScbdeMbYwWKzLKgAWeWEHL94ruFqymF66zYgzN2pEjgAFcrCg/formResponse" 
+/// Week 7 Form URL: https://docs.google.com/forms/d/e/1FAIpQLSfvesyHfUZdYlkKeJvxUR5VH5F165VoJnUx3Q8FB6beTribkA/formResponse
+/// </summary>
 public class Analytics : MonoBehaviour
-{   
+{
 
     [SerializeField] private string URL;
-    private long _sessionID;
-    private int _totalMoves;
+
     public static Analytics Instance;
 
     public Analytics()
@@ -16,22 +18,36 @@ public class Analytics : MonoBehaviour
         Instance = this;
     }
 
-    public void Send(string sessionID,int totalmovesfromGMC , string level, float time) 
-    {   
+    public void Send(string sessionID, float timePlayed, string levelName, int levelWidth, int levelHeight, int totalMovesMadeThisLevel, string movesMadeHeatJson, int circleMovesMade, int diamondMovesMade)
+    {
         Debug.Log("Analytics Send method started");
 
-        StartCoroutine(Post( sessionID, totalmovesfromGMC.ToString(), level.ToString() , time.ToString() ));
+        StartCoroutine(
+            Post(sessionID,
+            timePlayed.ToString(),
+            levelName,
+            levelWidth,
+            levelHeight,
+            totalMovesMadeThisLevel.ToString(),
+            movesMadeHeatJson,
+            circleMovesMade,
+            diamondMovesMade));
     }
 
-    private IEnumerator Post(string sessionID, string totalMoves, string level ,string time)
-    {   
+    private IEnumerator Post(string sessionID, string timePlayed, string levelName, int levelWidth, int levelHeight, string totalMoves, string movesMadeJson, int circleMovesMade, int diamondMovesMade)
+    {
         Debug.Log("Post Coroutine started");
         WWWForm form = new WWWForm();
         form.AddField("entry.1379325124", sessionID);
+        form.AddField("entry.589367142", timePlayed);
+        form.AddField("entry.1700549212", levelName);
+        form.AddField("entry.846791691", levelWidth);
+        form.AddField("entry.1378155138", levelHeight);
         form.AddField("entry.1367608849", totalMoves);
-        form.AddField("entry.1700549212", level);
-        form.AddField("entry.589367142", time);
-        
+        form.AddField("entry.812093032", movesMadeJson);
+        form.AddField("entry.1687230251", circleMovesMade);
+        form.AddField("entry.1816303285", diamondMovesMade);
+
         using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
         {
 
@@ -49,19 +65,4 @@ public class Analytics : MonoBehaviour
         }
     }
 }
-// 
-// {
-//     // Start is called before the first frame update
-//     void Start()
-//     {
-        
-//     }
-
-//     // Update is called once per frame
-//     void Update()
-//     {
-        
-//     }
-// }
-// Google FORM URL "https://docs.google.com/forms/u/1/d/e/1FAIpQLScbdeMbYwWKzLKgAWeWEHL94ruFqymF66zYgzN2pEjgAFcrCg/formResponse" 
 

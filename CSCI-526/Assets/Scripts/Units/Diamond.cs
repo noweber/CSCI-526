@@ -32,7 +32,7 @@ namespace Assets.Scripts.Units
 						var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
-                            if (!this.IsEnemyOf(availablePiece)) { continue; }
+                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Units
                         var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
-                            if (!this.IsEnemyOf(availablePiece)) { continue; }
+                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -54,7 +54,7 @@ namespace Assets.Scripts.Units
                         var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
-                            if (!this.IsEnemyOf(availablePiece)) { continue; }
+                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
                         }
                         legalSpots.Add(availableMove);
                     }
@@ -73,6 +73,11 @@ namespace Assets.Scripts.Units
             {
                 legalSpots.Clear();
             }
+            else if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 2)
+            {
+                legalSpots.Clear();
+            }
+
 
             // var Position = new Tuple<int, int>(x, y);
             // var triangleLegal = inTriangleRange(Position);

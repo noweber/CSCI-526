@@ -15,7 +15,11 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _legal;
 
-    //[SerializeField] private GameObject _useAbility;
+    [SerializeField] public GameObject _fog, _redFog;
+
+    [SerializeField] private GameObject closeEye, openEye;
+
+    private VisibilityState visibility;
 
     public void Init(bool isOffset)
     {
@@ -30,6 +34,59 @@ public class Tile : MonoBehaviour
     void OnMouseExit()
     {
         _highlight.SetActive(false);
+    }
+
+    public void SetVisibility(VisibilityState visibility)
+    {
+        this.visibility = visibility;
+        /*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
+                else { _fog.SetActive(true); }*/
+        switch (visibility)
+        {
+            case VisibilityState.Player:
+                _fog.SetActive(false);
+                // _redFog.SetActive(false);
+                break;
+            case VisibilityState.Enemy:
+                _fog.SetActive(true);
+                // _redFog.SetActive(true);
+                break;
+            case VisibilityState.Neutral:
+                _fog.SetActive(true);
+                // _redFog.SetActive(false);
+                break;
+        }
+        if (LevelMono.Instance.debug == true)
+        {
+            _fog.SetActive(false);
+        }
+    }
+
+    public VisibilityState GetVisibility()
+    {
+        return this.visibility;
+    }
+
+    public void ShowVisibility()
+    {
+        if (SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
+        switch (visibility)
+        {
+            case VisibilityState.Player:
+                openEye.SetActive(true);
+                closeEye.SetActive(false);
+                break;
+            case VisibilityState.Enemy:
+            case VisibilityState.Neutral:
+                closeEye.SetActive(true);
+                openEye.SetActive(false);
+                break;
+        }
+    }
+    public void HideVisibility()
+    {
+        openEye.SetActive(false);
+        closeEye.SetActive(false);
     }
 
     private void OnMouseDown()
@@ -49,7 +106,7 @@ public class Tile : MonoBehaviour
                 lvlMono.HighlightMoves();
 
                 MenuManager.Instance.ShowUnitInfo(clickedPiece);
-                GameManagerChain.Instance.AddMovedPiece(clickedPiece);
+                GameManagerChain.Instance.AddMovedPiece(clickedPiece, coord);
             }
             else
             {
@@ -57,12 +114,12 @@ public class Tile : MonoBehaviour
                 {
                     if (lvlMono.selectedPiece.IsEnemyOf(clickedPiece))
                     {
-						// LEVELMONO SELECTEDPIECE CAPTURING
+                        // LEVELMONO SELECTEDPIECE CAPTURING
                         if (lvlMono.MovePiece(coord))
                         {
-                            
-        					GameManagerChain.Instance.IncrementMoves(1); 
-							GameManagerChain.Instance.TotalMoves += 1;
+
+                            GameManagerChain.Instance.IncrementMoves(1);
+                            GameManagerChain.Instance.TotalMoves += 1;
                             MenuManager.Instance.ShowNumMovesInfo();
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -98,8 +155,8 @@ public class Tile : MonoBehaviour
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
-        			GameManagerChain.Instance.IncrementMoves(1); 
-					GameManagerChain.Instance.TotalMoves += 1;
+                    GameManagerChain.Instance.IncrementMoves(1);
+                    GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
 
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -118,7 +175,7 @@ public class Tile : MonoBehaviour
 
 
         // turn logic
-		/*
+        /*
         if (!LevelMono.Instance.DoesAiPlayerHaveUnitsRemaining())
         {
             StopAllCoroutines();
@@ -130,6 +187,11 @@ public class Tile : MonoBehaviour
             if (turn == true)
             {
                 if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                {
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    StartCoroutine(DelayedChangeState());
+                }
+                if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
                 {
                     GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
@@ -153,7 +215,12 @@ public class Tile : MonoBehaviour
     }
 }
 
-
+public enum VisibilityState
+{
+    Player = 0,
+    Enemy = 1,
+    Neutral = 2,
+}
 
 
 
