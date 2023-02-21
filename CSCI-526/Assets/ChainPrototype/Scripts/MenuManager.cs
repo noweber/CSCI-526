@@ -161,7 +161,8 @@ public class MenuManager : MonoBehaviour
                         tmpro.text = " Move the circle to the triangle.";
                     }
                     break;
-                case 2:     // Free movement -- player freely maneuvers
+                case 2:     
+                    _pointerObject.transform.position = new Vector3(3.25f, 2.75f, -2f);
                     tmpro.text = "Click the circle again to select it.";
                     if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
                     {
@@ -170,7 +171,7 @@ public class MenuManager : MonoBehaviour
                     }
 
                     break;
-                case 3:
+                case 3: // Free movement -- player freely maneuvers
                     _pointerObject.SetActive(false);
                     tmpro.text = "Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.";
                     break;
