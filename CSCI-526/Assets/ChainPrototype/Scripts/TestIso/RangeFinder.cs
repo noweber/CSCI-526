@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class RangeFinder
 {
-    public List<Overlay> GetTilesInRange(Tuple<int,int> location, int range)
+    public List<Tuple<int, int>> GetTilesInRange(Tuple<int,int> location, int range)
     {
         var startingTile = LevelMono.Instance.overlayTiles[location];
         var inRangeTiles = new List<Overlay>();

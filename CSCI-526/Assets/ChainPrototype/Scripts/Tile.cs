@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using System.Collections.Generic;
+using static ArrowTranslator;
 
 public class Tile : MonoBehaviour
 {
@@ -15,13 +16,15 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _legal;
 
+    public List<Sprite> arrows;
+
     //[SerializeField] private GameObject _useAbility;
 
     public void Init(bool isOffset)
     {
         _renderer.color = isOffset ? _base : _offset;
     }
-
+    
     void OnMouseEnter()
     {
         _highlight.SetActive(true);
@@ -30,6 +33,18 @@ public class Tile : MonoBehaviour
     void OnMouseExit()
     {
         _highlight.SetActive(false);
+    }
+
+    public void SetSprite(ArrowDirection d)
+    {
+        if (d == ArrowDirection.None)
+            GetComponentsInChildren<SpriteRenderer>()[1].color = new Color(1, 1, 1, 0);
+        else
+        {
+            GetComponentsInChildren<SpriteRenderer>()[1].color = new Color(1, 1, 1, 1);
+            GetComponentsInChildren<SpriteRenderer>()[1].sprite = arrows[(int)d];
+            GetComponentsInChildren<SpriteRenderer>()[1].sortingOrder = gameObject.GetComponent<SpriteRenderer>().sortingOrder;
+        }
     }
 
     private void OnMouseDown()

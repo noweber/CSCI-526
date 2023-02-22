@@ -95,16 +95,7 @@ public class LevelMono : MonoBehaviour
             for (int x = 0; x < level.Width; x++)
             {
                 _tileMap.SetTile(new Vector3Int(y, x, 0), (TileBase)_tile);
-                /*
-                var tile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity, transform);
-                tile.name = $"Tile {x} {y}";
-
-                var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
-                tile.Init(isOffset);
-
-                var coord = new Tuple<int, int>(x, y);
-                tiles[coord] = tile;
-                */
+                
             }
         }
 
