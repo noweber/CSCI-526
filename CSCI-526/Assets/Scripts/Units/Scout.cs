@@ -8,9 +8,15 @@ namespace Assets.Scripts.Units
 {
     public class Scout : PieceMono
     {
+        private Direction direction = Direction.Up;
+
+        public void SetDirection(Direction d)
+        {
+            this.direction = d;
+        }
         public override string getUnitInfo()
         {
-            return "Grants vision.";
+            return "Grants directional vision.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
@@ -71,12 +77,49 @@ namespace Assets.Scripts.Units
 
         public override List<Tuple<int, int>> GetVisibleArea(int range)
         {
+            var lvlMono = LevelMono.Instance;
             List<Tuple<int, int>> visibleArea = new List<Tuple<int, int>>();
-            
-            
+            var pos = this.transform.position;
+            int x = (int)pos.x;
+            int y = (int)pos.y;
+            switch (this.direction)
+            {
+                case Direction.Up:
+                    for (int j = 1; j <= range; j++)
+                    {
+                        for (int i = 1; i < j; i++)
+                        {
+                            if (lvlMono.CheckOutOfBounds(x-i, y+j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x - i, y + j));
+                            }
+                            if (lvlMono.CheckOutOfBounds(x+i, y+j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x + i, y + j));
+                            }
+                        }
+                        if (lvlMono.CheckOutOfBounds(x, y+j))
+                        {
+                            visibleArea.Add(new Tuple<int, int>(x, y + j));
+                        }
+                    }
+                    break;
+                case Direction.Right:
+                    break;
+                case Direction.Down:
+                    break;
+                case Direction.Left:
+                    break;
+            }
             return visibleArea;
         }
         
     }
 
+    public enum Direction {
+        Up = 0,
+        Right = 1,
+        Down = 2,
+        Left = 3
+    }
 }

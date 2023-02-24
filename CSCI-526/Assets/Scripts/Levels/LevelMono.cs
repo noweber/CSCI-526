@@ -58,6 +58,11 @@ public class LevelMono : MonoBehaviour
 
     public int GetHeight() { return this.Height; }
 
+    public bool CheckOutOfBounds(int x, int y)
+    {
+        return x >= 0 && x < Width && y >= 0 && y < Height;
+    }
+
     public void LoadLevel(LoadLevelData level)
     {
         UnloadLevel();
@@ -71,8 +76,67 @@ public class LevelMono : MonoBehaviour
         // TODO: Delete all pieces
         // TODO: Ensure any elements of the previous level are removed from the scene.
     }
+    
+    public List<Tuple<int, int>> GetEnemyPieceCoords()
+    {
+        List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
+        Debug.Log(_pieces.Count);
+        foreach (var piece in _pieces)
+        {
 
-    private void SetRangeVisibility(List<Tuple<int,int>> visibleArea, bool isHuman)
+            if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
+        }
+        return enemyPieces;
+    }
+
+    public List<PieceMono> GetPlayerPieces()
+    {
+        List<PieceMono> playerPieces = new List<PieceMono>();
+        foreach (var piece in _pieces)
+        {
+            if (piece.Value.IsHuman()) { playerPieces.Add(piece.Value); }
+        }
+
+        Debug.Log("NUM PLAYER PIECES " + playerPieces.Count);
+
+        return playerPieces;
+    }
+    
+    public List<PieceMono> GetEnemyPieces()
+    {
+        List<PieceMono> enemyPieces = new List<PieceMono>();
+        foreach (var piece in _pieces)
+        {
+            if (!piece.Value.IsHuman()) { enemyPieces.Add(piece.Value); }
+        }
+        return enemyPieces;
+    }
+
+    private void ClearVision()
+    {
+        foreach (var tile in tiles)
+        {
+            tile.Value.SetPlayerVisibility(false);
+            tile.Value.SetEnemyVisibility(false);
+        }
+    }
+
+    private void RenderVision()
+    {
+        foreach (var p in this._pieces)
+        {
+            var piece = p.Value;
+            if (piece.IsTriangle())
+            {
+                this.SetRangeVisibility(piece.GetVisibleArea(2), piece.IsHuman(), !piece.IsHuman());
+            } 
+            else if (piece.IsScout())
+            {
+                this.SetRangeVisibility(piece.GetVisibleArea(3), piece.IsHuman(), !piece.IsHuman());
+            }
+        }
+    }
+    private void SetRangeVisibility(List<Tuple<int,int>> visibleArea, bool isHuman, bool isEnemy)
     {
         foreach (var coord in visibleArea)
         {
@@ -83,7 +147,7 @@ public class LevelMono : MonoBehaviour
             if (this.debug == false)
             {
                 tiles[coord].SetPlayerVisibility(isHuman);
-                tiles[coord].SetEnemyVisibility(!isHuman);
+                tiles[coord].SetEnemyVisibility(isEnemy);
             }
 
             // sets visible pieces for player only
@@ -149,7 +213,7 @@ public class LevelMono : MonoBehaviour
                 triangle.gameObject.SetActive(true);
                 if (!this.debug)
                 {
-                    this.SetRangeVisibility(triangle.GetVisibleArea(2), unit.IsHuman());
+                    this.SetRangeVisibility(triangle.GetVisibleArea(2), unit.IsHuman(), !unit.IsHuman());
                 }
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
@@ -204,6 +268,10 @@ public class LevelMono : MonoBehaviour
                 {
                     square.color = scout.IsHuman() ? playerColor : enemyColor;
                 }
+                if (!this.debug)
+                {
+                    this.SetRangeVisibility(scout.GetVisibleArea(3), unit.IsHuman(), !unit.IsHuman());
+                }
                 _pieces[coord] = scout;
             }
         }
@@ -235,18 +303,6 @@ public class LevelMono : MonoBehaviour
         }
 
         return null;
-    }
-
-    public List<Tuple<int, int>> GetEnemyPieceCoords()
-    {
-        List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
-        Debug.Log(_pieces.Count);
-        foreach (var piece in _pieces)
-        {
-
-            if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
-        }
-        return enemyPieces;
     }
 
     public LevelMono()
@@ -341,11 +397,6 @@ public class LevelMono : MonoBehaviour
             var tower = _pieces[towerCoord];
             tower.SetHuman(currentPlayer);
             tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
-            if (this.debug == false)
-            {
-                this.SetRangeVisibility(tower.GetVisibleArea(2), currentPlayer);
-            }
-
         }
 
         // Setting inactive if on neutral or enemy territory
@@ -364,6 +415,9 @@ public class LevelMono : MonoBehaviour
                 this.selectedPiece.gameObject.SetActive(false);
             }
 
+            // set range visibilities for all player pieces
+            this.ClearVision();
+            this.RenderVision();
         }
 
         this.RemoveHighlight();
