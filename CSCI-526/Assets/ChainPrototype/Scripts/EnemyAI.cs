@@ -16,7 +16,14 @@ public class EnemyAI : MonoBehaviour
         isRunning = false;
     }
 
-    public Tuple<int, int> SelectRandomPiece()
+    /*
+     * Piece selection priority:
+     *  1. move diamond to circles
+     *  2. move a piece if it can capture (circle has capture priority)
+     *  3. move circle if range enhanced by diamond
+     *  4. select a random movable piece if all else fails
+     */
+    public Tuple<int, int> SelectBestPiece()
     {
         var lvlMono = LevelMono.Instance;
         var enemyPieceCoords = lvlMono.GetEnemyPieceCoords();
@@ -44,6 +51,20 @@ public class EnemyAI : MonoBehaviour
             }
         }
         if (movableEnemies.Count == 0) { return null; }
+
+        //check for ANY piece that can capture (circle capture priority)
+        var canCapture = GetPiecesThatCanCapture(movableEnemies);
+        foreach (var piece in canCapture)
+        {
+            if (LevelMono.Instance.GetPiece(piece).IsCircle())
+            {
+                return piece;
+            }
+        }
+        if (canCapture.Count > 0)
+        {
+            return canCapture[Random.Range(0, canCapture.Count)];
+        }
 
         foreach (var circle in movableCircles)
         {
@@ -107,6 +128,32 @@ public class EnemyAI : MonoBehaviour
             }
         }
         return circles;
+    }
+
+    private List<Tuple<int, int>> GetPiecesThatCanCapture(List<Tuple<int, int>> movablePieces)
+    {
+        var levelMono = LevelMono.Instance;
+        List<Tuple<int, int>> canCapture = new List<Tuple<int, int>>();
+        foreach (var coord in movablePieces)
+        {
+            var piece = levelMono.GetPiece(coord);
+            var moves = piece.LegalMoves(levelMono.GetWidth(), levelMono.GetHeight());
+            bool added = false;
+            foreach (var move in moves)
+            {
+                if (added)
+                { 
+                    break; 
+                }
+                if (IsACapturingMove(move))
+                {
+                    canCapture.Add(coord);
+                    added = true;
+                }
+            }
+        }
+
+        return canCapture;
     }
 
     private Tuple<int,int> MoveDiamondToCircle(Tuple<int, int> diamond, List<Tuple<int, int>> moves)
@@ -205,7 +252,7 @@ public class EnemyAI : MonoBehaviour
     private void MovePiece()
     {
         var lvlMono = LevelMono.Instance;
-        var aiCoord = SelectRandomPiece();
+        var aiCoord = SelectBestPiece();
         if (aiCoord != null)
         {
             var aiPiece = lvlMono.GetPiece(aiCoord);
