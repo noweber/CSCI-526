@@ -48,6 +48,19 @@ public class Tile : MonoBehaviour
             _fog.SetActive(true);
         }
     }
+    
+    // DEBUG ONLY
+    public void ToggleEnemyFog()
+    {
+        if (canEnemySee)
+        {
+            _fog.SetActive(false);
+        }
+        else
+        {
+            _fog.SetActive(true);
+        }
+    }
 
     public void SetPlayerVisibility(bool v)
     {

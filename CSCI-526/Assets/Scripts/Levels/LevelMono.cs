@@ -118,11 +118,20 @@ public class LevelMono : MonoBehaviour
         {
             tile.Value.SetPlayerVisibility(false);
             tile.Value.SetEnemyVisibility(false);
+            
+            // Set all enemy pieces inactive 
+            var coord = tile.Key;
+            var piece = this.GetPiece(coord);
+            if (piece != null && !piece.IsTriangle() && !piece.IsHuman())
+            {
+                piece.gameObject.SetActive(false);
+            }
         }
     }
 
     private void RenderVision()
     {
+        // set visible areas
         foreach (var p in this._pieces)
         {
             var piece = p.Value;
@@ -139,6 +148,7 @@ public class LevelMono : MonoBehaviour
             }
         }
         
+        // toggle fog and active pieces based on visible areas
         for (int i = 0; i < Width; i++)
         {
             for (int j = 0; j < Height; j++)
@@ -146,6 +156,9 @@ public class LevelMono : MonoBehaviour
                 var coord = new Tuple<int, int>(i, j);
                 var tile = this.GetTile(coord);
                 tile.ToggleFog();
+                // tile.ToggleEnemyFog(); // Use this only for debugging
+                
+                // Set player/enemy pieces active if they are within range
                 var piece = this.GetPiece(coord);
                 if (tile.CanPlayerSee() && piece != null)
                 {
@@ -277,6 +290,11 @@ public class LevelMono : MonoBehaviour
                 if (!this.debug)
                 {
                     scout.gameObject.SetActive(unit.IsHuman());
+                }
+
+                if (!unit.IsHuman())
+                {
+                    scout.SetInitialDirection(Direction.Down);
                 }
                 scout.SetMoveState(false);
                 var squares = scout.gameObject.GetComponentsInChildren<SpriteRenderer>();

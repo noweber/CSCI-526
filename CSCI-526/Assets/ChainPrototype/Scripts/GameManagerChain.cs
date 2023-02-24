@@ -415,6 +415,11 @@ public class GameManagerChain : MonoBehaviour
                 {
                     units.Add(new PieceInfo(position, false, "Diamond"));
                 }
+
+                if (x == 3 && y == 7)
+                {
+                    units.Add(new PieceInfo(position, false, "Scout"));
+                }
             }
         }
         return new LoadLevelData()

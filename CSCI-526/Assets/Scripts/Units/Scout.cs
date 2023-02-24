@@ -10,6 +10,11 @@ namespace Assets.Scripts.Units
     {
         private Direction direction = Direction.Up;
 
+        public void SetInitialDirection(Direction d)
+        {
+            this.direction = d;
+        }
+
         public void SetDirection(Tuple<int, int> destination)
         {
             var pos = this.transform.position;
@@ -190,6 +195,8 @@ namespace Assets.Scripts.Units
                     }
                     break;
             }
+
+            visibleArea.Add(new Tuple<int, int>(x, y));
             return visibleArea;
         }
         
