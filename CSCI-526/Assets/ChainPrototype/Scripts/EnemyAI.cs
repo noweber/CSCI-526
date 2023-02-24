@@ -147,9 +147,11 @@ public class EnemyAI : MonoBehaviour
     {
         //TODO: account for enemy visibility
         var pieceAtDestination = LevelMono.Instance.GetPiece(destination);
+        var lvlMono = LevelMono.Instance;
+        var tile = lvlMono.GetTile(destination);
 
         //If piece at destination not null and is Player and AI has visibility
-        if (pieceAtDestination != null && pieceAtDestination.IsHuman() && LevelMono.Instance.tiles[destination].GetVisibility() == VisibilityState.Enemy)
+        if (pieceAtDestination != null && pieceAtDestination.IsHuman() && tile.CanEnemySee())
         {
             return true;
         }
@@ -158,12 +160,13 @@ public class EnemyAI : MonoBehaviour
 
     private int PickBestMove(List<Tuple<int, int>> moves)
     {
+        var lvlMono = LevelMono.Instance;
         int bestMove = -1;
         int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
         for (int i=0; i<moves.Count; i++)
         {
             //If AI has visibility AND the move is a capturing move
-            if (LevelMono.Instance.tiles[moves[i]].GetVisibility() == VisibilityState.Enemy && IsACapturingMove(moves[i]))
+            if (lvlMono.GetTile(moves[i]).CanEnemySee() && IsACapturingMove(moves[i]))
                 bestMove = i;
         }
 

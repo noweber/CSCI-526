@@ -25,14 +25,10 @@ namespace Assets.Scripts.Units
 
             //add else block
             var availableMoves = new List<Tuple<int, int>>();
-            availableMoves.Add(new Tuple<int, int>(x - 1, y - 1));
             availableMoves.Add(new Tuple<int, int>(x - 1, y));
-            availableMoves.Add(new Tuple<int, int>(x - 1, y + 1));
             availableMoves.Add(new Tuple<int, int>(x, y - 1));
             availableMoves.Add(new Tuple<int, int>(x, y + 1));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y - 1));
             availableMoves.Add(new Tuple<int, int>(x + 1, y));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y + 1));
             foreach (Tuple<int, int> move in availableMoves)
             {
                 if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
@@ -73,10 +69,12 @@ namespace Assets.Scripts.Units
             return legalSpots;
         }
 
-        public List<Tuple<int, int>> GetVisionRange()
+        public override List<Tuple<int, int>> GetVisibleArea(int range)
         {
-            List<Tuple<int, int>> area = new List<Tuple<int, int>>();
-            return area;
+            List<Tuple<int, int>> visibleArea = new List<Tuple<int, int>>();
+            
+            
+            return visibleArea;
         }
         
     }

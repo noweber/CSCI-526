@@ -72,51 +72,35 @@ public class LevelMono : MonoBehaviour
         // TODO: Ensure any elements of the previous level are removed from the scene.
     }
 
-    private void SetRangeVisibility(Tuple<int, int> center, int range, VisibilityState visibility)
+    private void SetRangeVisibility(List<Tuple<int,int>> visibleArea, bool isHuman)
     {
-        int x = center.Item1;
-        int y = center.Item2;
-        var adjacentList = new List<Tuple<int, int>>();
-        for (int i = x - range; i <= x + range; i++)
+        foreach (var coord in visibleArea)
         {
-            for (int j = y - range; j <= y + range; j++)
+            var x = coord.Item1;
+            var y = coord.Item2;
+            
+            // sets fog
+            if (this.debug == false)
             {
-                if (i >= 0 && i < Width && j >= 0 && j < Height)
-                {
-                    adjacentList.Add(new Tuple<int, int>(i, j));
-                }
+                tiles[coord].SetPlayerVisibility(isHuman);
+                tiles[coord].SetEnemyVisibility(!isHuman);
             }
-        }
 
-        foreach (var coord in adjacentList)
-        {
-            x = coord.Item1;
-            y = coord.Item2;
-            if (x >= 0 && x < this.Width && y >= 0 && y < this.Height)
+            // sets visible pieces for player only
+            var piece = this.GetPiece(coord);
+            if (isHuman == true && piece != null && !piece.IsHuman() && !piece.IsTriangle())
             {
-                //1
-                if (this.debug == false)
-                {
-                    tiles[coord].SetVisibility(visibility);
-                }
-                var piece = this.GetPiece(coord);
+                piece.gameObject.SetActive(true);
+            }
+            else if (isHuman == false && piece != null && !piece.IsHuman() && !piece.IsTriangle())
+            {
+                piece.gameObject.SetActive(false);
+            }
 
-                if (visibility == VisibilityState.Player && piece != null && !piece.IsHuman() && !piece.IsTriangle())
-                {
-                    piece.gameObject.SetActive(true);
-                }
-                else if (visibility != VisibilityState.Player && piece != null && !piece.IsHuman() &&
-                            !piece.IsTriangle())
-                {
-                    piece.gameObject.SetActive(false);
-                }
-
-                if (this.debug == true && piece != null)
-                {
-                    piece.gameObject.SetActive(true);
-                }
-
-
+            // debug only
+            if (this.debug == true && piece != null)
+            {
+                piece.gameObject.SetActive(true);
             }
         }
     }
@@ -144,7 +128,8 @@ public class LevelMono : MonoBehaviour
                 tiles[coord] = tile;
                 if (!this.debug)
                 {
-                    tile.SetVisibility(VisibilityState.Neutral);
+                    tile.SetPlayerVisibility(false);
+                    tile.SetEnemyVisibility(false);
                 }
 
             }
@@ -158,21 +143,13 @@ public class LevelMono : MonoBehaviour
 
             if (unit.IsTriangle())
             {
-                Debug.Log("FOUND TRIANGLE");
                 var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 triangle.SetName("Triangle");
                 triangle.SetHuman(unit.IsHuman());
                 triangle.gameObject.SetActive(true);
                 if (!this.debug)
                 {
-                    if (unit.IsHuman())
-                    {
-                        this.SetRangeVisibility(coord, 2, VisibilityState.Player);
-                    }
-                    else
-                    {
-                        this.SetRangeVisibility(coord, 2, VisibilityState.Enemy);
-                    }
+                    this.SetRangeVisibility(triangle.GetVisibleArea(2), unit.IsHuman());
                 }
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
@@ -245,6 +222,16 @@ public class LevelMono : MonoBehaviour
         if (_pieces.TryGetValue(coord, out var piece))
         {
             return piece;
+        }
+
+        return null;
+    }
+    
+    public Tile GetTile(Tuple<int, int> coord)
+    {
+        if (tiles.TryGetValue(coord, out var tile))
+        {
+            return tile;
         }
 
         return null;
@@ -354,10 +341,9 @@ public class LevelMono : MonoBehaviour
             var tower = _pieces[towerCoord];
             tower.SetHuman(currentPlayer);
             tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
-            var v = currentPlayer ? VisibilityState.Player : VisibilityState.Enemy;
             if (this.debug == false)
             {
-                this.SetRangeVisibility(towerCoord, 2, v);
+                this.SetRangeVisibility(tower.GetVisibleArea(2), currentPlayer);
             }
 
         }
@@ -369,11 +355,11 @@ public class LevelMono : MonoBehaviour
             {
                 this.selectedPiece.gameObject.SetActive(true);
             }
-            else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() == VisibilityState.Player)
+            else if (!this.selectedPiece.IsHuman() && tile.CanPlayerSee())
             {
                 this.selectedPiece.gameObject.SetActive(true);
             }
-            else if (!this.selectedPiece.IsHuman() && tile.GetVisibility() != VisibilityState.Player)
+            else if (!this.selectedPiece.IsHuman() && !tile.CanPlayerSee())
             {
                 this.selectedPiece.gameObject.SetActive(false);
             }

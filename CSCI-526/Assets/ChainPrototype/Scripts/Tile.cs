@@ -18,8 +18,9 @@ public class Tile : MonoBehaviour
     [SerializeField] public GameObject _fog, _redFog;
 
     [SerializeField] private GameObject closeEye, openEye;
-
-    private VisibilityState visibility;
+    
+    private bool canPlayerSee;
+    private bool canEnemySee;
 
     public void Init(bool isOffset)
     {
@@ -36,52 +37,93 @@ public class Tile : MonoBehaviour
         _highlight.SetActive(false);
     }
 
-    public void SetVisibility(VisibilityState visibility)
+    public void ToggleFog()
     {
-        this.visibility = visibility;
-        /*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
-                else { _fog.SetActive(true); }*/
-        switch (visibility)
-        {
-            case VisibilityState.Player:
-                _fog.SetActive(false);
-                // _redFog.SetActive(false);
-                break;
-            case VisibilityState.Enemy:
-                _fog.SetActive(true);
-                // _redFog.SetActive(true);
-                break;
-            case VisibilityState.Neutral:
-                _fog.SetActive(true);
-                // _redFog.SetActive(false);
-                break;
-        }
-        if (LevelMono.Instance.debug == true)
+        if (canPlayerSee)
         {
             _fog.SetActive(false);
         }
+        else
+        {
+            _fog.SetActive(true);
+        }
     }
 
-    public VisibilityState GetVisibility()
+    public void SetPlayerVisibility(bool v)
     {
-        return this.visibility;
+        this.canPlayerSee = v;
+        ToggleFog();
+    }
+    
+    public void SetEnemyVisibility(bool v)
+    {
+        this.canEnemySee = v;
+        ToggleFog();
+    }
+    
+
+    // public void SetVisibility(bool visibility)
+    // {
+    //     this.visibility = visibility;
+    //     /*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
+    //             else { _fog.SetActive(true); }*/
+    //     switch (visibility)
+    //     {
+    //         case VisibilityState.Player:
+    //             _fog.SetActive(false);
+    //             // _redFog.SetActive(false);
+    //             break;
+    //         case VisibilityState.Enemy:
+    //             _fog.SetActive(true);
+    //             // _redFog.SetActive(true);
+    //             break;
+    //         case VisibilityState.Neutral:
+    //             _fog.SetActive(true);
+    //             // _redFog.SetActive(false);
+    //             break;
+    //     }
+    //     if (LevelMono.Instance.debug == true)
+    //     {
+    //         _fog.SetActive(false);
+    //     }
+    // }
+
+    public bool CanPlayerSee()
+    {
+        return this.canPlayerSee;
     }
 
+    public bool CanEnemySee()
+    {
+        return this.canEnemySee;
+    }
+    
     public void ShowVisibility()
     {
         if (SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
-        switch (visibility)
+        // switch (visibility)
+        // {
+        //     case VisibilityState.Player:
+        //         openEye.SetActive(true);
+        //         closeEye.SetActive(false);
+        //         break;
+        //     case VisibilityState.Enemy:
+        //     case VisibilityState.Neutral:
+        //         closeEye.SetActive(true);
+        //         openEye.SetActive(false);
+        //         break;
+        // }
+        if (this.canPlayerSee)
         {
-            case VisibilityState.Player:
-                openEye.SetActive(true);
-                closeEye.SetActive(false);
-                break;
-            case VisibilityState.Enemy:
-            case VisibilityState.Neutral:
-                closeEye.SetActive(true);
-                openEye.SetActive(false);
-                break;
+            openEye.SetActive(true);
+            closeEye.SetActive(false);
         }
+        else
+        {
+            openEye.SetActive(false);
+            closeEye.SetActive(true);
+        }
+        
     }
     public void HideVisibility()
     {
@@ -213,13 +255,6 @@ public class Tile : MonoBehaviour
         GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         yield return null;
     }
-}
-
-public enum VisibilityState
-{
-    Player = 0,
-    Enemy = 1,
-    Neutral = 2,
 }
 
 

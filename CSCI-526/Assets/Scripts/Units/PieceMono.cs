@@ -35,6 +35,9 @@ public abstract class PieceMono : MonoBehaviour
 	public string GetName() { return this.unitName; }
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
+    
+    public abstract List<Tuple<int, int>> GetVisibleArea(int range=-1);
+
 
     public void UpdateLocation(Vector3 location) { this.transform.position = location; }
     

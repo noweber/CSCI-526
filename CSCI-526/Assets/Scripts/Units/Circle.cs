@@ -253,5 +253,11 @@ namespace Assets.Scripts.Units
             }
             return false;
         }
+
+		public override List<Tuple<int, int>> GetVisibleArea(int range)
+        {
+            List<Tuple<int, int>> visibleArea = new List<Tuple<int, int>>();
+            return visibleArea;
+        }
     }
 }
