@@ -128,11 +128,11 @@ public class LevelMono : MonoBehaviour
             var piece = p.Value;
             if (piece.IsTriangle())
             {
-                this.SetRangeVisibility(piece.GetVisibleArea(2), piece.IsHuman(), !piece.IsHuman());
+                this.SetRangeVisibility(piece.GetVisibleArea(2), piece.IsHuman() == true, piece.IsHuman() == false);
             } 
             else if (piece.IsScout())
             {
-                this.SetRangeVisibility(piece.GetVisibleArea(3), piece.IsHuman(), !piece.IsHuman());
+                this.SetRangeVisibility(piece.GetVisibleArea(3), piece.IsHuman() == true, piece.IsHuman() == false);
             }
         }
     }
@@ -211,10 +211,10 @@ public class LevelMono : MonoBehaviour
                 triangle.SetName("Triangle");
                 triangle.SetHuman(unit.IsHuman());
                 triangle.gameObject.SetActive(true);
-                if (!this.debug)
-                {
-                    this.SetRangeVisibility(triangle.GetVisibleArea(2), unit.IsHuman(), !unit.IsHuman());
-                }
+                // if (!this.debug)
+                // {
+                //     this.SetRangeVisibility(triangle.GetVisibleArea(2), unit.IsHuman(), !unit.IsHuman());
+                // }
                 triangle.SetMoveState(false);
                 triangle.gameObject.GetComponent<SpriteRenderer>().color = triangle.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = triangle;
@@ -268,12 +268,18 @@ public class LevelMono : MonoBehaviour
                 {
                     square.color = scout.IsHuman() ? playerColor : enemyColor;
                 }
-                if (!this.debug)
-                {
-                    this.SetRangeVisibility(scout.GetVisibleArea(3), unit.IsHuman(), !unit.IsHuman());
-                }
+                // if (!this.debug)
+                // {
+                //     this.SetRangeVisibility(scout.GetVisibleArea(3), unit.IsHuman(), !unit.IsHuman());
+                // }
                 _pieces[coord] = scout;
             }
+        }
+        
+        if (!this.debug)
+        {
+            this.ClearVision();
+            this.RenderVision();
         }
 
         _camera.transform.position = new Vector3((float)level.Width / 2 - 0.5f, (float)level.Height / 2 - 0.5f, -10);
