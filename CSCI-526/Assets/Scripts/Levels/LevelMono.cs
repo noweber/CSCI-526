@@ -375,16 +375,21 @@ public class LevelMono : MonoBehaviour
         if (this.GetPiece(coord) != null && this.GetPiece(coord).IsEnemyOf(this.selectedPiece))
         {
             // CAPTURE TAKES PLACE HERE
+            // TODO: Implement intercepting capture
             Debug.Log("SOMETHING WAS CAPTURED");
             Destroy(this.GetPiece(coord).gameObject);
             //this.selectedPiece.gameObject.SetActive(true);
             captured = true;
             if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
         }
+        if (this.selectedPiece.IsScout())
+        {
+            ((Scout)this.selectedPiece).SetDirection(coord);
+        }
+        
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
-
         var towerCoord = this.selectedPiece.InTowerRange();
         if (towerCoord != null)
         {
@@ -399,7 +404,9 @@ public class LevelMono : MonoBehaviour
             tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
         }
 
-        // Setting inactive if on neutral or enemy territory
+        
+        
+        // Render vision
         if (this.debug == false)
         {
             if (captured)

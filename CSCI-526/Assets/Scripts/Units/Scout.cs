@@ -10,9 +10,32 @@ namespace Assets.Scripts.Units
     {
         private Direction direction = Direction.Up;
 
-        public void SetDirection(Direction d)
+        public void SetDirection(Tuple<int, int> destination)
         {
-            this.direction = d;
+            var pos = this.transform.position;
+            int x = (int)pos.x;
+            int y = (int)pos.y;
+
+            if (x - destination.Item1 > 0)
+            {
+                Debug.Log("GOING LEFT");
+                this.direction = Direction.Left;
+            } 
+            else if (x - destination.Item1 < 0)
+            {
+                Debug.Log("GOING RIGHT");
+                this.direction = Direction.Right;
+            } 
+            else if (y - destination.Item2 > 0)
+            {
+                Debug.Log("GOING DOWN");
+                this.direction = Direction.Down;
+            }
+            else
+            {
+                Debug.Log("GOING UP");
+                this.direction = Direction.Up;
+            }
         }
         public override string getUnitInfo()
         {
@@ -82,6 +105,7 @@ namespace Assets.Scripts.Units
             var pos = this.transform.position;
             int x = (int)pos.x;
             int y = (int)pos.y;
+
             switch (this.direction)
             {
                 case Direction.Up:
@@ -105,10 +129,65 @@ namespace Assets.Scripts.Units
                     }
                     break;
                 case Direction.Right:
+                    for (int i = 1; i <= range; i++)
+                    {
+                        for (int j = 1; j < i; j++)
+                        {
+                            if (lvlMono.CheckOutOfBounds(x+i, y - j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x + i, y - j));
+                            }
+                            if (lvlMono.CheckOutOfBounds(x+i, y+j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x + i, y + j));
+                            }
+                        }
+                        if (lvlMono.CheckOutOfBounds(x + i, y))
+                        {
+                            visibleArea.Add(new Tuple<int, int>(x + i, y));
+                        }
+                    }
+                    
                     break;
                 case Direction.Down:
+                    for (int j = 1; j <= range; j++)
+                    {
+                        for (int i = 1; i < j; i++)
+                        {
+                            if (lvlMono.CheckOutOfBounds(x-i, y - j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x - i, y - j));
+                            }
+                            if (lvlMono.CheckOutOfBounds(x+i, y - j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x + i, y - j));
+                            }
+                        }
+                        if (lvlMono.CheckOutOfBounds(x, y - j))
+                        {
+                            visibleArea.Add(new Tuple<int, int>(x, y - j));
+                        }
+                    }
                     break;
                 case Direction.Left:
+                    for (int i = 1; i <= range; i++)
+                    {
+                        for (int j = 1; j < i; j++)
+                        {
+                            if (lvlMono.CheckOutOfBounds(x - i, y - j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x - i, y - j));
+                            }
+                            if (lvlMono.CheckOutOfBounds(x - i, y + j))
+                            {
+                                visibleArea.Add(new Tuple<int, int>(x - i, y + j));
+                            }
+                        }
+                        if (lvlMono.CheckOutOfBounds(x - i, y))
+                        {
+                            visibleArea.Add(new Tuple<int, int>(x - i, y));
+                        }
+                    }
                     break;
             }
             return visibleArea;
