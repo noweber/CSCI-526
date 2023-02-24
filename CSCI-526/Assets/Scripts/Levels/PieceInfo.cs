@@ -22,8 +22,8 @@ namespace Assets.Scripts.Levels
 		public bool IsCircle() { return unitName == "Circle"; }
 
 		public bool IsTriangle() { return unitName == "Triangle"; }
-
 		public bool IsDiamond() { return unitName == "Diamond"; }
+		public bool IsScout() { return unitName == "Scout"; }
 		
 		public bool IsHuman() { return this.isHuman; }
 

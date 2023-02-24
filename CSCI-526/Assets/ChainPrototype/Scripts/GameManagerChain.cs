@@ -379,6 +379,12 @@ public class GameManagerChain : MonoBehaviour
             for (int y = 0; y < _height; y++)
             {
                 Tuple<int, int> position = new(x, y);
+
+                if (x == 3 && y == 3)
+                {
+                    units.Add(new PieceInfo(position, true, "Scout"));
+                }
+
                 if (x == 2 && y == 2 || x == _width - 3 && y == 2)
                 {
                     units.Add(new PieceInfo(position, true, "Triangle"));

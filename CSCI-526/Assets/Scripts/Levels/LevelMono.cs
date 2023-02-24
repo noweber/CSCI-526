@@ -16,6 +16,7 @@ public class LevelMono : MonoBehaviour
     [SerializeField] private Diamond _diamondPrefab;
     [SerializeField] private Circle _circlePrefab;
 
+    [SerializeField] private Scout _scoutPrefab;
     [SerializeField] private Camera _camera;
 
     public Color playerColor;
@@ -211,6 +212,22 @@ public class LevelMono : MonoBehaviour
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = diamond;
+            } else if (unit.IsScout())
+            {
+                var scout = Instantiate(_scoutPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+                scout.SetName("Scout");
+                scout.SetHuman(unit.IsHuman());
+                if (!this.debug)
+                {
+                    scout.gameObject.SetActive(unit.IsHuman());
+                }
+                scout.SetMoveState(false);
+                var squares = scout.gameObject.GetComponentsInChildren<SpriteRenderer>();
+                foreach (var square in squares)
+                {
+                    square.color = scout.IsHuman() ? playerColor : enemyColor;
+                }
+                _pieces[coord] = scout;
             }
         }
 

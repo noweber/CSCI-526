@@ -30,6 +30,8 @@ public abstract class PieceMono : MonoBehaviour
 
 	public bool IsDiamond() { return this.unitName == "Diamond"; }
 
+	public bool IsScout() { return this.unitName == "Scout"; }
+
 	public string GetName() { return this.unitName; }
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
