@@ -126,45 +126,61 @@ public class LevelMono : MonoBehaviour
         foreach (var p in this._pieces)
         {
             var piece = p.Value;
+            var isHuman = piece.IsHuman();
             if (piece.IsTriangle())
             {
-                this.SetRangeVisibility(piece.GetVisibleArea(2), piece.IsHuman() == true, piece.IsHuman() == false);
+                if (isHuman) { this.SetPlayerVisibilityArea(piece.GetVisibleArea(2)); }
+                if (!isHuman) { this.SetEnemyVisibilityArea(piece.GetVisibleArea(2)); }
             } 
             else if (piece.IsScout())
             {
-                this.SetRangeVisibility(piece.GetVisibleArea(3), piece.IsHuman() == true, piece.IsHuman() == false);
+                if (isHuman) { this.SetPlayerVisibilityArea(piece.GetVisibleArea(3)); }
+                if (!isHuman) { this.SetEnemyVisibilityArea(piece.GetVisibleArea(3)); }
+            }
+        }
+        
+        for (int i = 0; i < Width; i++)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                var coord = new Tuple<int, int>(i, j);
+                var tile = this.GetTile(coord);
+                tile.ToggleFog();
+                var piece = this.GetPiece(coord);
+                if (tile.CanPlayerSee() && piece != null)
+                {
+                    piece.gameObject.SetActive(true);
+                }
             }
         }
     }
-    private void SetRangeVisibility(List<Tuple<int,int>> visibleArea, bool isHuman, bool isEnemy)
+
+    private void SetPlayerVisibilityArea(List<Tuple<int, int>> visibleArea)
     {
         foreach (var coord in visibleArea)
         {
             var x = coord.Item1;
             var y = coord.Item2;
-            
+
             // sets fog
             if (this.debug == false)
             {
-                tiles[coord].SetPlayerVisibility(isHuman);
-                tiles[coord].SetEnemyVisibility(isEnemy);
+                tiles[coord].SetPlayerVisibility(true);
             }
+        }
+    }
+    
+    private void SetEnemyVisibilityArea(List<Tuple<int, int>> visibleArea)
+    {
+        foreach (var coord in visibleArea)
+        {
+            var x = coord.Item1;
+            var y = coord.Item2;
 
-            // sets visible pieces for player only
-            var piece = this.GetPiece(coord);
-            if (isHuman == true && piece != null && !piece.IsHuman() && !piece.IsTriangle())
+            // sets fog
+            if (this.debug == false)
             {
-                piece.gameObject.SetActive(true);
-            }
-            else if (isHuman == false && piece != null && !piece.IsHuman() && !piece.IsTriangle())
-            {
-                piece.gameObject.SetActive(false);
-            }
-
-            // debug only
-            if (this.debug == true && piece != null)
-            {
-                piece.gameObject.SetActive(true);
+                tiles[coord].SetEnemyVisibility(true);
             }
         }
     }
@@ -276,6 +292,8 @@ public class LevelMono : MonoBehaviour
             }
         }
         
+        // Sets Fog based on player vision
+        // Also, defines what enemy can see as well
         if (!this.debug)
         {
             this.ClearVision();

@@ -52,42 +52,13 @@ public class Tile : MonoBehaviour
     public void SetPlayerVisibility(bool v)
     {
         this.canPlayerSee = v;
-        ToggleFog();
     }
     
     public void SetEnemyVisibility(bool v)
     {
         this.canEnemySee = v;
-        ToggleFog();
     }
     
-
-    // public void SetVisibility(bool visibility)
-    // {
-    //     this.visibility = visibility;
-    //     /*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
-    //             else { _fog.SetActive(true); }*/
-    //     switch (visibility)
-    //     {
-    //         case VisibilityState.Player:
-    //             _fog.SetActive(false);
-    //             // _redFog.SetActive(false);
-    //             break;
-    //         case VisibilityState.Enemy:
-    //             _fog.SetActive(true);
-    //             // _redFog.SetActive(true);
-    //             break;
-    //         case VisibilityState.Neutral:
-    //             _fog.SetActive(true);
-    //             // _redFog.SetActive(false);
-    //             break;
-    //     }
-    //     if (LevelMono.Instance.debug == true)
-    //     {
-    //         _fog.SetActive(false);
-    //     }
-    // }
-
     public bool CanPlayerSee()
     {
         return this.canPlayerSee;
