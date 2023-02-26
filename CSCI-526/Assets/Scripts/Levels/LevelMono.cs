@@ -324,7 +324,8 @@ public class LevelMono : MonoBehaviour
         {
             _camera.orthographicSize = 6;
         }
-        GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+        StartCoroutine(GameManagerChain.Instance.StateToHuman());
+        // GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
     }
 
     public PieceMono GetPiece(Tuple<int, int> coord)

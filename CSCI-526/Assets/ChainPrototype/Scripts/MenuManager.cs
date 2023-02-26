@@ -13,7 +13,10 @@ public class MenuManager : MonoBehaviour
 
 
     [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject, _pointerObject;
+   
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
+
+    public GameObject _playerTurnIndicator, _enemyTurnIndicator;
 
     public MenuManager()
     {
@@ -66,12 +69,14 @@ public class MenuManager : MonoBehaviour
         if (turn == true)
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+            StartCoroutine(GameManagerChain.Instance.StateToAI());
+            // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
         }
         else
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+            StartCoroutine(GameManagerChain.Instance.StateToHuman());
+            // GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
         var lvlMono = LevelMono.Instance;
         lvlMono.RemoveHighlight();
@@ -173,7 +178,7 @@ public class MenuManager : MonoBehaviour
                     break;
                 case 3: // Free movement -- player freely maneuvers
                     _pointerObject.SetActive(false);
-                    tmpro.text = "Capturing an enemy unit gave the circle allows the it to be used again, but consumes another one of your Moves. Use it to capture the final enemy unit.";
+                    tmpro.text = "Capturing an enemy unit with the circle allows the it to be used again, but consumes another one of your Moves. Use it to capture the final enemy unit.";
                     break;
             }
         if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")

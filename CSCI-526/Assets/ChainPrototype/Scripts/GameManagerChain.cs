@@ -23,9 +23,6 @@ public class GameManagerChain : MonoBehaviour
     /// </summary>
     private Dictionary<Tuple<int, int>, int> countOfTilesMovedTo;
 
-    public float movableAlpha;      // Unified alpha value used for all player pieces when game state moves to player's turn
-    public bool increasingAlpha;
-
     /// <summary>
     /// This field tracks the number of times the player moved a circle piece for end-of-level analytics.
     /// </summary>
@@ -45,6 +42,12 @@ public class GameManagerChain : MonoBehaviour
     private float playStartTime;
 
     private int movesMade;
+
+    public float movableAlpha;      // Unified alpha value used for all player pieces when game state moves to player's turn
+
+    public bool increasingAlpha;
+
+    public bool switchingTurns = false;        // Flag used to lock switching turns if the game is in the process of doing so
 
     /// <summary>
     /// This is the set of pieces which have been moved during a given turn state.
@@ -209,6 +212,45 @@ public class GameManagerChain : MonoBehaviour
         }
         yield return null;
     }
+
+    // TESTING using this instead of directly changing turns to briefly display an obvious turn indicator -- animate after midterm?
+    public IEnumerator StateToAI()
+    {
+        if (!switchingTurns && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)     // Prevents spamming the call of this IEnumerator and bugging the turn sequence
+        {
+            switchingTurns = true;
+            MenuManager.Instance._enemyTurnIndicator.SetActive(true);
+            Debug.Log("SETTING TO AI TURN");
+            yield return new WaitForSeconds(1.5f);
+            MenuManager.Instance._enemyTurnIndicator.SetActive(false);
+
+            GameManagerChain.Instance.ResetMovesMade();
+
+            ChangeState(GameStateEnum.AI);
+            switchingTurns = false;
+        }
+
+        yield return null;
+    }
+    public IEnumerator StateToHuman()     
+    {
+        if(!switchingTurns && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)
+        {
+            switchingTurns = true;
+            MenuManager.Instance._playerTurnIndicator.SetActive(true);
+            Debug.Log("SETTING TO PLAYER TURN");
+            yield return new WaitForSeconds(1.5f);
+            MenuManager.Instance._playerTurnIndicator.SetActive(false);
+
+            GameManagerChain.Instance.ResetMovesMade();
+
+            ChangeState(GameStateEnum.Human);
+            switchingTurns = false;
+        }
+
+        yield return null;
+    }
+
     /// <summary>
     /// Changes the current game state.
     /// </summary>
@@ -216,7 +258,7 @@ public class GameManagerChain : MonoBehaviour
     public void ChangeState(GameStateEnum newState)
     {
         GameManagerChain.Instance.ClearMovedPieces();
-        GameManagerChain.Instance.ResetMovesMade();
+        // GameManagerChain.Instance.ResetMovesMade();
         GameManagerChain.Instance.UsedAbility = false;
 
         GameStateEnum = newState;

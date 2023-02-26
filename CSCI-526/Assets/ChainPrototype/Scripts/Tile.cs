@@ -122,7 +122,7 @@ public class Tile : MonoBehaviour
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
-        if (clickedPiece != null) // selected piece is correct turn's color
+        if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
         {
             if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
@@ -214,17 +214,18 @@ public class Tile : MonoBehaviour
             {
                 if (SceneManager.GetActiveScene().name == "TutorialLevel")
                 {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
                 if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
                 {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
                 else
                 {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    StartCoroutine(GameManagerChain.Instance.StateToAI());
+                    // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                 }
             }
         }
@@ -233,10 +234,12 @@ public class Tile : MonoBehaviour
     // "Slacking off" text for 2 seconds, then change state to white
     private IEnumerator DelayedChangeState()
     {
+        StartCoroutine(GameManagerChain.Instance.StateToAI());
+        yield return new WaitForSeconds(2.0f);
         MenuManager.Instance.SetSlackDialogue(true);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         MenuManager.Instance.SetSlackDialogue(false);
-        GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+        StartCoroutine(GameManagerChain.Instance.StateToHuman());
         yield return null;
     }
 }
