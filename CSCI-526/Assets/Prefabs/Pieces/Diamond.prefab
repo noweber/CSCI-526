@@ -969,7 +969,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1001,6 +1001,7 @@ MonoBehaviour:
   neSupport: {fileID: 7239580506414969956}
   swSupport: {fileID: 1323556968430634128}
   seSupport: {fileID: 1581511666677643677}
+  buffParticles: {fileID: 0}
   canMoveObject: {fileID: 9121405512622153349}
   cantMoveObject: {fileID: 5627580476858712090}
 --- !u!1 &9121405512622153349

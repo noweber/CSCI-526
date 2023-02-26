@@ -186,24 +186,24 @@ public class GameManagerChain : MonoBehaviour
 
     private IEnumerator FadeMovableAlpha()
     {
-        movableAlpha = 0.39f;
+        movableAlpha = 0.65f;
         while(true)
         {
-            if (movableAlpha >= 0.39f)
+            if (movableAlpha >= 0.65f)
             {
                 increasingAlpha = false;
             }
-            else if (movableAlpha <= 0)
+            else if (movableAlpha <= 0.15f)
             {
                 increasingAlpha = true;
             }
             if (increasingAlpha)
             {
-                movableAlpha += 0.03f;
+                movableAlpha += 0.07f;
             }
             else
             {
-                movableAlpha -= 0.03f;
+                movableAlpha -= 0.07f;
             }
             yield return new WaitForSeconds(0.1f);
         }
