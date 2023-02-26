@@ -430,6 +430,27 @@ public class LevelMono : MonoBehaviour
         }
         
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
+        if(this.selectedPiece.IsHuman() && !this.selectedPiece.IsCircle())
+        {
+            if(this.selectedPiece.IsCircle())
+            {
+                if(captured)
+                {
+                    // Same green highlight
+                }
+                else
+                {
+                    this.selectedPiece.canMoveObject.SetActive(false);
+                    this.selectedPiece.cantMoveObject.SetActive(true);
+                }
+            }
+            else
+            {
+                this.selectedPiece.canMoveObject.SetActive(false);
+                this.selectedPiece.cantMoveObject.SetActive(true);
+            }
+        }
+
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
         var towerCoord = this.selectedPiece.InTowerRange();

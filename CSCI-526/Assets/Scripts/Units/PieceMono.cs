@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections;       // IEnumerator
+using UnityEngine.Tilemaps;
 
 public abstract class PieceMono : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public abstract class PieceMono : MonoBehaviour
 	protected bool hasMoved;
 
 	protected string unitName;
+
+    public GameObject canMoveObject, cantMoveObject;     // Highlight will be temporary -- change to particles after midterm
 
     public abstract string getUnitInfo();
 
@@ -37,7 +41,6 @@ public abstract class PieceMono : MonoBehaviour
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
     
     public abstract List<Tuple<int, int>> GetVisibleArea(int range=-1);
-
 
     public void UpdateLocation(Vector3 location) { this.transform.position = location; }
     

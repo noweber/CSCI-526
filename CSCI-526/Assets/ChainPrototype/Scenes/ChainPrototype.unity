@@ -1988,6 +1988,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameStateEnum: 0
   TotalMoves: 0
+  movableAlpha: 0
+  increasingAlpha: 0
   UsedAbility: 0
   SceneName: 
   playTestID: 

@@ -1,5 +1,6 @@
 using Assets.Scripts.Levels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,9 @@ public class GameManagerChain : MonoBehaviour
     /// This is used to produce a heat map of which parts of the board the players move into the most.
     /// </summary>
     private Dictionary<Tuple<int, int>, int> countOfTilesMovedTo;
+
+    public float movableAlpha;      // Unified alpha value used for all player pieces when game state moves to player's turn
+    public bool increasingAlpha;
 
     /// <summary>
     /// This field tracks the number of times the player moved a circle piece for end-of-level analytics.
@@ -180,6 +184,33 @@ public class GameManagerChain : MonoBehaviour
         movesMade -= amount;
     }
 
+    private IEnumerator FadeMovableAlpha()
+    {
+        movableAlpha = 0.39f;
+        while(true)
+        {
+            if (movableAlpha >= 0.39f)
+            {
+                increasingAlpha = false;
+            }
+            else if (movableAlpha <= 0)
+            {
+                increasingAlpha = true;
+            }
+            if (increasingAlpha)
+            {
+                movableAlpha += 0.03f;
+            }
+            else
+            {
+                movableAlpha -= 0.03f;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+
+
+        yield return null;
+    }
     /// <summary>
     /// Changes the current game state.
     /// </summary>
@@ -212,15 +243,38 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
                 MenuManager.Instance.ShowNumMovesInfo();
+                StartCoroutine(FadeMovableAlpha());
+                foreach(PieceMono piece in LevelMono.Instance.GetPlayerPieces())
+                {
+                    if (!piece.IsTriangle())
+                    {
+                        piece.canMoveObject.SetActive(true);
+                        piece.cantMoveObject.SetActive(false);
+                    }
+                }
+                foreach(PieceMono piece in LevelMono.Instance.GetEnemyPieces())
+                {
+                    piece.canMoveObject.SetActive(false);
+                    piece.canMoveObject.SetActive(false);
+                    Debug.Log("DISABLED ENEMY TELLS");
+                }
                 if (SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
                 {
                     MenuManager.Instance.ShowEndTurnButton();
                 }
                 break;
             case GameStateEnum.AI:
+                StopCoroutine(FadeMovableAlpha());
                 MenuManager.Instance.ShowTurnInfo();
                 MenuManager.Instance.ShowNumMovesInfo();
                 MenuManager.Instance.HideEndTurnButton();
+
+                foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())
+                {
+                    piece.canMoveObject.SetActive(false);
+                    piece.cantMoveObject.SetActive(false);
+                }
+
                 if (SceneName == "TutorialLevel")
                 {
                     // slacking off 
@@ -236,11 +290,13 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.Victory:
                 Debug.Log("VICTORY");
+                StopCoroutine(FadeMovableAlpha());
                 MenuManager.Instance.SetVictoryScreen(true);
                 SendEndOfLevelAnalytics();
                 break;
             case GameStateEnum.Loss:
                 Debug.Log("LOSS");
+                StopCoroutine(FadeMovableAlpha());
                 SendEndOfLevelAnalytics();
                 SceneManager.LoadScene(SceneName);
                 break;
