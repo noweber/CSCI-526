@@ -158,7 +158,7 @@ public class MenuManager : MonoBehaviour
                     if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
                     {
                         _pointerObject.transform.position = new Vector3(3.25f, 2.75f, -2f);
-                        tmpro.text = " Move the circle to the triangle.";
+                        tmpro.text = "The triangle is a resource, rather than a unit, that will be useful later on, and does not need to be captured to win. Move the circle to the triangle.";
                     }
                     break;
                 case 2:     
@@ -173,7 +173,7 @@ public class MenuManager : MonoBehaviour
                     break;
                 case 3: // Free movement -- player freely maneuvers
                     _pointerObject.SetActive(false);
-                    tmpro.text = "Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.";
+                    tmpro.text = "Capturing an enemy unit gave the circle allows the it to be used again, but consumes another one of your Moves. Use it to capture the final enemy unit.";
                     break;
             }
         if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
