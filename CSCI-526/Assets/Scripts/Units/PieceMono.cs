@@ -12,6 +12,10 @@ public abstract class PieceMono : MonoBehaviour
 
 	protected string unitName;
 
+    [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
+
+    [SerializeField] private GameObject buffParticles;      // Circle indicator when it is buffed by Diamond
+
     public GameObject canMoveObject, cantMoveObject;     // Highlight will be temporary -- change to particles after midterm
 
     public abstract string getUnitInfo();
@@ -147,4 +151,168 @@ public abstract class PieceMono : MonoBehaviour
 		}
 		return false;
 	}
+
+    private void UpdateSupportIndicators()        // FOR DIAMOND PIECE
+    {
+        if(!this.IsDiamond())
+        {
+            return;
+        }
+
+        // Adjacent list from PieceMono
+        int x = (int)this.transform.position.x;
+        int y = (int)this.transform.position.y;
+
+        var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(new Tuple<int, int>(x + 1, y)); // E
+        adjacentList.Add(new Tuple<int, int>(x - 1, y)); // W
+        adjacentList.Add(new Tuple<int, int>(x, y + 1)); // N
+        adjacentList.Add(new Tuple<int, int>(x, y - 1)); // S
+        adjacentList.Add(new Tuple<int, int>(x + 1, y + 1)); // NE
+        adjacentList.Add(new Tuple<int, int>(x - 1, y + 1)); // NW
+        adjacentList.Add(new Tuple<int, int>(x + 1, y - 1)); // SE
+        adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); // SW
+
+
+        foreach (Tuple<int, int> coord in adjacentList)
+        {
+            int ax = coord.Item1;
+            int ay = coord.Item2;
+
+            if (LevelMono.Instance.GetPiece(coord) != null && !this.IsEnemyOf(LevelMono.Instance.GetPiece(coord)))
+            {
+                // Adjacent ally is circle
+                if (LevelMono.Instance.GetPiece(coord).IsCircle())
+                {
+                    if (ax == x + 1 && ay == y)      // East
+                    {
+                        if (!eSupport.activeInHierarchy) { eSupport.SetActive(true); }
+                    }
+                    if (ax == x - 1 && ay == y)      // West
+                    {
+                        if (!wSupport.activeInHierarchy) { wSupport.SetActive(true); }
+                    }
+                    if (ax == x && ay == y + 1)      // North
+                    {
+                        if (!nSupport.activeInHierarchy) { nSupport.SetActive(true); }
+                    }
+                    if (ax == x && ay == y - 1)      // South
+                    {
+                        if (!sSupport.activeInHierarchy) { sSupport.SetActive(true); }
+                    }
+
+                    if (ax == x + 1 && ay == y + 1)      // NorthEast
+                    {
+                        if (!neSupport.activeInHierarchy) { neSupport.SetActive(true); }
+                    }
+                    if (ax == x - 1 && ay == y + 1)      // NorthWest
+                    {
+                        if (!nwSupport.activeInHierarchy) { nwSupport.SetActive(true); }
+                    }
+                    if (ax == x - 1 && ay == y - 1)      // SouthWest
+                    {
+                        if (!swSupport.activeInHierarchy) { swSupport.SetActive(true); }
+                    }
+                    if (ax == x + 1 && ay == y - 1)      // SouthEast
+                    {
+                        if (!seSupport.activeInHierarchy) { seSupport.SetActive(true); }
+                    }
+                }
+                // Adjacent ally is not circle
+                else
+                {
+                    if (ax == x + 1 && ay == y)      // East
+                    {
+                        eSupport.SetActive(false);
+                    }
+                    if (ax == x - 1 && ay == y)      // West
+                    {
+                        wSupport.SetActive(false);
+                    }
+                    if (ax == x && ay == y + 1)      // North
+                    {
+                        nSupport.SetActive(false);
+                    }
+                    if (ax == x && ay == y - 1)      // South
+                    {
+                        sSupport.SetActive(false);
+                    }
+
+                    if (ax == x + 1 && ay == y + 1)      // NorthEast
+                    {
+                        neSupport.SetActive(false);
+                    }
+                    if (ax == x - 1 && ay == y + 1)      // NorthWest
+                    {
+                        nwSupport.SetActive(false);
+                    }
+                    if (ax == x - 1 && ay == y - 1)      // SouthWest
+                    {
+                        swSupport.SetActive(false);
+                    }
+                    if (ax == x + 1 && ay == y - 1)      // SouthEast
+                    {
+                        seSupport.SetActive(false);
+                    }
+                }
+            }
+            // Empty adjacent tile
+            else
+            {
+                if (ax == x + 1 && ay == y)      // East
+                {
+                    eSupport.SetActive(false);
+                }
+                if (ax == x - 1 && ay == y)      // West
+                {
+                    wSupport.SetActive(false);
+                }
+                if (ax == x && ay == y + 1)      // North
+                {
+                    nSupport.SetActive(false);
+                }
+                if (ax == x && ay == y - 1)      // South
+                {
+                    sSupport.SetActive(false);
+                }
+
+                if (ax == x + 1 && ay == y + 1)      // NorthEast
+                {
+                    neSupport.SetActive(false);
+                }
+                if (ax == x - 1 && ay == y + 1)      // NorthWest
+                {
+                    nwSupport.SetActive(false);
+                }
+                if (ax == x - 1 && ay == y - 1)      // SouthWest
+                {
+                    swSupport.SetActive(false);
+                }
+                if (ax == x + 1 && ay == y - 1)      // SouthEast
+                {
+                    seSupport.SetActive(false);
+                }
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if(this.IsDiamond())
+        {
+            UpdateSupportIndicators();
+        }
+
+        if(this.IsCircle())
+        {
+            if(this.IsAdjacentToAllyDiamond())
+            {
+                buffParticles.SetActive(true);
+            }
+            else
+            {
+                buffParticles.SetActive(false);
+            }
+        }
+    }
 }

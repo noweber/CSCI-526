@@ -207,8 +207,6 @@ public class GameManagerChain : MonoBehaviour
             }
             yield return new WaitForSeconds(0.1f);
         }
-
-
         yield return null;
     }
     /// <summary>
@@ -256,7 +254,6 @@ public class GameManagerChain : MonoBehaviour
                 {
                     piece.canMoveObject.SetActive(false);
                     piece.canMoveObject.SetActive(false);
-                    Debug.Log("DISABLED ENEMY TELLS");
                 }
                 if (SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
                 {
