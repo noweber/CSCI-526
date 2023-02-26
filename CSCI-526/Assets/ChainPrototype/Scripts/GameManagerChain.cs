@@ -236,12 +236,12 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(LevelOne());
                 }
+                StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
                 break;
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
                 MenuManager.Instance.ShowNumMovesInfo();
-                StartCoroutine(FadeMovableAlpha());
                 foreach(PieceMono piece in LevelMono.Instance.GetPlayerPieces())
                 {
                     if (!piece.IsTriangle())
@@ -261,7 +261,6 @@ public class GameManagerChain : MonoBehaviour
                 }
                 break;
             case GameStateEnum.AI:
-                StopCoroutine(FadeMovableAlpha());
                 MenuManager.Instance.ShowTurnInfo();
                 MenuManager.Instance.ShowNumMovesInfo();
                 MenuManager.Instance.HideEndTurnButton();
@@ -287,13 +286,11 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.Victory:
                 Debug.Log("VICTORY");
-                StopCoroutine(FadeMovableAlpha());
                 MenuManager.Instance.SetVictoryScreen(true);
                 SendEndOfLevelAnalytics();
                 break;
             case GameStateEnum.Loss:
                 Debug.Log("LOSS");
-                StopCoroutine(FadeMovableAlpha());
                 SendEndOfLevelAnalytics();
                 SceneManager.LoadScene(SceneName);
                 break;

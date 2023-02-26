@@ -2773,7 +2773,7 @@ MonoBehaviour:
   playerColor: {r: 0.004434774, g: 0, b: 0.735849, a: 1}
   enemyColor: {r: 0.5471698, g: 0, b: 0, a: 1}
   selectedPiece: {fileID: 0}
-  debug: 0
+  debug: 1
   capturedTower: 0
 --- !u!4 &1305261819
 Transform:
