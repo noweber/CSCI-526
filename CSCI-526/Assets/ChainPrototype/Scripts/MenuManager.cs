@@ -12,7 +12,8 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance { get; private set; }
 
 
-    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject, _pointerObject;
+    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, 
+        _objectiveContent, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, _defeatObject, _pointerObject, _gridManagerObject;
    
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
@@ -222,6 +223,29 @@ public class MenuManager : MonoBehaviour
 
     }
 
+    public void SetDefeatScreen(bool status)
+    {
+        _defeatObject.SetActive(status);
+
+        //Set every other UI elements to inactive
+        if (status)
+        {
+            _turnInfoObject.SetActive(false);
+            _selectedUnitInfo.SetActive(false);
+            _numTurnObject.SetActive(false);
+            _abilityUseObject.SetActive(false);
+            _endTurnObject.SetActive(false);
+            _slackObject.SetActive(false);
+            _pauseObject.SetActive(false);
+
+            if (SceneManager.GetActiveScene().name == "TutorialLevel" || SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+            {
+                _objectiveObject.SetActive(false);
+            }
+        }
+
+    }
+
     private IEnumerator FingerBlink()
     {
         while(_pointerObject.activeInHierarchy == true)
@@ -280,7 +304,26 @@ public class MenuManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "TutorialLevel" || SceneManager.GetActiveScene().name == "TutorialFogOfWar")
         {
             UpdateObjectiveContent();
+
+            //Update the remaining enemy numbers on the screen for players
+            LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
+
+            TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
+            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPiecesNum() + " enemy units</color>";
+            //Debug.Log(tempLevelMono.GetEnemyPiecesNum());
         }
+        else
+        {
+            //Update the remaining enemy numbers on the screen for players
+            LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
+
+            TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
+            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPiecesNum() + " enemy units</color>";
+            Debug.Log(tempLevelMono.GetEnemyPiecesNum());
+            //Debug.Log(temp.GetPlayerPieces().Count);
+        }
+
+
     }
 
     void OnDestroy()

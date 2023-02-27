@@ -112,6 +112,11 @@ public class LevelMono : MonoBehaviour
         return enemyPieces;
     }
 
+    public int GetEnemyPiecesNum()
+    {
+        return GetEnemyPieces().Count;
+    }
+
     private void ClearVision()
     {
         foreach (var tile in tiles)

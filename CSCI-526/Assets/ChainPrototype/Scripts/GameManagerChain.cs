@@ -334,7 +334,7 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Loss:
                 Debug.Log("LOSS");
                 SendEndOfLevelAnalytics();
-                SceneManager.LoadScene(SceneName);
+                MenuManager.Instance.SetDefeatScreen(true);
                 break;
         }
     }
