@@ -288,6 +288,19 @@ public class GameManagerChain : MonoBehaviour
 
             GameManagerChain.Instance.ResetMovesMade();
 
+            // This adds all of the active pieces in the level into a heatmap each time there is a transition into the human player's turn:
+            foreach (var piece in LevelMono.Instance._pieces)
+            {
+                if (tilesOccupiedHeatmap.ContainsKey(piece.Key))
+                {
+                    tilesOccupiedHeatmap[piece.Key]++;
+                }
+                else
+                {
+                    tilesOccupiedHeatmap.TryAdd(piece.Key, 1);
+                }
+            }
+
             ChangeState(GameStateEnum.Human);
             switchingTurns = false;
         }
