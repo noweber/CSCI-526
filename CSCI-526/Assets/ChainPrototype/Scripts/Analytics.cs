@@ -3,10 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/// <summary>
-/// Google FORM URL "https://docs.google.com/forms/u/1/d/e/1FAIpQLScbdeMbYwWKzLKgAWeWEHL94ruFqymF66zYgzN2pEjgAFcrCg/formResponse" 
-/// Week 7 Form URL: https://docs.google.com/forms/d/e/1FAIpQLSfvesyHfUZdYlkKeJvxUR5VH5F165VoJnUx3Q8FB6beTribkA/formResponse
-/// </summary>
 public class Analytics : MonoBehaviour
 {
     [SerializeField] private string StartOfLevelUrl;
@@ -23,7 +19,6 @@ public class Analytics : MonoBehaviour
         if (string.IsNullOrEmpty(EndOfLevelUrl))
         {
             EndOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdvn64Wxc0jOofVxK7r-tztWiLzJq31PnJCJZNMSsPzwczG4Q/formResponse";
-            //https://docs.google.com/forms/d/e/1FAIpQLSdvn64Wxc0jOofVxK7r-tztWiLzJq31PnJCJZNMSsPzwczG4Q/formResponse
         }
     }
 

@@ -79,7 +79,7 @@ public class GameManagerChain : MonoBehaviour
         TotalMoves = 0;
         tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
         tilesOccupiedHeatmap = new Dictionary<Tuple<int, int>, int>();
-        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
+        ResetPieceMovementCountsForHumanPlayer();
     }
 
     private void ResetPieceMovementCountsForHumanPlayer()
@@ -163,20 +163,23 @@ public class GameManagerChain : MonoBehaviour
             }
 
             // TODO: After Week 8: Refactor and remove the individual counters and only use the dictionary
-            
+
             if (pieceThatMoved.IsCircle())
             {
                 circlePiecessMovedByPlayer++;
+                humanPlayerPieceTypeMoveCounts[PieceMono.Circle]++;
             }
 
             if (pieceThatMoved.IsDiamond())
             {
                 diamondPiecessMovedByPlayer++;
+                humanPlayerPieceTypeMoveCounts[PieceMono.Diamond]++;
             }
 
             if (pieceThatMoved.IsScout())
             {
                 scoutPiecessMovedByPlayer++;
+                humanPlayerPieceTypeMoveCounts[PieceMono.Scout]++;
             }
         }
     }
@@ -412,7 +415,7 @@ public class GameManagerChain : MonoBehaviour
     {
         tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
         tilesOccupiedHeatmap = new Dictionary<Tuple<int, int>, int>();
-        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
+        ResetPieceMovementCountsForHumanPlayer();
         circlePiecessMovedByPlayer = 0;
         diamondPiecessMovedByPlayer = 0;
         scoutPiecessMovedByPlayer = 0;
