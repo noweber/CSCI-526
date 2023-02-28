@@ -23,6 +23,7 @@ public class Analytics : MonoBehaviour
         if (string.IsNullOrEmpty(EndOfLevelUrl))
         {
             EndOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdvn64Wxc0jOofVxK7r-tztWiLzJq31PnJCJZNMSsPzwczG4Q/formResponse";
+            //https://docs.google.com/forms/d/e/1FAIpQLSdvn64Wxc0jOofVxK7r-tztWiLzJq31PnJCJZNMSsPzwczG4Q/formResponse
         }
     }
 
@@ -67,7 +68,7 @@ public class Analytics : MonoBehaviour
         form.AddField("entry.1700549212", levelName);
         form.AddField("entry.846791691", levelWidth);
         form.AddField("entry.1378155138", levelHeight);
-        return PostAnalyticsForm(form);
+        return PostAnalyticsForm(form, StartOfLevelUrl);
     }
 
     private IEnumerator PostEndOfLevelData(string sessionID, string timePlayed, string levelName, string levelWidth, string levelHeight, string totalNumberOfPiecesMoved, string tilesOccupiedHeatmapJson, string pieceMovementHeatmapJson, string countOfCirclePiecesMoved, string countOfDiamondPiecesMoved, string countOfScoutPiecesMoved, string countOfPiecesMovedByTypeJson)
@@ -75,6 +76,7 @@ public class Analytics : MonoBehaviour
         Debug.Log("Post Coroutine started");
         WWWForm form = new WWWForm();
         form.AddField("entry.1379325124", sessionID);
+        form.AddField("entry.589367142", timePlayed);
         form.AddField("entry.1700549212", levelName);
         form.AddField("entry.846791691", levelWidth);
         form.AddField("entry.1378155138", levelHeight);
@@ -85,17 +87,17 @@ public class Analytics : MonoBehaviour
         form.AddField("entry.1119668788", countOfDiamondPiecesMoved);
         form.AddField("entry.1498362014", countOfScoutPiecesMoved);
         form.AddField("entry.1649735813", countOfPiecesMovedByTypeJson);
-        return PostAnalyticsForm(form);
+        return PostAnalyticsForm(form, EndOfLevelUrl);
     }
 
-    private IEnumerator PostAnalyticsForm(WWWForm analyticsForm)
+    private IEnumerator PostAnalyticsForm(WWWForm analyticsForm, string formUrl)
     {
         if (analyticsForm == null)
         {
             throw new ArgumentNullException(nameof(analyticsForm));
         }
 
-        using (UnityWebRequest www = UnityWebRequest.Post(EndOfLevelUrl, analyticsForm))
+        using (UnityWebRequest www = UnityWebRequest.Post(formUrl, analyticsForm))
         {
 
             yield return www.SendWebRequest();
