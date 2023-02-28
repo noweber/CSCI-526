@@ -16,7 +16,14 @@ public class EnemyAI : MonoBehaviour
         isRunning = false;
     }
 
-    public Tuple<int, int> SelectRandomPiece()
+    /*
+     * Piece selection priority:
+     *  1. move diamond to circles
+     *  2. move a piece if it can capture (circle has capture priority)
+     *  3. move circle if range enhanced by diamond
+     *  4. select a random movable piece if all else fails
+     */
+    public Tuple<int, int> SelectBestPiece()
     {
         var lvlMono = LevelMono.Instance;
         var enemyPieceCoords = lvlMono.GetEnemyPieceCoords();
@@ -44,6 +51,20 @@ public class EnemyAI : MonoBehaviour
             }
         }
         if (movableEnemies.Count == 0) { return null; }
+
+        //check for ANY piece that can capture (circle capture priority)
+        var canCapture = GetPiecesThatCanCapture(movableEnemies);
+        foreach (var piece in canCapture)
+        {
+            if (LevelMono.Instance.GetPiece(piece).IsCircle())
+            {
+                return piece;
+            }
+        }
+        if (canCapture.Count > 0)
+        {
+            return canCapture[Random.Range(0, canCapture.Count)];
+        }
 
         foreach (var circle in movableCircles)
         {
@@ -109,6 +130,32 @@ public class EnemyAI : MonoBehaviour
         return circles;
     }
 
+    private List<Tuple<int, int>> GetPiecesThatCanCapture(List<Tuple<int, int>> movablePieces)
+    {
+        var levelMono = LevelMono.Instance;
+        List<Tuple<int, int>> canCapture = new List<Tuple<int, int>>();
+        foreach (var coord in movablePieces)
+        {
+            var piece = levelMono.GetPiece(coord);
+            var moves = piece.LegalMoves(levelMono.GetWidth(), levelMono.GetHeight());
+            bool added = false;
+            foreach (var move in moves)
+            {
+                if (added)
+                { 
+                    break; 
+                }
+                if (IsACapturingMove(move))
+                {
+                    canCapture.Add(coord);
+                    added = true;
+                }
+            }
+        }
+
+        return canCapture;
+    }
+
     private Tuple<int,int> MoveDiamondToCircle(Tuple<int, int> diamond, List<Tuple<int, int>> moves)
     {
         var circles = GetCircles();
@@ -147,9 +194,11 @@ public class EnemyAI : MonoBehaviour
     {
         //TODO: account for enemy visibility
         var pieceAtDestination = LevelMono.Instance.GetPiece(destination);
+        var lvlMono = LevelMono.Instance;
+        var tile = lvlMono.GetTile(destination);
 
         //If piece at destination not null and is Player and AI has visibility
-        if (pieceAtDestination != null && pieceAtDestination.IsHuman() && LevelMono.Instance.tiles[destination].GetVisibility() == VisibilityState.Enemy)
+        if (pieceAtDestination != null && pieceAtDestination.IsHuman() && tile.CanEnemySee())
         {
             return true;
         }
@@ -158,12 +207,13 @@ public class EnemyAI : MonoBehaviour
 
     private int PickBestMove(List<Tuple<int, int>> moves)
     {
+        var lvlMono = LevelMono.Instance;
         int bestMove = -1;
         int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
         for (int i=0; i<moves.Count; i++)
         {
             //If AI has visibility AND the move is a capturing move
-            if (LevelMono.Instance.tiles[moves[i]].GetVisibility() == VisibilityState.Enemy && IsACapturingMove(moves[i]))
+            if (lvlMono.GetTile(moves[i]).CanEnemySee() && IsACapturingMove(moves[i]))
                 bestMove = i;
         }
 
@@ -202,7 +252,7 @@ public class EnemyAI : MonoBehaviour
     private void MovePiece()
     {
         var lvlMono = LevelMono.Instance;
-        var aiCoord = SelectRandomPiece();
+        var aiCoord = SelectBestPiece();
         if (aiCoord != null)
         {
             var aiPiece = lvlMono.GetPiece(aiCoord);
@@ -245,7 +295,8 @@ public class EnemyAI : MonoBehaviour
         {
             StopAllCoroutines();
             isRunning = false;
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+            StartCoroutine(GameManagerChain.Instance.StateToHuman());
+            // GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
     }
 

@@ -18,8 +18,9 @@ public class Tile : MonoBehaviour
     [SerializeField] public GameObject _fog, _redFog;
 
     [SerializeField] private GameObject closeEye, openEye;
-
-    private VisibilityState visibility;
+    
+    private bool canPlayerSee;
+    private bool canEnemySee;
 
     public void Init(bool isOffset)
     {
@@ -36,52 +37,77 @@ public class Tile : MonoBehaviour
         _highlight.SetActive(false);
     }
 
-    public void SetVisibility(VisibilityState visibility)
+    public void ToggleFog()
     {
-        this.visibility = visibility;
-        /*        if (visibility == VisibilityState.Player) { _fog.SetActive(false); }
-                else { _fog.SetActive(true); }*/
-        switch (visibility)
-        {
-            case VisibilityState.Player:
-                _fog.SetActive(false);
-                // _redFog.SetActive(false);
-                break;
-            case VisibilityState.Enemy:
-                _fog.SetActive(true);
-                // _redFog.SetActive(true);
-                break;
-            case VisibilityState.Neutral:
-                _fog.SetActive(true);
-                // _redFog.SetActive(false);
-                break;
-        }
-        if (LevelMono.Instance.debug == true)
+        if (canPlayerSee)
         {
             _fog.SetActive(false);
         }
+        else
+        {
+            _fog.SetActive(true);
+        }
     }
-
-    public VisibilityState GetVisibility()
+    
+    // DEBUG ONLY
+    public void ToggleEnemyFog()
     {
-        return this.visibility;
+        if (canEnemySee)
+        {
+            _fog.SetActive(false);
+        }
+        else
+        {
+            _fog.SetActive(true);
+        }
     }
 
+    public void SetPlayerVisibility(bool v)
+    {
+        this.canPlayerSee = v;
+    }
+    
+    public void SetEnemyVisibility(bool v)
+    {
+        this.canEnemySee = v;
+    }
+    
+    public bool CanPlayerSee()
+    {
+        return this.canPlayerSee;
+    }
+
+    public bool CanEnemySee()
+    {
+        return this.canEnemySee;
+    }
+    
     public void ShowVisibility()
     {
         if (SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
-        switch (visibility)
+        // switch (visibility)
+        // {
+        //     case VisibilityState.Player:
+        //         openEye.SetActive(true);
+        //         closeEye.SetActive(false);
+        //         break;
+        //     case VisibilityState.Enemy:
+        //     case VisibilityState.Neutral:
+        //         closeEye.SetActive(true);
+        //         openEye.SetActive(false);
+        //         break;
+        // }
+        if (this.canPlayerSee)
         {
-            case VisibilityState.Player:
-                openEye.SetActive(true);
-                closeEye.SetActive(false);
-                break;
-            case VisibilityState.Enemy:
-            case VisibilityState.Neutral:
-                closeEye.SetActive(true);
-                openEye.SetActive(false);
-                break;
+            openEye.SetActive(true);
+            closeEye.SetActive(false);
         }
+        else
+        {
+            openEye.SetActive(false);
+            closeEye.SetActive(true);
+        }
+        
     }
     public void HideVisibility()
     {
@@ -96,7 +122,7 @@ public class Tile : MonoBehaviour
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
-        if (clickedPiece != null) // selected piece is correct turn's color
+        if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
         {
             if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
@@ -188,17 +214,18 @@ public class Tile : MonoBehaviour
             {
                 if (SceneManager.GetActiveScene().name == "TutorialLevel")
                 {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
                 if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
                 {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
                 else
                 {
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+                    StartCoroutine(GameManagerChain.Instance.StateToAI());
+                    // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                 }
             }
         }
@@ -207,19 +234,14 @@ public class Tile : MonoBehaviour
     // "Slacking off" text for 2 seconds, then change state to white
     private IEnumerator DelayedChangeState()
     {
+        StartCoroutine(GameManagerChain.Instance.StateToAI());
+        yield return new WaitForSeconds(2.0f);
         MenuManager.Instance.SetSlackDialogue(true);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         MenuManager.Instance.SetSlackDialogue(false);
-        GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+        StartCoroutine(GameManagerChain.Instance.StateToHuman());
         yield return null;
     }
-}
-
-public enum VisibilityState
-{
-    Player = 0,
-    Enemy = 1,
-    Neutral = 2,
 }
 
 

@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/ChainPrototype/Scenes/TutorialFogOfWar.unity
     guid: 54385e1a0d04beb49858852e02efa0e4
   - enabled: 1
-    path: Assets/ChainPrototype/Scenes/ChainPrototype.unity
+    path: Assets/ChainPrototype/Scenes/Level_One.unity
     guid: a5fc7124fe9e747c6b220966cffad0fb
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/Level_Two.unity
+    guid: 7034c7386f03c4d0d80876a3ba28eed4
   m_configObjects: {}
