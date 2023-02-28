@@ -61,16 +61,18 @@ def main():
     #### Google Sheet % of moves by Circle START###
     circle_Moves = worksheet.col_values(8) 
     total_Moves = worksheet.col_values(3) 
-    percentage_circle = [0]*len(total_Moves)
+    percentage_circle = []
 
     for i in range(1,len(total_Moves)):
-        percentage_circle[i] = [str (int(circle_Moves[i])/int(total_Moves[i])*100)]
+        if int(circle_Moves[i]) < int(total_Moves[i]):
+            percentage_circle.append([str((int(circle_Moves[i]) *100)//int(total_Moves[i]))])
 
 
     filter_data_sheet = gc.open('Multilevel_branch_analytics_test').worksheet('Filter_Data_DND')
     n = len(percentage_circle)+4
     srange = f'D4:D{n}'
-    filter_data_sheet.update(srange,percentage_circle[1:])
+    print(percentage_circle)
+    filter_data_sheet.update(srange,percentage_circle)
     ### Google Sheet % of moves by Circle END ###
 
     #### Google Sheet % of moves by diamond START###
@@ -95,6 +97,7 @@ def main():
     im = ax.imshow(heatmap_5_10, cmap='coolwarm')
     # set the colorbar
     cbar = ax.figure.colorbar(im, ax=ax)
+
     # show the plot
     plt.show()
 
@@ -102,3 +105,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    

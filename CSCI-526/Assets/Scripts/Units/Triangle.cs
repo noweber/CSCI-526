@@ -42,5 +42,30 @@ namespace Assets.Scripts.Units
             }
             return false;
         }
+        
+        public override List<Tuple<int, int>> GetVisibleArea(int range)
+        {
+            var lvlMono = LevelMono.Instance;
+            var w = lvlMono.GetWidth();
+            var h = lvlMono.GetHeight();
+            var pos = this.transform.position;
+            int x = (int)pos.x;
+            int y = (int)pos.y;
+
+            var visibleArea = new List<Tuple<int, int>>();
+            for (int i = x - range; i <= x + range; i++)
+            {
+                for (int j = y - range; j <= y + range; j++)
+                {
+                    if (i >= 0 && i < w && j >= 0 && j < h)
+                    {
+                        visibleArea.Add(new Tuple<int, int>(i, j));
+                    }
+                }
+            }
+            
+            return visibleArea;
+        }
+
     }
 }

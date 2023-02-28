@@ -12,8 +12,12 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance { get; private set; }
 
 
-    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, _objectiveContent, _slackObject, _pauseObject, _victoryObject, _pointerObject;
+    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, 
+        _objectiveContent, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, _defeatObject, _pointerObject, _gridManagerObject;
+   
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
+
+    public GameObject _playerTurnIndicator, _enemyTurnIndicator;
 
     public MenuManager()
     {
@@ -66,12 +70,14 @@ public class MenuManager : MonoBehaviour
         if (turn == true)
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
+            StartCoroutine(GameManagerChain.Instance.StateToAI());
+            // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
         }
         else
         {
             Debug.Log(GameManagerChain.Instance.GameStateEnum);
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
+            StartCoroutine(GameManagerChain.Instance.StateToHuman());
+            // GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
         var lvlMono = LevelMono.Instance;
         lvlMono.RemoveHighlight();
@@ -158,7 +164,7 @@ public class MenuManager : MonoBehaviour
                     if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
                     {
                         _pointerObject.transform.position = new Vector3(3.25f, 2.75f, -2f);
-                        tmpro.text = " Move the circle to the triangle.";
+                        tmpro.text = "The triangle is a resource, rather than a unit, that will be useful later on, and does not need to be captured to win. Move the circle to the triangle.";
                     }
                     break;
                 case 2:     
@@ -173,7 +179,7 @@ public class MenuManager : MonoBehaviour
                     break;
                 case 3: // Free movement -- player freely maneuvers
                     _pointerObject.SetActive(false);
-                    tmpro.text = "Capturing an enemy unit gave the circle another move. Use it to capture the final enemy unit.";
+                    tmpro.text = "Capturing an enemy unit with the circle allows the it to be used again, but consumes another one of your Moves. Use it to capture the final enemy unit.";
                     break;
             }
         if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
@@ -200,6 +206,29 @@ public class MenuManager : MonoBehaviour
 
         //Set every other UI elements to inactive
         if(status)
+        {
+            _turnInfoObject.SetActive(false);
+            _selectedUnitInfo.SetActive(false);
+            _numTurnObject.SetActive(false);
+            _abilityUseObject.SetActive(false);
+            _endTurnObject.SetActive(false);
+            _slackObject.SetActive(false);
+            _pauseObject.SetActive(false);
+
+            if (SceneManager.GetActiveScene().name == "TutorialLevel" || SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+            {
+                _objectiveObject.SetActive(false);
+            }
+        }
+
+    }
+
+    public void SetDefeatScreen(bool status)
+    {
+        _defeatObject.SetActive(status);
+
+        //Set every other UI elements to inactive
+        if (status)
         {
             _turnInfoObject.SetActive(false);
             _selectedUnitInfo.SetActive(false);
@@ -275,7 +304,26 @@ public class MenuManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "TutorialLevel" || SceneManager.GetActiveScene().name == "TutorialFogOfWar")
         {
             UpdateObjectiveContent();
+
+            //Update the remaining enemy numbers on the screen for players
+            LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
+
+            TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
+            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color>";
+            //Debug.Log(tempLevelMono.GetEnemyPiecesNum());
         }
+        else
+        {
+            //Update the remaining enemy numbers on the screen for players
+            LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
+
+            TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
+            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color>";
+            Debug.Log(tempLevelMono.GetEnemyPiecesNum());
+            //Debug.Log(temp.GetPlayerPieces().Count);
+        }
+
+
     }
 
     void OnDestroy()

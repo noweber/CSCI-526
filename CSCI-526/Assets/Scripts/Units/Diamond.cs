@@ -7,6 +7,8 @@ namespace Assets.Scripts.Units
 {
     public class Diamond : PieceMono
     {
+        private List<Tuple<int, int>> adjAllies = new List<Tuple<int, int>>();
+
         public override string getUnitInfo()
         {
             return "Can Capture Enemies. When adjacent to Circle, Circle gains increased range.";
@@ -17,9 +19,9 @@ namespace Assets.Scripts.Units
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
             var lvlMono = LevelMono.Instance;
-			var pos = this.transform.position;
-			int x = (int)pos.x;
-			int y = (int)pos.y;
+            var pos = this.transform.position;
+            int x = (int)pos.x;
+            int y = (int)pos.y;
 
             for (int i = 0; i < boardWidth; i++)
             {
@@ -29,7 +31,7 @@ namespace Assets.Scripts.Units
                     if (Mathf.Abs(i - x) == 1 && Mathf.Abs(j - y) == 1)
                     {
                         var availableMove = new Tuple<int, int>(i, j);
-						var availablePiece = lvlMono.GetPiece(availableMove);
+                        var availablePiece = lvlMono.GetPiece(availableMove);
                         if (availablePiece != null)
                         {
                             if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
@@ -86,6 +88,12 @@ namespace Assets.Scripts.Units
             // }
 
             return legalSpots;
+        }
+
+        public override List<Tuple<int, int>> GetVisibleArea(int range)
+        {
+            List<Tuple<int, int>> visibleArea = new List<Tuple<int, int>>();
+            return visibleArea;
         }
     }
 }
