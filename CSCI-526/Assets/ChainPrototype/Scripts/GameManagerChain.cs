@@ -273,10 +273,14 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "TutorialFogOfWar")
                 {
                     LevelMono.Instance.LoadLevel(TutorialFogOfWarLevel());
-                }
-                else
+                } 
+				else if (SceneName == "Level_One")
+				{
+					LevelMono.Instance.LoadLevel(LevelOne());
+				}
+                else if (SceneName == "Level_Two")
                 {
-                    LevelMono.Instance.LoadLevel(LevelOne());
+                    LevelMono.Instance.LoadLevel(LevelTwo());
                 }
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
@@ -461,6 +465,68 @@ public class GameManagerChain : MonoBehaviour
     /// </summary>
     /// <returns>Returns the first level's data.</returns>
     private LoadLevelData LevelOne()
+    {
+        int _width = 5;
+        int _height = 10;
+        List<PieceInfo> units = new List<PieceInfo>();
+
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                Tuple<int, int> position = new(x, y);
+
+                if (x == 3 && y == 2)
+                {
+                    units.Add(new PieceInfo(position, true, "Scout"));
+                }
+
+                if (x == 2 && y == 2)
+                {
+                    units.Add(new PieceInfo(position, true, "Triangle"));
+                }
+
+                if (x == 2 && y == 0)
+                {
+                    units.Add(new PieceInfo(position, true, "Circle"));
+                }
+
+                if (x == 3 && y == 0)
+                {
+                    units.Add(new PieceInfo(position, true, "Diamond"));
+                }
+
+                if (x == 2 && y == 7)
+                {
+                    units.Add(new PieceInfo(position, false, "Triangle"));
+
+                }
+
+                if (x == 2 && y == _height - 1)
+                {
+                    units.Add(new PieceInfo(position, false, "Circle"));
+                }
+
+                if (x == 3 && y == _height - 1)
+                {
+                    units.Add(new PieceInfo(position, false, "Diamond"));
+                }
+
+                if (x == 2 && y == 6)
+                {
+                    units.Add(new PieceInfo(position, false, "Scout"));
+                }
+            }
+        }
+        return new LoadLevelData()
+        {
+            Width = _width,
+            Height = _height,
+            Units = units
+        };
+    }
+
+	private LoadLevelData LevelTwo()
     {
         int _width = 8;
         int _height = 10;
