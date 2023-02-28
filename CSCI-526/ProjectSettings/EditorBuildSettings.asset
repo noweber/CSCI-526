@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ChainPrototype/Scenes/Level_One.unity
     guid: a5fc7124fe9e747c6b220966cffad0fb
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/Level_Two.unity
+    guid: 7034c7386f03c4d0d80876a3ba28eed4
   m_configObjects: {}
