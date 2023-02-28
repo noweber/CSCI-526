@@ -309,7 +309,7 @@ public class MenuManager : MonoBehaviour
             LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
-            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPiecesNum() + " enemy units</color>";
+            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color>";
             //Debug.Log(tempLevelMono.GetEnemyPiecesNum());
         }
         else
@@ -318,7 +318,7 @@ public class MenuManager : MonoBehaviour
             LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
-            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPiecesNum() + " enemy units</color>";
+            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color>";
             Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }
