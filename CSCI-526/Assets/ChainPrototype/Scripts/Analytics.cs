@@ -6,8 +6,6 @@ using UnityEngine.Networking;
 /// <summary>
 /// Google FORM URL "https://docs.google.com/forms/u/1/d/e/1FAIpQLScbdeMbYwWKzLKgAWeWEHL94ruFqymF66zYgzN2pEjgAFcrCg/formResponse" 
 /// Week 7 Form URL: https://docs.google.com/forms/d/e/1FAIpQLSfvesyHfUZdYlkKeJvxUR5VH5F165VoJnUx3Q8FB6beTribkA/formResponse
-/// Week 8 Start of Level Form URL: https://docs.google.com/forms/d/1XcaZpgzAfxnk7cc_1TUuFhtQypDiF-H0YDvOxjyV-7I/formResponse
-/// Week 8 End of Level Form URL: https://docs.google.com/forms/d/1ZmQr9oyJ3fv3g-LN2MFvFGEHn_XoMZAWTyCpWWmqeUA/formResponse
 /// </summary>
 public class Analytics : MonoBehaviour
 {
@@ -15,6 +13,18 @@ public class Analytics : MonoBehaviour
     [SerializeField] private string EndOfLevelUrl;
 
     public static Analytics Instance;
+
+    private void Awake()
+    {
+        if (string.IsNullOrEmpty(StartOfLevelUrl))
+        {
+            StartOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSerply3kFSQjKMtiMbBGhCrQ-OtvP-Oa1fGMKo5OtTe6G5omg/formResponse";
+        }
+        if (string.IsNullOrEmpty(EndOfLevelUrl))
+        {
+            EndOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdvn64Wxc0jOofVxK7r-tztWiLzJq31PnJCJZNMSsPzwczG4Q/formResponse";
+        }
+    }
 
     public Analytics()
     {
