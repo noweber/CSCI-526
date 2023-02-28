@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -5,11 +6,13 @@ using UnityEngine.Networking;
 /// <summary>
 /// Google FORM URL "https://docs.google.com/forms/u/1/d/e/1FAIpQLScbdeMbYwWKzLKgAWeWEHL94ruFqymF66zYgzN2pEjgAFcrCg/formResponse" 
 /// Week 7 Form URL: https://docs.google.com/forms/d/e/1FAIpQLSfvesyHfUZdYlkKeJvxUR5VH5F165VoJnUx3Q8FB6beTribkA/formResponse
+/// Week 8 Start of Level Form URL: https://docs.google.com/forms/d/1XcaZpgzAfxnk7cc_1TUuFhtQypDiF-H0YDvOxjyV-7I/formResponse
+/// Week 8 End of Level Form URL: https://docs.google.com/forms/d/1ZmQr9oyJ3fv3g-LN2MFvFGEHn_XoMZAWTyCpWWmqeUA/formResponse
 /// </summary>
 public class Analytics : MonoBehaviour
 {
-
-    [SerializeField] private string URL;
+    [SerializeField] private string StartOfLevelUrl;
+    [SerializeField] private string EndOfLevelUrl;
 
     public static Analytics Instance;
 
@@ -18,37 +21,71 @@ public class Analytics : MonoBehaviour
         Instance = this;
     }
 
-    public void Send(string sessionID, float timePlayed, string levelName, int levelWidth, int levelHeight, int totalMovesMadeThisLevel, string movesMadeHeatJson, int circleMovesMade, int diamondMovesMade)
+    public void SendStartOfLevelData(string sessionID, string levelName, int levelWidth, int levelHeight)
+    {
+        StartCoroutine(
+            PostStartOfLevelData(sessionID,
+            levelName,
+            levelWidth.ToString(),
+            levelHeight.ToString()));
+    }
+
+    public void SendEndOfLevelData(string sessionID, float timePlayedInMinutes, string levelName, int levelWidth, int levelHeight, int totalNumberOfPiecesMoved, string tilesOccupiedHeatmapJson, string pieceMovementHeatmapJson, int countOfCirclePiecesMoved, int countOfDiamondPiecesMoved, int countOfScoutPiecesMoved, string countOfPiecesMovedByTypeJson)
     {
         Debug.Log("Analytics Send method started");
 
         StartCoroutine(
-            Post(sessionID,
-            timePlayed.ToString(),
+            PostEndOfLevelData(sessionID,
+            timePlayedInMinutes.ToString(),
             levelName,
-            levelWidth,
-            levelHeight,
-            totalMovesMadeThisLevel.ToString(),
-            movesMadeHeatJson,
-            circleMovesMade,
-            diamondMovesMade));
+            levelWidth.ToString(),
+            levelHeight.ToString(),
+            totalNumberOfPiecesMoved.ToString(),
+            tilesOccupiedHeatmapJson,
+            pieceMovementHeatmapJson,
+            countOfCirclePiecesMoved.ToString(),
+            countOfDiamondPiecesMoved.ToString(),
+            countOfScoutPiecesMoved.ToString(),
+            countOfPiecesMovedByTypeJson));
     }
 
-    private IEnumerator Post(string sessionID, string timePlayed, string levelName, int levelWidth, int levelHeight, string totalMoves, string movesMadeJson, int circleMovesMade, int diamondMovesMade)
+    private IEnumerator PostStartOfLevelData(string sessionID, string levelName, string levelWidth, string levelHeight)
     {
         Debug.Log("Post Coroutine started");
         WWWForm form = new WWWForm();
         form.AddField("entry.1379325124", sessionID);
-        form.AddField("entry.589367142", timePlayed);
         form.AddField("entry.1700549212", levelName);
         form.AddField("entry.846791691", levelWidth);
         form.AddField("entry.1378155138", levelHeight);
-        form.AddField("entry.1367608849", totalMoves);
-        form.AddField("entry.812093032", movesMadeJson);
-        form.AddField("entry.1687230251", circleMovesMade);
-        form.AddField("entry.1816303285", diamondMovesMade);
+        return PostAnalyticsForm(form);
+    }
 
-        using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
+    private IEnumerator PostEndOfLevelData(string sessionID, string timePlayed, string levelName, string levelWidth, string levelHeight, string totalNumberOfPiecesMoved, string tilesOccupiedHeatmapJson, string pieceMovementHeatmapJson, string countOfCirclePiecesMoved, string countOfDiamondPiecesMoved, string countOfScoutPiecesMoved, string countOfPiecesMovedByTypeJson)
+    {
+        Debug.Log("Post Coroutine started");
+        WWWForm form = new WWWForm();
+        form.AddField("entry.1379325124", sessionID);
+        form.AddField("entry.1700549212", levelName);
+        form.AddField("entry.846791691", levelWidth);
+        form.AddField("entry.1378155138", levelHeight);
+        form.AddField("entry.1367608849", totalNumberOfPiecesMoved);
+        form.AddField("entry.812093032", tilesOccupiedHeatmapJson);
+        form.AddField("entry.1687230251", pieceMovementHeatmapJson);
+        form.AddField("entry.346810973", countOfCirclePiecesMoved);
+        form.AddField("entry.1119668788", countOfDiamondPiecesMoved);
+        form.AddField("entry.1498362014", countOfScoutPiecesMoved);
+        form.AddField("entry.1649735813", countOfPiecesMovedByTypeJson);
+        return PostAnalyticsForm(form);
+    }
+
+    private IEnumerator PostAnalyticsForm(WWWForm analyticsForm)
+    {
+        if (analyticsForm == null)
+        {
+            throw new ArgumentNullException(nameof(analyticsForm));
+        }
+
+        using (UnityWebRequest www = UnityWebRequest.Post(EndOfLevelUrl, analyticsForm))
         {
 
             yield return www.SendWebRequest();
@@ -59,7 +96,7 @@ public class Analytics : MonoBehaviour
             }
             else
             {
-                Debug.Log("Form upload done");
+                Debug.Log("Form upload complete.");
             }
 
         }

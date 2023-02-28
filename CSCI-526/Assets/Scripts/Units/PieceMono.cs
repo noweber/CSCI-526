@@ -10,7 +10,15 @@ public abstract class PieceMono : MonoBehaviour
 	
 	protected bool hasMoved;
 
-	protected string unitName;
+	public string UnitName { get; protected set; }
+
+    public const string Circle = "Circle";
+
+    public const string Diamond = "Diamond";
+
+    public const string Triangle = "Triangle";
+
+    public const string Scout = "Scout";
 
     [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
 
@@ -22,7 +30,7 @@ public abstract class PieceMono : MonoBehaviour
 
 	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
 
-	public void SetName(string name) { this.unitName = name; }
+	public void SetName(string name) { this.UnitName = name; }
 
 	public void SetMoveState(bool state) { this.hasMoved = state; }
 
@@ -32,15 +40,15 @@ public abstract class PieceMono : MonoBehaviour
 
 	public bool IsHuman() { return this.isHuman; }
 
-	public bool IsCircle() { return this.unitName == "Circle"; }
+	public bool IsCircle() { return string.Equals(this.UnitName, Circle); }
 
-	public bool IsTriangle() { return this.unitName == "Triangle"; }
+	public bool IsTriangle() { return string.Equals(this.UnitName, Triangle); }
 
-	public bool IsDiamond() { return this.unitName == "Diamond"; }
+	public bool IsDiamond() { return string.Equals(this.UnitName, Diamond); }
 
-	public bool IsScout() { return this.unitName == "Scout"; }
+	public bool IsScout() { return string.Equals(this.UnitName, Scout); }
 
-	public string GetName() { return this.unitName; }
+	public string GetName() { return this.UnitName; }
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
     

@@ -19,11 +19,11 @@ namespace Assets.Scripts.Levels
 			this.unitName = unitName;
 		}
 		
-		public bool IsCircle() { return unitName == "Circle"; }
+		public bool IsCircle() { return string.Equals(unitName, PieceMono.Circle); }
 
-		public bool IsTriangle() { return unitName == "Triangle"; }
-		public bool IsDiamond() { return unitName == "Diamond"; }
-		public bool IsScout() { return unitName == "Scout"; }
+		public bool IsTriangle() { return string.Equals(unitName, PieceMono.Triangle); }
+		public bool IsDiamond() { return string.Equals(unitName, PieceMono.Diamond); }
+		public bool IsScout() { return string.Equals(unitName, PieceMono.Scout); }
 		
 		public bool IsHuman() { return this.isHuman; }
 

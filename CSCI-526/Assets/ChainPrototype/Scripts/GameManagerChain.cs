@@ -21,7 +21,19 @@ public class GameManagerChain : MonoBehaviour
     /// This field tracks the (x, y) positions of the game board which pieces move into along with a counter for analytics.
     /// This is used to produce a heat map of which parts of the board the players move into the most.
     /// </summary>
-    private Dictionary<Tuple<int, int>, int> countOfTilesMovedTo;
+    private Dictionary<Tuple<int, int>, int> tilesMoveToHeatmap;
+
+    /// <summary>
+    /// This field tracks the (x, y) positions of the game board where pieces are with a counter for analytics.
+    /// This is used to produce a heat map of which parts of the board pieces are located whether idle/defending or not.
+    /// </summary>
+    private Dictionary<Tuple<int, int>, int> tilesOccupiedHeatmap;
+
+    /// <summary>
+    /// This field tracks number of times each type of piece is moved.
+    /// The key is a string of the piece name (Circle, Diamond, etc.) and the value is an integer of the number of times the human player moved said piece.
+    /// </summary>
+    private Dictionary<string, int> humanPlayerPieceTypeMoveCounts;
 
     /// <summary>
     /// This field tracks the number of times the player moved a circle piece for end-of-level analytics.
@@ -32,6 +44,11 @@ public class GameManagerChain : MonoBehaviour
     /// This field tracks the number of times the player moved a diamond piece for end-of-level analytics.
     /// </summary>
     private int diamondPiecessMovedByPlayer;
+
+    /// <summary>
+    /// This field tracks the number of times the player moved a diamond piece for end-of-level analytics.
+    /// </summary>
+    private int scoutPiecessMovedByPlayer;
 
     public bool UsedAbility = false;
 
@@ -60,7 +77,19 @@ public class GameManagerChain : MonoBehaviour
         SceneName = SceneManager.GetActiveScene().name;
         movesMade = 0;
         TotalMoves = 0;
-        countOfTilesMovedTo = new Dictionary<Tuple<int, int>, int>();
+        tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
+        tilesOccupiedHeatmap = new Dictionary<Tuple<int, int>, int>();
+        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
+    }
+
+    private void ResetPieceMovementCountsForHumanPlayer()
+    {
+        // TODO: Make a function to increment the counts which checks for these keys
+        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Circle, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Diamond, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Triangle, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Scout, 0);
     }
 
     // Start is called before the first frame update
@@ -72,6 +101,11 @@ public class GameManagerChain : MonoBehaviour
             MenuManager.Instance.ShowEndTurnButton();
         }
         playTestID = Guid.NewGuid().ToString();
+        Analytics.Instance.SendStartOfLevelData(
+            playTestID,
+            SceneName,
+            LevelMono.Instance.GetWidth(),
+            LevelMono.Instance.GetHeight());
         playStartTime = Time.realtimeSinceStartup;
 
     }
@@ -119,15 +153,17 @@ public class GameManagerChain : MonoBehaviour
         // Store the move made for sending the counts in analytics later:
         if (pieceThatMoved.IsHuman())
         {
-            if (countOfTilesMovedTo.ContainsKey(destination))
+            if (tilesMoveToHeatmap.ContainsKey(destination))
             {
-                countOfTilesMovedTo[destination]++;
+                tilesMoveToHeatmap[destination]++;
             }
             else
             {
-                countOfTilesMovedTo.TryAdd(destination, 1);
+                tilesMoveToHeatmap.TryAdd(destination, 1);
             }
 
+            // TODO: After Week 8: Refactor and remove the individual counters and only use the dictionary
+            
             if (pieceThatMoved.IsCircle())
             {
                 circlePiecessMovedByPlayer++;
@@ -136,6 +172,11 @@ public class GameManagerChain : MonoBehaviour
             if (pieceThatMoved.IsDiamond())
             {
                 diamondPiecessMovedByPlayer++;
+            }
+
+            if (pieceThatMoved.IsScout())
+            {
+                scoutPiecessMovedByPlayer++;
             }
         }
     }
@@ -190,7 +231,7 @@ public class GameManagerChain : MonoBehaviour
     private IEnumerator FadeMovableAlpha()
     {
         movableAlpha = 0.65f;
-        while(true)
+        while (true)
         {
             if (movableAlpha >= 0.65f)
             {
@@ -232,9 +273,9 @@ public class GameManagerChain : MonoBehaviour
 
         yield return null;
     }
-    public IEnumerator StateToHuman()     
+    public IEnumerator StateToHuman()
     {
-        if(!switchingTurns && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)
+        if (!switchingTurns && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)
         {
             switchingTurns = true;
             MenuManager.Instance._playerTurnIndicator.SetActive(true);
@@ -273,11 +314,11 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "TutorialFogOfWar")
                 {
                     LevelMono.Instance.LoadLevel(TutorialFogOfWarLevel());
-                } 
-				else if (SceneName == "Level_One")
-				{
-					LevelMono.Instance.LoadLevel(LevelOne());
-				}
+                }
+                else if (SceneName == "Level_One")
+                {
+                    LevelMono.Instance.LoadLevel(LevelOne());
+                }
                 else if (SceneName == "Level_Two")
                 {
                     LevelMono.Instance.LoadLevel(LevelTwo());
@@ -288,7 +329,7 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
                 MenuManager.Instance.ShowNumMovesInfo();
-                foreach(PieceMono piece in LevelMono.Instance.GetPlayerPieces())
+                foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())
                 {
                     if (!piece.IsTriangle())
                     {
@@ -296,7 +337,7 @@ public class GameManagerChain : MonoBehaviour
                         piece.cantMoveObject.SetActive(false);
                     }
                 }
-                foreach(PieceMono piece in LevelMono.Instance.GetEnemyPieces())
+                foreach (PieceMono piece in LevelMono.Instance.GetEnemyPieces())
                 {
                     piece.canMoveObject.SetActive(false);
                     piece.canMoveObject.SetActive(false);
@@ -346,26 +387,35 @@ public class GameManagerChain : MonoBehaviour
     private void SendEndOfLevelAnalytics()
     {
         float timePlayedThisLevelInSeconds = (Time.realtimeSinceStartup - playStartTime) / 60;
-        string serializedMovesMadeHeat = JsonConvert.SerializeObject(countOfTilesMovedTo);
-        Analytics.Instance.Send(
+        string serializedMovesMadeHeatmapData = JsonConvert.SerializeObject(tilesMoveToHeatmap);
+        string serializedTilesOccupiedHeatmapData = JsonConvert.SerializeObject(tilesOccupiedHeatmap);
+        string serializedPiecesMovedByHumanPlayerCountData = JsonConvert.SerializeObject(humanPlayerPieceTypeMoveCounts);
+        Analytics.Instance.SendEndOfLevelData(
             playTestID,
             timePlayedThisLevelInSeconds,
             SceneName,
             LevelMono.Instance.GetWidth(),
             LevelMono.Instance.GetHeight(),
             GameManagerChain.Instance.TotalMoves,
-            serializedMovesMadeHeat,
+            serializedTilesOccupiedHeatmapData,
+            serializedMovesMadeHeatmapData,
             circlePiecessMovedByPlayer,
-            diamondPiecessMovedByPlayer
+            diamondPiecessMovedByPlayer,
+            scoutPiecessMovedByPlayer,
+            serializedPiecesMovedByHumanPlayerCountData
             );
         ResetAnalyticsCounters();
     }
 
+    // TODO: Week 9 - move the analytics counters to the analytics service.
     private void ResetAnalyticsCounters()
     {
-        countOfTilesMovedTo = new Dictionary<Tuple<int, int>, int>();
+        tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
+        tilesOccupiedHeatmap = new Dictionary<Tuple<int, int>, int>();
+        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
         circlePiecessMovedByPlayer = 0;
         diamondPiecessMovedByPlayer = 0;
+        scoutPiecessMovedByPlayer = 0;
     }
 
     /// <summary>
@@ -385,23 +435,23 @@ public class GameManagerChain : MonoBehaviour
                 var position = new Tuple<int, int>(x, y);
                 if (x == 2 && y == 3)
                 {
-                    units.Add(new PieceInfo(position, true, "Triangle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
                 }
 
                 if (x == 0 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Circle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
                 }
 
                 if (x == 3 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Diamond"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                 }
 
                 // enemies
                 if (x == 3 && y == _height - 4 || x == 3 && y == _height - 3)
                 {
-                    units.Add(new PieceInfo(position, false, "Circle"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
                 }
             }
         }
@@ -426,29 +476,29 @@ public class GameManagerChain : MonoBehaviour
                 var position = new Tuple<int, int>(x, y);
                 if (x == 0 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Circle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
                 }
                 if (x == 3 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Diamond"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                 }
                 if (x == 2 && y == 2)
                 {
-                    units.Add(new PieceInfo(position, true, "Triangle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
                 }
 
                 // Enemies
                 if (x == 4 && y == 9)
                 {
-                    units.Add(new PieceInfo(position, false, "Circle"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
                 }
                 if (x == 1 && y == 9)
                 {
-                    units.Add(new PieceInfo(position, false, "Diamond"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Diamond));
                 }
                 if (x == 2 && y == 7)
                 {
-                    units.Add(new PieceInfo(position, false, "Triangle"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Triangle));
                 }
             }
         }
@@ -478,43 +528,43 @@ public class GameManagerChain : MonoBehaviour
 
                 if (x == 3 && y == 2)
                 {
-                    units.Add(new PieceInfo(position, true, "Scout"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Scout));
                 }
 
                 if (x == 2 && y == 2)
                 {
-                    units.Add(new PieceInfo(position, true, "Triangle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
                 }
 
                 if (x == 2 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Circle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
                 }
 
                 if (x == 3 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Diamond"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                 }
 
                 if (x == 2 && y == 7)
                 {
-                    units.Add(new PieceInfo(position, false, "Triangle"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Triangle));
 
                 }
 
                 if (x == 2 && y == _height - 1)
                 {
-                    units.Add(new PieceInfo(position, false, "Circle"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
                 }
 
                 if (x == 3 && y == _height - 1)
                 {
-                    units.Add(new PieceInfo(position, false, "Diamond"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Diamond));
                 }
 
                 if (x == 2 && y == 6)
                 {
-                    units.Add(new PieceInfo(position, false, "Scout"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Scout));
                 }
             }
         }
@@ -526,7 +576,7 @@ public class GameManagerChain : MonoBehaviour
         };
     }
 
-	private LoadLevelData LevelTwo()
+    private LoadLevelData LevelTwo()
     {
         int _width = 8;
         int _height = 10;
@@ -540,43 +590,43 @@ public class GameManagerChain : MonoBehaviour
 
                 if (x == 3 && y == 3)
                 {
-                    units.Add(new PieceInfo(position, true, "Scout"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Scout));
                 }
 
                 if (x == 2 && y == 2 || x == _width - 3 && y == 2)
                 {
-                    units.Add(new PieceInfo(position, true, "Triangle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
                 }
 
                 if (x == 0 && y == 0 || x == _width - 1 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Circle"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
                 }
 
                 if (x == 3 && y == 0 || x == 4 && y == 0)
                 {
-                    units.Add(new PieceInfo(position, true, "Diamond"));
+                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                 }
 
                 if (x == 2 && y == _height - 3 || x == _width - 3 && y == _height - 3)
                 {
-                    units.Add(new PieceInfo(position, false, "Triangle"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Triangle));
 
                 }
 
                 if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
                 {
-                    units.Add(new PieceInfo(position, false, "Circle"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
                 }
 
                 if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
                 {
-                    units.Add(new PieceInfo(position, false, "Diamond"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Diamond));
                 }
 
                 if (x == 3 && y == 7)
                 {
-                    units.Add(new PieceInfo(position, false, "Scout"));
+                    units.Add(new PieceInfo(position, false, PieceMono.Scout));
                 }
             }
         }
@@ -613,11 +663,4 @@ public enum GameStateEnum
     AI = 2,
     Victory = 3,
     Loss = 4
-}
-
-struct TileHeatCount
-{
-    public int x;
-    public int y;
-    public int numMovesIntoThisTIle;
 }

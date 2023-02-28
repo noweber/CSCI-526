@@ -271,7 +271,7 @@ public class LevelMono : MonoBehaviour
             if (unit.IsCircle())
             {
                 var circle = Instantiate(_circlePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-                circle.SetName("Circle");
+                circle.SetName(PieceMono.Circle);
                 circle.SetHuman(unit.IsHuman());
                 if (!this.debug)
                 {
@@ -284,7 +284,7 @@ public class LevelMono : MonoBehaviour
             else if (unit.IsDiamond())
             {
                 var diamond = Instantiate(_diamondPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-                diamond.SetName("Diamond");
+                diamond.SetName(PieceMono.Diamond);
                 diamond.SetHuman(unit.IsHuman());
                 if (!this.debug)
                 {
@@ -297,7 +297,7 @@ public class LevelMono : MonoBehaviour
             } else if (unit.IsScout())
             {
                 var scout = Instantiate(_scoutPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-                scout.SetName("Scout");
+                scout.SetName(PieceMono.Scout);
                 scout.SetHuman(unit.IsHuman());
                 if (!this.debug)
                 {
