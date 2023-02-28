@@ -151,11 +151,13 @@ public class LevelMono : MonoBehaviour
                 if (isHuman) { this.SetPlayerVisibilityArea(piece.GetVisibleArea(3)); }
                 if (!isHuman) { this.SetEnemyVisibilityArea(piece.GetVisibleArea(3)); }
             }
+            /*
             else if (piece.IsCircle())
             {
                 if (isHuman) { this.SetPlayerVisibilityArea(piece.GetVisibleArea(1)); }
                 if (!isHuman) { this.SetEnemyVisibilityArea(piece.GetVisibleArea(1)); }
             }
+            */
         }
         
         // toggle fog and active pieces based on visible areas

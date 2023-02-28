@@ -256,6 +256,7 @@ namespace Assets.Scripts.Units
 
 		public override List<Tuple<int, int>> GetVisibleArea(int range)
         {
+            /*
             var lvlMono = LevelMono.Instance;
             var pos = this.transform.position;
             int x = (int)pos.x;
@@ -282,6 +283,8 @@ namespace Assets.Scripts.Units
                     visibleArea.Add(move);
                 }
             }
+            */
+            List<Tuple<int, int>> visibleArea = new List<Tuple<int, int>>();
             return visibleArea;
         }
     }
