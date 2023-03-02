@@ -9,6 +9,8 @@ namespace Assets.Scripts.Units
     public class Scout : PieceMono
     {
         private Direction direction = Direction.Up;
+        [SerializeField] public GameObject veritcal;
+        [SerializeField] public GameObject horizontal;
         [SerializeField] public GameObject upArrow;
         [SerializeField] public GameObject downArrow;
         [SerializeField] public GameObject leftArrow;
@@ -20,6 +22,8 @@ namespace Assets.Scripts.Units
         {
             this.direction = d;
             upArrow.SetActive(true);
+            veritcal.SetActive(true);
+            horizontal.SetActive(false);
             downArrow.SetActive(false);
             leftArrow.SetActive(false);
             rightArrow.SetActive(false);
@@ -40,7 +44,11 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(true);
                 rightArrow.SetActive(false);
+
+                veritcal.SetActive(false);
+                horizontal.SetActive(true);
                 leftArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
+                horizontal.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             } 
             else if (x - destination.Item1 < 0)
             {
@@ -50,7 +58,11 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(true);
+
+                veritcal.SetActive(false);
+                horizontal.SetActive(true);
                 rightArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
+                horizontal.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             } 
             else if (y - destination.Item2 > 0)
             {
@@ -60,7 +72,11 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(true);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(false);
+
+                veritcal.SetActive(true);
+                horizontal.SetActive(false);
                 downArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
+                veritcal.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             }
             else
             {
@@ -70,7 +86,11 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(false);
+
+                veritcal.SetActive(true);
+                horizontal.SetActive(false);
                 upArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
+                veritcal.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             }
         }
         public override string getUnitInfo()
