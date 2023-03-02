@@ -165,9 +165,9 @@ namespace Assets.Scripts.Units
                     }
                     break;
                 case Direction.Right:
-                    for (int i = 1; i <= range; i++)
+                    for (int i = 0; i < range; i++)
                     {
-                        for (int j = 1; j < i; j++)
+                        for (int j = 1; j < Math.Max(i + 1, 2); j++)
                         {
                             if (lvlMono.CheckOutOfBounds(x+i, y - j))
                             {
@@ -182,13 +182,12 @@ namespace Assets.Scripts.Units
                         {
                             visibleArea.Add(new Tuple<int, int>(x + i, y));
                         }
-                    }
-                    
+                    }                    
                     break;
                 case Direction.Down:
-                    for (int j = 1; j <= range; j++)
+                    for (int j = 0; j < range; j++)
                     {
-                        for (int i = 1; i < j; i++)
+                        for (int i = 1; i < Math.Max(j + 1, 2); i++)
                         {
                             if (lvlMono.CheckOutOfBounds(x-i, y - j))
                             {
@@ -206,9 +205,9 @@ namespace Assets.Scripts.Units
                     }
                     break;
                 case Direction.Left:
-                    for (int i = 1; i <= range; i++)
+                    for (int i = 0; i < range; i++)
                     {
-                        for (int j = 1; j < i; j++)
+                        for (int j = 1; j < Math.Max(i + 1, 2); j++)
                         {
                             if (lvlMono.CheckOutOfBounds(x - i, y - j))
                             {
