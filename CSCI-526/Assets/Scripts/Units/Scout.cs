@@ -114,24 +114,33 @@ namespace Assets.Scripts.Units
             switch (this.direction)
             {
                 case Direction.Up:
-                    for (int j = 1; j <= range; j++)
+                    //two adjacent l-r
+                    //3 in row above
+                    //5 in 2 rows above
+                    for (int j=0; j<range; j++)
                     {
-                        for (int i = 1; i < j; i++)
+                        var row = j;
+                        if (row < 2)
                         {
-                            if (lvlMono.CheckOutOfBounds(x-i, y+j))
+                            row = 2;
+                        }
+                        for (int i=1; i<row; i++)
+                        {
+                            if (lvlMono.CheckOutOfBounds(x - i, y + j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x - i, y + j));
                             }
-                            if (lvlMono.CheckOutOfBounds(x+i, y+j))
+                            if (lvlMono.CheckOutOfBounds(x + i, y + j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x + i, y + j));
                             }
                         }
-                        if (lvlMono.CheckOutOfBounds(x, y+j))
+                        if (lvlMono.CheckOutOfBounds(x, y + row))
                         {
                             visibleArea.Add(new Tuple<int, int>(x, y + j));
                         }
                     }
+
                     break;
                 case Direction.Right:
                     for (int i = 1; i <= range; i++)
