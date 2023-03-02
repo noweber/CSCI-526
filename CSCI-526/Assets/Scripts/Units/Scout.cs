@@ -145,17 +145,9 @@ namespace Assets.Scripts.Units
             switch (this.direction)
             {
                 case Direction.Up:
-                    //two adjacent l-r
-                    //3 in row above
-                    //5 in 2 rows above
-                    for (int j=0; j<range; j++)
+                    for (int j = 0; j < range; j++)
                     {
-                        var row = j;
-                        if (row < 2)
-                        {
-                            row = 2;
-                        }
-                        for (int i=1; i<row; i++)
+                        for (int i = 1; i < Math.Max(j + 1, 2); i++)
                         {
                             if (lvlMono.CheckOutOfBounds(x - i, y + j))
                             {
@@ -166,12 +158,11 @@ namespace Assets.Scripts.Units
                                 visibleArea.Add(new Tuple<int, int>(x + i, y + j));
                             }
                         }
-                        if (lvlMono.CheckOutOfBounds(x, y + row))
+                        if (lvlMono.CheckOutOfBounds(x, y + j))
                         {
                             visibleArea.Add(new Tuple<int, int>(x, y + j));
                         }
                     }
-
                     break;
                 case Direction.Right:
                     for (int i = 1; i <= range; i++)
