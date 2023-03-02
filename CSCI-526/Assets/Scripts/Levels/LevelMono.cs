@@ -308,6 +308,10 @@ public class LevelMono : MonoBehaviour
                 {
                     scout.SetInitialDirection(Direction.Down);
                 }
+                else
+                {
+                    scout.SetInitialDirection(Direction.Up);
+                }
                 scout.SetMoveState(false);
                 var squares = scout.gameObject.GetComponentsInChildren<SpriteRenderer>();
                 foreach (var square in squares)
