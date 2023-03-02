@@ -9,10 +9,21 @@ namespace Assets.Scripts.Units
     public class Scout : PieceMono
     {
         private Direction direction = Direction.Up;
+        [SerializeField] public GameObject upArrow;
+        [SerializeField] public GameObject downArrow;
+        [SerializeField] public GameObject leftArrow;
+        [SerializeField] public GameObject rightArrow;
 
+
+        //TODO: Enemy Scout Unit set as Up instead of Down on Initialization
         public void SetInitialDirection(Direction d)
         {
             this.direction = d;
+            upArrow.SetActive(true);
+            downArrow.SetActive(false);
+            leftArrow.SetActive(false);
+            rightArrow.SetActive(false);
+            upArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
         }
 
         public void SetDirection(Tuple<int, int> destination)
@@ -25,21 +36,41 @@ namespace Assets.Scripts.Units
             {
                 Debug.Log("GOING LEFT");
                 this.direction = Direction.Left;
+                upArrow.SetActive(false);
+                downArrow.SetActive(false);
+                leftArrow.SetActive(true);
+                rightArrow.SetActive(false);
+                leftArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             } 
             else if (x - destination.Item1 < 0)
             {
                 Debug.Log("GOING RIGHT");
                 this.direction = Direction.Right;
+                upArrow.SetActive(false);
+                downArrow.SetActive(false);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(true);
+                rightArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             } 
             else if (y - destination.Item2 > 0)
             {
                 Debug.Log("GOING DOWN");
                 this.direction = Direction.Down;
+                upArrow.SetActive(false);
+                downArrow.SetActive(true);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(false);
+                downArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             }
             else
             {
                 Debug.Log("GOING UP");
                 this.direction = Direction.Up;
+                upArrow.SetActive(true);
+                downArrow.SetActive(false);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(false);
+                upArrow.GetComponent<SpriteRenderer>().color = this.IsHuman() ? LevelMono.Instance.playerColor : LevelMono.Instance.enemyColor;
             }
         }
         public override string getUnitInfo()

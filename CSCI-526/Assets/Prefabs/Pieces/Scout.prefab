@@ -743,6 +743,10 @@ MonoBehaviour:
   buffParticles: {fileID: 0}
   canMoveObject: {fileID: 3279517663559956433}
   cantMoveObject: {fileID: 393564392712565467}
+  upArrow: {fileID: 5109288117036127224}
+  downArrow: {fileID: 4691181079287728138}
+  leftArrow: {fileID: 5546048331462149042}
+  rightArrow: {fileID: 5309453749331462374}
 --- !u!1 &8195878275045474195
 GameObject:
   m_ObjectHideFlags: 0
