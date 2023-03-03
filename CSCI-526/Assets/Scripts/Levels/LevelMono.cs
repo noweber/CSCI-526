@@ -304,20 +304,24 @@ public class LevelMono : MonoBehaviour
                     scout.gameObject.SetActive(unit.IsHuman());
                 }
 
-                if (!unit.IsHuman())
-                {
-                    scout.SetInitialDirection(Direction.Down);
-                }
-                else
-                {
-                    scout.SetInitialDirection(Direction.Up);
-                }
-                scout.SetMoveState(false);
                 var squares = scout.gameObject.GetComponentsInChildren<SpriteRenderer>();
                 foreach (var square in squares)
                 {
                     square.color = scout.IsHuman() ? playerColor : enemyColor;
                 }
+
+                if (!unit.IsHuman())
+                {
+                    scout.SetInitialDirection(Direction.Down);
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                else
+                {
+                    scout.SetInitialDirection(Direction.Up);
+                    scout.upArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                scout.SetMoveState(false);
+                
                 // if (!this.debug)
                 // {
                 //     this.SetRangeVisibility(scout.GetVisibleArea(3), unit.IsHuman(), !unit.IsHuman());
