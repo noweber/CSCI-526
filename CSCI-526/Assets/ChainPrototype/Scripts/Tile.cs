@@ -144,8 +144,8 @@ public class Tile : MonoBehaviour
                         if (lvlMono.MovePiece(coord))
                         {
 
-                            GameManagerChain.Instance.IncrementMoves(1);
                             GameManagerChain.Instance.TotalMoves += 1;
+							GameManagerChain.Instance.IncrementMoves(1);
                             MenuManager.Instance.ShowNumMovesInfo();
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -181,8 +181,8 @@ public class Tile : MonoBehaviour
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
+					GameManagerChain.Instance.TotalMoves += 1;
                     GameManagerChain.Instance.IncrementMoves(1);
-                    GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
 
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -217,11 +217,15 @@ public class Tile : MonoBehaviour
                     // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
-                if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+                else if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
                 {
                     // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
+				else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
+				{
+					StartCoroutine(DelayedChangeState());
+				}
                 else
                 {
                     StartCoroutine(GameManagerChain.Instance.StateToAI());

@@ -1887,7 +1887,7 @@ MonoBehaviour:
   _trianglePrefab: {fileID: 407907921454345211, guid: 3de7a7b5052bf45c3ab52ce7772f0e3c, type: 3}
   _diamondPrefab: {fileID: -2407875458895566835, guid: 25d78e865f02248f4af66875889e1384, type: 3}
   _circlePrefab: {fileID: 4121908883811533435, guid: 88faaf480b95a451fb31740047228ead, type: 3}
-  _scoutPrefab: {fileID: 0}
+  _scoutPrefab: {fileID: -577971291739253569, guid: 754c7020d67cf460a8f59452dbe24cf4, type: 3}
   _camera: {fileID: 1063371916}
   playerColor: {r: 0.003921569, g: 0, b: 0.7372549, a: 1}
   enemyColor: {r: 0.54901963, g: 0, b: 0, a: 1}
@@ -3328,7 +3328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a217f803fe547938a4ce825b5833f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  URL: https://docs.google.com/forms/d/e/1FAIpQLSfvesyHfUZdYlkKeJvxUR5VH5F165VoJnUx3Q8FB6beTribkA/formResponse
+  StartOfLevelUrl: 
+  EndOfLevelUrl: 
 --- !u!4 &849857062
 Transform:
   m_ObjectHideFlags: 0

@@ -155,7 +155,7 @@ public class MenuManager : MonoBehaviour
                     if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsDiamond())
                     {
                         _pointerObject.transform.position = new Vector3(1.25f, -0.25f, -2f);
-                        tmpro.text = "Click the highlighted region to move the diamond to a legal position. Each unit may only move once, without the help of an ability.";
+                        tmpro.text = "Click the highlighted region to move the diamond to a legal position. Without an ability, each unit may only move once.";
                     }
                     break;
                 case 1:     // Second move -- player must move circle next to triangle, directly in front of enemy
@@ -173,24 +173,24 @@ public class MenuManager : MonoBehaviour
                     if (LevelMono.Instance.selectedPiece != null && LevelMono.Instance.selectedPiece.IsCircle())
                     {
                         _pointerObject.transform.position = new Vector3(3.25f, 3.75f, -2f);
-                        tmpro.text = "Use the circle again to capture the nearest enemy (red) unit.";
+                        tmpro.text = "Use the circle again to capture the nearest enemy unit.";
                     }
 
                     break;
                 case 3: // Free movement -- player freely maneuvers
                     _pointerObject.SetActive(false);
-                    tmpro.text = "Capturing an enemy unit with the circle allows the it to be used again, but consumes another one of your Moves. Use it to capture the final enemy unit.";
+                    tmpro.text = "Capturing an enemy unit with the circle allows it to be moved again. Use its extra move to capture the final enemy unit.";
                     break;
             }
         if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
         {
             if (!LevelMono.Instance.capturedTower)
             {
-                tmpro.text = "The fog of war hinders your vision. The triangle grants vision to the team that owns it. Move any of your units to a tile adjacent to the enemy triangle to capture it.";
+                tmpro.text = "The fog of war hinders your vision. Move any of your units adjacent to the enemy triangle to capture it and gain vision of an area. Be careful! They can be re-captured.";
             }
             else
             {
-                tmpro.text = "Now that you own the triangle, you have vision of the enemy. Capture the enemy units.";
+                tmpro.text = "Now that you own the triangle, you have vision of an area. Capture the remaining units.";
             }
         }
             
@@ -281,6 +281,12 @@ public class MenuManager : MonoBehaviour
             MenuManager.Instance.UpdateObjectiveContent();
             _endTurnObject.SetActive(false);
         }
+        else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
+        {
+            // _objectiveObject.SetActive(true);
+            // MenuManager.Instance.UpdateObjectiveContent();
+            _endTurnObject.SetActive(false);
+        }
         else
         {
             _objectiveObject.SetActive(false);
@@ -319,7 +325,7 @@ public class MenuManager : MonoBehaviour
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
             tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color>";
-            Debug.Log(tempLevelMono.GetEnemyPiecesNum());
+            // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }
 
