@@ -37,7 +37,7 @@ public class EnemyAI : MonoBehaviour
         List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
         List<Tuple<int, int>> movableDiamonds = new List<Tuple<int, int>>();
         List<Tuple<int, int>> movableCircles = new List<Tuple<int, int>>();
-        if (SceneManager.GetActiveScene().name == "Level_Two")
+        if (SceneManager.GetActiveScene().name != "Challenge_Scout")
         {
             foreach (var coord in enemyPieceCoords)
             {
@@ -259,7 +259,27 @@ public class EnemyAI : MonoBehaviour
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectBestPiece();
-        if (aiCoord != null && SceneManager.GetActiveScene().name == "Level_Two")
+        if (aiCoord != null && SceneManager.GetActiveScene().name == "Challenge_Scout")
+        {
+            //Dumb AI
+            var aiPiece = lvlMono.GetPiece(aiCoord);
+            var moves = aiPiece.LegalMoves(lvlMono.GetWidth(), lvlMono.GetHeight());
+            Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
+
+            if (lvlMono.MovePiece(destination))
+            {
+                GameManagerChain.Instance.AddMovedPiece(aiPiece, destination);
+                GameManagerChain.Instance.IncrementMoves(1);
+                MenuManager.Instance.ShowNumMovesInfo();
+            }
+            else
+            {
+                lvlMono.ResetPiece();
+                Debug.Log("AI FAILED TO MOVE");
+
+            }
+        }
+        else
         {
             var aiPiece = lvlMono.GetPiece(aiCoord);
             lvlMono.SelectPiece(aiPiece, aiCoord);
@@ -288,12 +308,6 @@ public class EnemyAI : MonoBehaviour
                 Debug.Log("AI FAILED TO MOVE");
                 
             }
-        } else
-        {
-            //Dumb AI
-            var aiPiece = lvlMono.GetPiece(aiCoord);
-            var moves = aiPiece.LegalMoves(lvlMono.GetWidth(), lvlMono.GetHeight());
-            Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
         }
 
             /*
