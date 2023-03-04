@@ -17,6 +17,30 @@ public class EnemyAI : MonoBehaviour
         isRunning = false;
     }
 
+    public Tuple<int, int> SelectRandomPiece()
+    {
+        var lvlMono = LevelMono.Instance;
+        var enemyPieceCoords = lvlMono.GetEnemyPieceCoords();
+        if (enemyPieceCoords.Count == 0)
+        {
+            return null;
+        }
+
+
+        List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
+        List<Tuple<int, int>> movableDiamonds = new List<Tuple<int, int>>();
+        List<Tuple<int, int>> movableCircles = new List<Tuple<int, int>>();
+        foreach (var coord in enemyPieceCoords)
+        {
+            if (lvlMono.GetPiece(coord).CanMove())
+            {
+                movableEnemies.Add(coord);
+            }
+        }
+        if (movableEnemies.Count == 0) { return null; }
+        return movableEnemies[Random.Range(0, movableEnemies.Count)];
+    }
+
     /*
      * Piece selection priority:
      *  1. move diamond to circles
@@ -37,58 +61,56 @@ public class EnemyAI : MonoBehaviour
         List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
         List<Tuple<int, int>> movableDiamonds = new List<Tuple<int, int>>();
         List<Tuple<int, int>> movableCircles = new List<Tuple<int, int>>();
-        if (SceneManager.GetActiveScene().name != "Challenge_Scout")
+        foreach (var coord in enemyPieceCoords)
         {
-            foreach (var coord in enemyPieceCoords)
+            if (lvlMono.GetPiece(coord).CanMove())
             {
-                if (lvlMono.GetPiece(coord).CanMove())
+                movableEnemies.Add(coord);
+                if (lvlMono.GetPiece(coord).IsDiamond())
                 {
-                    movableEnemies.Add(coord);
-                    if (lvlMono.GetPiece(coord).IsDiamond())
-                    {
-                        movableDiamonds.Add(coord);
-                    }
-                    else if (lvlMono.GetPiece(coord).IsCircle())
-                    {
-                        movableCircles.Add(coord);
-                    }
+                    movableDiamonds.Add(coord);
                 }
-            }
-            if (movableEnemies.Count == 0) { return null; }
-
-            //check for ANY piece that can capture (circle capture priority)
-            var canCapture = GetPiecesThatCanCapture(movableEnemies);
-            foreach (var piece in canCapture)
-            {
-                if (LevelMono.Instance.GetPiece(piece).IsCircle())
+                else if (lvlMono.GetPiece(coord).IsCircle())
                 {
-                    return piece;
-                }
-            }
-            if (canCapture.Count > 0)
-            {
-                return canCapture[Random.Range(0, canCapture.Count)];
-            }
-
-            foreach (var circle in movableCircles)
-            {
-                if (ShouldMoveCircle(circle))
-                {
-                    return circle;
-                }
-            }
-
-            if (GameManagerChain.Instance.GetMovesMade() == 0)
-            {
-                foreach (var diamond in movableDiamonds)
-                {
-                    if (ShouldMoveDiamondToCircle(diamond))
-                    {
-                        return diamond;
-                    }
+                    movableCircles.Add(coord);
                 }
             }
         }
+        if (movableEnemies.Count == 0) { return null; }
+
+        //check for ANY piece that can capture (circle capture priority)
+        var canCapture = GetPiecesThatCanCapture(movableEnemies);
+        foreach (var piece in canCapture)
+        {
+            if (LevelMono.Instance.GetPiece(piece).IsCircle())
+            {
+                return piece;
+            }
+        }
+        if (canCapture.Count > 0)
+        {
+            return canCapture[Random.Range(0, canCapture.Count)];
+        }
+
+        foreach (var circle in movableCircles)
+        {
+            if (ShouldMoveCircle(circle))
+            {
+                return circle;
+            }
+        }
+
+        if (GameManagerChain.Instance.GetMovesMade() == 0)
+        {
+            foreach (var diamond in movableDiamonds)
+            {
+                if (ShouldMoveDiamondToCircle(diamond))
+                {
+                    return diamond;
+                }
+            }
+        }
+     
 
 
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
@@ -259,6 +281,14 @@ public class EnemyAI : MonoBehaviour
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectBestPiece();
+        if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+        {
+            aiCoord = SelectRandomPiece();
+        } else
+        {
+            aiCoord = SelectBestPiece();
+        }
+        
         if (aiCoord != null && SceneManager.GetActiveScene().name == "Challenge_Scout")
         {
             //Dumb AI
@@ -279,7 +309,7 @@ public class EnemyAI : MonoBehaviour
 
             }
         }
-        else
+        else if (aiCoord != null)
         {
             var aiPiece = lvlMono.GetPiece(aiCoord);
             lvlMono.SelectPiece(aiPiece, aiCoord);
@@ -317,7 +347,7 @@ public class EnemyAI : MonoBehaviour
                         GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
                     }
             */
-            if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
+        if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
         {
             StopAllCoroutines();
             isRunning = false;
