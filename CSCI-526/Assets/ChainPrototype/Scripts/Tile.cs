@@ -222,10 +222,14 @@ public class Tile : MonoBehaviour
                     // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
-				else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
-				{
-					StartCoroutine(DelayedChangeState());
-				}
+                else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
+                {
+                    StartCoroutine(DelayedChangeState());
+                }
+                else if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+                {
+                    StartCoroutine(GameManagerChain.Instance.StateToAI());
+                }
                 else
                 {
                     StartCoroutine(GameManagerChain.Instance.StateToAI());
