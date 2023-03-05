@@ -12,7 +12,8 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance { get; private set; }
     
     [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, 
-        _objectiveContent, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, _defeatObject, _pointerObject, _gridManagerObject;
+        _objectiveContent, _sideObjectiveHeader, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
+        _defeatObject, _pointerObject, _gridManagerObject;
    
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
@@ -137,6 +138,7 @@ public class MenuManager : MonoBehaviour
         unitAbility.text = "Unit Ability";
         _selectedUnitInfo.SetActive(false);
     }
+
 
     public void UpdateObjectiveContent()
     {
@@ -291,11 +293,19 @@ public class MenuManager : MonoBehaviour
             _objectiveObject.SetActive(true);
             MenuManager.Instance.UpdateObjectiveContent();
             _endTurnObject.SetActive(false);
+
+            //Setting side objective off
+            _sideObjectiveHeader.SetActive(false);
+            _objectiveContent.SetActive(false);
         }
         else
         {
             //_objectiveObject.SetActive(false);
             _endTurnObject.SetActive(true);
+
+            //Setting side objective off
+            _sideObjectiveHeader.SetActive(false);
+            _objectiveContent.SetActive(false);
         }
         SetVictoryScreen(false);
         _turnInfoObject.SetActive(true);
@@ -320,7 +330,7 @@ public class MenuManager : MonoBehaviour
             LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
-            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color>";
+            tempOverallObjective.text = "Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units";
             //Debug.Log(tempLevelMono.GetEnemyPiecesNum());
         }
         else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
@@ -329,7 +339,7 @@ public class MenuManager : MonoBehaviour
             LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
-            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color><br><color=red>Within 2 turns, capture all enemies.</color>";
+            tempOverallObjective.text = "Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units<br>Within 2 turns, capture all enemies.";
             //Debug.Log(tempLevelMono.GetEnemyPiecesNum());
         }
         else
@@ -338,7 +348,7 @@ public class MenuManager : MonoBehaviour
             LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
-            tempOverallObjective.text = "<color=red>Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count + " </color>";
+            tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
             // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }
