@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ChainPrototype/Scenes/Level_Two.unity
     guid: 7034c7386f03c4d0d80876a3ba28eed4
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/Challenge_Circle.unity
+    guid: ad724729185724c138078e762bb37225
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/Challenge_Scout.unity
+    guid: 1e4d3accb4a414e3db5da8be649197d3
   m_configObjects: {}
