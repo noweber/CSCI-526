@@ -412,14 +412,24 @@ public abstract class PieceMono : MonoBehaviour
 
     private void UpdateCircleIndicator()
     {
-        var list = this.AdjacentAllies();
-        foreach (var ally in list)
+        if(this.IsHuman())
         {
-            if (LevelMono.Instance.GetPiece(ally).IsDiamond())
+            if(this.IsAdjacentToAllyDiamond())
             {
-                if (LevelMono.Instance.tiles[ally].CanPlayerSee())
+                buffParticles.SetActive(true);
+            }
+            else
+            {
+                buffParticles.SetActive(false);
+            }
+        }
+        else
+        {
+            if(this.IsAdjacentToAllyDiamond())
+            {
+                foreach(var ally in this.AdjacentAllies())
                 {
-                    if (this.IsAdjacentToAllyDiamond())
+                    if(LevelMono.Instance.GetPiece(ally).IsDiamond() && LevelMono.Instance.tiles[ally].CanPlayerSee())
                     {
                         buffParticles.SetActive(true);
                     }
