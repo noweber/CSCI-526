@@ -28,7 +28,7 @@ public class LevelMono : MonoBehaviour
     public PieceMono selectedPiece = null;
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
     public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
-
+	private List<Tuple<int, int>> eyes = new List<Tuple<int, int>>();
     public List<Tuple<int, int>> towerLocations = new List<Tuple<int, int>>();
 
     private int Width;
@@ -383,6 +383,12 @@ public class LevelMono : MonoBehaviour
         return this.selectedPiece;
     }
 
+	public Tuple<int, int> GetSelectedCoord()
+    {
+        return this.selectedCoord;
+    }
+
+
     public void SelectPiece(PieceMono piece, Tuple<int, int> coord)
     {
         this.selectedPiece = piece;
@@ -430,6 +436,46 @@ public class LevelMono : MonoBehaviour
             //this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
         }
     }
+
+	public void TurnOnEyes(Tuple<int, int> boot) 
+	{
+		var currentTile = this.GetTile(boot);
+		foreach(Tuple<int,int> coord in currentTile.AdjacentPieces())
+        {
+			var piece = this.GetPiece(coord);
+            if(piece.IsTriangle() && piece.IsEnemyOf(this.selectedPiece)) // adjacent to triangle
+            {
+				var area = piece.GetVisibleArea(2);
+				foreach(Tuple<int,int> visibleTile in area)
+        		{
+					var tile = this.GetTile(visibleTile); 
+					var p = this.GetPiece(visibleTile);
+            		if (tile.CanPlayerSee() == false) 
+					{ 
+						tile.ToggleEye(true); 
+						this.eyes.Add(visibleTile);
+					}
+					if (p != null && p.IsTriangle()) { tile.ToggleEye(false); }
+					if (visibleTile.Equals(boot)) { tile.ToggleEye(false); }
+    			}
+			}
+		}
+
+		if (this.selectedPiece != null && this.selectedPiece.IsScout()) // scout case
+		{ 
+			
+		}
+	}
+	
+	public void TurnOffEyes() 
+	{
+		foreach(Tuple<int,int> visibleTile in this.eyes)
+        {
+			var tile = this.GetTile(visibleTile); 
+			tile.ToggleEye(false);
+    	}
+		this.eyes.Clear();
+	}
 
     public bool MovePiece(Tuple<int, int> coord)
     {
