@@ -21,6 +21,9 @@ public abstract class PieceMono : MonoBehaviour
     public const string Scout = "Scout";
 
     [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
+    [SerializeField]
+    private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
+                                        nePartPlayer, nePartEnemy, nwPartPlayer, nwPartEnemy, swPartPlayer, swPartEnemy, sePartPlayer, sePartEnemy;
 
     [SerializeField] private GameObject buffParticles;      // Circle indicator when it is buffed by Diamond
 
@@ -160,6 +163,72 @@ public abstract class PieceMono : MonoBehaviour
 		return false;
 	}
 
+    private void ToggleDiamondParticles(string dir, bool status)
+    {
+        if(this.IsHuman())
+        {
+            switch(dir.ToLower())
+            {
+                case "n":
+                    nPartPlayer.SetActive(true);
+                    break;
+                case "e":
+                    ePartPlayer.SetActive(true);
+                    break;
+                case "w":
+                    wPartPlayer.SetActive(true);
+                    break;
+                case "s":
+                    sPartPlayer.SetActive(true);
+                    break;
+
+                case "ne":
+                    nePartPlayer.SetActive(true);
+                    break;
+                case "nw":
+                    nwPartPlayer.SetActive(true);
+                    break;
+                case "se":
+                    sePartPlayer.SetActive(true);
+                    break;
+                case "sw":
+                    swPartPlayer.SetActive(true);
+                    break;
+            }
+        }
+        else 
+        {
+            switch (dir.ToString().ToLower())
+            {
+                case "n":
+                    nPartEnemy.SetActive(true);
+                    break;
+                case "e":
+                    ePartEnemy.SetActive(true);
+                    break;
+                case "w":
+                    wPartEnemy.SetActive(true);
+                    break;
+                case "s":
+                    sPartEnemy.SetActive(true);
+                    break;
+
+                case "ne":
+                    nePartEnemy.SetActive(true);
+                    break;
+                case "nw":
+                    nwPartEnemy.SetActive(true);
+                    break;
+                case "se":
+                    sePartEnemy.SetActive(true);
+                    break;
+                case "sw":
+                    swPartEnemy.SetActive(true);
+                    break;
+            }
+        }
+    }
+
     private void UpdateSupportIndicators()        // FOR DIAMOND PIECE
     {
         if(!this.IsDiamond())
@@ -194,36 +263,63 @@ public abstract class PieceMono : MonoBehaviour
                 {
                     if (ax == x + 1 && ay == y)      // East
                     {
-                        if (!eSupport.activeInHierarchy) { eSupport.SetActive(true); }
+                        if (!eSupport.activeInHierarchy) { 
+                            eSupport.SetActive(true);
+                            ToggleDiamondParticles("e", true);
+                        }
                     }
                     if (ax == x - 1 && ay == y)      // West
                     {
-                        if (!wSupport.activeInHierarchy) { wSupport.SetActive(true); }
+                        if (!wSupport.activeInHierarchy) { 
+                            wSupport.SetActive(true);
+                            ToggleDiamondParticles("w", true);
+                        }
                     }
                     if (ax == x && ay == y + 1)      // North
                     {
-                        if (!nSupport.activeInHierarchy) { nSupport.SetActive(true); }
+                        if (!nSupport.activeInHierarchy) { 
+                            nSupport.SetActive(true);
+                            ToggleDiamondParticles("n", true);
+
+                        }
                     }
                     if (ax == x && ay == y - 1)      // South
                     {
-                        if (!sSupport.activeInHierarchy) { sSupport.SetActive(true); }
+                        if (!sSupport.activeInHierarchy) { 
+                            sSupport.SetActive(true);
+                            ToggleDiamondParticles("s", true);
+
+                        }
                     }
 
                     if (ax == x + 1 && ay == y + 1)      // NorthEast
                     {
-                        if (!neSupport.activeInHierarchy) { neSupport.SetActive(true); }
+                        if (!neSupport.activeInHierarchy) { 
+                            neSupport.SetActive(true);
+                            ToggleDiamondParticles("ne", true);
+
+                        }
                     }
                     if (ax == x - 1 && ay == y + 1)      // NorthWest
                     {
-                        if (!nwSupport.activeInHierarchy) { nwSupport.SetActive(true); }
+                        if (!nwSupport.activeInHierarchy) { 
+                            nwSupport.SetActive(true);
+                            ToggleDiamondParticles("nw", true);
+                        }
                     }
                     if (ax == x - 1 && ay == y - 1)      // SouthWest
                     {
-                        if (!swSupport.activeInHierarchy) { swSupport.SetActive(true); }
+                        if (!swSupport.activeInHierarchy) { 
+                            swSupport.SetActive(true);
+                            ToggleDiamondParticles("sw", true);
+                        }
                     }
                     if (ax == x + 1 && ay == y - 1)      // SouthEast
                     {
-                        if (!seSupport.activeInHierarchy) { seSupport.SetActive(true); }
+                        if (!seSupport.activeInHierarchy) { 
+                            seSupport.SetActive(true);
+                            ToggleDiamondParticles("se", true);
+                        }
                     }
                 }
                 // Adjacent ally is not circle
@@ -270,35 +366,51 @@ public abstract class PieceMono : MonoBehaviour
                 if (ax == x + 1 && ay == y)      // East
                 {
                     eSupport.SetActive(false);
+                    ePartEnemy.SetActive(false);
+                    ePartPlayer.SetActive(false);
                 }
                 if (ax == x - 1 && ay == y)      // West
                 {
                     wSupport.SetActive(false);
+                    wPartEnemy.SetActive(false);
+                    wPartPlayer.SetActive(false);
                 }
                 if (ax == x && ay == y + 1)      // North
                 {
                     nSupport.SetActive(false);
+                    nPartEnemy.SetActive(false);
+                    nPartPlayer.SetActive(false);
                 }
                 if (ax == x && ay == y - 1)      // South
                 {
                     sSupport.SetActive(false);
+                    sPartEnemy.SetActive(false);
+                    sPartPlayer.SetActive(false);
                 }
 
                 if (ax == x + 1 && ay == y + 1)      // NorthEast
                 {
                     neSupport.SetActive(false);
+                    nePartEnemy.SetActive(false);
+                    nePartPlayer.SetActive(false);
                 }
                 if (ax == x - 1 && ay == y + 1)      // NorthWest
                 {
                     nwSupport.SetActive(false);
+                    nwPartEnemy.SetActive(false);
+                    nwPartPlayer.SetActive(false);
                 }
                 if (ax == x - 1 && ay == y - 1)      // SouthWest
                 {
                     swSupport.SetActive(false);
+                    swPartEnemy.SetActive(false);
+                    swPartPlayer.SetActive(false);
                 }
                 if (ax == x + 1 && ay == y - 1)      // SouthEast
                 {
                     seSupport.SetActive(false);
+                    sePartEnemy.SetActive(false);
+                    sePartPlayer.SetActive(false);
                 }
             }
         }
