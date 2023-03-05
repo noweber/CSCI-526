@@ -216,6 +216,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
+		boot.SetActive(false);
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
         var lvlMono = LevelMono.Instance;
 		lvlMono.TurnOffEyes();

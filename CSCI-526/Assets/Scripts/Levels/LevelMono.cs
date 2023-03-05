@@ -450,12 +450,10 @@ public class LevelMono : MonoBehaviour
         		{
 					var tile = this.GetTile(visibleTile); 
 					var p = this.GetPiece(visibleTile);
-            		if (tile.CanPlayerSee() == false) 
-					{ 
-						tile.ToggleEye(true); 
-						this.eyes.Add(visibleTile);
-					}
-					if (p != null && p.IsTriangle()) { tile.ToggleEye(false); }
+            		
+					tile.ToggleEye(true); 
+					this.eyes.Add(visibleTile);
+					//if (p != null && tile.CanPlayerSee()) { tile.ToggleEye(false); }
 					if (visibleTile.Equals(boot)) { tile.ToggleEye(false); }
     			}
 			}
@@ -463,7 +461,25 @@ public class LevelMono : MonoBehaviour
 
 		if (this.selectedPiece != null && this.selectedPiece.IsScout()) // scout case
 		{ 
-			
+			var phantomScout = Instantiate(_scoutPrefab, new Vector3(boot.Item1, boot.Item2, -1), Quaternion.identity);
+			phantomScout.gameObject.SetActive(false);
+			phantomScout.SetHuman(this.selectedPiece.IsHuman());
+			phantomScout.SetName(PieceMono.Scout);
+			if (boot.Item1 - this.selectedCoord.Item1 > 0) { phantomScout.SetInitialDirection(Direction.Right); }
+			else if (boot.Item1 - this.selectedCoord.Item1 < 0) { phantomScout.SetInitialDirection(Direction.Left); }
+			else if (boot.Item2 - this.selectedCoord.Item2 > 0) { phantomScout.SetInitialDirection(Direction.Up); }
+			else if (boot.Item1 - this.selectedCoord.Item2 < 0) { phantomScout.SetInitialDirection(Direction.Down); }
+			var area = phantomScout.GetVisibleArea(3);
+			foreach(Tuple<int,int> visibleTile in area)
+        	{
+				var tile = this.GetTile(visibleTile); 
+				var p = this.GetPiece(visibleTile);
+				tile.ToggleEye(true); 
+				this.eyes.Add(visibleTile);
+				//if (p != null && tile.CanPlayerSee()) { tile.ToggleEye(false); }
+				if (visibleTile.Equals(boot)) { tile.ToggleEye(false); }
+    		}
+			Destroy(phantomScout.gameObject);
 		}
 	}
 	
