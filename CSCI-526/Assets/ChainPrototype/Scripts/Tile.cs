@@ -107,13 +107,50 @@ public class Tile : MonoBehaviour
             openEye.SetActive(false);
             closeEye.SetActive(true);
         }
-        
     }
+
     public void HideVisibility()
     {
         openEye.SetActive(false);
         closeEye.SetActive(false);
     }
+
+	private List<Tuple<int, int>> AdjacentAllies()
+	{
+		var lvlMono = LevelMono.Instance;
+		var pos = this.transform.position;
+		int x = (int)pos.x;
+		int y = (int)pos.y;
+
+		if (!lvlMono.HasSelectedPiece()) 
+		{
+			Debug.Log("NO SELECTED PIECE. CANNOT FIND ADJACENT ALLIES");
+			return null;
+		}
+
+		var selectedPiece = lvlMono.GetSelectedPiece();		
+
+		var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
+        adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
+        adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
+        adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
+        adjacentList.Add(new Tuple<int, int>(x + 1, y + 1)); //right up diag
+        adjacentList.Add(new Tuple<int, int>(x - 1, y + 1)); //left  up diag
+        adjacentList.Add(new Tuple<int, int>(x + 1, y - 1)); //right down diag
+        adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); //left down diag
+
+        var adjAlly = new List<Tuple<int, int>>();
+		
+        foreach (Tuple<int, int> coord in adjacentList)
+        {
+			if (lvlMono.GetPiece(coord) != null && !selectedPiece.IsEnemyOf(lvlMono.GetPiece(coord)))
+            {
+            	adjAlly.Add(coord);
+            }
+        }    
+        return adjAlly;
+	}
 
     private void OnMouseDown()
     {
