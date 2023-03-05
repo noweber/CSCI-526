@@ -6,7 +6,6 @@ using UnityEngine;
 public class HighlightTile : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer tileHighlight;
-
     // Update is called once per frame
     void Update()
     {

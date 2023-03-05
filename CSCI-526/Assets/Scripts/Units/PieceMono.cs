@@ -21,8 +21,7 @@ public abstract class PieceMono : MonoBehaviour
     public const string Scout = "Scout";
 
     [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
-    [SerializeField]
-    private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
+    [SerializeField] private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
                                         nePartPlayer, nePartEnemy, nwPartPlayer, nwPartEnemy, swPartPlayer, swPartEnemy, sePartPlayer, sePartEnemy;
 
     [SerializeField] private GameObject buffParticles;      // Circle indicator when it is buffed by Diamond
@@ -229,13 +228,8 @@ public abstract class PieceMono : MonoBehaviour
         }
     }
 
-    private void UpdateSupportIndicators()        // FOR DIAMOND PIECE
+    private void UpdateDiamondIndicators()        // FOR DIAMOND PIECE
     {
-        if(!this.IsDiamond())
-        {
-            return;
-        }
-
         // Adjacent list from PieceMono
         int x = (int)this.transform.position.x;
         int y = (int)this.transform.position.y;
@@ -259,7 +253,7 @@ public abstract class PieceMono : MonoBehaviour
             if (LevelMono.Instance.GetPiece(coord) != null && !this.IsEnemyOf(LevelMono.Instance.GetPiece(coord)))
             {
                 // Adjacent ally is circle
-                if (LevelMono.Instance.GetPiece(coord).IsCircle())
+                if (LevelMono.Instance.GetPiece(coord).IsCircle() && LevelMono.Instance.tiles[coord].CanPlayerSee())
                 {
                     if (ax == x + 1 && ay == y)      // East
                     {
@@ -416,23 +410,38 @@ public abstract class PieceMono : MonoBehaviour
         }
     }
 
+    private void UpdateCircleIndicator()
+    {
+        var list = this.AdjacentAllies();
+        foreach (var ally in list)
+        {
+            if (LevelMono.Instance.GetPiece(ally).IsDiamond())
+            {
+                if (LevelMono.Instance.tiles[ally].CanPlayerSee())
+                {
+                    if (this.IsAdjacentToAllyDiamond())
+                    {
+                        buffParticles.SetActive(true);
+                    }
+                    else
+                    {
+                        buffParticles.SetActive(false);
+                    }
+                }
+            }
+        }
+    }
+
     private void Update()
     {
         if(this.IsDiamond())
         {
-            UpdateSupportIndicators();
+            UpdateDiamondIndicators();
         }
 
         if(this.IsCircle())
         {
-            if(this.IsAdjacentToAllyDiamond())
-            {
-                buffParticles.SetActive(true);
-            }
-            else
-            {
-                buffParticles.SetActive(false);
-            }
+            UpdateCircleIndicator();
         }
     }
 }

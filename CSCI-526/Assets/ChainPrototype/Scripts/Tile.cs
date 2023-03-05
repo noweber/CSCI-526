@@ -45,7 +45,7 @@ public class Tile : MonoBehaviour
             boot.SetActive(true);
             
             // IF adjacent ally is triangle, render triangle visible area as eyes
-            foreach(Tuple<int,int> ally in AdjacentAllies())
+            foreach(Tuple<int,int> ally in AdjacentPieces())
             {
                 var lvlmono = LevelMono.Instance;
                 if(lvlmono.GetPiece(ally).IsTriangle())
@@ -66,7 +66,7 @@ public class Tile : MonoBehaviour
         {
             boot.SetActive(false);
             // IF adjacent ally is triangle, render triangle visible area as eyes
-            foreach (Tuple<int, int> ally in AdjacentAllies())
+            foreach (Tuple<int, int> ally in AdjacentPieces())
             {
                 var lvlmono = LevelMono.Instance;
                 if (lvlmono.GetPiece(ally).IsTriangle())
@@ -159,7 +159,7 @@ public class Tile : MonoBehaviour
     }
 */
 
-	private List<Tuple<int, int>> AdjacentAllies()
+	private List<Tuple<int, int>> AdjacentPieces()
 	{
 		var lvlMono = LevelMono.Instance;
 		var pos = this.transform.position;
@@ -184,16 +184,16 @@ public class Tile : MonoBehaviour
         adjacentList.Add(new Tuple<int, int>(x + 1, y - 1)); //right down diag
         adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); //left down diag
 
-        var adjAlly = new List<Tuple<int, int>>();
+        var adjPiece = new List<Tuple<int, int>>();
 		
         foreach (Tuple<int, int> coord in adjacentList)
         {
 			if (lvlMono.GetPiece(coord) != null)
             {
-            	adjAlly.Add(coord);
+                adjPiece.Add(coord);
             }
         }    
-        return adjAlly;
+        return adjPiece;
 	}
 
     private void OnMouseDown()
@@ -248,7 +248,7 @@ public class Tile : MonoBehaviour
 
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
+                    MenuManager.Instance.HideUnitInfo(lvlMono.GetSelectedPiece());
                 }
             }
         }
@@ -275,6 +275,8 @@ public class Tile : MonoBehaviour
                 {
                     Debug.Log("FAILED TO MOVE");
                 }
+
+                MenuManager.Instance.HideUnitInfo(lvlMono.GetSelectedPiece());
                 lvlMono.RemoveHighlight();
                 lvlMono.ResetPiece();
             }

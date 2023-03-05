@@ -284,6 +284,22 @@ MonoBehaviour:
   neSupport: {fileID: 0}
   swSupport: {fileID: 0}
   seSupport: {fileID: 0}
+  nPartPlayer: {fileID: 0}
+  nPartEnemy: {fileID: 0}
+  wPartPlayer: {fileID: 0}
+  wPartEnemy: {fileID: 0}
+  sPartPlayer: {fileID: 0}
+  sPartEnemy: {fileID: 0}
+  ePartPlayer: {fileID: 0}
+  ePartEnemy: {fileID: 0}
+  nePartPlayer: {fileID: 0}
+  nePartEnemy: {fileID: 0}
+  nwPartPlayer: {fileID: 0}
+  nwPartEnemy: {fileID: 0}
+  swPartPlayer: {fileID: 0}
+  swPartEnemy: {fileID: 0}
+  sePartPlayer: {fileID: 0}
+  sePartEnemy: {fileID: 0}
   buffParticles: {fileID: 7143685811454871220}
   canMoveObject: {fileID: 345989405470797271}
   cantMoveObject: {fileID: 3511072670434693464}
@@ -304,7 +320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2155599928143206820
 Transform:
   m_ObjectHideFlags: 0
