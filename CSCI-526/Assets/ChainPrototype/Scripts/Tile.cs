@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEditor.XR;
 
 public class Tile : MonoBehaviour
 {
@@ -17,24 +18,66 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _fog, _redFog;
 
-    [SerializeField] private GameObject closeEye, openEye;
+    [SerializeField] private GameObject closeEye, openEye, boot;
     
     private bool canPlayerSee;
     private bool canEnemySee;
+
+    public bool isLegalMove = false;
 
     public void Init(bool isOffset)
     {
         _renderer.color = isOffset ? _base : _offset;
     }
 
+    public void ToggleEye(bool status)
+    {
+        openEye.SetActive(status);
+    }
+
     void OnMouseEnter()
     {
         _highlight.SetActive(true);
+
+        // If legal move, turn on boot
+        if(isLegalMove)
+        {
+            boot.SetActive(true);
+            
+            // IF adjacent ally is triangle, render triangle visible area as eyes
+            foreach(Tuple<int,int> ally in AdjacentAllies())
+            {
+                var lvlmono = LevelMono.Instance;
+                if(lvlmono.GetPiece(ally).IsTriangle())
+                {
+                    foreach(Tuple<int,int> visibleTile in lvlmono.GetPiece(ally).GetVisibleArea())
+                    {
+                        lvlmono.GetTile(visibleTile).ToggleEye(true);
+                    }
+                }
+            }
+        }
     }
 
     void OnMouseExit()
     {
         _highlight.SetActive(false);
+        if(this.boot.activeInHierarchy)
+        {
+            boot.SetActive(false);
+            // IF adjacent ally is triangle, render triangle visible area as eyes
+            foreach (Tuple<int, int> ally in AdjacentAllies())
+            {
+                var lvlmono = LevelMono.Instance;
+                if (lvlmono.GetPiece(ally).IsTriangle())
+                {
+                    foreach (Tuple<int, int> visibleTile in lvlmono.GetPiece(ally).GetVisibleArea())
+                    {
+                        lvlmono.GetTile(visibleTile).ToggleEye(false);
+                    }
+                }
+            }
+        }
     }
 
     public void ToggleFog()
@@ -82,7 +125,7 @@ public class Tile : MonoBehaviour
         return this.canEnemySee;
     }
     
-    public void ShowVisibility()
+/*    public void ShowVisibility()
     {
         if (SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
         // switch (visibility)
@@ -114,6 +157,7 @@ public class Tile : MonoBehaviour
         openEye.SetActive(false);
         closeEye.SetActive(false);
     }
+*/
 
 	private List<Tuple<int, int>> AdjacentAllies()
 	{
@@ -144,7 +188,7 @@ public class Tile : MonoBehaviour
 		
         foreach (Tuple<int, int> coord in adjacentList)
         {
-			if (lvlMono.GetPiece(coord) != null && !selectedPiece.IsEnemyOf(lvlMono.GetPiece(coord)))
+			if (lvlMono.GetPiece(coord) != null)
             {
             	adjAlly.Add(coord);
             }
@@ -287,6 +331,7 @@ public class Tile : MonoBehaviour
         StartCoroutine(GameManagerChain.Instance.StateToHuman());
         yield return null;
     }
+
 }
 
 
