@@ -378,6 +378,11 @@ public class LevelMono : MonoBehaviour
         return this.selectedPiece != null;
     }
 
+	public PieceMono GetSelectedPiece()
+    {
+        return this.selectedPiece;
+    }
+
     public void SelectPiece(PieceMono piece, Tuple<int, int> coord)
     {
         this.selectedPiece = piece;
