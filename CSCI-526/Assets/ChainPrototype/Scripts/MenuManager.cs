@@ -199,10 +199,6 @@ public class MenuManager : MonoBehaviour
                 tmpro.text = "Now that you own the triangle, you have vision of an area. Capture the remaining units.";
             }
         }
-        else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
-        {
-            tmpro.text = "Within 2 turns, capture all enemies.";
-        }
     }
     public void SetSlackDialogue(bool status)
     {
@@ -298,7 +294,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            _objectiveObject.SetActive(false);
+            //_objectiveObject.SetActive(false);
             _endTurnObject.SetActive(true);
         }
         SetVictoryScreen(false);
@@ -325,6 +321,15 @@ public class MenuManager : MonoBehaviour
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
             tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color>";
+            //Debug.Log(tempLevelMono.GetEnemyPiecesNum());
+        }
+        else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
+        {
+            //Update the remaining enemy numbers on the screen for players
+            LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
+
+            TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
+            tempOverallObjective.text = "<color=red>Capture the " + tempLevelMono.GetEnemyPieceCoords().Count + " enemy units</color><br><color=red>Within 2 turns, capture all enemies.</color>";
             //Debug.Log(tempLevelMono.GetEnemyPiecesNum());
         }
         else
