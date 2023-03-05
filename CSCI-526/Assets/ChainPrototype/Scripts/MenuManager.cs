@@ -12,7 +12,7 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance { get; private set; }
     
     [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, 
-        _objectiveContent, _sideObjectiveHeader, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
+        _objectiveContent, _sideObjectiveHeader, _sideObjectiveIcon, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
         _defeatObject, _pointerObject, _gridManagerObject;
    
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
@@ -296,6 +296,7 @@ public class MenuManager : MonoBehaviour
 
             //Setting side objective off
             _sideObjectiveHeader.SetActive(false);
+            _sideObjectiveIcon.SetActive(false);
             _objectiveContent.SetActive(false);
         }
         else
@@ -305,6 +306,7 @@ public class MenuManager : MonoBehaviour
 
             //Setting side objective off
             _sideObjectiveHeader.SetActive(false);
+            _sideObjectiveIcon.SetActive(false);
             _objectiveContent.SetActive(false);
         }
         SetVictoryScreen(false);
