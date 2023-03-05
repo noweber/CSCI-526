@@ -252,107 +252,231 @@ public abstract class PieceMono : MonoBehaviour
 
             if (LevelMono.Instance.GetPiece(coord) != null && !this.IsEnemyOf(LevelMono.Instance.GetPiece(coord)))
             {
-                // Adjacent ally is circle
-                if (LevelMono.Instance.GetPiece(coord).IsCircle() && LevelMono.Instance.tiles[coord].CanPlayerSee())
+                if(this.IsHuman())
                 {
-                    if (ax == x + 1 && ay == y)      // East
+                    // Adjacent ally is circle
+                    if (LevelMono.Instance.GetPiece(coord).IsCircle())
                     {
-                        if (!eSupport.activeInHierarchy) { 
-                            eSupport.SetActive(true);
-                            ToggleDiamondParticles("e", true);
+                        if (ax == x + 1 && ay == y)      // East
+                        {
+                            if (!eSupport.activeInHierarchy)
+                            {
+                                eSupport.SetActive(true);
+                                ToggleDiamondParticles("e", true);
+                            }
                         }
-                    }
-                    if (ax == x - 1 && ay == y)      // West
-                    {
-                        if (!wSupport.activeInHierarchy) { 
-                            wSupport.SetActive(true);
-                            ToggleDiamondParticles("w", true);
+                        if (ax == x - 1 && ay == y)      // West
+                        {
+                            if (!wSupport.activeInHierarchy)
+                            {
+                                wSupport.SetActive(true);
+                                ToggleDiamondParticles("w", true);
+                            }
                         }
-                    }
-                    if (ax == x && ay == y + 1)      // North
-                    {
-                        if (!nSupport.activeInHierarchy) { 
-                            nSupport.SetActive(true);
-                            ToggleDiamondParticles("n", true);
+                        if (ax == x && ay == y + 1)      // North
+                        {
+                            if (!nSupport.activeInHierarchy)
+                            {
+                                nSupport.SetActive(true);
+                                ToggleDiamondParticles("n", true);
 
+                            }
                         }
-                    }
-                    if (ax == x && ay == y - 1)      // South
-                    {
-                        if (!sSupport.activeInHierarchy) { 
-                            sSupport.SetActive(true);
-                            ToggleDiamondParticles("s", true);
+                        if (ax == x && ay == y - 1)      // South
+                        {
+                            if (!sSupport.activeInHierarchy)
+                            {
+                                sSupport.SetActive(true);
+                                ToggleDiamondParticles("s", true);
 
+                            }
                         }
-                    }
 
-                    if (ax == x + 1 && ay == y + 1)      // NorthEast
-                    {
-                        if (!neSupport.activeInHierarchy) { 
-                            neSupport.SetActive(true);
-                            ToggleDiamondParticles("ne", true);
+                        if (ax == x + 1 && ay == y + 1)      // NorthEast
+                        {
+                            if (!neSupport.activeInHierarchy)
+                            {
+                                neSupport.SetActive(true);
+                                ToggleDiamondParticles("ne", true);
 
+                            }
+                        }
+                        if (ax == x - 1 && ay == y + 1)      // NorthWest
+                        {
+                            if (!nwSupport.activeInHierarchy)
+                            {
+                                nwSupport.SetActive(true);
+                                ToggleDiamondParticles("nw", true);
+                            }
+                        }
+                        if (ax == x - 1 && ay == y - 1)      // SouthWest
+                        {
+                            if (!swSupport.activeInHierarchy)
+                            {
+                                swSupport.SetActive(true);
+                                ToggleDiamondParticles("sw", true);
+                            }
+                        }
+                        if (ax == x + 1 && ay == y - 1)      // SouthEast
+                        {
+                            if (!seSupport.activeInHierarchy)
+                            {
+                                seSupport.SetActive(true);
+                                ToggleDiamondParticles("se", true);
+                            }
                         }
                     }
-                    if (ax == x - 1 && ay == y + 1)      // NorthWest
+                    // Adjacent ally is not circle
+                    else
                     {
-                        if (!nwSupport.activeInHierarchy) { 
-                            nwSupport.SetActive(true);
-                            ToggleDiamondParticles("nw", true);
+                        if (ax == x + 1 && ay == y)      // East
+                        {
+                            eSupport.SetActive(false);
                         }
-                    }
-                    if (ax == x - 1 && ay == y - 1)      // SouthWest
-                    {
-                        if (!swSupport.activeInHierarchy) { 
-                            swSupport.SetActive(true);
-                            ToggleDiamondParticles("sw", true);
+                        if (ax == x - 1 && ay == y)      // West
+                        {
+                            wSupport.SetActive(false);
                         }
-                    }
-                    if (ax == x + 1 && ay == y - 1)      // SouthEast
-                    {
-                        if (!seSupport.activeInHierarchy) { 
-                            seSupport.SetActive(true);
-                            ToggleDiamondParticles("se", true);
+                        if (ax == x && ay == y + 1)      // North
+                        {
+                            nSupport.SetActive(false);
+                        }
+                        if (ax == x && ay == y - 1)      // South
+                        {
+                            sSupport.SetActive(false);
+                        }
+
+                        if (ax == x + 1 && ay == y + 1)      // NorthEast
+                        {
+                            neSupport.SetActive(false);
+                        }
+                        if (ax == x - 1 && ay == y + 1)      // NorthWest
+                        {
+                            nwSupport.SetActive(false);
+                        }
+                        if (ax == x - 1 && ay == y - 1)      // SouthWest
+                        {
+                            swSupport.SetActive(false);
+                        }
+                        if (ax == x + 1 && ay == y - 1)      // SouthEast
+                        {
+                            seSupport.SetActive(false);
                         }
                     }
                 }
-                // Adjacent ally is not circle
                 else
                 {
-                    if (ax == x + 1 && ay == y)      // East
+                    // Adjacent ally is circle
+                    if (LevelMono.Instance.GetPiece(coord).IsCircle() && LevelMono.Instance.tiles[coord].CanPlayerSee())
                     {
-                        eSupport.SetActive(false);
-                    }
-                    if (ax == x - 1 && ay == y)      // West
-                    {
-                        wSupport.SetActive(false);
-                    }
-                    if (ax == x && ay == y + 1)      // North
-                    {
-                        nSupport.SetActive(false);
-                    }
-                    if (ax == x && ay == y - 1)      // South
-                    {
-                        sSupport.SetActive(false);
-                    }
+                        if (ax == x + 1 && ay == y)      // East
+                        {
+                            if (!eSupport.activeInHierarchy)
+                            {
+                                eSupport.SetActive(true);
+                                ToggleDiamondParticles("e", true);
+                            }
+                        }
+                        if (ax == x - 1 && ay == y)      // West
+                        {
+                            if (!wSupport.activeInHierarchy)
+                            {
+                                wSupport.SetActive(true);
+                                ToggleDiamondParticles("w", true);
+                            }
+                        }
+                        if (ax == x && ay == y + 1)      // North
+                        {
+                            if (!nSupport.activeInHierarchy)
+                            {
+                                nSupport.SetActive(true);
+                                ToggleDiamondParticles("n", true);
 
-                    if (ax == x + 1 && ay == y + 1)      // NorthEast
-                    {
-                        neSupport.SetActive(false);
+                            }
+                        }
+                        if (ax == x && ay == y - 1)      // South
+                        {
+                            if (!sSupport.activeInHierarchy)
+                            {
+                                sSupport.SetActive(true);
+                                ToggleDiamondParticles("s", true);
+
+                            }
+                        }
+
+                        if (ax == x + 1 && ay == y + 1)      // NorthEast
+                        {
+                            if (!neSupport.activeInHierarchy)
+                            {
+                                neSupport.SetActive(true);
+                                ToggleDiamondParticles("ne", true);
+
+                            }
+                        }
+                        if (ax == x - 1 && ay == y + 1)      // NorthWest
+                        {
+                            if (!nwSupport.activeInHierarchy)
+                            {
+                                nwSupport.SetActive(true);
+                                ToggleDiamondParticles("nw", true);
+                            }
+                        }
+                        if (ax == x - 1 && ay == y - 1)      // SouthWest
+                        {
+                            if (!swSupport.activeInHierarchy)
+                            {
+                                swSupport.SetActive(true);
+                                ToggleDiamondParticles("sw", true);
+                            }
+                        }
+                        if (ax == x + 1 && ay == y - 1)      // SouthEast
+                        {
+                            if (!seSupport.activeInHierarchy)
+                            {
+                                seSupport.SetActive(true);
+                                ToggleDiamondParticles("se", true);
+                            }
+                        }
                     }
-                    if (ax == x - 1 && ay == y + 1)      // NorthWest
+                    // Adjacent ally is not circle
+                    else
                     {
-                        nwSupport.SetActive(false);
-                    }
-                    if (ax == x - 1 && ay == y - 1)      // SouthWest
-                    {
-                        swSupport.SetActive(false);
-                    }
-                    if (ax == x + 1 && ay == y - 1)      // SouthEast
-                    {
-                        seSupport.SetActive(false);
+                        if (ax == x + 1 && ay == y)      // East
+                        {
+                            eSupport.SetActive(false);
+                        }
+                        if (ax == x - 1 && ay == y)      // West
+                        {
+                            wSupport.SetActive(false);
+                        }
+                        if (ax == x && ay == y + 1)      // North
+                        {
+                            nSupport.SetActive(false);
+                        }
+                        if (ax == x && ay == y - 1)      // South
+                        {
+                            sSupport.SetActive(false);
+                        }
+
+                        if (ax == x + 1 && ay == y + 1)      // NorthEast
+                        {
+                            neSupport.SetActive(false);
+                        }
+                        if (ax == x - 1 && ay == y + 1)      // NorthWest
+                        {
+                            nwSupport.SetActive(false);
+                        }
+                        if (ax == x - 1 && ay == y - 1)      // SouthWest
+                        {
+                            swSupport.SetActive(false);
+                        }
+                        if (ax == x + 1 && ay == y - 1)      // SouthEast
+                        {
+                            seSupport.SetActive(false);
+                        }
                     }
                 }
+                
             }
             // Empty adjacent tile
             else
