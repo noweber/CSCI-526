@@ -172,7 +172,6 @@ namespace Assets.Scripts.Levels
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Circle));
                     }
-                  
                 }
             }
             return new LoadLevelData()
