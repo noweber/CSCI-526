@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
+using Assets.Scripts.Analytics;
 
 public class GameManagerChain : MonoBehaviour
 {
@@ -66,10 +67,42 @@ public class GameManagerChain : MonoBehaviour
 
     public bool switchingTurns = false;        // Flag used to lock switching turns if the game is in the process of doing so
 
+    public LevelReplayData replayDataForAnalytics;
+
     /// <summary>
     /// This is the set of pieces which have been moved during a given turn state.
     /// </summary>
     private List<PieceMono> movedPieces;
+
+    private void AddPieceToInitialLevelStateForReplayAnalytics(bool isHumanOwnedPiece, string pieceType, int xPosition, int yPostiion)
+    {
+        replayDataForAnalytics.InitialPiecePositions.Add(new PieceData()
+        {
+            Player = GetPlayerName(isHumanOwnedPiece),
+            Piece = pieceType,
+            Position = new Tuple<int, int>(xPosition, yPostiion)
+        });
+    }
+
+    private void AddPieceMovementForReplayAnalytics(bool isHumanOwnedPiece, string pieceType, int xPositionStart, int yPositionStart, int xPositionDestination, int yPositionDestination)
+    {
+        replayDataForAnalytics.MovesMade.Add(new MoveData()
+        {
+            Player = GetPlayerName(isHumanOwnedPiece),
+            Piece = pieceType,
+            Position = new Tuple<int, int>(xPositionStart, yPositionStart),
+            Destination = new Tuple<int, int>(xPositionDestination, yPositionDestination)
+        });
+    }
+
+    private string GetPlayerName(bool isHuman)
+    {
+        if (isHuman)
+        {
+            return "Human";
+        }
+        return "AI";
+    }
 
     void Awake()
     {
@@ -80,16 +113,7 @@ public class GameManagerChain : MonoBehaviour
         tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
         tilesOccupiedHeatmap = new Dictionary<Tuple<int, int>, int>();
         ResetPieceMovementCountsForHumanPlayer();
-    }
-
-    private void ResetPieceMovementCountsForHumanPlayer()
-    {
-        // TODO: Make a function to increment the counts which checks for these keys
-        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Circle, 0);
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Diamond, 0);
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Triangle, 0);
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Scout, 0);
+        replayDataForAnalytics = new LevelReplayData();
     }
 
     // Start is called before the first frame update
@@ -108,6 +132,11 @@ public class GameManagerChain : MonoBehaviour
             LevelMono.Instance.GetHeight());
         playStartTime = Time.realtimeSinceStartup;
 
+        // Store the initial positions for all pieces to send as analytics data later:
+        foreach (var pieceEntry in LevelMono.Instance._pieces)
+        {
+            AddPieceToInitialLevelStateForReplayAnalytics(pieceEntry.Value.IsHuman(), pieceEntry.Value.UnitName, pieceEntry.Key.Item1, pieceEntry.Key.Item2);
+        }
     }
     public void LoadNextLevel(String inputLevelName)
     {
@@ -162,25 +191,24 @@ public class GameManagerChain : MonoBehaviour
                 tilesMoveToHeatmap.TryAdd(destination, 1);
             }
 
-            // TODO: After Week 8: Refactor and remove the individual counters and only use the dictionary
-
+            // TODO: After Week 10: Refactor and remove the individual counters and only use the dictionary
             if (pieceThatMoved.IsCircle())
             {
                 circlePiecessMovedByPlayer++;
-                humanPlayerPieceTypeMoveCounts[PieceMono.Circle]++;
             }
 
             if (pieceThatMoved.IsDiamond())
             {
                 diamondPiecessMovedByPlayer++;
-                humanPlayerPieceTypeMoveCounts[PieceMono.Diamond]++;
             }
 
             if (pieceThatMoved.IsScout())
             {
                 scoutPiecessMovedByPlayer++;
-                humanPlayerPieceTypeMoveCounts[PieceMono.Scout]++;
             }
+
+            humanPlayerPieceTypeMoveCounts[pieceThatMoved.UnitName]++;
+            AddPieceMovementForReplayAnalytics(pieceThatMoved.IsHuman(), pieceThatMoved.UnitName, (int)pieceThatMoved.transform.position.x, (int)pieceThatMoved.transform.position.y, destination.Item1, destination.Item2);
         }
     }
 
@@ -210,27 +238,28 @@ public class GameManagerChain : MonoBehaviour
         movesMade += amount;
 
         // Check if the the game is over now that number of available moves decreased during play:
-		if (SceneName == "Challenge_Circle") {
-			Debug.Log("TOTAL MOVES: " + TotalMoves);
-			if (TotalMoves == 4)
-			{ 
-				if (!LevelMono.Instance.DoEnemiesRemain()) { this.ChangeState(GameStateEnum.Victory);  }
-				else { this.ChangeState(GameStateEnum.Loss); }
-			}
-		}
-		else 
-		{
-			if (!LevelMono.Instance.DoEnemiesRemain())
-        	{
-            	// TODO: Transition to a win state per open tasks once designed.
-            	this.ChangeState(GameStateEnum.Victory);
-        	}
-        	else if (!LevelMono.Instance.DoHumansRemain())
-        	{
-            	// TODO: Transition to a lose state.
-            	this.ChangeState(GameStateEnum.Loss);
-        	}
-		}
+        if (SceneName == "Challenge_Circle")
+        {
+            Debug.Log("TOTAL MOVES: " + TotalMoves);
+            if (TotalMoves == 4)
+            {
+                if (!LevelMono.Instance.DoEnemiesRemain()) { this.ChangeState(GameStateEnum.Victory); }
+                else { this.ChangeState(GameStateEnum.Loss); }
+            }
+        }
+        else
+        {
+            if (!LevelMono.Instance.DoEnemiesRemain())
+            {
+                // TODO: Transition to a win state per open tasks once designed.
+                this.ChangeState(GameStateEnum.Victory);
+            }
+            else if (!LevelMono.Instance.DoHumansRemain())
+            {
+                // TODO: Transition to a lose state.
+                this.ChangeState(GameStateEnum.Loss);
+            }
+        }
     }
 
     /// <summary>
@@ -349,15 +378,15 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Level_Two")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
-                } 
-				else if (SceneName == "Challenge_Circle") 
-				{
-					LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
-				}
-				else if (SceneName == "Challenge_Scout")
-				{
-					LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
-				}
+                }
+                else if (SceneName == "Challenge_Circle")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
+                }
+                else if (SceneName == "Challenge_Scout")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
+                }
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
                 break;
@@ -409,22 +438,24 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Victory:
                 Debug.Log("VICTORY");
                 MenuManager.Instance.SetVictoryScreen(true);
-                SendEndOfLevelAnalytics();
+                SendEndOfLevelAnalytics(true);
                 break;
             case GameStateEnum.Loss:
                 Debug.Log("LOSS");
-                SendEndOfLevelAnalytics();
+                SendEndOfLevelAnalytics(false);
                 MenuManager.Instance.SetDefeatScreen(true);
                 break;
         }
     }
 
-    private void SendEndOfLevelAnalytics()
+    private void SendEndOfLevelAnalytics(bool humanPlayerWasVictorious)
     {
         float timePlayedThisLevelInSeconds = (Time.realtimeSinceStartup - playStartTime) / 60;
         string serializedMovesMadeHeatmapData = JsonConvert.SerializeObject(tilesMoveToHeatmap);
         string serializedTilesOccupiedHeatmapData = JsonConvert.SerializeObject(tilesOccupiedHeatmap);
         string serializedPiecesMovedByHumanPlayerCountData = JsonConvert.SerializeObject(humanPlayerPieceTypeMoveCounts);
+        replayDataForAnalytics.VictoriousPlayerName = GetPlayerName(humanPlayerWasVictorious);
+        string serializedReplayData = JsonConvert.SerializeObject(replayDataForAnalytics);
         Analytics.Instance.SendEndOfLevelData(
             playTestID,
             timePlayedThisLevelInSeconds,
@@ -437,12 +468,13 @@ public class GameManagerChain : MonoBehaviour
             circlePiecessMovedByPlayer,
             diamondPiecessMovedByPlayer,
             scoutPiecessMovedByPlayer,
-            serializedPiecesMovedByHumanPlayerCountData
+            serializedPiecesMovedByHumanPlayerCountData,
+            serializedReplayData
             );
         ResetAnalyticsCounters();
     }
 
-    // TODO: Week 9 - move the analytics counters to the analytics service.
+    // TODO: Week 10 - move the analytics counters to the analytics service.
     private void ResetAnalyticsCounters()
     {
         tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
@@ -451,6 +483,17 @@ public class GameManagerChain : MonoBehaviour
         circlePiecessMovedByPlayer = 0;
         diamondPiecessMovedByPlayer = 0;
         scoutPiecessMovedByPlayer = 0;
+        replayDataForAnalytics = new LevelReplayData();
+    }
+
+    private void ResetPieceMovementCountsForHumanPlayer()
+    {
+        // TODO: Make a function to increment the counts which checks for these keys
+        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Circle, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Diamond, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Triangle, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Scout, 0);
     }
 
     /// <summary>
