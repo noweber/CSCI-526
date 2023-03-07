@@ -328,19 +328,11 @@ public class EnemyAI : MonoBehaviour
 
             }
         }
-        /*
-                if (!LevelMono.Instance.DoHumansRemain())
-                {
-                    StopAllCoroutines();
-                    GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
-                }
-        */
         if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
         {
             StopAllCoroutines();
             isRunning = false;
             StartCoroutine(GameManagerChain.Instance.StateToHuman());
-            // GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
     }
 
