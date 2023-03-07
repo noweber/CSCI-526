@@ -84,7 +84,7 @@ public class GameManagerChain : MonoBehaviour
         });
     }
 
-    private void AddPieceMovementForReplayAnalytics(bool isHumanOwnedPiece, string pieceType, int xPositionStart, int yPositionStart, int xPositionDestination, int yPositionDestination)
+    public void AddPieceMovementForReplayAnalytics(bool isHumanOwnedPiece, string pieceType, int xPositionStart, int yPositionStart, int xPositionDestination, int yPositionDestination)
     {
         replayDataForAnalytics.MovesMade.Add(new MoveData()
         {
@@ -208,7 +208,7 @@ public class GameManagerChain : MonoBehaviour
             }
 
             humanPlayerPieceTypeMoveCounts[pieceThatMoved.UnitName]++;
-            AddPieceMovementForReplayAnalytics(pieceThatMoved.IsHuman(), pieceThatMoved.UnitName, (int)pieceThatMoved.transform.position.x, (int)pieceThatMoved.transform.position.y, destination.Item1, destination.Item2);
+            //AddPieceMovementForReplayAnalytics(pieceThatMoved.IsHuman(), pieceThatMoved.UnitName, (int)pieceThatMoved.transform.position.x, (int)pieceThatMoved.transform.position.y, destination.Item1, destination.Item2);
         }
     }
 
