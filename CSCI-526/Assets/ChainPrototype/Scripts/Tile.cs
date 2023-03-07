@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using System.Collections.Generic;
-using UnityEditor.XR;
 
 public class Tile : MonoBehaviour
 {
