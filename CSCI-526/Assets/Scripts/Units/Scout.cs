@@ -9,10 +9,34 @@ namespace Assets.Scripts.Units
     public class Scout : PieceMono
     {
         private Direction direction = Direction.Up;
+        [SerializeField] public GameObject upArrow;
+        [SerializeField] public GameObject downArrow;
+        [SerializeField] public GameObject leftArrow;
+        [SerializeField] public GameObject rightArrow;
 
+
+        //TODO: Enemy Scout Unit set as Up instead of Down on Initialization
         public void SetInitialDirection(Direction d)
         {
             this.direction = d;
+            if (this.direction == Direction.Up)
+            {
+                upArrow.SetActive(true);
+                downArrow.SetActive(false);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(false);
+                upArrow.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+
+            if (this.direction == Direction.Down)
+            {
+                upArrow.SetActive(false);
+                downArrow.SetActive(true);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(false);
+                downArrow.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+
         }
 
         public void SetDirection(Tuple<int, int> destination)
@@ -25,21 +49,45 @@ namespace Assets.Scripts.Units
             {
                 Debug.Log("GOING LEFT");
                 this.direction = Direction.Left;
-            } 
+                upArrow.SetActive(false);
+                downArrow.SetActive(false);
+                leftArrow.SetActive(true);
+                rightArrow.SetActive(false);
+
+                leftArrow.GetComponent<SpriteRenderer>().color = Color.white;
+            }
             else if (x - destination.Item1 < 0)
             {
                 Debug.Log("GOING RIGHT");
                 this.direction = Direction.Right;
+                upArrow.SetActive(false);
+                downArrow.SetActive(false);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(true);
+
+                rightArrow.GetComponent<SpriteRenderer>().color = Color.white;
             } 
             else if (y - destination.Item2 > 0)
             {
                 Debug.Log("GOING DOWN");
                 this.direction = Direction.Down;
+                upArrow.SetActive(false);
+                downArrow.SetActive(true);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(false);
+
+                downArrow.GetComponent<SpriteRenderer>().color = Color.white;
             }
             else
             {
                 Debug.Log("GOING UP");
                 this.direction = Direction.Up;
+                upArrow.SetActive(true);
+                downArrow.SetActive(false);
+                leftArrow.SetActive(false);
+                rightArrow.SetActive(false);
+
+                upArrow.GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
         public override string getUnitInfo()
@@ -114,29 +162,29 @@ namespace Assets.Scripts.Units
             switch (this.direction)
             {
                 case Direction.Up:
-                    for (int j = 1; j <= range; j++)
+                    for (int j = 0; j < range; j++)
                     {
-                        for (int i = 1; i < j; i++)
+                        for (int i = 1; i < Math.Max(j + 1, 2); i++)
                         {
-                            if (lvlMono.CheckOutOfBounds(x-i, y+j))
+                            if (lvlMono.CheckOutOfBounds(x - i, y + j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x - i, y + j));
                             }
-                            if (lvlMono.CheckOutOfBounds(x+i, y+j))
+                            if (lvlMono.CheckOutOfBounds(x + i, y + j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x + i, y + j));
                             }
                         }
-                        if (lvlMono.CheckOutOfBounds(x, y+j))
+                        if (lvlMono.CheckOutOfBounds(x, y + j))
                         {
                             visibleArea.Add(new Tuple<int, int>(x, y + j));
                         }
                     }
                     break;
                 case Direction.Right:
-                    for (int i = 1; i <= range; i++)
+                    for (int i = 0; i < range; i++)
                     {
-                        for (int j = 1; j < i; j++)
+                        for (int j = 1; j < Math.Max(i + 1, 2); j++)
                         {
                             if (lvlMono.CheckOutOfBounds(x+i, y - j))
                             {
@@ -151,13 +199,12 @@ namespace Assets.Scripts.Units
                         {
                             visibleArea.Add(new Tuple<int, int>(x + i, y));
                         }
-                    }
-                    
+                    }                    
                     break;
                 case Direction.Down:
-                    for (int j = 1; j <= range; j++)
+                    for (int j = 0; j < range; j++)
                     {
-                        for (int i = 1; i < j; i++)
+                        for (int i = 1; i < Math.Max(j + 1, 2); i++)
                         {
                             if (lvlMono.CheckOutOfBounds(x-i, y - j))
                             {
@@ -175,9 +222,9 @@ namespace Assets.Scripts.Units
                     }
                     break;
                 case Direction.Left:
-                    for (int i = 1; i <= range; i++)
+                    for (int i = 0; i < range; i++)
                     {
-                        for (int j = 1; j < i; j++)
+                        for (int j = 1; j < Math.Max(i + 1, 2); j++)
                         {
                             if (lvlMono.CheckOutOfBounds(x - i, y - j))
                             {

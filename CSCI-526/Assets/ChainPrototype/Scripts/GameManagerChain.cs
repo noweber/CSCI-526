@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
+using Assets.Scripts.Analytics;
 
 public class GameManagerChain : MonoBehaviour
 {
@@ -66,10 +67,42 @@ public class GameManagerChain : MonoBehaviour
 
     public bool switchingTurns = false;        // Flag used to lock switching turns if the game is in the process of doing so
 
+    public LevelReplayData replayDataForAnalytics;
+
     /// <summary>
     /// This is the set of pieces which have been moved during a given turn state.
     /// </summary>
     private List<PieceMono> movedPieces;
+
+    private void AddPieceToInitialLevelStateForReplayAnalytics(bool isHumanOwnedPiece, string pieceType, int xPosition, int yPostiion)
+    {
+        replayDataForAnalytics.InitialPiecePositions.Add(new PieceData()
+        {
+            Player = GetPlayerName(isHumanOwnedPiece),
+            Piece = pieceType,
+            Position = new Tuple<int, int>(xPosition, yPostiion)
+        });
+    }
+
+    private void AddPieceMovementForReplayAnalytics(bool isHumanOwnedPiece, string pieceType, int xPositionStart, int yPositionStart, int xPositionDestination, int yPositionDestination)
+    {
+        replayDataForAnalytics.MovesMade.Add(new MoveData()
+        {
+            Player = GetPlayerName(isHumanOwnedPiece),
+            Piece = pieceType,
+            Position = new Tuple<int, int>(xPositionStart, yPositionStart),
+            Destination = new Tuple<int, int>(xPositionDestination, yPositionDestination)
+        });
+    }
+
+    private string GetPlayerName(bool isHuman)
+    {
+        if (isHuman)
+        {
+            return "Human";
+        }
+        return "AI";
+    }
 
     void Awake()
     {
@@ -80,16 +113,7 @@ public class GameManagerChain : MonoBehaviour
         tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
         tilesOccupiedHeatmap = new Dictionary<Tuple<int, int>, int>();
         ResetPieceMovementCountsForHumanPlayer();
-    }
-
-    private void ResetPieceMovementCountsForHumanPlayer()
-    {
-        // TODO: Make a function to increment the counts which checks for these keys
-        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Circle, 0);
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Diamond, 0);
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Triangle, 0);
-        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Scout, 0);
+        replayDataForAnalytics = new LevelReplayData();
     }
 
     // Start is called before the first frame update
@@ -108,6 +132,11 @@ public class GameManagerChain : MonoBehaviour
             LevelMono.Instance.GetHeight());
         playStartTime = Time.realtimeSinceStartup;
 
+        // Store the initial positions for all pieces to send as analytics data later:
+        foreach (var pieceEntry in LevelMono.Instance._pieces)
+        {
+            AddPieceToInitialLevelStateForReplayAnalytics(pieceEntry.Value.IsHuman(), pieceEntry.Value.UnitName, pieceEntry.Key.Item1, pieceEntry.Key.Item2);
+        }
     }
     public void LoadNextLevel(String inputLevelName)
     {
@@ -162,25 +191,24 @@ public class GameManagerChain : MonoBehaviour
                 tilesMoveToHeatmap.TryAdd(destination, 1);
             }
 
-            // TODO: After Week 8: Refactor and remove the individual counters and only use the dictionary
-
+            // TODO: After Week 10: Refactor and remove the individual counters and only use the dictionary
             if (pieceThatMoved.IsCircle())
             {
                 circlePiecessMovedByPlayer++;
-                humanPlayerPieceTypeMoveCounts[PieceMono.Circle]++;
             }
 
             if (pieceThatMoved.IsDiamond())
             {
                 diamondPiecessMovedByPlayer++;
-                humanPlayerPieceTypeMoveCounts[PieceMono.Diamond]++;
             }
 
             if (pieceThatMoved.IsScout())
             {
                 scoutPiecessMovedByPlayer++;
-                humanPlayerPieceTypeMoveCounts[PieceMono.Scout]++;
             }
+
+            humanPlayerPieceTypeMoveCounts[pieceThatMoved.UnitName]++;
+            AddPieceMovementForReplayAnalytics(pieceThatMoved.IsHuman(), pieceThatMoved.UnitName, (int)pieceThatMoved.transform.position.x, (int)pieceThatMoved.transform.position.y, destination.Item1, destination.Item2);
         }
     }
 
@@ -210,15 +238,27 @@ public class GameManagerChain : MonoBehaviour
         movesMade += amount;
 
         // Check if the the game is over now that number of available moves decreased during play:
-        if (!LevelMono.Instance.DoEnemiesRemain())
+        if (SceneName == "Challenge_Circle")
         {
-            // TODO: Transition to a win state per open tasks once designed.
-            this.ChangeState(GameStateEnum.Victory);
+            Debug.Log("TOTAL MOVES: " + TotalMoves);
+            if (TotalMoves == 4)
+            {
+                if (!LevelMono.Instance.DoEnemiesRemain()) { this.ChangeState(GameStateEnum.Victory); }
+                else { this.ChangeState(GameStateEnum.Loss); }
+            }
         }
-        else if (!LevelMono.Instance.DoHumansRemain())
+        else
         {
-            // TODO: Transition to a lose state.
-            this.ChangeState(GameStateEnum.Loss);
+            if (!LevelMono.Instance.DoEnemiesRemain())
+            {
+                // TODO: Transition to a win state per open tasks once designed.
+                this.ChangeState(GameStateEnum.Victory);
+            }
+            else if (!LevelMono.Instance.DoHumansRemain())
+            {
+                // TODO: Transition to a lose state.
+                this.ChangeState(GameStateEnum.Loss);
+            }
         }
     }
 
@@ -325,19 +365,27 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.GenerateGrid:
                 if (SceneName == "TutorialLevel")
                 {
-                    LevelMono.Instance.LoadLevel(TutorialLevel());
+                    LevelMono.Instance.LoadLevel(Levels.TutorialLevel());
                 }
                 else if (SceneName == "TutorialFogOfWar")
                 {
-                    LevelMono.Instance.LoadLevel(TutorialFogOfWarLevel());
+                    LevelMono.Instance.LoadLevel(Levels.TutorialFogOfWarLevel());
                 }
                 else if (SceneName == "Level_One")
                 {
-                    LevelMono.Instance.LoadLevel(LevelOne());
+                    LevelMono.Instance.LoadLevel(Levels.LevelOne());
                 }
                 else if (SceneName == "Level_Two")
                 {
-                    LevelMono.Instance.LoadLevel(LevelTwo());
+                    LevelMono.Instance.LoadLevel(Levels.LevelTwo());
+                }
+                else if (SceneName == "Challenge_Circle")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
+                }
+                else if (SceneName == "Challenge_Scout")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
                 }
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
@@ -374,7 +422,7 @@ public class GameManagerChain : MonoBehaviour
                     piece.cantMoveObject.SetActive(false);
                 }
 
-                if (SceneName == "TutorialLevel")
+                if (SceneName == "TutorialLevel" || SceneName == "Challenge_Circle")
                 {
                     // slacking off 
                 }
@@ -390,22 +438,24 @@ public class GameManagerChain : MonoBehaviour
             case GameStateEnum.Victory:
                 Debug.Log("VICTORY");
                 MenuManager.Instance.SetVictoryScreen(true);
-                SendEndOfLevelAnalytics();
+                SendEndOfLevelAnalytics(true);
                 break;
             case GameStateEnum.Loss:
                 Debug.Log("LOSS");
-                SendEndOfLevelAnalytics();
+                SendEndOfLevelAnalytics(false);
                 MenuManager.Instance.SetDefeatScreen(true);
                 break;
         }
     }
 
-    private void SendEndOfLevelAnalytics()
+    private void SendEndOfLevelAnalytics(bool humanPlayerWasVictorious)
     {
         float timePlayedThisLevelInSeconds = (Time.realtimeSinceStartup - playStartTime) / 60;
         string serializedMovesMadeHeatmapData = JsonConvert.SerializeObject(tilesMoveToHeatmap);
         string serializedTilesOccupiedHeatmapData = JsonConvert.SerializeObject(tilesOccupiedHeatmap);
         string serializedPiecesMovedByHumanPlayerCountData = JsonConvert.SerializeObject(humanPlayerPieceTypeMoveCounts);
+        replayDataForAnalytics.VictoriousPlayerName = GetPlayerName(humanPlayerWasVictorious);
+        string serializedReplayData = JsonConvert.SerializeObject(replayDataForAnalytics);
         Analytics.Instance.SendEndOfLevelData(
             playTestID,
             timePlayedThisLevelInSeconds,
@@ -418,12 +468,13 @@ public class GameManagerChain : MonoBehaviour
             circlePiecessMovedByPlayer,
             diamondPiecessMovedByPlayer,
             scoutPiecessMovedByPlayer,
-            serializedPiecesMovedByHumanPlayerCountData
+            serializedPiecesMovedByHumanPlayerCountData,
+            serializedReplayData
             );
         ResetAnalyticsCounters();
     }
 
-    // TODO: Week 9 - move the analytics counters to the analytics service.
+    // TODO: Week 10 - move the analytics counters to the analytics service.
     private void ResetAnalyticsCounters()
     {
         tilesMoveToHeatmap = new Dictionary<Tuple<int, int>, int>();
@@ -432,226 +483,17 @@ public class GameManagerChain : MonoBehaviour
         circlePiecessMovedByPlayer = 0;
         diamondPiecessMovedByPlayer = 0;
         scoutPiecessMovedByPlayer = 0;
+        replayDataForAnalytics = new LevelReplayData();
     }
 
-    /// <summary>
-    /// A method representing the tutorial level's data.
-    /// </summary>
-    /// <returns>Returns the tutorial level's data.</returns>
-    private LoadLevelData TutorialLevel()
+    private void ResetPieceMovementCountsForHumanPlayer()
     {
-        int _width = 5;
-        int _height = 8;
-        List<PieceInfo> units = new List<PieceInfo>();
-
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                var position = new Tuple<int, int>(x, y);
-                if (x == 2 && y == 3)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
-                }
-
-                if (x == 0 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
-                }
-
-                if (x == 3 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
-                }
-
-                // enemies
-                if (x == 3 && y == _height - 4 || x == 3 && y == _height - 3)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
-                }
-            }
-        }
-        return new LoadLevelData()
-        {
-            Width = _width,
-            Height = _height,
-            Units = units
-        };
-    }
-
-    private LoadLevelData TutorialFogOfWarLevel()
-    {
-        int _width = 5;
-        int _height = 10;       // Display the visibility of 2 triangles: 1 per team
-        List<PieceInfo> units = new List<PieceInfo>();
-
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                var position = new Tuple<int, int>(x, y);
-                if (x == 0 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
-                }
-                if (x == 3 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
-                }
-                if (x == 2 && y == 2)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
-                }
-
-                // Enemies
-                if (x == 4 && y == 9)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
-                }
-                if (x == 1 && y == 9)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Diamond));
-                }
-                if (x == 2 && y == 7)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Triangle));
-                }
-            }
-        }
-        return new LoadLevelData()
-        {
-            Width = _width,
-            Height = _height,
-            Units = units
-        };
-    }
-
-    /// <summary>
-    /// A method representing the first level's data.
-    /// </summary>
-    /// <returns>Returns the first level's data.</returns>
-    private LoadLevelData LevelOne()
-    {
-        int _width = 5;
-        int _height = 10;
-        List<PieceInfo> units = new List<PieceInfo>();
-
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                Tuple<int, int> position = new(x, y);
-
-                if (x == 3 && y == 2)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Scout));
-                }
-
-                if (x == 2 && y == 2)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
-                }
-
-                if (x == 2 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
-                }
-
-                if (x == 3 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
-                }
-
-                if (x == 2 && y == 7)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Triangle));
-
-                }
-
-                if (x == 2 && y == _height - 1)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
-                }
-
-                if (x == 3 && y == _height - 1)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Diamond));
-                }
-
-                if (x == 2 && y == 6)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Scout));
-                }
-            }
-        }
-        return new LoadLevelData()
-        {
-            Width = _width,
-            Height = _height,
-            Units = units
-        };
-    }
-
-    private LoadLevelData LevelTwo()
-    {
-        int _width = 8;
-        int _height = 10;
-        List<PieceInfo> units = new List<PieceInfo>();
-
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                Tuple<int, int> position = new(x, y);
-
-                if (x == 3 && y == 3)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Scout));
-                }
-
-                if (x == 2 && y == 2 || x == _width - 3 && y == 2)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Triangle));
-                }
-
-                if (x == 0 && y == 0 || x == _width - 1 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Circle));
-                }
-
-                if (x == 3 && y == 0 || x == 4 && y == 0)
-                {
-                    units.Add(new PieceInfo(position, true, PieceMono.Diamond));
-                }
-
-                if (x == 2 && y == _height - 3 || x == _width - 3 && y == _height - 3)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Triangle));
-
-                }
-
-                if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Circle));
-                }
-
-                if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Diamond));
-                }
-
-                if (x == 3 && y == 7)
-                {
-                    units.Add(new PieceInfo(position, false, PieceMono.Scout));
-                }
-            }
-        }
-        return new LoadLevelData()
-        {
-            Width = _width,
-            Height = _height,
-            Units = units
-        };
+        // TODO: Make a function to increment the counts which checks for these keys
+        humanPlayerPieceTypeMoveCounts = new Dictionary<string, int>();
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Circle, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Diamond, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Triangle, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Scout, 0);
     }
 
     /// <summary>

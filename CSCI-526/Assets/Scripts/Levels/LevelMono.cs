@@ -28,7 +28,7 @@ public class LevelMono : MonoBehaviour
     public PieceMono selectedPiece = null;
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
     public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
-
+	private List<Tuple<int, int>> eyes = new List<Tuple<int, int>>();
     public List<Tuple<int, int>> towerLocations = new List<Tuple<int, int>>();
 
     private int Width;
@@ -304,16 +304,24 @@ public class LevelMono : MonoBehaviour
                     scout.gameObject.SetActive(unit.IsHuman());
                 }
 
-                if (!unit.IsHuman())
-                {
-                    scout.SetInitialDirection(Direction.Down);
-                }
-                scout.SetMoveState(false);
                 var squares = scout.gameObject.GetComponentsInChildren<SpriteRenderer>();
                 foreach (var square in squares)
                 {
                     square.color = scout.IsHuman() ? playerColor : enemyColor;
                 }
+
+                if (!unit.IsHuman())
+                {
+                    scout.SetInitialDirection(Direction.Down);
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                else
+                {
+                    scout.SetInitialDirection(Direction.Up);
+                    scout.upArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                scout.SetMoveState(false);
+                
                 // if (!this.debug)
                 // {
                 //     this.SetRangeVisibility(scout.GetVisibleArea(3), unit.IsHuman(), !unit.IsHuman());
@@ -370,6 +378,17 @@ public class LevelMono : MonoBehaviour
         return this.selectedPiece != null;
     }
 
+	public PieceMono GetSelectedPiece()
+    {
+        return this.selectedPiece;
+    }
+
+	public Tuple<int, int> GetSelectedCoord()
+    {
+        return this.selectedCoord;
+    }
+
+
     public void SelectPiece(PieceMono piece, Tuple<int, int> coord)
     {
         this.selectedPiece = piece;
@@ -394,7 +413,8 @@ public class LevelMono : MonoBehaviour
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
             this.tiles[tileCoords]._legal.SetActive(true);
-            this.tiles[tileCoords].ShowVisibility();
+            this.tiles[tileCoords].isLegalMove = true;
+            // this.tiles[tileCoords].ShowVisibility();
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
 
@@ -410,10 +430,68 @@ public class LevelMono : MonoBehaviour
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
             this.tiles[tileCoords]._legal.SetActive(false);
-            this.tiles[tileCoords].HideVisibility();
+            this.tiles[tileCoords].isLegalMove = false;
+
+            // this.tiles[tileCoords].HideVisibility();
             //this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
         }
     }
+
+	public void TurnOnEyes(Tuple<int, int> boot) 
+	{
+		var currentTile = this.GetTile(boot);
+		foreach(Tuple<int,int> coord in currentTile.AdjacentPieces())
+        {
+			var piece = this.GetPiece(coord);
+            if(piece.IsTriangle() && piece.IsEnemyOf(this.selectedPiece)) // adjacent to triangle
+            {
+				var area = piece.GetVisibleArea(2);
+				foreach(Tuple<int,int> visibleTile in area)
+        		{
+					var tile = this.GetTile(visibleTile); 
+					var p = this.GetPiece(visibleTile);
+            		
+					tile.ToggleEye(true); 
+					this.eyes.Add(visibleTile);
+					//if (p != null && tile.CanPlayerSee()) { tile.ToggleEye(false); }
+					if (visibleTile.Equals(boot)) { tile.ToggleEye(false); }
+    			}
+			}
+		}
+
+		if (this.selectedPiece != null && this.selectedPiece.IsScout()) // scout case
+		{ 
+			var phantomScout = Instantiate(_scoutPrefab, new Vector3(boot.Item1, boot.Item2, -1), Quaternion.identity);
+			phantomScout.gameObject.SetActive(false);
+			phantomScout.SetHuman(this.selectedPiece.IsHuman());
+			phantomScout.SetName(PieceMono.Scout);
+			if (boot.Item1 - this.selectedCoord.Item1 > 0) { phantomScout.SetInitialDirection(Direction.Right); }
+			else if (boot.Item1 - this.selectedCoord.Item1 < 0) { phantomScout.SetInitialDirection(Direction.Left); }
+			else if (boot.Item2 - this.selectedCoord.Item2 > 0) { phantomScout.SetInitialDirection(Direction.Up); }
+			else if (boot.Item2 - this.selectedCoord.Item2 < 0) { phantomScout.SetInitialDirection(Direction.Down); }
+			var area = phantomScout.GetVisibleArea(3);
+			foreach(Tuple<int,int> visibleTile in area)
+        	{
+				var tile = this.GetTile(visibleTile); 
+				var p = this.GetPiece(visibleTile);
+				tile.ToggleEye(true); 
+				this.eyes.Add(visibleTile);
+				//if (p != null && tile.CanPlayerSee()) { tile.ToggleEye(false); }
+				if (visibleTile.Equals(boot)) { tile.ToggleEye(false); }
+    		}
+			Destroy(phantomScout.gameObject);
+		}
+	}
+	
+	public void TurnOffEyes() 
+	{
+		foreach(Tuple<int,int> visibleTile in this.eyes)
+        {
+			var tile = this.GetTile(visibleTile); 
+			tile.ToggleEye(false);
+    	}
+		this.eyes.Clear();
+	}
 
     public bool MovePiece(Tuple<int, int> coord)
     {
@@ -445,17 +523,14 @@ public class LevelMono : MonoBehaviour
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
         if(this.selectedPiece.IsHuman() && !this.selectedPiece.IsCircle())
         {
-            if(this.selectedPiece.IsCircle())
+            this.selectedPiece.canMoveObject.SetActive(false);
+            this.selectedPiece.cantMoveObject.SetActive(true);
+        }
+        if (this.selectedPiece.IsHuman() && this.selectedPiece.IsCircle())
+        {
+            if (captured)
             {
-                if(captured)
-                {
-                    // Same green highlight
-                }
-                else
-                {
-                    this.selectedPiece.canMoveObject.SetActive(false);
-                    this.selectedPiece.cantMoveObject.SetActive(true);
-                }
+                // Same green highlight
             }
             else
             {
@@ -463,7 +538,6 @@ public class LevelMono : MonoBehaviour
                 this.selectedPiece.cantMoveObject.SetActive(true);
             }
         }
-
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
         var towerCoord = this.selectedPiece.InTowerRange();
