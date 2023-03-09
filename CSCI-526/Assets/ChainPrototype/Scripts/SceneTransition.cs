@@ -12,6 +12,16 @@ public class SceneTransition : MonoBehaviour
         SceneManager.LoadScene(sceneNames[inputIndex]);
     }
 
+    public void LoadNextLevel(string inputLevelName)
+    {
+        SceneManager.LoadScene(inputLevelName);
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     public void QuitGame()
     {
         Application.Quit();

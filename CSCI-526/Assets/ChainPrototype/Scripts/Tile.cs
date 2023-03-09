@@ -17,24 +17,83 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public GameObject _fog, _redFog;
 
-    [SerializeField] private GameObject closeEye, openEye;
+    [SerializeField] private GameObject closeEye, openEye, boot;
     
     private bool canPlayerSee;
     private bool canEnemySee;
+
+    public bool isLegalMove = false;
 
     public void Init(bool isOffset)
     {
         _renderer.color = isOffset ? _base : _offset;
     }
 
+    public void ToggleEye(bool status)
+    {
+        openEye.SetActive(status);
+    }
+
+	public void TurnOffEyes(List<Tuple<int, int>> tiles) 
+	{
+		var lvlMono = LevelMono.Instance;
+		foreach(Tuple<int,int> visibleTile in tiles)
+        {
+			var tile = lvlMono.GetTile(visibleTile);
+            if (tile.CanPlayerSee() == false) { lvlMono.GetTile(visibleTile).ToggleEye(false); }
+    	}
+	}
+
     void OnMouseEnter()
     {
         _highlight.SetActive(true);
+		var lvlMono = LevelMono.Instance;
+		int x = (int)this.transform.position.x;
+		int y = (int)this.transform.position.y;
+        // If legal move, turn on boot
+        if(isLegalMove)
+        {
+            boot.SetActive(true);
+            List<Tuple<int, int>> area = new List<Tuple<int, int>>();
+            // IF adjacent ally is triangle, render triangle visible area as eyes
+            /*foreach(Tuple<int,int> coord in AdjacentPieces())
+            {
+                var piece = lvlMono.GetPiece(coord);
+                if(piece.IsTriangle() && piece.IsEnemyOf(lvlMono.GetSelectedPiece()))
+                {
+                    foreach(Tuple<int,int> visibleTile in piece.GetVisibleArea(2))
+                    {
+						var tile = lvlMono.GetTile(visibleTile); 
+						var p = lvlMono.GetPiece(visibleTile);
+                        if (tile.CanPlayerSee() == false) { tile.ToggleEye(true); }
+						if (p != null && p.IsTriangle()) { tile.ToggleEye(false); }
+						if (visibleTile.Item1 == x && visibleTile.Item2 == y) { tile.ToggleEye(false); }
+                    }
+					area.AddRange(piece.GetVisibleArea(2));
+                }
+            }*/
+			lvlMono.TurnOnEyes(new Tuple<int, int>(x, y));
+        }
     }
 
     void OnMouseExit()
     {
         _highlight.SetActive(false);
+		var lvlMono = LevelMono.Instance;
+        if(this.boot.activeInHierarchy)
+        {
+            boot.SetActive(false);
+            // IF adjacent ally is triangle, render triangle visible area as eyes
+            /*foreach(Tuple<int,int> coord in AdjacentPieces())
+            {
+                var piece = lvlMono.GetPiece(coord);
+                if(piece.IsTriangle() && piece.IsEnemyOf(lvlMono.GetSelectedPiece()))
+                {
+                   
+                }
+            }*/
+			lvlMono.TurnOffEyes();
+        }
     }
 
     public void ToggleFog()
@@ -82,7 +141,7 @@ public class Tile : MonoBehaviour
         return this.canEnemySee;
     }
     
-    public void ShowVisibility()
+/*    public void ShowVisibility()
     {
         if (SceneManager.GetActiveScene().name == "TutorialLevel") { return; }       // Not needed in first tutorial level -- no fog
         // switch (visibility)
@@ -107,18 +166,59 @@ public class Tile : MonoBehaviour
             openEye.SetActive(false);
             closeEye.SetActive(true);
         }
-        
     }
+
     public void HideVisibility()
     {
         openEye.SetActive(false);
         closeEye.SetActive(false);
     }
+*/
+
+	public List<Tuple<int, int>> AdjacentPieces()
+	{
+		var lvlMono = LevelMono.Instance;
+		var adjPieces = new List<Tuple<int, int>>();
+		var pos = this.transform.position;
+		int x = (int)pos.x;
+		int y = (int)pos.y;
+
+		if (!lvlMono.HasSelectedPiece()) 
+		{
+			Debug.Log("NO SELECTED PIECE. CANNOT FIND ADJACENT ALLIES");
+			return adjPieces;
+		}
+
+		var selectedPiece = lvlMono.GetSelectedPiece();		
+
+		var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
+        adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
+        adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
+        adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
+        adjacentList.Add(new Tuple<int, int>(x + 1, y + 1)); //right up diag
+        adjacentList.Add(new Tuple<int, int>(x - 1, y + 1)); //left  up diag
+        adjacentList.Add(new Tuple<int, int>(x + 1, y - 1)); //right down diag
+        adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); //left down diag
+
+		
+        foreach (Tuple<int, int> coord in adjacentList)
+        {
+			if (coord.Equals(lvlMono.GetSelectedCoord())) { continue; }
+			if (lvlMono.GetPiece(coord) != null)
+            {
+                adjPieces.Add(coord);
+            }
+        }    
+        return adjPieces;
+	}
 
     private void OnMouseDown()
     {
+		boot.SetActive(false);
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
         var lvlMono = LevelMono.Instance;
+		lvlMono.TurnOffEyes();
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
@@ -143,9 +243,8 @@ public class Tile : MonoBehaviour
                         // LEVELMONO SELECTEDPIECE CAPTURING
                         if (lvlMono.MovePiece(coord))
                         {
-
-                            GameManagerChain.Instance.IncrementMoves(1);
                             GameManagerChain.Instance.TotalMoves += 1;
+							GameManagerChain.Instance.IncrementMoves(1);
                             MenuManager.Instance.ShowNumMovesInfo();
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -167,7 +266,7 @@ public class Tile : MonoBehaviour
 
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
+                    MenuManager.Instance.HideUnitInfo(lvlMono.GetSelectedPiece());
                 }
             }
         }
@@ -181,8 +280,8 @@ public class Tile : MonoBehaviour
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
+					GameManagerChain.Instance.TotalMoves += 1;
                     GameManagerChain.Instance.IncrementMoves(1);
-                    GameManagerChain.Instance.TotalMoves += 1;
                     MenuManager.Instance.ShowNumMovesInfo();
 
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -194,6 +293,8 @@ public class Tile : MonoBehaviour
                 {
                     Debug.Log("FAILED TO MOVE");
                 }
+
+                MenuManager.Instance.HideUnitInfo(lvlMono.GetSelectedPiece());
                 lvlMono.RemoveHighlight();
                 lvlMono.ResetPiece();
             }
@@ -217,10 +318,18 @@ public class Tile : MonoBehaviour
                     // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
                 }
-                if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
+                else if (SceneManager.GetActiveScene().name == "TutorialFogOfWar")
                 {
                     // GameManagerChain.Instance.ChangeState(GameStateEnum.AI);
                     StartCoroutine(DelayedChangeState());
+                }
+                else if (SceneManager.GetActiveScene().name == "Challenge_Circle")
+                {
+                    StartCoroutine(DelayedChangeState());
+                }
+                else if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+                {
+                    StartCoroutine(GameManagerChain.Instance.StateToAI());
                 }
                 else
                 {
@@ -242,6 +351,7 @@ public class Tile : MonoBehaviour
         StartCoroutine(GameManagerChain.Instance.StateToHuman());
         yield return null;
     }
+
 }
 
 

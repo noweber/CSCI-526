@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Units;
 using System;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class EnemyAI : MonoBehaviour
@@ -14,6 +15,30 @@ public class EnemyAI : MonoBehaviour
     {
         Instance = this;
         isRunning = false;
+    }
+
+    public Tuple<int, int> SelectRandomPiece()
+    {
+        var lvlMono = LevelMono.Instance;
+        var enemyPieceCoords = lvlMono.GetEnemyPieceCoords();
+        if (enemyPieceCoords.Count == 0)
+        {
+            return null;
+        }
+
+
+        List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
+        List<Tuple<int, int>> movableDiamonds = new List<Tuple<int, int>>();
+        List<Tuple<int, int>> movableCircles = new List<Tuple<int, int>>();
+        foreach (var coord in enemyPieceCoords)
+        {
+            if (lvlMono.GetPiece(coord).CanMove())
+            {
+                movableEnemies.Add(coord);
+            }
+        }
+        if (movableEnemies.Count == 0) { return null; }
+        return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
     /*
@@ -31,6 +56,7 @@ public class EnemyAI : MonoBehaviour
         {
             return null;
         }
+
 
         List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
         List<Tuple<int, int>> movableDiamonds = new List<Tuple<int, int>>();
@@ -84,6 +110,8 @@ public class EnemyAI : MonoBehaviour
                 }
             }
         }
+     
+
 
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
@@ -253,23 +281,40 @@ public class EnemyAI : MonoBehaviour
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectBestPiece();
+        if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+        {
+            aiCoord = SelectRandomPiece();
+        }
+
         if (aiCoord != null)
         {
             var aiPiece = lvlMono.GetPiece(aiCoord);
             lvlMono.SelectPiece(aiPiece, aiCoord);
             var moves = aiPiece.LegalMoves(lvlMono.GetWidth(), lvlMono.GetHeight());
             Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
-
-            if (aiPiece.IsDiamond() && ShouldMoveDiamondToCircle(aiCoord))
+            
+            // Decide movement logic 
+            if (SceneManager.GetActiveScene().name == "Challenge_Scout")
             {
-                destination = MoveDiamondToCircle(aiCoord, moves);
+                // Random AI
+                // Subject to change
+                Debug.Log("RANDOM AI");
             }
             else
             {
-                int index = PickBestMove(moves);
-                destination = moves[index];
+                Debug.Log("OPTIMAL AI");
+                if (aiPiece.IsDiamond() && ShouldMoveDiamondToCircle(aiCoord))
+                {
+                    destination = MoveDiamondToCircle(aiCoord, moves);
+                }
+                else
+                {
+                    int index = PickBestMove(moves);
+                    destination = moves[index];
+                }
             }
-
+            
+            // Make AI movement based on above logic
             if (lvlMono.MovePiece(destination))
             {
                 GameManagerChain.Instance.AddMovedPiece(aiPiece, destination);
@@ -280,17 +325,16 @@ public class EnemyAI : MonoBehaviour
             {
                 lvlMono.ResetPiece();
                 Debug.Log("AI FAILED TO MOVE");
-                
+
             }
         }
-
-/*
-        if (!LevelMono.Instance.DoHumansRemain())
-        {
-            StopAllCoroutines();
-            GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
-        }
-*/
+        /*
+                if (!LevelMono.Instance.DoHumansRemain())
+                {
+                    StopAllCoroutines();
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
+                }
+        */
         if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
         {
             StopAllCoroutines();

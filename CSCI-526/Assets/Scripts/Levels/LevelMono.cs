@@ -28,7 +28,7 @@ public class LevelMono : MonoBehaviour
     public PieceMono selectedPiece = null;
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
     public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
-
+    private List<Tuple<int, int>> eyes = new List<Tuple<int, int>>();
     public List<Tuple<int, int>> towerLocations = new List<Tuple<int, int>>();
 
     private int Width;
@@ -76,7 +76,7 @@ public class LevelMono : MonoBehaviour
         // TODO: Delete all pieces
         // TODO: Ensure any elements of the previous level are removed from the scene.
     }
-    
+
     public List<Tuple<int, int>> GetEnemyPieceCoords()
     {
         List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
@@ -101,7 +101,7 @@ public class LevelMono : MonoBehaviour
 
         return playerPieces;
     }
-    
+
     public List<PieceMono> GetEnemyPieces()
     {
         List<PieceMono> enemyPieces = new List<PieceMono>();
@@ -123,7 +123,7 @@ public class LevelMono : MonoBehaviour
         {
             tile.Value.SetPlayerVisibility(false);
             tile.Value.SetEnemyVisibility(false);
-            
+
             // Set all enemy pieces inactive 
             var coord = tile.Key;
             var piece = this.GetPiece(coord);
@@ -145,7 +145,7 @@ public class LevelMono : MonoBehaviour
             {
                 if (isHuman) { this.SetPlayerVisibilityArea(piece.GetVisibleArea(2)); }
                 if (!isHuman) { this.SetEnemyVisibilityArea(piece.GetVisibleArea(2)); }
-            } 
+            }
             else if (piece.IsScout())
             {
                 if (isHuman) { this.SetPlayerVisibilityArea(piece.GetVisibleArea(3)); }
@@ -159,7 +159,7 @@ public class LevelMono : MonoBehaviour
             }
             */
         }
-        
+
         // toggle fog and active pieces based on visible areas
         for (int i = 0; i < Width; i++)
         {
@@ -169,7 +169,7 @@ public class LevelMono : MonoBehaviour
                 var tile = this.GetTile(coord);
                 tile.ToggleFog();
                 // tile.ToggleEnemyFog(); // Use this only for debugging
-                
+
                 // Set player/enemy pieces active if they are within range
                 var piece = this.GetPiece(coord);
                 if (tile.CanPlayerSee() && piece != null)
@@ -194,7 +194,7 @@ public class LevelMono : MonoBehaviour
             }
         }
     }
-    
+
     private void SetEnemyVisibilityArea(List<Tuple<int, int>> visibleArea)
     {
         foreach (var coord in visibleArea)
@@ -294,7 +294,8 @@ public class LevelMono : MonoBehaviour
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = diamond;
-            } else if (unit.IsScout())
+            }
+            else if (unit.IsScout())
             {
                 var scout = Instantiate(_scoutPrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
                 scout.SetName(PieceMono.Scout);
@@ -304,16 +305,24 @@ public class LevelMono : MonoBehaviour
                     scout.gameObject.SetActive(unit.IsHuman());
                 }
 
-                if (!unit.IsHuman())
-                {
-                    scout.SetInitialDirection(Direction.Down);
-                }
-                scout.SetMoveState(false);
                 var squares = scout.gameObject.GetComponentsInChildren<SpriteRenderer>();
                 foreach (var square in squares)
                 {
                     square.color = scout.IsHuman() ? playerColor : enemyColor;
                 }
+
+                if (!unit.IsHuman())
+                {
+                    scout.SetInitialDirection(Direction.Down);
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                else
+                {
+                    scout.SetInitialDirection(Direction.Up);
+                    scout.upArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                scout.SetMoveState(false);
+
                 // if (!this.debug)
                 // {
                 //     this.SetRangeVisibility(scout.GetVisibleArea(3), unit.IsHuman(), !unit.IsHuman());
@@ -321,7 +330,7 @@ public class LevelMono : MonoBehaviour
                 _pieces[coord] = scout;
             }
         }
-        
+
         // Sets Fog based on player vision
         // Also, defines what enemy can see as well
         if (!this.debug)
@@ -349,7 +358,7 @@ public class LevelMono : MonoBehaviour
 
         return null;
     }
-    
+
     public Tile GetTile(Tuple<int, int> coord)
     {
         if (tiles.TryGetValue(coord, out var tile))
@@ -369,6 +378,17 @@ public class LevelMono : MonoBehaviour
     {
         return this.selectedPiece != null;
     }
+
+    public PieceMono GetSelectedPiece()
+    {
+        return this.selectedPiece;
+    }
+
+    public Tuple<int, int> GetSelectedCoord()
+    {
+        return this.selectedCoord;
+    }
+
 
     public void SelectPiece(PieceMono piece, Tuple<int, int> coord)
     {
@@ -394,7 +414,8 @@ public class LevelMono : MonoBehaviour
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
             this.tiles[tileCoords]._legal.SetActive(true);
-            this.tiles[tileCoords].ShowVisibility();
+            this.tiles[tileCoords].isLegalMove = true;
+            // this.tiles[tileCoords].ShowVisibility();
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 2 && tileCoords.Item2 == 2 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
 
@@ -410,9 +431,67 @@ public class LevelMono : MonoBehaviour
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
             this.tiles[tileCoords]._legal.SetActive(false);
-            this.tiles[tileCoords].HideVisibility();
+            this.tiles[tileCoords].isLegalMove = false;
+
+            // this.tiles[tileCoords].HideVisibility();
             //this.tiles[tileCoords]._highlight.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 100);
         }
+    }
+
+    public void TurnOnEyes(Tuple<int, int> boot)
+    {
+        var currentTile = this.GetTile(boot);
+        foreach (Tuple<int, int> coord in currentTile.AdjacentPieces())
+        {
+            var piece = this.GetPiece(coord);
+            if (piece.IsTriangle() && piece.IsEnemyOf(this.selectedPiece)) // adjacent to triangle
+            {
+                var area = piece.GetVisibleArea(2);
+                foreach (Tuple<int, int> visibleTile in area)
+                {
+                    var tile = this.GetTile(visibleTile);
+                    var p = this.GetPiece(visibleTile);
+
+                    tile.ToggleEye(true);
+                    this.eyes.Add(visibleTile);
+                    //if (p != null && tile.CanPlayerSee()) { tile.ToggleEye(false); }
+                    if (visibleTile.Equals(boot)) { tile.ToggleEye(false); }
+                }
+            }
+        }
+
+        if (this.selectedPiece != null && this.selectedPiece.IsScout()) // scout case
+        {
+            var phantomScout = Instantiate(_scoutPrefab, new Vector3(boot.Item1, boot.Item2, -1), Quaternion.identity);
+            phantomScout.gameObject.SetActive(false);
+            phantomScout.SetHuman(this.selectedPiece.IsHuman());
+            phantomScout.SetName(PieceMono.Scout);
+            if (boot.Item1 - this.selectedCoord.Item1 > 0) { phantomScout.SetInitialDirection(Direction.Right); }
+            else if (boot.Item1 - this.selectedCoord.Item1 < 0) { phantomScout.SetInitialDirection(Direction.Left); }
+            else if (boot.Item2 - this.selectedCoord.Item2 > 0) { phantomScout.SetInitialDirection(Direction.Up); }
+            else if (boot.Item2 - this.selectedCoord.Item2 < 0) { phantomScout.SetInitialDirection(Direction.Down); }
+            var area = phantomScout.GetVisibleArea(3);
+            foreach (Tuple<int, int> visibleTile in area)
+            {
+                var tile = this.GetTile(visibleTile);
+                var p = this.GetPiece(visibleTile);
+                tile.ToggleEye(true);
+                this.eyes.Add(visibleTile);
+                //if (p != null && tile.CanPlayerSee()) { tile.ToggleEye(false); }
+                if (visibleTile.Equals(boot)) { tile.ToggleEye(false); }
+            }
+            Destroy(phantomScout.gameObject);
+        }
+    }
+
+    public void TurnOffEyes()
+    {
+        foreach (Tuple<int, int> visibleTile in this.eyes)
+        {
+            var tile = this.GetTile(visibleTile);
+            tile.ToggleEye(false);
+        }
+        this.eyes.Clear();
     }
 
     public bool MovePiece(Tuple<int, int> coord)
@@ -441,21 +520,19 @@ public class LevelMono : MonoBehaviour
         {
             ((Scout)this.selectedPiece).SetDirection(coord);
         }
-        
+
+        GameManagerChain.Instance.AddPieceMovementForReplayAnalytics(this.selectedPiece.IsHuman(), this.selectedPiece.UnitName, (int)this.selectedPiece.transform.position.x, (int)this.selectedPiece.transform.position.y, coord.Item1, coord.Item2);
         this.selectedPiece.UpdateLocation(new Vector3(coord.Item1, coord.Item2, this.selectedPiece.transform.position.z));
-        if(this.selectedPiece.IsHuman() && !this.selectedPiece.IsCircle())
+        if (this.selectedPiece.IsHuman() && !this.selectedPiece.IsCircle())
         {
-            if(this.selectedPiece.IsCircle())
+            this.selectedPiece.canMoveObject.SetActive(false);
+            this.selectedPiece.cantMoveObject.SetActive(true);
+        }
+        if (this.selectedPiece.IsHuman() && this.selectedPiece.IsCircle())
+        {
+            if (captured)
             {
-                if(captured)
-                {
-                    // Same green highlight
-                }
-                else
-                {
-                    this.selectedPiece.canMoveObject.SetActive(false);
-                    this.selectedPiece.cantMoveObject.SetActive(true);
-                }
+                // Same green highlight
             }
             else
             {
@@ -463,7 +540,6 @@ public class LevelMono : MonoBehaviour
                 this.selectedPiece.cantMoveObject.SetActive(true);
             }
         }
-
         _pieces[coord] = this.selectedPiece;
         _pieces.Remove(selectedCoord);
         var towerCoord = this.selectedPiece.InTowerRange();
@@ -480,8 +556,8 @@ public class LevelMono : MonoBehaviour
             tower.gameObject.GetComponent<SpriteRenderer>().color = currentPlayer ? playerColor : enemyColor;
         }
 
-        
-        
+
+
         // Render vision
         if (this.debug == false)
         {
