@@ -1,5 +1,6 @@
 using Assets.Scripts.Piece;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Assets.Scripts.Units
         [SerializeField] public GameObject leftArrow;
         [SerializeField] public GameObject rightArrow;
 
-
+        [SerializeField] public GameObject[] pieces;
         //TODO: Enemy Scout Unit set as Up instead of Down on Initialization
         public void SetInitialDirection(Direction d)
         {
@@ -246,7 +247,6 @@ namespace Assets.Scripts.Units
             visibleArea.Add(new Tuple<int, int>(x, y));
             return visibleArea;
         }
-        
     }
 
     public enum Direction {

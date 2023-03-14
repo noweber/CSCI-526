@@ -1,6 +1,7 @@
 using Assets.Scripts.Levels;
 using Assets.Scripts.Units;
 using System;
+using System.Collections;       // IEnumerator
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -413,7 +414,9 @@ public class LevelMono : MonoBehaviour
     {
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
-            this.tiles[tileCoords]._legal.SetActive(true);
+            // this.tiles[tileCoords]._legal.SetActive(true);
+            // this.tiles[tileCoords].legalParticles.Play();
+            this.tiles[tileCoords].ToggleLegal(true);
             this.tiles[tileCoords].isLegalMove = true;
             // this.tiles[tileCoords].ShowVisibility();
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && tileCoords.Item1 == 1 && tileCoords.Item2 == 1 && GameManagerChain.Instance.TotalMoves == 1) { LevelMono.Instance.tiles[tileCoords]._legal.GetComponent<SpriteRenderer>().color = new Color32(200, 100, 70, 255); }
@@ -430,7 +433,9 @@ public class LevelMono : MonoBehaviour
     {
         foreach (Tuple<int, int> tileCoords in this.highlightedMoves)
         {
-            this.tiles[tileCoords]._legal.SetActive(false);
+            // this.tiles[tileCoords]._legal.SetActive(false);
+            // this.tiles[tileCoords].legalParticles.Stop();
+            this.tiles[tileCoords].ToggleLegal(false);
             this.tiles[tileCoords].isLegalMove = false;
 
             // this.tiles[tileCoords].HideVisibility();

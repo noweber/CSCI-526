@@ -17,7 +17,7 @@ public class Analytics : MonoBehaviour
 
     void Awake()
     {
-        // TODO: Take these URLs from a config file and swap it on build for production instances.
+/*        // TODO: Take these URLs from a config file and swap it on build for production instances.
         if (string.IsNullOrEmpty(StartOfLevelUrl))
         {
             StartOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSerply3kFSQjKMtiMbBGhCrQ-OtvP-Oa1fGMKo5OtTe6G5omg/formResponse";
@@ -25,7 +25,7 @@ public class Analytics : MonoBehaviour
         if (string.IsNullOrEmpty(EndOfLevelUrl))
         {
             EndOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeYxOpPKvYOuO141Z35ltYHGqsTfE3ZScL_BSC-NWhtNMaULg/formResponse";
-        }
+        }*/
     }
 
 

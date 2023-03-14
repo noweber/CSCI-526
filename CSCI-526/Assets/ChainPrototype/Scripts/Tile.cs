@@ -14,8 +14,10 @@ public class Tile : MonoBehaviour
     [SerializeField] public GameObject _highlight;
 
     [SerializeField] public GameObject _legal;
+    public ParticleSystem legalParticles;
 
     [SerializeField] public GameObject _fog, _redFog;
+    public ParticleSystem fogParticles;
 
     [SerializeField] private GameObject closeEye, openEye, boot;
     
@@ -32,6 +34,19 @@ public class Tile : MonoBehaviour
     public void ToggleEye(bool status)
     {
         openEye.SetActive(status);
+    }
+    public void ToggleLegal(bool status)
+    {
+        // _legal.SetActive(status);
+
+        if (status)
+        {
+            legalParticles.Play();
+        }
+        else
+        {
+            legalParticles.Stop();
+        }
     }
 
 	public void TurnOffEyes(List<Tuple<int, int>> tiles) 
@@ -100,11 +115,13 @@ public class Tile : MonoBehaviour
     {
         if (canPlayerSee)
         {
-            _fog.SetActive(false);
+            // _fog.SetActive(false);
+            fogParticles.Stop();
         }
         else
         {
-            _fog.SetActive(true);
+            // _fog.SetActive(true);
+            fogParticles.Play();
         }
     }
     
@@ -113,11 +130,13 @@ public class Tile : MonoBehaviour
     {
         if (canEnemySee)
         {
-            _fog.SetActive(false);
+            // _fog.SetActive(false);
+            fogParticles.Stop();
         }
         else
         {
-            _fog.SetActive(true);
+            // _fog.SetActive(true);
+            fogParticles.Play();
         }
     }
 
