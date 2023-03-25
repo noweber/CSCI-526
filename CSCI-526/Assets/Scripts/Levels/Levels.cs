@@ -637,7 +637,7 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, false, PieceMono.Scout));
                     }
 
-                    if (x == 8 && y == 9)
+                    if (x == 6 && y == 9)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }
