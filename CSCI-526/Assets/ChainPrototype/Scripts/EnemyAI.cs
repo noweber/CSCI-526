@@ -343,10 +343,17 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator DelayEnemyStart()
     {
-        isRunning = true;
-        yield return new WaitForSeconds(1f);
+        if (!isRunning)
+        {
+            isRunning = true;
+            yield return new WaitForSeconds(1f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(.6f);
+        }
         MovePiece();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.6f);
         StartCoroutine(DelayEnemyStart());
     }
 }
