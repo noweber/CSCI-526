@@ -300,7 +300,7 @@ MonoBehaviour:
   swPartEnemy: {fileID: 0}
   sePartPlayer: {fileID: 0}
   sePartEnemy: {fileID: 0}
-  buffParticles: {fileID: 7143685811454871220}
+  buffParticles: {fileID: 4777754929288098192}
   canMoveObject: {fileID: 345989405470797271}
   cantMoveObject: {fileID: 3511072670434693464}
 --- !u!1 &7143685811454871220
@@ -353,7 +353,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
