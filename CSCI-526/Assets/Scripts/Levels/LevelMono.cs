@@ -554,7 +554,7 @@ public class LevelMono : MonoBehaviour
 
 
         // Render vision
-        if (this.debug == false)
+        if (!this.debug )
         {
             if (captured)
             {
