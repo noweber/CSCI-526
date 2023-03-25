@@ -238,9 +238,18 @@ public class GameManagerChain : MonoBehaviour
         TotalMoves += amount;
         //movesMade += amount;
 
-        // Check if the the game is over now that number of available moves decreased during play:
-        if (SceneName == "Challenge_Circle")
+        // Check win condition
+        if (SceneName == "Tutorial_Circle")
         {
+            if (LevelMono.Instance.TutorialCircleVictory()){ this.ChangeState(GameStateEnum.Victory); }
+        }
+        else if (SceneName == "Tutorial_Diamond")
+        {
+            if (LevelMono.Instance.TutorialDiamondVictory()){ this.ChangeState(GameStateEnum.Victory); }
+        }
+        else if (SceneName == "Challenge_Circle")
+        {
+            // Challenge Circle specific win condition
             Debug.Log("TOTAL MOVES: " + TotalMoves);
             if (TotalMoves == 4)
             {
@@ -250,6 +259,7 @@ public class GameManagerChain : MonoBehaviour
         }
         else
         {
+            // Normal level's win condition
             if (!LevelMono.Instance.DoEnemiesRemain())
             {
                 // TODO: Transition to a win state per open tasks once designed.
