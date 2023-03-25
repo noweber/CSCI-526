@@ -243,9 +243,7 @@ public class Tile : MonoBehaviour
                         // LEVELMONO SELECTEDPIECE CAPTURING
                         if (lvlMono.MovePiece(coord))
                         {
-                            GameManagerChain.Instance.TotalMoves += 1;
 							GameManagerChain.Instance.IncrementMoves(1);
-                            MenuManager.Instance.ShowNumMovesInfo();
 
                             if (SceneManager.GetActiveScene().name == "TutorialLevel")
                             {
@@ -280,9 +278,7 @@ public class Tile : MonoBehaviour
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
                     MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
-					GameManagerChain.Instance.TotalMoves += 1;
                     GameManagerChain.Instance.IncrementMoves(1);
-                    MenuManager.Instance.ShowNumMovesInfo();
 
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
                     {
@@ -309,8 +305,12 @@ public class Tile : MonoBehaviour
             GameManagerChain.Instance.ChangeState(GameStateEnum.Victory);
         }
 		*/
-        if (GameManagerChain.Instance.GetMovesMade() == 2)
+
+		// If no more pieces left to move, switch turn
+
+        if (GameManagerChain.Instance.IsPlayerTurnOver())
         {
+			Debug.Log("PLAYER TURN IS OVER");
             if (turn == true)
             {
                 if (SceneManager.GetActiveScene().name == "TutorialLevel")

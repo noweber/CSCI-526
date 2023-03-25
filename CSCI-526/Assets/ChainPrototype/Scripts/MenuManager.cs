@@ -11,7 +11,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     
-    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, 
+    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject, 
         _objectiveContent, _sideObjectiveHeader, _sideObjectiveIcon, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
         _defeatObject, _pointerObject, _gridManagerObject;
    
@@ -49,10 +49,10 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void ShowNumMovesInfo()
-    {
-        _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.GetMovesMade()) + " Moves Left";
-    }
+    // public void ShowNumMovesInfo()
+    // {
+    //     _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.GetMovesMade()) + " Moves Left";
+    // }
     public void ShowEndTurnButton()
     {
         _endTurnObject.SetActive(true);
@@ -101,12 +101,10 @@ public class MenuManager : MonoBehaviour
 
     public void TriangleEvent()//(Piece triangle, Piece other)
     {
-        Debug.Log("BUTTON WORKS");
         if (GameManagerChain.Instance.UsedAbility == false)
         {
             GameManagerChain.Instance.DecrementMoves(1);
             GameManagerChain.Instance.UsedAbility = true;
-            this.ShowNumMovesInfo();
         }
         this.HideAbilityButton();
     }
@@ -216,7 +214,7 @@ public class MenuManager : MonoBehaviour
         {
             _turnInfoObject.SetActive(false);
             _selectedUnitInfo.SetActive(false);
-            _numTurnObject.SetActive(false);
+
             _abilityUseObject.SetActive(false);
             _endTurnObject.SetActive(false);
             _slackObject.SetActive(false);
@@ -239,7 +237,6 @@ public class MenuManager : MonoBehaviour
         {
             _turnInfoObject.SetActive(false);
             _selectedUnitInfo.SetActive(false);
-            _numTurnObject.SetActive(false);
             _abilityUseObject.SetActive(false);
             _endTurnObject.SetActive(false);
             _slackObject.SetActive(false);
@@ -312,7 +309,6 @@ public class MenuManager : MonoBehaviour
         SetVictoryScreen(false);
         _turnInfoObject.SetActive(true);
         _selectedUnitInfo.SetActive(false);
-        _numTurnObject.SetActive(true);
         _abilityUseObject.SetActive(false);
         _slackObject.SetActive(false);
         _pauseObject.SetActive(true);

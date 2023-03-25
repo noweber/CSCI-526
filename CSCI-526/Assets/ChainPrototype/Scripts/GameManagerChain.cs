@@ -235,7 +235,8 @@ public class GameManagerChain : MonoBehaviour
     /// <param name="amount">The number of moves made.</param>
     public void IncrementMoves(int amount = 1)
     {
-        movesMade += amount;
+        TotalMoves += amount;
+        //movesMade += amount;
 
         // Check if the the game is over now that number of available moves decreased during play:
         if (SceneName == "Challenge_Circle")
@@ -260,6 +261,22 @@ public class GameManagerChain : MonoBehaviour
                 this.ChangeState(GameStateEnum.Loss);
             }
         }
+    }
+    
+    public bool IsPlayerTurnOver() {
+        var playerPieces = LevelMono.Instance.GetPlayerPieces();
+        foreach (var piece in playerPieces) {
+            if (!piece.IsTriangle() && piece.CanMove() == true) { return false; }
+        }
+        return true;
+    }
+
+    public bool IsEnemyTurnOver() {
+        var enemyPieces = LevelMono.Instance.GetEnemyPieces();
+        foreach (var piece in enemyPieces) {
+            if (!piece.IsTriangle() && piece.CanMove() == true) { return false; }
+        }
+        return true;
     }
 
     /// <summary>
@@ -308,7 +325,7 @@ public class GameManagerChain : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             MenuManager.Instance._enemyTurnIndicator.SetActive(false);
 
-            GameManagerChain.Instance.ResetMovesMade();
+            //GameManagerChain.Instance.ResetMovesMade();
 
             ChangeState(GameStateEnum.AI);
             switchingTurns = false;
@@ -326,7 +343,7 @@ public class GameManagerChain : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             MenuManager.Instance._playerTurnIndicator.SetActive(false);
 
-            GameManagerChain.Instance.ResetMovesMade();
+            //GameManagerChain.Instance.ResetMovesMade();
 
             // This adds all of the active pieces in the level into a heatmap each time there is a transition into the human player's turn:
             foreach (var piece in LevelMono.Instance._pieces)
@@ -367,6 +384,14 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialLevel());
                 }
+                else if (SceneName == "Tutorial_Circle")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialCircle());
+                }
+                else if (SceneName == "Tutorial_Diamond")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialDiamond());
+                }
                 else if (SceneName == "TutorialFogOfWar")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialFogOfWarLevel());
@@ -392,7 +417,6 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
-                MenuManager.Instance.ShowNumMovesInfo();
                 foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())
                 {
                     if (!piece.IsTriangle())
@@ -413,7 +437,6 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.AI:
                 MenuManager.Instance.ShowTurnInfo();
-                MenuManager.Instance.ShowNumMovesInfo();
                 MenuManager.Instance.HideEndTurnButton();
 
                 foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())

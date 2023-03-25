@@ -110,9 +110,7 @@ public class EnemyAI : MonoBehaviour
                 }
             }
         }
-     
-
-
+        
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
@@ -319,7 +317,6 @@ public class EnemyAI : MonoBehaviour
             {
                 GameManagerChain.Instance.AddMovedPiece(aiPiece, destination);
                 GameManagerChain.Instance.IncrementMoves(1);
-                MenuManager.Instance.ShowNumMovesInfo();
             }
             else
             {
@@ -335,7 +332,7 @@ public class EnemyAI : MonoBehaviour
                     GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
                 }
         */
-        if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
+        if (GameManagerChain.Instance.IsEnemyTurnOver() || aiCoord == null)
         {
             StopAllCoroutines();
             isRunning = false;

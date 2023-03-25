@@ -80,7 +80,6 @@ public class LevelMono : MonoBehaviour
     public List<Tuple<int, int>> GetEnemyPieceCoords()
     {
         List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
-        Debug.Log(_pieces.Count);
         foreach (var piece in _pieces)
         {
 
@@ -96,8 +95,6 @@ public class LevelMono : MonoBehaviour
         {
             if (piece.Value.IsHuman()) { playerPieces.Add(piece.Value); }
         }
-
-        Debug.Log("NUM PLAYER PIECES " + playerPieces.Count);
 
         return playerPieces;
     }
@@ -212,7 +209,6 @@ public class LevelMono : MonoBehaviour
 
     private void CreateSceneObjects(LoadLevelData level)
     {
-        Debug.Log("check debug: " + this.debug);
         var units = level.Units;
         this.tiles = new Dictionary<Tuple<int, int>, Tile>();
         this._pieces = new Dictionary<Tuple<int, int>, PieceMono>();
@@ -510,7 +506,6 @@ public class LevelMono : MonoBehaviour
         {
             // CAPTURE TAKES PLACE HERE
             // TODO: Implement intercepting capture
-            Debug.Log("SOMETHING WAS CAPTURED");
             Destroy(this.GetPiece(coord).gameObject);
             //this.selectedPiece.gameObject.SetActive(true);
             captured = true;
