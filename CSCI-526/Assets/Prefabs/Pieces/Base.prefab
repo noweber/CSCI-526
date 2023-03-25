@@ -384,5 +384,5 @@ MonoBehaviour:
   sePartPlayer: {fileID: 0}
   sePartEnemy: {fileID: 0}
   buffParticles: {fileID: 0}
-  canMoveObject: {fileID: 4336704710664707431}
-  cantMoveObject: {fileID: 3698429481844293765}
+  canMoveObject: {fileID: 0}
+  cantMoveObject: {fileID: 0}
