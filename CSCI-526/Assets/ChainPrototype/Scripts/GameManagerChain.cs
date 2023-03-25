@@ -458,8 +458,13 @@ public class GameManagerChain : MonoBehaviour
                 }
                 foreach (PieceMono piece in LevelMono.Instance.GetEnemyPieces())
                 {
-                    piece.canMoveObject.SetActive(false);
-                    piece.canMoveObject.SetActive(false);
+                    if (!piece.IsTriangle() && !piece.IsBase())     // Do not show enemy movability during player turn
+                    {
+                        piece.canMoveObject.SetActive(false);
+                        piece.cantMoveObject.SetActive(false);
+                    }
+/*                    piece.canMoveObject.SetActive(false);
+                    piece.canMoveObject.SetActive(false);*/
                 }
                 if (SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
                 {
@@ -472,10 +477,12 @@ public class GameManagerChain : MonoBehaviour
 
                 foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())
                 {
-                    piece.canMoveObject.SetActive(false);
-                    piece.cantMoveObject.SetActive(false);
+                    if (!piece.IsTriangle() && !piece.IsBase())     // Do not show player movability during enemy turn
+                    {
+                        piece.canMoveObject.SetActive(false);
+                        piece.cantMoveObject.SetActive(false);
+                    }
                 }
-
                 if (SceneName == "TutorialLevel" || SceneName == "Challenge_Circle")
                 {
                     // slacking off 
