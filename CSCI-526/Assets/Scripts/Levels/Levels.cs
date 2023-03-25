@@ -80,7 +80,54 @@ namespace Assets.Scripts.Levels
                 Units = units
             };
         }
-        
+
+        public static LoadLevelData TutorialCircleAbility()
+        {
+            int _width = 3;
+            int _height = 7;
+            List<PieceInfo> units = new List<PieceInfo>();
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    var position = new Tuple<int, int>(x, y);
+
+                    if (x==1 && y == 0)
+                    {
+                        //Add Player Base
+                    }
+
+                    if (x == 1 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                    }
+
+                    if (x != 1 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Diamond));
+                    }
+
+                    if (y == 3)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Diamond));
+                    }
+
+                    if (x == 1 && y == 4)
+                    {
+                        //Add Enemy Base
+                    }
+
+                }
+            }
+            return new LoadLevelData()
+            {
+                Width = _width,
+                Height = _height,
+                Units = units
+            };
+        }
+
         public static LoadLevelData TutorialDiamond()
         {
             int _width = 7;
@@ -96,6 +143,50 @@ namespace Assets.Scripts.Levels
                     if (x == 2 && y == 2)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
+                }
+            }
+            return new LoadLevelData()
+            {
+                Width = _width,
+                Height = _height,
+                Units = units
+            };
+        }
+
+        public static LoadLevelData TutorialDiamondAbility()
+        {
+            int _width = 7;
+            int _height = 7;
+            List<PieceInfo> units = new List<PieceInfo>();
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    var position = new Tuple<int, int>(x, y);
+
+                    if (x == 0 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                    }
+
+                    if (x == 2 && y == 0)
+                    {
+                        //Add Player Base
+                        //units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
+
+                    if (x == 3 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
+                    if (x == 5 && y == 5)
+                    {
+                        //Add Enemy Base
+                        //units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }
 
                 }
