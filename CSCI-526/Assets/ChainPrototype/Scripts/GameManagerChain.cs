@@ -402,6 +402,22 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamond());
                 }
+                else if (SceneName == "Tutorial_Circle_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialCircleAbility());
+                }
+                else if (SceneName == "Tutorial_Diamond_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialDiamondAbility());
+                }
+                else if (SceneName == "Tutorial_Scout_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialScoutAbility());
+                }
+                else if (SceneName == "Tutorial_Triangle_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialTriangleAbility());
+                }
                 else if (SceneName == "TutorialFogOfWar")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialFogOfWarLevel());
