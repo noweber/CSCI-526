@@ -279,7 +279,7 @@ public class EnemyAI : MonoBehaviour
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectBestPiece();
-        if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+        if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
         {
             aiCoord = SelectRandomPiece();
         }
@@ -292,7 +292,7 @@ public class EnemyAI : MonoBehaviour
             Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
             
             // Decide movement logic 
-            if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+            if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
                 // Random AI
                 // Subject to change

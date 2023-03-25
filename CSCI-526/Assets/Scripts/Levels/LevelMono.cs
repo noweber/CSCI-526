@@ -623,6 +623,16 @@ public class LevelMono : MonoBehaviour
         return GetNumberOfUnitsRemainingForPlayer(false) > 0;
     }
 
+    public bool IsHumanBaseAlive()
+    {
+        return checkBaseStatus(true);
+    }
+
+    public bool IsEnemyBaseAlive()
+    {
+        return checkBaseStatus(false);
+    }
+
     /// <summary>
     /// This method return checks for the number of units which remain in the level for a given play.
     /// </summary>
@@ -637,5 +647,16 @@ public class LevelMono : MonoBehaviour
 
         int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && !piece.IsTriangle()) select piece).Count();
         return result;
+    }
+
+    private bool checkBaseStatus(bool checkHumanPlayer)
+    {
+        if (_pieces == null)
+        {
+            return false;
+        }
+
+        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && piece.IsBase()) select piece).Count();
+        return result > 0;
     }
 }

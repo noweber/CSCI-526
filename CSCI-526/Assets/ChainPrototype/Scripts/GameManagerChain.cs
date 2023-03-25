@@ -260,6 +260,18 @@ public class GameManagerChain : MonoBehaviour
         else
         {
             // Normal level's win condition
+            if (!LevelMono.Instance.IsEnemyBaseAlive())
+            {
+                // TODO: Transition to a win state per open tasks once designed.
+                this.ChangeState(GameStateEnum.Victory);
+            }
+            else if (!LevelMono.Instance.IsHumanBaseAlive())
+            {
+                // TODO: Transition to a lose state.
+                this.ChangeState(GameStateEnum.Loss);
+            }
+            /*
+            // Normal level's win condition
             if (!LevelMono.Instance.DoEnemiesRemain())
             {
                 // TODO: Transition to a win state per open tasks once designed.
@@ -270,6 +282,7 @@ public class GameManagerChain : MonoBehaviour
                 // TODO: Transition to a lose state.
                 this.ChangeState(GameStateEnum.Loss);
             }
+            */
         }
     }
     
