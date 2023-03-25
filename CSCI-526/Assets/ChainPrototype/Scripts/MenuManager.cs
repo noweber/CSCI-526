@@ -346,7 +346,8 @@ public class MenuManager : MonoBehaviour
             LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
-            tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
+            //tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
+            tempOverallObjective.text = "Capture the enemy base(Star)!";
             // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }
