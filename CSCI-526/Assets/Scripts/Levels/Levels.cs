@@ -65,7 +65,12 @@ namespace Assets.Scripts.Levels
                 for (int y = 0; y < _height; y++)
                 {
                     var position = new Tuple<int, int>(x, y);
-               
+
+                    if (x == 0 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
+
                     if (x == 2 && y == 2)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Circle));
@@ -74,6 +79,11 @@ namespace Assets.Scripts.Levels
                     if (x == 0 && y == 6)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                    if (x == 5 && y == 5)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }
 
                 }
