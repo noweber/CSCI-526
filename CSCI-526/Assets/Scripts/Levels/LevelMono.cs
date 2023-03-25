@@ -15,6 +15,7 @@ public class LevelMono : MonoBehaviour
     [SerializeField] private Triangle _trianglePrefab;
     [SerializeField] private Diamond _diamondPrefab;
     [SerializeField] private Circle _circlePrefab;
+    [SerializeField] private Base _basePrefab;
 
     [SerializeField] private Scout _scoutPrefab;
     [SerializeField] private Camera _camera;
@@ -52,6 +53,8 @@ public class LevelMono : MonoBehaviour
             Instance = this;
             //this.debug = false;
         }
+
+        if (_camera == null) _camera = Camera.main;
     }
 
     public int GetWidth() { return this.Width; }
@@ -82,8 +85,10 @@ public class LevelMono : MonoBehaviour
         List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
         foreach (var piece in _pieces)
         {
-
-            if (!piece.Value.IsHuman() && !piece.Value.IsTriangle()) { enemyPieces.Add(piece.Key); }
+            if (!piece.Value.IsHuman() && !piece.Value.IsTriangle() && !piece.Value.IsBase()) 
+            { 
+                enemyPieces.Add(piece.Key); 
+            }
         }
         return enemyPieces;
     }
@@ -338,6 +343,20 @@ public class LevelMono : MonoBehaviour
                 //     this.SetRangeVisibility(scout.GetVisibleArea(3), unit.IsHuman(), !unit.IsHuman());
                 // }
                 _pieces[coord] = scout;
+            }
+            else if (unit.IsBase())
+            {
+                var basePiece = Instantiate(_basePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
+                basePiece.SetName(PieceMono.Base);
+                basePiece.SetHuman(unit.IsHuman());
+                if (!this.debug)
+                {
+                    basePiece.gameObject.SetActive(unit.IsHuman());
+                }
+                //diamond.gameObject.SetActive(unit.IsHuman());
+                basePiece.SetMoveState(false);
+                basePiece.gameObject.GetComponent<SpriteRenderer>().color = basePiece.IsHuman() ? playerColor : enemyColor;
+                _pieces[coord] = basePiece;
             }
         }
 

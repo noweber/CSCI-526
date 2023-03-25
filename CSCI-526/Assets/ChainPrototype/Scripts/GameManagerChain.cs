@@ -527,6 +527,7 @@ public class GameManagerChain : MonoBehaviour
         humanPlayerPieceTypeMoveCounts.Add(PieceMono.Diamond, 0);
         humanPlayerPieceTypeMoveCounts.Add(PieceMono.Triangle, 0);
         humanPlayerPieceTypeMoveCounts.Add(PieceMono.Scout, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Base, 0);
     }
 
     /// <summary>

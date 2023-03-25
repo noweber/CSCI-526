@@ -20,6 +20,8 @@ public abstract class PieceMono : MonoBehaviour
 
     public const string Scout = "Scout";
 
+    public const string Base = "Base";
+
     [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
     [SerializeField] private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
                                         nePartPlayer, nePartEnemy, nwPartPlayer, nwPartEnemy, swPartPlayer, swPartEnemy, sePartPlayer, sePartEnemy;
@@ -49,6 +51,8 @@ public abstract class PieceMono : MonoBehaviour
 	public bool IsDiamond() { return string.Equals(this.UnitName, Diamond); }
 
 	public bool IsScout() { return string.Equals(this.UnitName, Scout); }
+
+    public bool IsBase() { return string.Equals(this.UnitName, Base); }
 
 	public string GetName() { return this.UnitName; }
 
