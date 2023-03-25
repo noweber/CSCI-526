@@ -71,6 +71,11 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, true, PieceMono.Circle));
                     }
 
+                    if (x == 0 && y == 6)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
                 }
             }
             return new LoadLevelData()
@@ -145,6 +150,11 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                     }
 
+                    if (x == 3 && y == 6)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
                 }
             }
             return new LoadLevelData()
@@ -172,10 +182,15 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, true, PieceMono.Circle));
                     }
 
+                    if (x == 5 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                    }
+
                     if (x == 2 && y == 0)
                     {
                         //Add Player Base
-                        //units.Add(new PieceInfo(position, true, PieceMono.Base));
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
                     }
 
                     if (x == 3 && y == 2)
@@ -183,10 +198,159 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                     }
 
+                    if (x == 2 && y == 3)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
                     if (x == 5 && y == 5)
                     {
                         //Add Enemy Base
-                        //units.Add(new PieceInfo(position, false, PieceMono.Base));
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
+                    }
+
+                    if (x == 6 && y == 6)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                }
+            }
+            return new LoadLevelData()
+            {
+                Width = _width,
+                Height = _height,
+                Units = units
+            };
+        }
+
+        public static LoadLevelData TutorialScoutAbility()
+        {
+            int _width = 7;
+            int _height = 7;
+            List<PieceInfo> units = new List<PieceInfo>();
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    var position = new Tuple<int, int>(x, y);
+
+                    if (x == 1 && y == 5)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 3 && y == 4)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Scout));
+                    }
+
+                    if (x == 6 && y == 6)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                    if (x == 4 && y == 2)
+                    {
+                        //Add Enemy Base
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
+                    }
+
+                    if (x == 0 && y == 0)
+                    {
+                        //Add Player Base
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
+
+
+                }
+            }
+            return new LoadLevelData()
+            {
+                Width = _width,
+                Height = _height,
+                Units = units
+            };
+        }
+
+        public static LoadLevelData TutorialTriangleAbility()
+        {
+            int _width = 10;
+            int _height = 10;
+            List<PieceInfo> units = new List<PieceInfo>();
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    var position = new Tuple<int, int>(x, y);
+
+                    if (x == 0 && y == 0)
+                    {
+                        //Add Enemy Base
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
+
+                    if (x == 0 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
+                    if (x == 2 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
+                    if (x == 2 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Triangle));
+                    }
+
+                    if (x == 4 && y == 1)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                    }
+
+                    if (x == 1 && y == 4)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                    }
+
+                    if (x==7 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
+                    }
+
+                    if (x == 9 && y == 5)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Diamond));
+                    }
+
+                    if (x == 5 && y == 5)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 7 && y == 7)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
+                    }
+
+                    if (x == 2 && y == 7)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
+                    }
+
+                    if (x == 4 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                    if (x == 9 && y == 9)
+                    {
+                        //Add Enemy Base
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }
 
                 }
