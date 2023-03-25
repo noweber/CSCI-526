@@ -185,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 5692367029894097677, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: _gridManagerObject
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1211090596}
     - target: {fileID: 5692367029894097906, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -537,6 +537,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1211090596 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7806463710294681611, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
+  m_PrefabInstance: {fileID: 231893295}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1698966383
 GameObject:
   m_ObjectHideFlags: 0
