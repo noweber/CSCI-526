@@ -450,7 +450,7 @@ public class GameManagerChain : MonoBehaviour
                 MenuManager.Instance.ShowTurnInfo();
                 foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())
                 {
-                    if (!piece.IsTriangle())
+                    if (!piece.IsTriangle() && !piece.IsBase())
                     {
                         piece.canMoveObject.SetActive(true);
                         piece.cantMoveObject.SetActive(false);
