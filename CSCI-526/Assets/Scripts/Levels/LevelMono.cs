@@ -127,6 +127,7 @@ public class LevelMono : MonoBehaviour
 	}
 
 	public bool TutorialDiamondVictory() {
+        //TODO: Change win condition to capture Base.
 		if (this.GetPiece(new Tuple<int, int>(5,1)) != null) {
 			return true;
 		} 

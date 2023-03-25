@@ -519,6 +519,11 @@ namespace Assets.Scripts.Levels
                 {
                     Tuple<int, int> position = new(x, y);
 
+                    if (x == 0 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
+
                     if (x == 3 && y == 2)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Scout));
@@ -559,6 +564,11 @@ namespace Assets.Scripts.Levels
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Scout));
                     }
+
+                    if (x == 0 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
+                    }
                 }
             }
             return new LoadLevelData()
@@ -580,6 +590,11 @@ namespace Assets.Scripts.Levels
                 for (int y = 0; y < _height; y++)
                 {
                     Tuple<int, int> position = new(x, y);
+
+                    if (x == 1 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
 
                     if (x == 3 && y == 3)
                     {
@@ -620,6 +635,11 @@ namespace Assets.Scripts.Levels
                     if (x == 3 && y == 7)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 8 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }
                 }
             }
