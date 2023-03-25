@@ -101,6 +101,7 @@ namespace Assets.Scripts.Levels
                     if (x==1 && y == 0)
                     {
                         //Add Player Base
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
                     }
 
                     if (x == 1 && y == 2)
@@ -121,6 +122,7 @@ namespace Assets.Scripts.Levels
                     if (x == 1 && y == 4)
                     {
                         //Add Enemy Base
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }
 
                 }
@@ -144,6 +146,11 @@ namespace Assets.Scripts.Levels
                 for (int y = 0; y < _height; y++)
                 {
                     var position = new Tuple<int, int>(x, y);
+
+                    if (x==0 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
                
                     if (x == 2 && y == 2)
                     {
@@ -153,6 +160,11 @@ namespace Assets.Scripts.Levels
                     if (x == 3 && y == 6)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 5 && y == 1)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }
 
                 }
