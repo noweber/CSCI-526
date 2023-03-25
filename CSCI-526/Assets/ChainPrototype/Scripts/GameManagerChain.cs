@@ -276,7 +276,7 @@ public class GameManagerChain : MonoBehaviour
     public bool IsPlayerTurnOver() {
         var playerPieces = LevelMono.Instance.GetPlayerPieces();
         foreach (var piece in playerPieces) {
-            if (!piece.IsTriangle() && piece.CanMove() == true) { return false; }
+            if (!piece.IsTriangle() && !piece.IsBase() && piece.CanMove() == true) { return false; }
         }
         return true;
     }

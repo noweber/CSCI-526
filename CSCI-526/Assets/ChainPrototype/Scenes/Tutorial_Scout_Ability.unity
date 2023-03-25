@@ -444,7 +444,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
       propertyPath: debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
       propertyPath: _camera
