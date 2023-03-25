@@ -119,21 +119,6 @@ public class LevelMono : MonoBehaviour
         return GetEnemyPieces().Count;
     }
 
-	public bool TutorialCircleVictory() {
-		if (this.GetPiece(new Tuple<int, int>(5,5)) != null) {
-			return true;
-		} 
-		return false;
-	}
-
-	public bool TutorialDiamondVictory() {
-        //TODO: Change win condition to capture Base.
-		if (this.GetPiece(new Tuple<int, int>(5,1)) != null) {
-			return true;
-		} 
-		return false;
-	}
-
     private void ClearVision()
     {
         foreach (var tile in tiles)

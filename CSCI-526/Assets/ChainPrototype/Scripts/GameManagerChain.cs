@@ -239,15 +239,7 @@ public class GameManagerChain : MonoBehaviour
         //movesMade += amount;
 
         // Check win condition
-        if (SceneName == "Tutorial_Circle")
-        {
-            if (LevelMono.Instance.TutorialCircleVictory()){ this.ChangeState(GameStateEnum.Victory); }
-        }
-        else if (SceneName == "Tutorial_Diamond")
-        {
-            if (LevelMono.Instance.TutorialDiamondVictory()){ this.ChangeState(GameStateEnum.Victory); }
-        }
-        else if (SceneName == "Challenge_Circle")
+    	if (SceneName == "Challenge_Circle")
         {
             // Challenge Circle specific win condition
             Debug.Log("TOTAL MOVES: " + TotalMoves);
