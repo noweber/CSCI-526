@@ -394,54 +394,69 @@ public class GameManagerChain : MonoBehaviour
 
         switch (newState)
         {
+            // TO SET THE PROMPT:
+            //  MenuManager.Instance.SetPrompt(levelName, levelDescription)
+            //      IF levelDescription is omitted, defaults to "Capture the enemy base."
             case GameStateEnum.GenerateGrid:
                 if (SceneName == "TutorialLevel")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialLevel());
+                    MenuManager.Instance.SetPrompt("Tutorial");
                 }
                 else if (SceneName == "Tutorial_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialCircle());
+                    MenuManager.Instance.SetPrompt("Circle Tutorial");
                 }
                 else if (SceneName == "Tutorial_Diamond")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamond());
+                    MenuManager.Instance.SetPrompt("Diamond Tutorial");
                 }
                 else if (SceneName == "Tutorial_Circle_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialCircleAbility());
+                    MenuManager.Instance.SetPrompt("Circle Ability Tutorial");
                 }
                 else if (SceneName == "Tutorial_Diamond_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamondAbility());
+                    MenuManager.Instance.SetPrompt("Diamond Ability Tutorial");
                 }
                 else if (SceneName == "Tutorial_Scout_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialScoutAbility());
+                    MenuManager.Instance.SetPrompt("Scout Ability Tutorial");
                 }
                 else if (SceneName == "Tutorial_Triangle_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialTriangleAbility());
+                    MenuManager.Instance.SetPrompt("Triangle Ability Tutorial");
                 }
                 else if (SceneName == "TutorialFogOfWar")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialFogOfWarLevel());
+                    MenuManager.Instance.SetPrompt("Fog of War Tutorial");
                 }
                 else if (SceneName == "Level_One")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelOne());
+                    MenuManager.Instance.SetPrompt("Level 1");
                 }
                 else if (SceneName == "Level_Two")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
+                    MenuManager.Instance.SetPrompt("Level 2");
                 }
                 else if (SceneName == "Challenge_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
+                    MenuManager.Instance.SetPrompt("Challenge Circle");
                 }
                 else if (SceneName == "Challenge_Scout")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
+                    MenuManager.Instance.SetPrompt("Challenge Scout");
                 }
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
@@ -463,8 +478,8 @@ public class GameManagerChain : MonoBehaviour
                         piece.canMoveObject.SetActive(false);
                         piece.cantMoveObject.SetActive(false);
                     }
-/*                    piece.canMoveObject.SetActive(false);
-                    piece.canMoveObject.SetActive(false);*/
+                    /*                    piece.canMoveObject.SetActive(false);
+                                        piece.canMoveObject.SetActive(false);*/
                 }
                 if (SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
                 {
