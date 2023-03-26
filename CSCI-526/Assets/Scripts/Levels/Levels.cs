@@ -298,7 +298,7 @@ namespace Assets.Scripts.Levels
 
         public static LoadLevelData TutorialTriangleAbility()
         {
-            int _width = 10;
+            int _width = 5;
             int _height = 10;
             List<PieceInfo> units = new List<PieceInfo>();
 
@@ -308,58 +308,30 @@ namespace Assets.Scripts.Levels
                 {
                     var position = new Tuple<int, int>(x, y);
 
-                    if (x == 0 && y == 0)
+					// Player pieces
+                    if (x == 2 && y == 0)
                     {
-                        //Add Enemy Base
+                        
                         units.Add(new PieceInfo(position, true, PieceMono.Base));
                     }
 
-                    if (x == 0 && y == 2)
+                    if (x == 3 && y == 0)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                     }
 
-                    if (x == 2 && y == 0)
-                    {
-                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
-                    }
-
-                    if (x == 2 && y == 2)
-                    {
-                        units.Add(new PieceInfo(position, true, PieceMono.Triangle));
-                    }
-
-                    if (x == 4 && y == 1)
+                    if (x == 1 && y == 0)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Circle));
                     }
 
-                    if (x == 1 && y == 4)
+					if (x == 0 && y == 2)
                     {
-                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                        units.Add(new PieceInfo(position, true, PieceMono.Scout));
                     }
 
-                    if (x==7 && y == 2)
-                    {
-                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
-                    }
-
-                    if (x == 9 && y == 5)
-                    {
-                        units.Add(new PieceInfo(position, false, PieceMono.Diamond));
-                    }
-
-                    if (x == 5 && y == 5)
-                    {
-                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
-                    }
-
-                    if (x == 7 && y == 7)
-                    {
-                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
-                    }
-
-                    if (x == 2 && y == 7)
+					// Enemy pieces
+                    if ((x == 2 && y == 7) || (x == 2 && y == 2))
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Triangle));
                     }
@@ -369,7 +341,17 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, false, PieceMono.Circle));
                     }
 
-                    if (x == 9 && y == 9)
+                    if (x == 2 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Diamond));
+                    }
+
+                    if (x == 4 && y == 7)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 0 && y == 9)
                     {
                         //Add Enemy Base
                         units.Add(new PieceInfo(position, false, PieceMono.Base));
