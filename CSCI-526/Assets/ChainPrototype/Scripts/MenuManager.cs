@@ -333,6 +333,7 @@ public class MenuManager : MonoBehaviour
             _objectiveContent.SetActive(false);
         }
         SetVictoryScreen(false);
+        promptObject.SetActive(false);
         _turnInfoObject.SetActive(true);
         _selectedUnitInfo.SetActive(false);
         _abilityUseObject.SetActive(false);
@@ -373,7 +374,7 @@ public class MenuManager : MonoBehaviour
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
             //tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
-            tempOverallObjective.text = "Capture the enemy base(Star)!";
+            tempOverallObjective.text = "Capture the <color=red>Star</color>!";
             // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using Assets.Scripts.Analytics;
+using UnityEngine.UIElements;
 
 public class GameManagerChain : MonoBehaviour
 {
@@ -406,32 +407,32 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Tutorial_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialCircle());
-                    MenuManager.Instance.SetPrompt("Circle Tutorial");
+                    MenuManager.Instance.SetPrompt("Circle Tutorial", "The Star functions as a team's base. Click to move your<color=blue> Circle</color>, and capture the enemy<color=red> Star</color>.");
                 }
                 else if (SceneName == "Tutorial_Diamond")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamond());
-                    MenuManager.Instance.SetPrompt("Diamond Tutorial");
+                    MenuManager.Instance.SetPrompt("Diamond Tutorial", "Using your<color=blue> Diamond</color>, capture the enemy<color=red> Star</color>.");
                 }
                 else if (SceneName == "Tutorial_Circle_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialCircleAbility());
-                    MenuManager.Instance.SetPrompt("Circle Ability Tutorial");
+                    MenuManager.Instance.SetPrompt("Circle Ability Tutorial", "If a Circle captures an enemy unit, it may move again. Using your<color=blue> Circle</color>, capture enemy<color=red> unit(s)</color> to reach the enemy<color=red> Star</color>.");
                 }
                 else if (SceneName == "Tutorial_Diamond_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamondAbility());
-                    MenuManager.Instance.SetPrompt("Diamond Ability Tutorial");
+                    MenuManager.Instance.SetPrompt("Diamond Ability Tutorial", "The Diamond extend the Circle's movement when next to one. Move one of your<color=blue> Diamonds</color> to one of your<color=blue> Circles</color> to reach the enemy <color=red>Star</color> quicker.");
                 }
                 else if (SceneName == "Tutorial_Scout_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialScoutAbility());
-                    MenuManager.Instance.SetPrompt("Scout Ability Tutorial");
+                    MenuManager.Instance.SetPrompt("Scout Ability Tutorial", "The Fog of War hinders your vision, but the Scout grants vision in a cone where it is facing. Use your <color=blue>Scout </color> to find and capture the enemy <color=red>Star </color>.");
                 }
                 else if (SceneName == "Tutorial_Triangle_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialTriangleAbility());
-                    MenuManager.Instance.SetPrompt("Triangle Ability Tutorial");
+                    MenuManager.Instance.SetPrompt("Triangle Ability Tutorial", "The Triangle grants a large amount of vision. To capture a Triangle, move one of your units next to it. Find and capture the enemy <color=red> Star</color>");
                 }
                 else if (SceneName == "TutorialFogOfWar")
                 {
@@ -441,12 +442,12 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Level_One")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelOne());
-                    MenuManager.Instance.SetPrompt("Level 1");
+                    // MenuManager.Instance.SetPrompt("Level 1");
                 }
                 else if (SceneName == "Level_Two")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
-                    MenuManager.Instance.SetPrompt("Level 2");
+                    // MenuManager.Instance.SetPrompt("Level 2");
                 }
                 else if (SceneName == "Challenge_Circle")
                 {
