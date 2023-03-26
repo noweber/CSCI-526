@@ -562,7 +562,10 @@ public abstract class PieceMono : MonoBehaviour
                 {
                     if(LevelMono.Instance.GetPiece(ally).IsDiamond() && LevelMono.Instance.tiles[ally].CanPlayerSee())
                     {
-                        buffParticles.Play();
+                        if (!buffParticles.isPlaying)
+                        {
+                            buffParticles.Play();
+                        }
                     }
                     else
                     {
