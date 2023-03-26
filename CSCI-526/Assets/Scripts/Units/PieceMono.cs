@@ -26,7 +26,7 @@ public abstract class PieceMono : MonoBehaviour
     [SerializeField] private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
                                         nePartPlayer, nePartEnemy, nwPartPlayer, nwPartEnemy, swPartPlayer, swPartEnemy, sePartPlayer, sePartEnemy;
 
-    [SerializeField] private GameObject buffParticles;      // Circle indicator when it is buffed by Diamond
+    [SerializeField] private ParticleSystem buffParticles;      // Circle indicator when it is buffed by Diamond
 
     public GameObject canMoveObject, cantMoveObject;     // Highlight will be temporary -- change to particles after midterm
 
@@ -544,14 +544,17 @@ public abstract class PieceMono : MonoBehaviour
         {
             if(this.IsAdjacentToAllyDiamond())
             {
-                buffParticles.SetActive(true);
+                if(!buffParticles.isPlaying)
+                {
+                    buffParticles.Play();
+                }
             }
             else
             {
-                buffParticles.SetActive(false);
+                buffParticles.Stop();
             }
         }
-        else
+        else        // ENEMY CIRCLE
         {
             if(this.IsAdjacentToAllyDiamond())
             {
@@ -559,11 +562,14 @@ public abstract class PieceMono : MonoBehaviour
                 {
                     if(LevelMono.Instance.GetPiece(ally).IsDiamond() && LevelMono.Instance.tiles[ally].CanPlayerSee())
                     {
-                        buffParticles.SetActive(true);
+                        if (!buffParticles.isPlaying)
+                        {
+                            buffParticles.Play();
+                        }
                     }
                     else
                     {
-                        buffParticles.SetActive(false);
+                        buffParticles.Stop();
                     }
                 }
             }
