@@ -949,7 +949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneNames:
   - LevelSelection
-  - TutorialLevel
+  - Tutorial_Circle
   - ChainPrototype
 --- !u!4 &1700764391
 Transform:
