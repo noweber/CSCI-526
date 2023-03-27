@@ -130,54 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 889055179}
-    - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadNextLevel
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Tutorial_Diamond
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028284544184, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -296.12714
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028284544184, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028445150444, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028445150444, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028445150444, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028934716795, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5692367029167344274, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_Camera
       value: 
@@ -232,10 +188,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5692367029894097906, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367029896284214, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -320,7 +272,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.05490196, g: 0, b: 0.79607844, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
