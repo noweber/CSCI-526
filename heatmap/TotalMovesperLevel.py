@@ -14,7 +14,7 @@ def main():
     gc = gspread.authorize(credentials)
 
 
-    EOLgsheet = gc.open('Week 8 - End of Level Analytics Form (Responses)').worksheet('Form Responses 1')
+    EOLgsheet = gc.open('Midterm End Analytics').worksheet('Form Responses 1')
     filter_data_sheet = gc.open('Multilevel_branch_analytics_test').worksheet('Week9_Cleaned_Data')
 
     ##### AUTH CODE END ##  DO NOT TOUCH ####
@@ -23,7 +23,8 @@ def main():
                              "TutorialFogOfWar":[] ,
                              "Level_One": [],
                              "Level_Two": [],
-                            "Challenge_Circle" : []}
+                            "Challenge_Circle" : [],
+                            "Challenge_Scout": []}
     
     data = EOLgsheet.get_all_values()
     for row in data[1:]:
@@ -50,6 +51,10 @@ def main():
     n = len(player_totalmoves_per_level['Challenge_Circle'])
     drange = f'E3:E{n+3}'
     filter_data_sheet.update(drange , player_totalmoves_per_level['Challenge_Circle'] , value_input_option='USER_ENTERED')
+
+    n = len(player_totalmoves_per_level['Challenge_Scout'])
+    drange = f'F3:F{n+3}'
+    filter_data_sheet.update(drange , player_totalmoves_per_level['Challenge_Scout'] , value_input_option='USER_ENTERED')
     
     
 if __name__ == "__main__":
