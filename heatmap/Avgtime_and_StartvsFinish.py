@@ -12,8 +12,8 @@ def main():
    
     credentials = ServiceAccountCredentials.from_json_keyfile_name('gamedev_key.json', scope)            
     gc = gspread.authorize(credentials)
-    EOLgsheet = gc.open('Week 8 - End of Level Analytics Form (Responses)').worksheet('Form Responses 1')
-    SOLgsheet = gc.open('Week 8 - Start of Level Analytics Form (Responses)').worksheet('Form Responses 1')
+    EOLgsheet = gc.open('Midterm End Analytics').worksheet('Form Responses 1')
+    SOLgsheet = gc.open('Midterm_Start_Analytics').worksheet('Form Responses 1')
     filter_data_sheet = gc.open('Multilevel_branch_analytics_test').worksheet('Week9_Cleaned_Data')
 
     ##### AUTH CODE END ##  DO NOT TOUCH ####
@@ -23,7 +23,8 @@ def main():
                              "TutorialFogOfWar": [],
                              "Level_One": [],
                              "Level_Two":[],
-                             "Challenge_Circle":[]
+                             "Challenge_Circle":[],
+                             "Challenge_Scout":[]
                              }
 
     all_val = EOLgsheet.get_all_values()
@@ -34,7 +35,8 @@ def main():
                              "TutorialFogOfWar":0 ,
                              "Level_One": 0,
                              "Level_Two": 0 ,
-                             "Challenge_Circle":0}
+                             "Challenge_Circle":0,
+                             "Challenge_Scout":0}
     
     for key in dict_time_per_level:
         temp = (sum(dict_time_per_level[key])/len(dict_time_per_level[key]) )* 60
@@ -45,6 +47,7 @@ def main():
     filter_data_sheet.update('R4' , avg_time_per_level['Level_One'] , value_input_option='USER_ENTERED')
     filter_data_sheet.update('R5' , avg_time_per_level['Level_Two'] , value_input_option='USER_ENTERED')
     filter_data_sheet.update('R6' , avg_time_per_level['Challenge_Circle'] , value_input_option='USER_ENTERED')
+    filter_data_sheet.update('R7' , avg_time_per_level['Challenge_Scout'] , value_input_option='USER_ENTERED')
 
 
 
@@ -81,6 +84,8 @@ def main():
     filter_data_sheet.update('T13' , int(player_end_per_level["Level_Two"]),value_input_option='USER_ENTERED' )
     filter_data_sheet.update('T15' , int(player_end_per_level["Challenge_Circle"]),value_input_option='USER_ENTERED' )
     filter_data_sheet.update('T16' , int(player_end_per_level["Challenge_Circle"]),value_input_option='USER_ENTERED' )
+    filter_data_sheet.update('T18' , int(player_end_per_level["Challenge_Scout"]),value_input_option='USER_ENTERED' )
+    filter_data_sheet.update('T19' , int(player_end_per_level["Challenge_Scout"]),value_input_option='USER_ENTERED' )
 
     
           

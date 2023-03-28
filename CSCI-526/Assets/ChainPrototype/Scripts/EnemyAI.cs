@@ -110,9 +110,7 @@ public class EnemyAI : MonoBehaviour
                 }
             }
         }
-     
-
-
+        
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
@@ -281,7 +279,7 @@ public class EnemyAI : MonoBehaviour
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectBestPiece();
-        if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+        if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
         {
             aiCoord = SelectRandomPiece();
         }
@@ -294,7 +292,7 @@ public class EnemyAI : MonoBehaviour
             Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
             
             // Decide movement logic 
-            if (SceneManager.GetActiveScene().name == "Challenge_Scout")
+            if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
                 // Random AI
                 // Subject to change
@@ -319,7 +317,6 @@ public class EnemyAI : MonoBehaviour
             {
                 GameManagerChain.Instance.AddMovedPiece(aiPiece, destination);
                 GameManagerChain.Instance.IncrementMoves(1);
-                MenuManager.Instance.ShowNumMovesInfo();
             }
             else
             {
@@ -328,20 +325,35 @@ public class EnemyAI : MonoBehaviour
 
             }
         }
-        if (GameManagerChain.Instance.GetMovesMade() == 2 || aiCoord == null)
+        /*
+                if (!LevelMono.Instance.DoHumansRemain())
+                {
+                    StopAllCoroutines();
+                    GameManagerChain.Instance.ChangeState(GameStateEnum.Loss);
+                }
+        */
+        if (GameManagerChain.Instance.IsEnemyTurnOver() || aiCoord == null)
         {
             StopAllCoroutines();
             isRunning = false;
             StartCoroutine(GameManagerChain.Instance.StateToHuman());
+            // GameManagerChain.Instance.ChangeState(GameStateEnum.Human);
         }
     }
 
     private IEnumerator DelayEnemyStart()
     {
-        isRunning = true;
-        yield return new WaitForSeconds(1f);
+        if (!isRunning)
+        {
+            isRunning = true;
+            yield return new WaitForSeconds(1f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(.6f);
+        }
         MovePiece();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.6f);
         StartCoroutine(DelayEnemyStart());
     }
 }

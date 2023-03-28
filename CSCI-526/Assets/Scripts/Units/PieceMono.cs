@@ -20,11 +20,13 @@ public abstract class PieceMono : MonoBehaviour
 
     public const string Scout = "Scout";
 
+    public const string Base = "Base";
+
     [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
     [SerializeField] private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
                                         nePartPlayer, nePartEnemy, nwPartPlayer, nwPartEnemy, swPartPlayer, swPartEnemy, sePartPlayer, sePartEnemy;
 
-    [SerializeField] private GameObject buffParticles;      // Circle indicator when it is buffed by Diamond
+    [SerializeField] private ParticleSystem buffParticles;      // Circle indicator when it is buffed by Diamond
 
     public GameObject canMoveObject, cantMoveObject;     // Highlight will be temporary -- change to particles after midterm
 
@@ -49,6 +51,8 @@ public abstract class PieceMono : MonoBehaviour
 	public bool IsDiamond() { return string.Equals(this.UnitName, Diamond); }
 
 	public bool IsScout() { return string.Equals(this.UnitName, Scout); }
+
+    public bool IsBase() { return string.Equals(this.UnitName, Base); }
 
 	public string GetName() { return this.UnitName; }
 
@@ -540,14 +544,17 @@ public abstract class PieceMono : MonoBehaviour
         {
             if(this.IsAdjacentToAllyDiamond())
             {
-                buffParticles.SetActive(true);
+                if(!buffParticles.isPlaying)
+                {
+                    buffParticles.Play();
+                }
             }
             else
             {
-                buffParticles.SetActive(false);
+                buffParticles.Stop();
             }
         }
-        else
+        else        // ENEMY CIRCLE
         {
             if(this.IsAdjacentToAllyDiamond())
             {
@@ -555,11 +562,14 @@ public abstract class PieceMono : MonoBehaviour
                 {
                     if(LevelMono.Instance.GetPiece(ally).IsDiamond() && LevelMono.Instance.tiles[ally].CanPlayerSee())
                     {
-                        buffParticles.SetActive(true);
+                        if (!buffParticles.isPlaying)
+                        {
+                            buffParticles.Play();
+                        }
                     }
                     else
                     {
-                        buffParticles.SetActive(false);
+                        buffParticles.Stop();
                     }
                 }
             }
