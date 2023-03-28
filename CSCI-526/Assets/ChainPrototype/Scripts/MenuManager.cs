@@ -333,7 +333,7 @@ public class MenuManager : MonoBehaviour
             _objectiveContent.SetActive(false);
         }
         SetVictoryScreen(false);
-        promptObject.SetActive(false);
+        //promptObject.SetActive(false);
         _turnInfoObject.SetActive(true);
         _selectedUnitInfo.SetActive(false);
         _abilityUseObject.SetActive(false);
