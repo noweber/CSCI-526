@@ -24,7 +24,8 @@ namespace Assets.Scripts.Levels
 		public bool IsTriangle() { return string.Equals(unitName, PieceMono.Triangle); }
 		public bool IsDiamond() { return string.Equals(unitName, PieceMono.Diamond); }
 		public bool IsScout() { return string.Equals(unitName, PieceMono.Scout); }
-		
+		public bool IsBase() { return string.Equals(unitName, PieceMono.Base); }
+
 		public bool IsHuman() { return this.isHuman; }
 
 		public Tuple<int, int> GetPosition()

@@ -11,13 +11,17 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
     
-    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _numTurnObject, _abilityUseObject, _endTurnObject, _objectiveObject, 
+    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject, 
         _objectiveContent, _sideObjectiveHeader, _sideObjectiveIcon, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
         _defeatObject, _pointerObject, _gridManagerObject;
    
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public GameObject _playerTurnIndicator, _enemyTurnIndicator;
+    
+    // Prompt variables
+    [SerializeField] private GameObject promptObject;
+    [SerializeField] private TextMeshProUGUI levelName, levelDescription;
 
     public MenuManager()
     {
@@ -36,6 +40,28 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void SetPrompt(string lvlName, string lvlDesc = null)
+    {
+        promptObject.SetActive(true);
+        SetLevelName(lvlName);
+        SetLevelDescription(lvlDesc);
+    }
+    public void SetLevelName(string name)
+    {
+        levelName.text = name;
+    }
+    public void SetLevelDescription(string description)
+    {
+        if (description == null)
+        {
+            Debug.Log("DESCRIPTION IS NULL");
+            levelDescription.text = "Capture the enemy's base.";
+        }
+        else
+        {
+            levelDescription.text = description;
+        }
+    }
     public void ShowTurnInfo()
     {
         if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human)
@@ -49,10 +75,10 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void ShowNumMovesInfo()
-    {
-        _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.GetMovesMade()) + " Moves Left";
-    }
+    // public void ShowNumMovesInfo()
+    // {
+    //     _numTurnObject.GetComponentInChildren<Text>().text = "" + (2 - GameManagerChain.Instance.GetMovesMade()) + " Moves Left";
+    // }
     public void ShowEndTurnButton()
     {
         _endTurnObject.SetActive(true);
@@ -101,12 +127,10 @@ public class MenuManager : MonoBehaviour
 
     public void TriangleEvent()//(Piece triangle, Piece other)
     {
-        Debug.Log("BUTTON WORKS");
         if (GameManagerChain.Instance.UsedAbility == false)
         {
             GameManagerChain.Instance.DecrementMoves(1);
             GameManagerChain.Instance.UsedAbility = true;
-            this.ShowNumMovesInfo();
         }
         this.HideAbilityButton();
     }
@@ -216,7 +240,7 @@ public class MenuManager : MonoBehaviour
         {
             _turnInfoObject.SetActive(false);
             _selectedUnitInfo.SetActive(false);
-            _numTurnObject.SetActive(false);
+
             _abilityUseObject.SetActive(false);
             _endTurnObject.SetActive(false);
             _slackObject.SetActive(false);
@@ -239,7 +263,6 @@ public class MenuManager : MonoBehaviour
         {
             _turnInfoObject.SetActive(false);
             _selectedUnitInfo.SetActive(false);
-            _numTurnObject.SetActive(false);
             _abilityUseObject.SetActive(false);
             _endTurnObject.SetActive(false);
             _slackObject.SetActive(false);
@@ -310,9 +333,9 @@ public class MenuManager : MonoBehaviour
             _objectiveContent.SetActive(false);
         }
         SetVictoryScreen(false);
+        promptObject.SetActive(false);
         _turnInfoObject.SetActive(true);
         _selectedUnitInfo.SetActive(false);
-        _numTurnObject.SetActive(true);
         _abilityUseObject.SetActive(false);
         _slackObject.SetActive(false);
         _pauseObject.SetActive(true);
@@ -350,7 +373,8 @@ public class MenuManager : MonoBehaviour
             LevelMono tempLevelMono = _gridManagerObject.GetComponent<LevelMono>();
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
-            tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
+            //tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
+            tempOverallObjective.text = "Capture the <color=red>Star</color>!";
             // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }

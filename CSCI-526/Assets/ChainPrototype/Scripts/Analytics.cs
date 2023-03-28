@@ -20,11 +20,11 @@ public class Analytics : MonoBehaviour
         // TODO: Take these URLs from a config file and swap it on build for production instances.
         if (string.IsNullOrEmpty(StartOfLevelUrl))
         {
-            StartOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSerply3kFSQjKMtiMbBGhCrQ-OtvP-Oa1fGMKo5OtTe6G5omg/formResponse";
+            StartOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLScx2srJ-CuNMi6lSInGdIulNEICS_A4DGzPgInOSyEDVkD_-A/formResponse";
         }
         if (string.IsNullOrEmpty(EndOfLevelUrl))
         {
-            EndOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeYxOpPKvYOuO141Z35ltYHGqsTfE3ZScL_BSC-NWhtNMaULg/formResponse";
+            EndOfLevelUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdpsatzp5ucBpTpuz2khbtjAWZ9OOz7baGN7fWJDW20l8aNYQ/formResponse";
         }
     }
 

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using Assets.Scripts.Analytics;
+using UnityEngine.UIElements;
 
 public class GameManagerChain : MonoBehaviour
 {
@@ -235,11 +236,13 @@ public class GameManagerChain : MonoBehaviour
     /// <param name="amount">The number of moves made.</param>
     public void IncrementMoves(int amount = 1)
     {
-        movesMade += amount;
+        TotalMoves += amount;
+        //movesMade += amount;
 
-        // Check if the the game is over now that number of available moves decreased during play:
-        if (SceneName == "Challenge_Circle")
+        // Check win condition
+    	if (SceneName == "Challenge_Circle")
         {
+            // Challenge Circle specific win condition
             Debug.Log("TOTAL MOVES: " + TotalMoves);
             if (TotalMoves == 4)
             {
@@ -249,6 +252,19 @@ public class GameManagerChain : MonoBehaviour
         }
         else
         {
+            // Normal level's win condition
+            if (!LevelMono.Instance.IsEnemyBaseAlive())
+            {
+                // TODO: Transition to a win state per open tasks once designed.
+                this.ChangeState(GameStateEnum.Victory);
+            }
+            else if (!LevelMono.Instance.IsHumanBaseAlive())
+            {
+                // TODO: Transition to a lose state.
+                this.ChangeState(GameStateEnum.Loss);
+            }
+            /*
+            // Normal level's win condition
             if (!LevelMono.Instance.DoEnemiesRemain())
             {
                 // TODO: Transition to a win state per open tasks once designed.
@@ -259,7 +275,24 @@ public class GameManagerChain : MonoBehaviour
                 // TODO: Transition to a lose state.
                 this.ChangeState(GameStateEnum.Loss);
             }
+            */
         }
+    }
+    
+    public bool IsPlayerTurnOver() {
+        var playerPieces = LevelMono.Instance.GetPlayerPieces();
+        foreach (var piece in playerPieces) {
+            if (!piece.IsTriangle() && !piece.IsBase() && piece.CanMove() == true) { return false; }
+        }
+        return true;
+    }
+
+    public bool IsEnemyTurnOver() {
+        var enemyPieces = LevelMono.Instance.GetEnemyPieces();
+        foreach (var piece in enemyPieces) {
+            if (!piece.IsTriangle() && piece.CanMove() == true) { return false; }
+        }
+        return true;
     }
 
     /// <summary>
@@ -308,7 +341,7 @@ public class GameManagerChain : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             MenuManager.Instance._enemyTurnIndicator.SetActive(false);
 
-            GameManagerChain.Instance.ResetMovesMade();
+            //GameManagerChain.Instance.ResetMovesMade();
 
             ChangeState(GameStateEnum.AI);
             switchingTurns = false;
@@ -326,7 +359,7 @@ public class GameManagerChain : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             MenuManager.Instance._playerTurnIndicator.SetActive(false);
 
-            GameManagerChain.Instance.ResetMovesMade();
+            //GameManagerChain.Instance.ResetMovesMade();
 
             // This adds all of the active pieces in the level into a heatmap each time there is a transition into the human player's turn:
             foreach (var piece in LevelMono.Instance._pieces)
@@ -362,40 +395,78 @@ public class GameManagerChain : MonoBehaviour
 
         switch (newState)
         {
+            // TO SET THE PROMPT:
+            //  MenuManager.Instance.SetPrompt(levelName, levelDescription)
+            //      IF levelDescription is omitted, defaults to "Capture the enemy base."
             case GameStateEnum.GenerateGrid:
                 if (SceneName == "TutorialLevel")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialLevel());
+                    MenuManager.Instance.SetPrompt("Tutorial");
+                }
+                else if (SceneName == "Tutorial_Circle")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialCircle());
+                    MenuManager.Instance.SetPrompt("Circle Tutorial", "The Star functions as a team's base. Click to move your<color=blue> Circle</color>, and capture the enemy<color=red> Star</color>.");
+                }
+                else if (SceneName == "Tutorial_Diamond")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialDiamond());
+                    MenuManager.Instance.SetPrompt("Diamond Tutorial", "Using your<color=blue> Diamond</color>, capture the enemy<color=red> Star</color>.");
+                }
+                else if (SceneName == "Tutorial_Circle_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialCircleAbility());
+                    MenuManager.Instance.SetPrompt("Circle Ability Tutorial", "If a Circle captures an enemy unit, it may move again. Using your<color=blue> Circle</color>, capture enemy<color=red> unit(s)</color> to reach the enemy<color=red> Star</color>.");
+                }
+                else if (SceneName == "Tutorial_Diamond_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialDiamondAbility());
+                    MenuManager.Instance.SetPrompt("Diamond Ability Tutorial", "The Diamond extend the Circle's movement when next to one. Move one of your<color=blue> Diamonds</color> to one of your<color=blue> Circles</color> to reach the enemy <color=red>Star</color> quicker.");
+                }
+                else if (SceneName == "Tutorial_Scout_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialScoutAbility());
+                    MenuManager.Instance.SetPrompt("Scout Ability Tutorial", "The Fog of War hinders your vision, but the Scout grants vision in a cone where it is facing. Use your <color=blue>Scout </color> to find and capture the enemy <color=red>Star </color>.");
+                }
+                else if (SceneName == "Tutorial_Triangle_Ability")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.TutorialTriangleAbility());
+                    MenuManager.Instance.SetPrompt("Triangle Ability Tutorial", "The Triangle grants a large amount of vision. To capture a Triangle, move one of your units next to it. Find and capture the enemy <color=red> Star</color>");
                 }
                 else if (SceneName == "TutorialFogOfWar")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialFogOfWarLevel());
+                    MenuManager.Instance.SetPrompt("Fog of War Tutorial");
                 }
                 else if (SceneName == "Level_One")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelOne());
+                    // MenuManager.Instance.SetPrompt("Level 1");
                 }
                 else if (SceneName == "Level_Two")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
+                    // MenuManager.Instance.SetPrompt("Level 2");
                 }
                 else if (SceneName == "Challenge_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
+                    MenuManager.Instance.SetPrompt("Challenge Circle");
                 }
                 else if (SceneName == "Challenge_Scout")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
+                    MenuManager.Instance.SetPrompt("Challenge Scout");
                 }
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
                 break;
             case GameStateEnum.Human:
                 MenuManager.Instance.ShowTurnInfo();
-                MenuManager.Instance.ShowNumMovesInfo();
                 foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())
                 {
-                    if (!piece.IsTriangle())
+                    if (!piece.IsTriangle() && !piece.IsBase())
                     {
                         piece.canMoveObject.SetActive(true);
                         piece.cantMoveObject.SetActive(false);
@@ -403,8 +474,13 @@ public class GameManagerChain : MonoBehaviour
                 }
                 foreach (PieceMono piece in LevelMono.Instance.GetEnemyPieces())
                 {
-                    piece.canMoveObject.SetActive(false);
-                    piece.canMoveObject.SetActive(false);
+                    if (!piece.IsTriangle() && !piece.IsBase())     // Do not show enemy movability during player turn
+                    {
+                        piece.canMoveObject.SetActive(false);
+                        piece.cantMoveObject.SetActive(false);
+                    }
+                    /*                    piece.canMoveObject.SetActive(false);
+                                        piece.canMoveObject.SetActive(false);*/
                 }
                 if (SceneName != "TutorialLevel" && SceneName != "TutorialFogOfWar")
                 {
@@ -413,15 +489,16 @@ public class GameManagerChain : MonoBehaviour
                 break;
             case GameStateEnum.AI:
                 MenuManager.Instance.ShowTurnInfo();
-                MenuManager.Instance.ShowNumMovesInfo();
                 MenuManager.Instance.HideEndTurnButton();
 
                 foreach (PieceMono piece in LevelMono.Instance.GetPlayerPieces())
                 {
-                    piece.canMoveObject.SetActive(false);
-                    piece.cantMoveObject.SetActive(false);
+                    if (!piece.IsTriangle() && !piece.IsBase())     // Do not show player movability during enemy turn
+                    {
+                        piece.canMoveObject.SetActive(false);
+                        piece.cantMoveObject.SetActive(false);
+                    }
                 }
-
                 if (SceneName == "TutorialLevel" || SceneName == "Challenge_Circle")
                 {
                     // slacking off 
@@ -494,6 +571,7 @@ public class GameManagerChain : MonoBehaviour
         humanPlayerPieceTypeMoveCounts.Add(PieceMono.Diamond, 0);
         humanPlayerPieceTypeMoveCounts.Add(PieceMono.Triangle, 0);
         humanPlayerPieceTypeMoveCounts.Add(PieceMono.Scout, 0);
+        humanPlayerPieceTypeMoveCounts.Add(PieceMono.Base, 0);
     }
 
     /// <summary>
