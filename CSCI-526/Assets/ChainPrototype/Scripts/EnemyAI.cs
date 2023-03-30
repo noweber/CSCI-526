@@ -297,6 +297,15 @@ public class EnemyAI : MonoBehaviour
                 // Random AI
                 // Subject to change
                 Debug.Log("RANDOM AI");
+
+                //If the player moves into enemy vision AND randomly selected enemy piece can capture. Capture.
+                foreach (var coord in moves){
+                    if (lvlMono.GetTile(coord).CanEnemySee() && IsACapturingMove(coord)){
+                        Tuple<int, int> destination = coord;
+                        break;
+                    }
+                }
+
             }
             else
             {
