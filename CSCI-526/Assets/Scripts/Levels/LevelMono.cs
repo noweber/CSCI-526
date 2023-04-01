@@ -644,4 +644,24 @@ public class LevelMono : MonoBehaviour
         int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && piece.IsBase()) select piece).Count();
         return result > 0;
     }
+
+    public List<Tuple<int, int>> GetBaseCoords(bool checkHumanPlayer)
+    {
+        List<Tuple<int, int>> baseCoords = new List<Tuple<int, int>>();
+
+        if (_pieces == null)
+        {
+            return baseCoords;
+        }
+
+        foreach (var piece in _pieces)
+        {
+            if (piece.Value.IsHuman() == checkHumanPlayer && piece.Value.IsBase())
+            {
+                baseCoords.Add(piece.Key);
+            }
+        }
+
+        return baseCoords;
+    }
 }

@@ -26,10 +26,7 @@ public class EnemyAI : MonoBehaviour
             return null;
         }
 
-
         List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
-        List<Tuple<int, int>> movableDiamonds = new List<Tuple<int, int>>();
-        List<Tuple<int, int>> movableCircles = new List<Tuple<int, int>>();
         foreach (var coord in enemyPieceCoords)
         {
             if (lvlMono.GetPiece(coord).CanMove())
@@ -218,16 +215,26 @@ public class EnemyAI : MonoBehaviour
 
     private bool IsACapturingMove(Tuple<int, int> destination)
     {
-        //TODO: account for enemy visibility
         var pieceAtDestination = LevelMono.Instance.GetPiece(destination);
         var lvlMono = LevelMono.Instance;
         var tile = lvlMono.GetTile(destination);
 
-        //If piece at destination not null and is Player and AI has visibility
+        //Capture if piece at destination not null and is Player and AI has visibility
         if (pieceAtDestination != null && pieceAtDestination.IsHuman() && tile.CanEnemySee())
         {
             return true;
         }
+        return false;
+    }
+
+    private bool IsABaseCapture(Tuple<int, int> destination)
+    {
+        //if the destination move would be a capturing move, check if it is a base
+        if (IsACapturingMove(destination))
+        {
+            return (LevelMono.Instance.GetPiece(destination).IsBase());
+        }
+
         return false;
     }
 
@@ -236,20 +243,57 @@ public class EnemyAI : MonoBehaviour
         var lvlMono = LevelMono.Instance;
         int bestMove = -1;
         int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
+
+        List<int> capturingMoves = new List<int>();
         for (int i=0; i<moves.Count; i++)
         {
-            //If AI has visibility AND the move is a capturing move
-            if (lvlMono.GetTile(moves[i]).CanEnemySee() && IsACapturingMove(moves[i]))
-                bestMove = i;
+            //If AI has visibility, consider this move for capture
+            if (lvlMono.GetTile(moves[i]).CanEnemySee())
+            {
+                if (IsACapturingMove(moves[i]))
+                {
+                    capturingMoves.Add(i);
+                }
+            }
+        }
+        foreach (var index in capturingMoves)
+        {
+            bestMove = index;
+            //prioritize base captures
+            if (IsABaseCapture(moves[index]))
+                break;
         }
 
         if (bestMove == -1)
         {
+            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
             for (int i = 0; i < moves.Count; i++)
             {
-                foreach (var tower in LevelMono.Instance.towerLocations)
+                //move towards the base if you can see it
+                foreach (var playerBase in lvlMono.GetBaseCoords(true))
                 {
-                    if (LevelMono.Instance.GetPiece(tower).IsHuman())
+                    if (lvlMono.GetTile(playerBase).CanEnemySee())
+                    {
+                        var distance = CalculateDistance(playerBase, moves[i]);
+                        if (distance < minDistance)
+                        {
+                            bestMove = i;
+                            minDistance = distance;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (bestMove == -1)
+        {
+            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
+            for (int i = 0; i < moves.Count; i++)
+            {
+                //move towards the towers
+                foreach (var tower in lvlMono.towerLocations)
+                {
+                    if (lvlMono.GetPiece(tower).IsHuman())
                     {
                         var distance = CalculateDistance(tower, moves[i]);
                         if (distance < minDistance)
@@ -268,7 +312,6 @@ public class EnemyAI : MonoBehaviour
         }
         return bestMove;
     }
-
 
 
     //Ranking Movement:
@@ -294,18 +337,21 @@ public class EnemyAI : MonoBehaviour
             // Decide movement logic 
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
-                // Random AI
+                // Random AI (with adjacent capture logic)
                 // Subject to change
                 Debug.Log("RANDOM AI");
 
-                //If the player moves into enemy vision AND randomly selected enemy piece can capture. Capture.
-                foreach (var coord in moves){
-                    if (lvlMono.GetTile(coord).CanEnemySee() && IsACapturingMove(coord)){
-                        Tuple<int, int> destination = coord;
-                        break;
+                //If the player moves into enemy vision AND piece can capture: Capture.
+                //Prioritize capturing bases over pieces
+                foreach (var coord in moves)
+                {
+                    if (IsACapturingMove(coord))
+                    {
+                        destination = coord;
+                        if (IsABaseCapture(coord))
+                            break;
                     }
                 }
-
             }
             else
             {
@@ -359,10 +405,10 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(.6f);
+            yield return new WaitForSeconds(.4f);
         }
         MovePiece();
-        yield return new WaitForSeconds(.6f);
+        yield return new WaitForSeconds(.4f);
         StartCoroutine(DelayEnemyStart());
     }
 }
