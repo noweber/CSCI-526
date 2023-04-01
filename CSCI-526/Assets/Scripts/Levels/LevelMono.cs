@@ -15,6 +15,8 @@ public class LevelMono : MonoBehaviour
     [SerializeField] private Triangle _trianglePrefab;
     [SerializeField] private Diamond _diamondPrefab;
     [SerializeField] private Circle _circlePrefab;
+    [SerializeField] private GameObject circleAbilityIndicator;     // Indicates WHEN the Circle's ability is activated
+
     [SerializeField] private Base _basePrefab;
 
     [SerializeField] private Scout _scoutPrefab;
@@ -547,6 +549,8 @@ public class LevelMono : MonoBehaviour
             if (captured)
             {
                 // Same green highlight
+                var indicator = Instantiate(circleAbilityIndicator);
+                indicator.transform.position = this.selectedPiece.transform.position;
             }
             else
             {
