@@ -25,7 +25,6 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(false);
-                upArrow.GetComponent<SpriteRenderer>().color = Color.white;
             }
 
             if (this.direction == Direction.Down)
@@ -34,7 +33,6 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(true);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(false);
-                downArrow.GetComponent<SpriteRenderer>().color = Color.white;
             }
 
         }
@@ -53,8 +51,6 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(true);
                 rightArrow.SetActive(false);
-
-                leftArrow.GetComponent<SpriteRenderer>().color = Color.white;
             }
             else if (x - destination.Item1 < 0)
             {
@@ -64,8 +60,6 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(true);
-
-                rightArrow.GetComponent<SpriteRenderer>().color = Color.white;
             } 
             else if (y - destination.Item2 > 0)
             {
@@ -75,8 +69,6 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(true);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(false);
-
-                downArrow.GetComponent<SpriteRenderer>().color = Color.white;
             }
             else
             {
@@ -86,8 +78,6 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(false);
-
-                upArrow.GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
         public override string getUnitInfo()

@@ -317,12 +317,18 @@ public class LevelMono : MonoBehaviour
                 if (!unit.IsHuman())
                 {
                     scout.SetInitialDirection(Direction.Down);
-                    scout.downArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = enemyColor;
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = enemyColor;
+                    scout.leftArrow.GetComponent<SpriteRenderer>().color = enemyColor;
+                    scout.rightArrow.GetComponent<SpriteRenderer>().color = enemyColor;
                 }
                 else
                 {
                     scout.SetInitialDirection(Direction.Up);
-                    scout.upArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                    scout.upArrow.GetComponent<SpriteRenderer>().color = playerColor;
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = playerColor;
+                    scout.leftArrow.GetComponent<SpriteRenderer>().color = playerColor;
+                    scout.rightArrow.GetComponent<SpriteRenderer>().color = playerColor;
                 }
                 scout.SetMoveState(false);
 
