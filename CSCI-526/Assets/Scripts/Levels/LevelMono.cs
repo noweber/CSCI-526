@@ -528,6 +528,8 @@ public class LevelMono : MonoBehaviour
             // CAPTURE TAKES PLACE HERE
             // TODO: Implement intercepting capture
             Destroy(this.GetPiece(coord).gameObject);
+            if(this.selectedPiece.IsHuman()) { tile.PlayEnemyExplosion(); }     // Human capturing enemy
+            else { tile.PlayPlayerExplosion(); }        // Enemy capturing human
             //this.selectedPiece.gameObject.SetActive(true);
             captured = true;
             if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
