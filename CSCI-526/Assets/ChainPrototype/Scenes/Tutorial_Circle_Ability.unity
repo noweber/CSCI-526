@@ -451,6 +451,30 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 494762419}
+    - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
+      propertyPath: enemyColor.b
+      value: 0.14528298
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
+      propertyPath: enemyColor.g
+      value: 0.16961579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
+      propertyPath: enemyColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
+      propertyPath: playerColor.b
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
+      propertyPath: playerColor.g
+      value: 0.84832686
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806463710294681608, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
+      propertyPath: playerColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7806463710294681609, guid: d4ee23c120dc79742863ea15942e156b, type: 3}
       propertyPath: m_RootOrder
       value: 2

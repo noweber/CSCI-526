@@ -52,8 +52,8 @@ MonoBehaviour:
   _basePrefab: {fileID: 7376478469752636539, guid: 05d4f9ebee23f064cb90c80febe37719, type: 3}
   _scoutPrefab: {fileID: -577971291739253569, guid: 754c7020d67cf460a8f59452dbe24cf4, type: 3}
   _camera: {fileID: 0}
-  playerColor: {r: 0.004434774, g: 0, b: 0.735849, a: 1}
-  enemyColor: {r: 0.5471698, g: 0, b: 0, a: 1}
+  playerColor: {r: 0, g: 0.84832686, b: 0.990566, a: 1}
+  enemyColor: {r: 1, g: 0.16961579, b: 0.14528298, a: 1}
   selectedPiece: {fileID: 0}
-  debug: 0
+  debug: 1
   capturedTower: 0
