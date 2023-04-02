@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3459937632672835433, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 494762419}
     - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_fontColor.b
       value: 1
