@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private GameObject closeEye, openEye, boot;
 
     [SerializeField] private ParticleSystem enemyExplosion1, enemyExplosion2, playerExplosion1, playerExplosion2;
-
+    [SerializeField] private ParticleSystem playerExplosionV2, enemyExplosionV2;
     private bool canPlayerSee;
     private bool canEnemySee;
 
@@ -48,13 +48,15 @@ public class Tile : MonoBehaviour
 
     public void PlayPlayerExplosion()
     {
-        playerExplosion1.Play();
-        playerExplosion2.Play();
+/*        playerExplosion1.Play();
+        playerExplosion2.Play();*/
+        playerExplosionV2.Play();
     }
     public void PlayEnemyExplosion()
     {
-        enemyExplosion1.Play();
-        enemyExplosion2.Play();
+        /*        enemyExplosion1.Play();
+                enemyExplosion2.Play();*/
+        enemyExplosionV2.Play();
     }
     void OnMouseEnter()
     {
