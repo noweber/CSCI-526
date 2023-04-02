@@ -252,7 +252,7 @@ public class LevelMono : MonoBehaviour
             if (unit.IsTriangle())
             {
                 var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-                triangle.SetName("Triangle");
+                triangle.SetName(PieceMono.Triangle);
                 triangle.SetHuman(unit.IsHuman());
                 triangle.gameObject.SetActive(true);
                 // if (!this.debug)
