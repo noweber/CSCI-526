@@ -134,6 +134,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 889055179}
+    - target: {fileID: 5692367028934716792, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6777076
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028934716792, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6777076
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028934716792, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6777076
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028934716792, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028934716792, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 98
+      objectReference: {fileID: 0}
     - target: {fileID: 5692367029167344274, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_Camera
       value: 
