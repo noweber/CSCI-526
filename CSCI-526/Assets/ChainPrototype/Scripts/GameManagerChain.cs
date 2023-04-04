@@ -252,13 +252,14 @@ public class GameManagerChain : MonoBehaviour
         }
         else
         {
+            print("DO HUMANS REMAIN: " + LevelMono.Instance.DoHumansRemain());
             // Normal level's win condition
             if (!LevelMono.Instance.IsEnemyBaseAlive())
             {
                 // TODO: Transition to a win state per open tasks once designed.
                 this.ChangeState(GameStateEnum.Victory);
             }
-            else if (!LevelMono.Instance.IsHumanBaseAlive())
+            else if (!LevelMono.Instance.IsHumanBaseAlive() || !LevelMono.Instance.DoHumansRemain())
             {
                 // TODO: Transition to a lose state.
                 this.ChangeState(GameStateEnum.Loss);
@@ -407,32 +408,32 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Tutorial_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialCircle());
-                    MenuManager.Instance.SetPrompt("Circle Tutorial", "The Star functions as a team's base. Click to move your<color=blue> Circle</color>, and capture the enemy<color=red> Star</color>.");
+                    MenuManager.Instance.SetPrompt("Fighter Tutorial", "The planet functions as a base. Click to move your <color=blue>fighter</color>, and capture the <color=red>enemy planet</color>.");
                 }
                 else if (SceneName == "Tutorial_Diamond")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamond());
-                    MenuManager.Instance.SetPrompt("Diamond Tutorial", "Using your<color=blue> Diamond</color>, capture the enemy<color=red> Star</color>.");
+                    MenuManager.Instance.SetPrompt("Support Tutorial", "Using your<color=blue> support</color>, capture the <color=red>enemy planet</color>.");
                 }
                 else if (SceneName == "Tutorial_Circle_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialCircleAbility());
-                    MenuManager.Instance.SetPrompt("Circle Ability Tutorial", "If a Circle captures an enemy unit, it may move again. Using your<color=blue> Circle</color>, capture enemy<color=red> unit(s)</color> to reach the enemy<color=red> Star</color>.");
+                    MenuManager.Instance.SetPrompt("Fighter Ability Tutorial", "If a fighter captures an enemy unit, it may move again. Using your <color=blue>fighter</color>, capture <color=red>enemy unit(s)</color> to reach the <color=red>enemy planet</color>.");
                 }
                 else if (SceneName == "Tutorial_Diamond_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamondAbility());
-                    MenuManager.Instance.SetPrompt("Diamond Ability Tutorial", "The Diamond extend the Circle's movement when next to one. Move one of your<color=blue> Diamonds</color> to one of your<color=blue> Circles</color> to reach the enemy <color=red>Star</color> quicker.");
+                    MenuManager.Instance.SetPrompt("Support Ability Tutorial", "Supports extend a fighter's movement when next to one. Move one of your <color=blue>supports</color> near one of your <color=blue>fighters</color> to reach the <color=red>enemy planet</color> quickly.");
                 }
                 else if (SceneName == "Tutorial_Scout_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialScoutAbility());
-                    MenuManager.Instance.SetPrompt("Scout Ability Tutorial", "The Fog of War hinders your vision, but the Scout grants vision in a cone where it is facing. Use your <color=blue>Scout </color> to find and capture the enemy <color=red>Star </color>.");
+                    MenuManager.Instance.SetPrompt("Scout Ability Tutorial", "The Fog of War hinders your vision, but the Scout grants vision in a cone where it is facing. Use your <color=blue>Scout </color> to find and capture the <color=red>enemy planet</color>.");
                 }
                 else if (SceneName == "Tutorial_Triangle_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialTriangleAbility());
-                    MenuManager.Instance.SetPrompt("Triangle Ability Tutorial", "The Triangle grants a large amount of vision. To capture a Triangle, move one of your units next to it. Find and capture the enemy <color=red> Star</color>");
+                    MenuManager.Instance.SetPrompt("Satellite Ability Tutorial", "The satellite grants a large amount of vision. To capture a satellite, move one of your units near it. Find and capture the <color=red>enemy planet</color>");
                 }
                 else if (SceneName == "TutorialFogOfWar")
                 {
@@ -442,12 +443,12 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Level_One")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelOne());
-                    // MenuManager.Instance.SetPrompt("Level 1");
+                    MenuManager.Instance.SetLevelName("Level One");
                 }
                 else if (SceneName == "Level_Two")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
-                    // MenuManager.Instance.SetPrompt("Level 2");
+                    MenuManager.Instance.SetLevelName("Level Two");
                 }
                 else if (SceneName == "Challenge_Circle")
                 {
@@ -458,7 +459,7 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
                     MenuManager.Instance.SetPrompt("Challenge Scout");
-                }
+                } 
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
                 break;

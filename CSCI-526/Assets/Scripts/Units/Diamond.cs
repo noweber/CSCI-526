@@ -11,7 +11,7 @@ namespace Assets.Scripts.Units
 
         public override string getUnitInfo()
         {
-            return "Can Capture Enemies. When adjacent to Circle, Circle gains increased range.";
+            return "Capture Enemies: Yes \nAbility: When adjacent to a Fighter, that Fighter gains increased movement range.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
@@ -22,6 +22,22 @@ namespace Assets.Scripts.Units
             var pos = this.transform.position;
             int x = (int)pos.x;
             int y = (int)pos.y;
+            var adjacentList = new List<Tuple<int, int>>();
+            adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
+            adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
+            adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
+            adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
+
+            foreach (var adj in adjacentList){
+                if (adj.Item1 >= 0 && adj.Item1 < boardWidth && adj.Item2 >= 0 && adj.Item2 < boardHeight){
+                    var availablePiece = lvlMono.GetPiece(adj);
+                    if (availablePiece != null)
+                    {
+                        if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
+                    }
+                    legalSpots.Add(adj);
+                }
+            }
 
             for (int i = 0; i < boardWidth; i++)
             {

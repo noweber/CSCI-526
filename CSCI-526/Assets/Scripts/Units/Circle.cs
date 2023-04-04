@@ -9,7 +9,7 @@ namespace Assets.Scripts.Units
         //public string unitInfo = "Upon Capture, Circle can move again.";
         public override string getUnitInfo()
         {
-            return "Upon Capture, Circle can move again.";
+            return "Capture Enemies: Yes \nAbility: Upon successful capture, Fighter can move again.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)

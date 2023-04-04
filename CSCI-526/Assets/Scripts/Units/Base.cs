@@ -8,7 +8,7 @@ namespace Assets.Scripts.Units
     {
         public override string getUnitInfo()
         {
-            return "Capture an enemy's base to defeat them.";
+            return "Capture Enemies: N\\A \nAbility: Capture enemy planet to win";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)

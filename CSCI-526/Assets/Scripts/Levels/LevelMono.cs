@@ -15,6 +15,8 @@ public class LevelMono : MonoBehaviour
     [SerializeField] private Triangle _trianglePrefab;
     [SerializeField] private Diamond _diamondPrefab;
     [SerializeField] private Circle _circlePrefab;
+    [SerializeField] private GameObject circleAbilityIndicator;     // Indicates WHEN the Circle's ability is activated
+
     [SerializeField] private Base _basePrefab;
 
     [SerializeField] private Scout _scoutPrefab;
@@ -250,7 +252,7 @@ public class LevelMono : MonoBehaviour
             if (unit.IsTriangle())
             {
                 var triangle = Instantiate(_trianglePrefab, new Vector3(coord.Item1, coord.Item2, -1), Quaternion.identity);
-                triangle.SetName("Triangle");
+                triangle.SetName(PieceMono.Triangle);
                 triangle.SetHuman(unit.IsHuman());
                 triangle.gameObject.SetActive(true);
                 // if (!this.debug)
@@ -315,12 +317,18 @@ public class LevelMono : MonoBehaviour
                 if (!unit.IsHuman())
                 {
                     scout.SetInitialDirection(Direction.Down);
-                    scout.downArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = enemyColor;
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = enemyColor;
+                    scout.leftArrow.GetComponent<SpriteRenderer>().color = enemyColor;
+                    scout.rightArrow.GetComponent<SpriteRenderer>().color = enemyColor;
                 }
                 else
                 {
                     scout.SetInitialDirection(Direction.Up);
-                    scout.upArrow.GetComponent<SpriteRenderer>().color = Color.white;
+                    scout.upArrow.GetComponent<SpriteRenderer>().color = playerColor;
+                    scout.downArrow.GetComponent<SpriteRenderer>().color = playerColor;
+                    scout.leftArrow.GetComponent<SpriteRenderer>().color = playerColor;
+                    scout.rightArrow.GetComponent<SpriteRenderer>().color = playerColor;
                 }
                 scout.SetMoveState(false);
 
@@ -526,6 +534,8 @@ public class LevelMono : MonoBehaviour
             // CAPTURE TAKES PLACE HERE
             // TODO: Implement intercepting capture
             Destroy(this.GetPiece(coord).gameObject);
+            if(this.selectedPiece.IsHuman()) { tile.PlayEnemyExplosion(); }     // Human capturing enemy
+            else { tile.PlayPlayerExplosion(); }        // Enemy capturing human
             //this.selectedPiece.gameObject.SetActive(true);
             captured = true;
             if (this.selectedPiece.IsCircle()) { this.selectedPiece.SetMoveState(false); }
@@ -547,6 +557,8 @@ public class LevelMono : MonoBehaviour
             if (captured)
             {
                 // Same green highlight
+                var indicator = Instantiate(circleAbilityIndicator);
+                indicator.transform.position = this.selectedPiece.transform.position;
             }
             else
             {
@@ -600,6 +612,7 @@ public class LevelMono : MonoBehaviour
 
     public bool DoHumansRemain()
     {
+        print("NUMBER HUMAN UNITS " + GetNumberOfUnitsRemainingForPlayer(true));
         return GetNumberOfUnitsRemainingForPlayer(true) > 0;
     }
 
@@ -630,7 +643,7 @@ public class LevelMono : MonoBehaviour
             return 0;
         }
 
-        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && !piece.IsTriangle()) select piece).Count();
+        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && !piece.IsTriangle() && !piece.IsBase()) select piece).Count();
         return result;
     }
 
@@ -643,5 +656,25 @@ public class LevelMono : MonoBehaviour
 
         int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && piece.IsBase()) select piece).Count();
         return result > 0;
+    }
+
+    public List<Tuple<int, int>> GetBaseCoords(bool checkHumanPlayer)
+    {
+        List<Tuple<int, int>> baseCoords = new List<Tuple<int, int>>();
+
+        if (_pieces == null)
+        {
+            return baseCoords;
+        }
+
+        foreach (var piece in _pieces)
+        {
+            if (piece.Value.IsHuman() == checkHumanPlayer && piece.Value.IsBase())
+            {
+                baseCoords.Add(piece.Key);
+            }
+        }
+
+        return baseCoords;
     }
 }

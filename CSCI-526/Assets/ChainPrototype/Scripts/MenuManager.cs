@@ -14,14 +14,15 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject, 
         _objectiveContent, _sideObjectiveHeader, _sideObjectiveIcon, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
         _defeatObject, _pointerObject, _gridManagerObject;
-   
+    [SerializeField] private TextMeshProUGUI objectiveLevelName;        // Displayed on the top right
+
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public GameObject _playerTurnIndicator, _enemyTurnIndicator;
     
     // Prompt variables
     [SerializeField] private GameObject promptObject;
-    [SerializeField] private TextMeshProUGUI levelName, levelDescription;
+    [SerializeField] private TextMeshProUGUI levelName, levelDescription;       // Displayed in the prompt popup
 
     public MenuManager()
     {
@@ -49,6 +50,7 @@ public class MenuManager : MonoBehaviour
     public void SetLevelName(string name)
     {
         levelName.text = name;
+        objectiveLevelName.text = name;
     }
     public void SetLevelDescription(string description)
     {
@@ -67,11 +69,14 @@ public class MenuManager : MonoBehaviour
         if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human)
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Blue Turn";
+            _turnInfoObject.GetComponent<Image>().color = new Color(0, 0, 1, 1);
         }
         else if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.AI)
         {
             Debug.Log("AI TURN");
             _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
+            _turnInfoObject.GetComponent<Image>().color = new Color(1, 0, 0, 1);
+
         }
     }
 
@@ -374,7 +379,7 @@ public class MenuManager : MonoBehaviour
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
             //tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
-            tempOverallObjective.text = "Capture the <color=red>Star</color>!";
+            tempOverallObjective.text = "Find and capture the <color=red>enemy planet</color>!";
             // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }
