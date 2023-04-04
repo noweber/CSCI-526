@@ -82,7 +82,7 @@ namespace Assets.Scripts.Units
         }
         public override string getUnitInfo()
         {
-            return "Grants directional vision.";
+            return "Capture Enemies: Yes \nAbility: Grants directional vision.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)

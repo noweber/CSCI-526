@@ -2300,7 +2300,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (Triangle Ability)
+  m_text: (Satellite Ability)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
   m_sharedMaterial: {fileID: -2200243765277287928, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
@@ -2435,7 +2435,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (Circle Ability)
+  m_text: (Fighter Ability)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
   m_sharedMaterial: {fileID: -2200243765277287928, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
@@ -3253,7 +3253,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (Circle)
+  m_text: (Fighter)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
   m_sharedMaterial: {fileID: -2200243765277287928, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
@@ -3388,7 +3388,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (Diamond Ability)
+  m_text: (Support Ability)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
   m_sharedMaterial: {fileID: -2200243765277287928, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
@@ -4105,7 +4105,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (Diamond)
+  m_text: (Support)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}
   m_sharedMaterial: {fileID: -2200243765277287928, guid: 91e59cfba20810346914a1481e7aef5d, type: 2}

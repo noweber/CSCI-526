@@ -379,7 +379,7 @@ public class MenuManager : MonoBehaviour
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
             //tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
-            tempOverallObjective.text = "Capture the <color=red>Star</color>!";
+            tempOverallObjective.text = "Find and capture the <color=red>enemy planet</color>!";
             // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }

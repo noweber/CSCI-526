@@ -12,15 +12,15 @@ public abstract class PieceMono : MonoBehaviour
 
 	public string UnitName { get; protected set; }
 
-    public const string Circle = "Circle";
+    public const string Circle = "Fighter";
 
-    public const string Diamond = "Diamond";
+    public const string Diamond = "Support";
 
-    public const string Triangle = "Triangle";
+    public const string Triangle = "Satellite";
 
     public const string Scout = "Scout";
 
-    public const string Base = "Base";
+    public const string Base = "Planet";
 
     [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
     [SerializeField] private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,

@@ -11,7 +11,7 @@ namespace Assets.Scripts.Units
 
         public override string getUnitInfo()
         {
-            return "Can Capture Enemies. When adjacent to Circle, Circle gains increased range.";
+            return "Capture Enemies: Yes \nAbility: When adjacent to a Fighter, that Fighter gains increased movement range.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
