@@ -252,13 +252,14 @@ public class GameManagerChain : MonoBehaviour
         }
         else
         {
+            print("DO HUMANS REMAIN: " + LevelMono.Instance.DoHumansRemain());
             // Normal level's win condition
             if (!LevelMono.Instance.IsEnemyBaseAlive())
             {
                 // TODO: Transition to a win state per open tasks once designed.
                 this.ChangeState(GameStateEnum.Victory);
             }
-            else if (!LevelMono.Instance.IsHumanBaseAlive())
+            else if (!LevelMono.Instance.IsHumanBaseAlive() || !LevelMono.Instance.DoHumansRemain())
             {
                 // TODO: Transition to a lose state.
                 this.ChangeState(GameStateEnum.Loss);
@@ -442,12 +443,12 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Level_One")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelOne());
-                    // MenuManager.Instance.SetPrompt("Level 1");
+                    MenuManager.Instance.SetLevelName("Level One");
                 }
                 else if (SceneName == "Level_Two")
                 {
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
-                    // MenuManager.Instance.SetPrompt("Level 2");
+                    MenuManager.Instance.SetLevelName("Level Two");
                 }
                 else if (SceneName == "Challenge_Circle")
                 {
@@ -458,7 +459,7 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
                     MenuManager.Instance.SetPrompt("Challenge Scout");
-                }
+                } 
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
                 break;

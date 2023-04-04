@@ -612,6 +612,7 @@ public class LevelMono : MonoBehaviour
 
     public bool DoHumansRemain()
     {
+        print("NUMBER HUMAN UNITS " + GetNumberOfUnitsRemainingForPlayer(true));
         return GetNumberOfUnitsRemainingForPlayer(true) > 0;
     }
 
@@ -642,7 +643,7 @@ public class LevelMono : MonoBehaviour
             return 0;
         }
 
-        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && !piece.IsTriangle()) select piece).Count();
+        int result = (from piece in _pieces.Values where (piece.IsHuman() == checkHumanPlayer && !piece.IsTriangle() && !piece.IsBase()) select piece).Count();
         return result;
     }
 
