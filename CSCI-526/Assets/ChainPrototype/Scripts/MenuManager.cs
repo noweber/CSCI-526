@@ -12,7 +12,7 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance { get; private set; }
     
     [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject, 
-        _objectiveContent, _sideObjectiveHeader, _sideObjectiveIcon, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
+        _objectiveContent, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
         _defeatObject, _pointerObject, _gridManagerObject;
     [SerializeField] private TextMeshProUGUI objectiveLevelName;        // Displayed on the top right
 
@@ -322,20 +322,12 @@ public class MenuManager : MonoBehaviour
             MenuManager.Instance.UpdateObjectiveContent();
             _endTurnObject.SetActive(false);
 
-            //Setting side objective off
-            _sideObjectiveHeader.SetActive(false);
-            _sideObjectiveIcon.SetActive(false);
-            _objectiveContent.SetActive(false);
         }
         else
         {
             //_objectiveObject.SetActive(false);
             _endTurnObject.SetActive(true);
 
-            //Setting side objective off
-            _sideObjectiveHeader.SetActive(false);
-            _sideObjectiveIcon.SetActive(false);
-            _objectiveContent.SetActive(false);
         }
         SetVictoryScreen(false);
         //promptObject.SetActive(false);
