@@ -130,6 +130,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5692367027862456497, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367027862456497, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367027862456497, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367027862456497, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_fontColor.b
       value: 1
@@ -162,6 +178,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 67
       objectReference: {fileID: 0}
+    - target: {fileID: 5692367028445150418, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028445150418, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028445150418, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028445150418, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5692367028445150444, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_fontColor.b
       value: 1
@@ -190,6 +222,18 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 494762419}
+    - target: {fileID: 5692367029190480660, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367029190480661, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -327
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367029190480661, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -130
+      objectReference: {fileID: 0}
     - target: {fileID: 5692367029894097676, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_Name
       value: MenuManager
