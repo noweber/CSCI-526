@@ -130,62 +130,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3459937632672835433, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 494762419}
-    - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367027862456503, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 889055179}
-    - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadNextLevel
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Tutorial_Circle_Ability
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028284544184, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -296.12714
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028284544184, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028445150444, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028445150444, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028445150444, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5692367028934716795, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+    - target: {fileID: 5692367028258655691, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5692367029167344274, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 494762419}
+    - target: {fileID: 5692367029204034023, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5692367029894097676, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_Name
       value: MenuManager
@@ -238,14 +198,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5692367029896284214, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6041051497368676175, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7106524d0f6e9b54190aa44519067919, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
 --- !u!1 &228268524
