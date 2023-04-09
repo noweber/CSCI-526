@@ -16,7 +16,7 @@ public class Tile : MonoBehaviour
     [SerializeField] public GameObject _legal;
 
     [SerializeField] public GameObject _fog, _redFog;
-    [SerializeField] private ParticleSystem asteroids;
+    [SerializeField] private ParticleSystem asteroids, asteroidFog;
 
     [SerializeField] private GameObject closeEye, openEye, boot;
 
@@ -117,12 +117,14 @@ public class Tile : MonoBehaviour
         {
             _fog.SetActive(false);
             // asteroids.Stop();
+            asteroidFog.gameObject.SetActive(false);
             asteroids.gameObject.SetActive(false);
         }
         else
         {
             _fog.SetActive(true);
             // asteroids.Play();
+            asteroidFog.gameObject.SetActive(true);
             asteroids.gameObject.SetActive(true);
         }
     }
