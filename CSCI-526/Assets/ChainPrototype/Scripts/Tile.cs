@@ -113,20 +113,24 @@ public class Tile : MonoBehaviour
 
     public void ToggleFog()
     {
-        if (canPlayerSee)
+        if(!LevelMono.Instance.debug)
         {
-            _fog.SetActive(false);
-            // asteroids.Stop();
-            asteroidFog.gameObject.SetActive(false);
-            asteroids.gameObject.SetActive(false);
+            if (canPlayerSee)
+            {
+                _fog.SetActive(false);
+                // asteroids.Stop();
+                asteroidFog.gameObject.SetActive(false);
+                asteroids.gameObject.SetActive(false);
+            }
+            else
+            {
+                _fog.SetActive(true);
+                // asteroids.Play();
+                asteroidFog.gameObject.SetActive(true);
+                asteroids.gameObject.SetActive(true);
+            }
         }
-        else
-        {
-            _fog.SetActive(true);
-            // asteroids.Play();
-            asteroidFog.gameObject.SetActive(true);
-            asteroids.gameObject.SetActive(true);
-        }
+
     }
     
     // DEBUG ONLY

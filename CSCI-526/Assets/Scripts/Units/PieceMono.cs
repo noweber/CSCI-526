@@ -30,6 +30,7 @@ public abstract class PieceMono : MonoBehaviour
 
     public GameObject canMoveObject, cantMoveObject;     // Highlight will be temporary -- change to particles after midterm
 
+    [SerializeField] private GameObject enemySightIndicator;        // Display when the enemy is able to see the player unit
     public abstract string getUnitInfo();
 
 	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
@@ -587,9 +588,23 @@ public abstract class PieceMono : MonoBehaviour
         {
             UpdateCircleIndicator();
         }
-        if(this.IsHuman())      // Red "eye" when in player vision
+        if(!LevelMono.Instance.debug)       // Debug mode will display all units and could bug this
         {
-
+            if (this.IsHuman())      // Red "eye" when player is in enemy vision
+            {
+                if (!this.IsTriangle() && !this.IsBase())
+                {
+                    if (LevelMono.Instance.tiles[new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y)].CanEnemySee())
+                    {
+                        enemySightIndicator.SetActive(true);
+                    }
+                    else
+                    {
+                        enemySightIndicator.SetActive(false);
+                    }
+                }
+            }
         }
+
     }
 }

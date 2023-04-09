@@ -386,3 +386,4 @@ MonoBehaviour:
   buffParticles: {fileID: 0}
   canMoveObject: {fileID: 4336704710664707431}
   cantMoveObject: {fileID: 3698429481844293765}
+  enemySightIndicator: {fileID: 0}
