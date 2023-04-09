@@ -22,62 +22,110 @@ namespace Assets.Scripts.Units
             var pos = this.transform.position;
             int x = (int)pos.x;
             int y = (int)pos.y;
-            var adjacentList = new List<Tuple<int, int>>();
-            adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
-            adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
-            adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
-            adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
-
-            foreach (var adj in adjacentList){
-                if (adj.Item1 >= 0 && adj.Item1 < boardWidth && adj.Item2 >= 0 && adj.Item2 < boardHeight){
-                    var availablePiece = lvlMono.GetPiece(adj);
-                    if (availablePiece != null)
-                    {
-                        if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
-                    }
-                    legalSpots.Add(adj);
-                }
-            }
-
-            for (int i = 0; i < boardWidth; i++)
+            // var adjacentList = new List<Tuple<int, int>>();
+            // adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
+            // adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
+            // adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
+            // adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
+            
+            
+            int maxRange = 2;
+                // left 
+            var range = UnityEngine.Mathf.Min(x, maxRange);
+            for (int i = 1; i <= range; i++)
             {
-                for (int j = 0; j < boardHeight; j++)
+                var availableMove = new Tuple<int, int>(x - i, y);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                 {
-                    //get diagonals - those are ok
-                    if (Mathf.Abs(i - x) == 1 && Mathf.Abs(j - y) == 1)
-                    {
-                        var availableMove = new Tuple<int, int>(i, j);
-                        var availablePiece = lvlMono.GetPiece(availableMove);
-                        if (availablePiece != null)
-                        {
-                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
-                        }
-                        legalSpots.Add(availableMove);
-                    }
-
-                    //get +1 to cardinal directions
-                    if (Mathf.Abs(i - x) == 2 && Mathf.Abs(j - y) == 0)
-                    {
-                        var availableMove = new Tuple<int, int>(i, j);
-                        var availablePiece = lvlMono.GetPiece(availableMove);
-                        if (availablePiece != null)
-                        {
-                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
-                        }
-                        legalSpots.Add(availableMove);
-                    }
-                    if (Mathf.Abs(i - x) == 0 && Mathf.Abs(j - y) == 2)
-                    {
-                        var availableMove = new Tuple<int, int>(i, j);
-                        var availablePiece = lvlMono.GetPiece(availableMove);
-                        if (availablePiece != null)
-                        {
-                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
-                        }
-                        legalSpots.Add(availableMove);
-                    }
+                    break;
                 }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
             }
+
+            // right
+            range = UnityEngine.Mathf.Min(boardWidth - x - 1, maxRange);
+            for (int i = 1; i <= range; i++)
+            {
+                var availableMove = new Tuple<int, int>(x + i, y);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                {
+                    break;
+                }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
+
+            // up
+            range = UnityEngine.Mathf.Min(boardHeight - y - 1, maxRange);
+            for (int j = 1; j <= range; j++)
+            {
+                var availableMove = new Tuple<int, int>(x, y + j);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                {
+                    break;
+                }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
+
+            // down
+            range = UnityEngine.Mathf.Min(y, maxRange);
+            for (int j = 1; j <= range; j++)
+            {
+                var availableMove = new Tuple<int, int>(x, y - j);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                {
+                    break;
+                }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
+
+            // top left
+            if ((x - 1) >= 0 && (y + 1) < boardHeight)
+            {
+                legalSpots.Add(new Tuple<int, int>(x - 1, y + 1));
+            }
+            
+            // bottom left
+            if ((x - 1) >= 0 && (y - 1) >= 0)
+            {
+                legalSpots.Add(new Tuple<int, int>(x - 1, y - 1));
+            }
+
+            // top right
+            if ((x + 1) < boardWidth && (y + 1) < boardHeight)
+            {
+                legalSpots.Add(new Tuple<int, int>(x + 1, y + 1));
+            }
+            
+            // bottom right
+            if ((x + 1) < boardWidth && (y - 1) >= 0)
+            {
+                legalSpots.Add(new Tuple<int, int>(x + 1, y - 1));
+            }
+            
 
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0)
             {

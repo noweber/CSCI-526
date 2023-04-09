@@ -206,7 +206,7 @@ namespace Assets.Scripts.Levels
 
                     if (x == 5 && y == 0)
                     {
-                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                        units.Add(new PieceInfo(position, true, PieceMono.Scout));
                     }
 
                     if (x == 2 && y == 0)

@@ -84,6 +84,26 @@ namespace Assets.Scripts.Units
         {
             return "Capture Enemies: Yes \nAbility: Grants directional vision.";
         }
+        
+        private bool CircleMovementCheck()
+        {
+            var pos = this.transform.position;
+            var adjList = this.AdjacentAllies();
+            var lvlMono = LevelMono.Instance;
+            if (adjList != null)
+            {
+                foreach (Tuple<int, int> coord in adjList)
+                {
+                    //Debug.Log("" + coord.Item1 + " " + coord.Item2);
+                    if (lvlMono.GetPiece(coord) != null && lvlMono.GetPiece(coord).IsDiamond())
+                    {
+                        // Debug.Log("Make Circle move like Queen");
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
@@ -94,26 +114,106 @@ namespace Assets.Scripts.Units
 			int x = (int)pos.x;
 			int y = (int)pos.y;
             var lvlMono = LevelMono.Instance;
+            bool changeMovement = this.CircleMovementCheck();
 
-            //add else block
-            var availableMoves = new List<Tuple<int, int>>();
-            availableMoves.Add(new Tuple<int, int>(x - 1, y));
-            availableMoves.Add(new Tuple<int, int>(x, y - 1));
-            availableMoves.Add(new Tuple<int, int>(x, y + 1));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y));
-            foreach (Tuple<int, int> move in availableMoves)
+            if (changeMovement)
             {
-                if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
+                int maxRange = 2;
+                // left 
+                var range = UnityEngine.Mathf.Min(x, maxRange);
+                for (int i = 1; i <= range; i++)
                 {
-                    if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
+                    var availableMove = new Tuple<int, int>(x - i, y);
+                    var availablePiece = lvlMono.GetPiece(availableMove);
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
-                        continue;
+                        break;
                     }
+                    else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                    {
+                        legalSpots.Add(availableMove);
+                        break;
+                    }
+                    else { legalSpots.Add(availableMove); }
+                }
 
-                    legalSpots.Add(move);
+                // right
+                range = UnityEngine.Mathf.Min(boardWidth - x - 1, maxRange);
+                for (int i = 1; i <= range; i++)
+                {
+                    var availableMove = new Tuple<int, int>(x + i, y);
+                    var availablePiece = lvlMono.GetPiece(availableMove);
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                    {
+                        break;
+                    }
+                    else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                    {
+                        legalSpots.Add(availableMove);
+                        break;
+                    }
+                    else { legalSpots.Add(availableMove); }
+                }
+
+                // up
+                range = UnityEngine.Mathf.Min(boardHeight - y - 1, maxRange);
+                for (int j = 1; j <= range; j++)
+                {
+                    var availableMove = new Tuple<int, int>(x, y + j);
+                    var availablePiece = lvlMono.GetPiece(availableMove);
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                    {
+                        break;
+                    }
+                    else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                    {
+                        legalSpots.Add(availableMove);
+                        break;
+                    }
+                    else { legalSpots.Add(availableMove); }
+                }
+
+                // down
+                range = UnityEngine.Mathf.Min(y, maxRange);
+                for (int j = 1; j <= range; j++)
+                {
+                    var availableMove = new Tuple<int, int>(x, y - j);
+                    var availablePiece = lvlMono.GetPiece(availableMove);
+                    if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                    {
+                        break;
+                    }
+                    else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                    {
+                        legalSpots.Add(availableMove);
+                        break;
+                    }
+                    else { legalSpots.Add(availableMove); }
                 }
             }
-            
+            else
+            {
+                //add else block
+                var availableMoves = new List<Tuple<int, int>>();
+                availableMoves.Add(new Tuple<int, int>(x - 1, y));
+                availableMoves.Add(new Tuple<int, int>(x, y - 1));
+                availableMoves.Add(new Tuple<int, int>(x, y + 1));
+                availableMoves.Add(new Tuple<int, int>(x + 1, y));
+                foreach (Tuple<int, int> move in availableMoves)
+                {
+                    if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
+                    {
+                        if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) ||
+                                                               (lvlMono.GetPiece(move).IsTriangle())))
+                        {
+                            continue;
+                        }
+
+                        legalSpots.Add(move);
+                    }
+                }
+            }
+
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0)
             {
                 // Diamond moves first, circle must not
