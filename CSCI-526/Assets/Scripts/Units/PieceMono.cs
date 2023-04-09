@@ -587,5 +587,9 @@ public abstract class PieceMono : MonoBehaviour
         {
             UpdateCircleIndicator();
         }
+        if(this.IsHuman())      // Red "eye" when in player vision
+        {
+
+        }
     }
 }
