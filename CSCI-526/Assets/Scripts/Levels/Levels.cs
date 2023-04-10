@@ -642,5 +642,77 @@ namespace Assets.Scripts.Levels
                 Units = units
             };
         }
+        
+         public static LoadLevelData LevelThree()
+        {
+            int _width = 9;
+            int _height = 9;
+            List<PieceInfo> units = new List<PieceInfo>();
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    Tuple<int, int> position = new(x, y);
+
+                    if (x == 1 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
+
+                    if (x == 7 && y == 3)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Scout));
+                    }
+
+                    if (x == 4 && y == 4)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Triangle));
+                    }
+
+                    if (x == 0 && y == 0 || x == _width - 1 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                    }
+
+                    if (x == 3 && y == 0 || x == 4 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
+                    if (x == 2 && y == _height - 3 || x == _width - 3 && y == _height - 3)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
+
+                    }
+
+                    if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                    if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Diamond));
+                    }
+
+                    if (x == 3 && y == 7)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 6 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
+                    }
+                }
+            }
+            return new LoadLevelData()
+            {
+                Width = _width,
+                Height = _height,
+                Units = units
+            };
+        }
     }
 }
