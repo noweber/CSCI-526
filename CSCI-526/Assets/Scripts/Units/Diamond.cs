@@ -30,7 +30,7 @@ namespace Assets.Scripts.Units
             
             
             int maxRange = 2;
-                // left 
+            // left 
             var range = UnityEngine.Mathf.Min(x, maxRange);
             for (int i = 1; i <= range; i++)
             {
@@ -102,28 +102,21 @@ namespace Assets.Scripts.Units
                 else { legalSpots.Add(availableMove); }
             }
 
-            // top left
-            if ((x - 1) >= 0 && (y + 1) < boardHeight)
+            var availableMoves = new List<Tuple<int, int>>();
+            availableMoves.Add(new Tuple<int, int>(x - 1, y - 1));
+            availableMoves.Add(new Tuple<int, int>(x - 1, y + 1));
+            availableMoves.Add(new Tuple<int, int>(x + 1, y - 1));
+            availableMoves.Add(new Tuple<int, int>(x + 1, y + 1));
+            foreach (Tuple<int, int> move in availableMoves)
             {
-                legalSpots.Add(new Tuple<int, int>(x - 1, y + 1));
-            }
-            
-            // bottom left
-            if ((x - 1) >= 0 && (y - 1) >= 0)
-            {
-                legalSpots.Add(new Tuple<int, int>(x - 1, y - 1));
-            }
-
-            // top right
-            if ((x + 1) < boardWidth && (y + 1) < boardHeight)
-            {
-                legalSpots.Add(new Tuple<int, int>(x + 1, y + 1));
-            }
-            
-            // bottom right
-            if ((x + 1) < boardWidth && (y - 1) >= 0)
-            {
-                legalSpots.Add(new Tuple<int, int>(x + 1, y - 1));
+                if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
+                {
+                    if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
+                    {
+                        continue;
+                    } 
+                    legalSpots.Add(move);
+                }
             }
             
 
