@@ -717,7 +717,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 16.53, y: -17.47}
+  m_AnchoredPosition: {x: 16.53003, y: -17.470001}
   m_SizeDelta: {x: 1229.58, y: 734.62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5850560054637722060
@@ -951,7 +951,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -10
-  m_Sprite: {fileID: 21300000, guid: 7106524d0f6e9b54190aa44519067919, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 27fd871d1f2f40e4dbabf86647ad4c64, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1274,9 +1274,9 @@ RectTransform:
   m_Father: {fileID: 5692367029190480661}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 194.6364, y: -24.204}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 369.2728, y: 28.408}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5692367027862456502
@@ -2354,10 +2354,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManagerChain, Assembly-CSharp
+      - m_Target: {fileID: 2095665095818425575}
+        m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
         m_MethodName: LoadNextLevel
-        m_Mode: 5
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2722,7 +2722,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -154, y: 65.5}
+  m_AnchoredPosition: {x: -134, y: 87.5}
   m_SizeDelta: {x: 308, y: 131}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5692367028284544190
@@ -2876,9 +2876,9 @@ RectTransform:
   m_Father: {fileID: 5692367029190480661}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 193.88734, y: -127.557556}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 367.7747, y: 178.2991}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5692367028445150445
@@ -3014,7 +3014,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -154, y: 139}
+  m_AnchoredPosition: {x: -134, y: 161}
   m_SizeDelta: {x: 308, y: 130.29999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5692367028541181284
@@ -3314,8 +3314,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2095665095818425575}
         m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
-        m_MethodName: LoadNextLevel
-        m_Mode: 5
+        m_MethodName: LoadSelectedScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4875,12 +4875,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2095665095818425575}
         m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
-        m_MethodName: LoadNextLevel
-        m_Mode: 5
+        m_MethodName: LoadSelectedScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: LevelSelection
           m_BoolArgument: 0
@@ -5481,12 +5481,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2095665095818425575}
         m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
-        m_MethodName: LoadNextLevel
-        m_Mode: 5
+        m_MethodName: LoadSelectedScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: LevelSelection
           m_BoolArgument: 0
@@ -5914,7 +5914,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -291.79068, y: -168.5}
+  m_AnchoredPosition: {x: -333, y: -112}
   m_SizeDelta: {x: -559.5065, y: -172.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5692367029190480670
@@ -7151,12 +7151,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2095665095818425575}
         m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
-        m_MethodName: LoadNextLevel
-        m_Mode: 5
+        m_MethodName: LoadSelectedScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: LevelSelection
           m_BoolArgument: 0
@@ -7285,8 +7285,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2095665095818425575}
         m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
-        m_MethodName: LoadNextLevel
-        m_Mode: 5
+        m_MethodName: LoadSelectedScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
