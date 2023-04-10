@@ -22,7 +22,7 @@ public abstract class PieceMono : MonoBehaviour
 
     public const string Base = "Planet";
 
-    [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
+    // [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
     [SerializeField] private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
                                         nePartPlayer, nePartEnemy, nwPartPlayer, nwPartEnemy, swPartPlayer, swPartEnemy, sePartPlayer, sePartEnemy;
 
@@ -167,72 +167,6 @@ public abstract class PieceMono : MonoBehaviour
 		return false;
 	}
 
-    private void ToggleDiamondParticles(string dir, bool status)
-    {
-        if(this.IsHuman())
-        {
-            switch(dir.ToLower())
-            {
-                case "n":
-                    nPartPlayer.SetActive(true);
-                    break;
-                case "e":
-                    ePartPlayer.SetActive(true);
-                    break;
-                case "w":
-                    wPartPlayer.SetActive(true);
-                    break;
-                case "s":
-                    sPartPlayer.SetActive(true);
-                    break;
-
-                case "ne":
-                    nePartPlayer.SetActive(true);
-                    break;
-                case "nw":
-                    nwPartPlayer.SetActive(true);
-                    break;
-                case "se":
-                    sePartPlayer.SetActive(true);
-                    break;
-                case "sw":
-                    swPartPlayer.SetActive(true);
-                    break;
-            }
-        }
-        else 
-        {
-            switch (dir.ToString().ToLower())
-            {
-                case "n":
-                    nPartEnemy.SetActive(true);
-                    break;
-                case "e":
-                    ePartEnemy.SetActive(true);
-                    break;
-                case "w":
-                    wPartEnemy.SetActive(true);
-                    break;
-                case "s":
-                    sPartEnemy.SetActive(true);
-                    break;
-
-                case "ne":
-                    nePartEnemy.SetActive(true);
-                    break;
-                case "nw":
-                    nwPartEnemy.SetActive(true);
-                    break;
-                case "se":
-                    sePartEnemy.SetActive(true);
-                    break;
-                case "sw":
-                    swPartEnemy.SetActive(true);
-                    break;
-            }
-        }
-    }
-
     private void UpdateDiamondIndicators()        // FOR DIAMOND PIECE
     {
         // Adjacent list from PieceMono
@@ -265,70 +199,62 @@ public abstract class PieceMono : MonoBehaviour
                     {
                         if (ax == x + 1 && ay == y)      // East
                         {
-                            if (!eSupport.activeInHierarchy)
+                            if (!ePartPlayer.activeInHierarchy)
                             {
-                                eSupport.SetActive(true);
-                                ToggleDiamondParticles("e", true);
+                                ePartPlayer.SetActive(true);
                             }
                         }
                         if (ax == x - 1 && ay == y)      // West
                         {
-                            if (!wSupport.activeInHierarchy)
+                            if (!wPartPlayer.activeInHierarchy)
                             {
-                                wSupport.SetActive(true);
-                                ToggleDiamondParticles("w", true);
+                                wPartPlayer.SetActive(true);
                             }
                         }
                         if (ax == x && ay == y + 1)      // North
                         {
-                            if (!nSupport.activeInHierarchy)
+                            if (!nPartPlayer.activeInHierarchy)
                             {
-                                nSupport.SetActive(true);
-                                ToggleDiamondParticles("n", true);
+                                nPartPlayer.SetActive(true);
 
                             }
                         }
                         if (ax == x && ay == y - 1)      // South
                         {
-                            if (!sSupport.activeInHierarchy)
+                            if (!sPartPlayer.activeInHierarchy)
                             {
-                                sSupport.SetActive(true);
-                                ToggleDiamondParticles("s", true);
+                                sPartPlayer.SetActive(true);
 
                             }
                         }
 
                         if (ax == x + 1 && ay == y + 1)      // NorthEast
                         {
-                            if (!neSupport.activeInHierarchy)
+                            if (!nePartPlayer.activeInHierarchy)
                             {
-                                neSupport.SetActive(true);
-                                ToggleDiamondParticles("ne", true);
+                                nePartPlayer.SetActive(true);
 
                             }
                         }
                         if (ax == x - 1 && ay == y + 1)      // NorthWest
                         {
-                            if (!nwSupport.activeInHierarchy)
+                            if (!nwPartPlayer.activeInHierarchy)
                             {
-                                nwSupport.SetActive(true);
-                                ToggleDiamondParticles("nw", true);
+                                nwPartPlayer.SetActive(true);
                             }
                         }
                         if (ax == x - 1 && ay == y - 1)      // SouthWest
                         {
-                            if (!swSupport.activeInHierarchy)
+                            if (!swPartPlayer.activeInHierarchy)
                             {
-                                swSupport.SetActive(true);
-                                ToggleDiamondParticles("sw", true);
+                                swPartPlayer.SetActive(true);
                             }
                         }
                         if (ax == x + 1 && ay == y - 1)      // SouthEast
                         {
-                            if (!seSupport.activeInHierarchy)
+                            if (!sePartPlayer.activeInHierarchy)
                             {
-                                seSupport.SetActive(true);
-                                ToggleDiamondParticles("se", true);
+                                sePartPlayer.SetActive(true);
                             }
                         }
                     }
@@ -337,36 +263,36 @@ public abstract class PieceMono : MonoBehaviour
                     {
                         if (ax == x + 1 && ay == y)      // East
                         {
-                            eSupport.SetActive(false);
+                            ePartPlayer.SetActive(false);
                         }
                         if (ax == x - 1 && ay == y)      // West
                         {
-                            wSupport.SetActive(false);
+                            wPartPlayer.SetActive(false);
                         }
                         if (ax == x && ay == y + 1)      // North
                         {
-                            nSupport.SetActive(false);
+                            nPartPlayer.SetActive(false);
                         }
                         if (ax == x && ay == y - 1)      // South
                         {
-                            sSupport.SetActive(false);
+                            sPartPlayer.SetActive(false);
                         }
 
                         if (ax == x + 1 && ay == y + 1)      // NorthEast
                         {
-                            neSupport.SetActive(false);
+                            nePartPlayer.SetActive(false);
                         }
                         if (ax == x - 1 && ay == y + 1)      // NorthWest
                         {
-                            nwSupport.SetActive(false);
+                            nwPartPlayer.SetActive(false);
                         }
                         if (ax == x - 1 && ay == y - 1)      // SouthWest
                         {
-                            swSupport.SetActive(false);
+                            swPartPlayer.SetActive(false);
                         }
                         if (ax == x + 1 && ay == y - 1)      // SouthEast
                         {
-                            seSupport.SetActive(false);
+                            sePartPlayer.SetActive(false);
                         }
                     }
                 }
@@ -378,70 +304,60 @@ public abstract class PieceMono : MonoBehaviour
                     {
                         if (ax == x + 1 && ay == y)      // East
                         {
-                            if (!eSupport.activeInHierarchy)
+                            if (!ePartEnemy.activeInHierarchy)
                             {
-                                eSupport.SetActive(true);
-                                ToggleDiamondParticles("e", true);
+                                ePartEnemy.SetActive(true);
                             }
                         }
                         if (ax == x - 1 && ay == y)      // West
                         {
-                            if (!wSupport.activeInHierarchy)
+                            if (!wPartEnemy.activeInHierarchy)
                             {
-                                wSupport.SetActive(true);
-                                ToggleDiamondParticles("w", true);
+                                wPartEnemy.SetActive(true);
                             }
                         }
                         if (ax == x && ay == y + 1)      // North
                         {
-                            if (!nSupport.activeInHierarchy)
+                            if (!nPartEnemy.activeInHierarchy)
                             {
-                                nSupport.SetActive(true);
-                                ToggleDiamondParticles("n", true);
-
+                                nPartEnemy.SetActive(true);
                             }
                         }
                         if (ax == x && ay == y - 1)      // South
                         {
-                            if (!sSupport.activeInHierarchy)
+                            if (!sPartEnemy.activeInHierarchy)
                             {
-                                sSupport.SetActive(true);
-                                ToggleDiamondParticles("s", true);
-
+                                sPartEnemy.SetActive(true);
                             }
                         }
 
                         if (ax == x + 1 && ay == y + 1)      // NorthEast
                         {
-                            if (!neSupport.activeInHierarchy)
+                            if (!nePartEnemy.activeInHierarchy)
                             {
-                                neSupport.SetActive(true);
-                                ToggleDiamondParticles("ne", true);
+                                nePartEnemy.SetActive(true);
 
                             }
                         }
                         if (ax == x - 1 && ay == y + 1)      // NorthWest
                         {
-                            if (!nwSupport.activeInHierarchy)
+                            if (!nwPartEnemy.activeInHierarchy)
                             {
-                                nwSupport.SetActive(true);
-                                ToggleDiamondParticles("nw", true);
+                                nwPartEnemy.SetActive(true);
                             }
                         }
                         if (ax == x - 1 && ay == y - 1)      // SouthWest
                         {
-                            if (!swSupport.activeInHierarchy)
+                            if (!swPartEnemy.activeInHierarchy)
                             {
-                                swSupport.SetActive(true);
-                                ToggleDiamondParticles("sw", true);
+                                swPartEnemy.SetActive(true);
                             }
                         }
                         if (ax == x + 1 && ay == y - 1)      // SouthEast
                         {
-                            if (!seSupport.activeInHierarchy)
+                            if (!sePartEnemy.activeInHierarchy)
                             {
-                                seSupport.SetActive(true);
-                                ToggleDiamondParticles("se", true);
+                                sePartEnemy.SetActive(true);
                             }
                         }
                     }
@@ -450,36 +366,36 @@ public abstract class PieceMono : MonoBehaviour
                     {
                         if (ax == x + 1 && ay == y)      // East
                         {
-                            eSupport.SetActive(false);
+                            ePartEnemy.SetActive(false);
                         }
                         if (ax == x - 1 && ay == y)      // West
                         {
-                            wSupport.SetActive(false);
+                            wPartEnemy.SetActive(false);
                         }
                         if (ax == x && ay == y + 1)      // North
                         {
-                            nSupport.SetActive(false);
+                            nPartEnemy.SetActive(false);
                         }
                         if (ax == x && ay == y - 1)      // South
                         {
-                            sSupport.SetActive(false);
+                            sPartEnemy.SetActive(false);
                         }
 
                         if (ax == x + 1 && ay == y + 1)      // NorthEast
                         {
-                            neSupport.SetActive(false);
+                            nePartEnemy.SetActive(false);
                         }
                         if (ax == x - 1 && ay == y + 1)      // NorthWest
                         {
-                            nwSupport.SetActive(false);
+                            nwPartEnemy.SetActive(false);
                         }
                         if (ax == x - 1 && ay == y - 1)      // SouthWest
                         {
-                            swSupport.SetActive(false);
+                            swPartEnemy.SetActive(false);
                         }
                         if (ax == x + 1 && ay == y - 1)      // SouthEast
                         {
-                            seSupport.SetActive(false);
+                            sePartEnemy.SetActive(false);
                         }
                     }
                 }
@@ -490,51 +406,43 @@ public abstract class PieceMono : MonoBehaviour
             {
                 if (ax == x + 1 && ay == y)      // East
                 {
-                    eSupport.SetActive(false);
-                    ePartEnemy.SetActive(false);
+                    ePartEnemy.SetActive(false); ;
                     ePartPlayer.SetActive(false);
                 }
                 if (ax == x - 1 && ay == y)      // West
                 {
-                    wSupport.SetActive(false);
-                    wPartEnemy.SetActive(false);
+                    wPartEnemy.SetActive(false); ;
                     wPartPlayer.SetActive(false);
                 }
                 if (ax == x && ay == y + 1)      // North
                 {
-                    nSupport.SetActive(false);
-                    nPartEnemy.SetActive(false);
+                    nPartEnemy.SetActive(false); ;
                     nPartPlayer.SetActive(false);
                 }
                 if (ax == x && ay == y - 1)      // South
                 {
-                    sSupport.SetActive(false);
-                    sPartEnemy.SetActive(false);
+                    sPartEnemy.SetActive(false); ;
                     sPartPlayer.SetActive(false);
                 }
 
                 if (ax == x + 1 && ay == y + 1)      // NorthEast
                 {
-                    neSupport.SetActive(false);
-                    nePartEnemy.SetActive(false);
+                    nePartEnemy.SetActive(false); ;
                     nePartPlayer.SetActive(false);
                 }
                 if (ax == x - 1 && ay == y + 1)      // NorthWest
                 {
-                    nwSupport.SetActive(false);
-                    nwPartEnemy.SetActive(false);
+                    nwPartEnemy.SetActive(false); ;
                     nwPartPlayer.SetActive(false);
                 }
                 if (ax == x - 1 && ay == y - 1)      // SouthWest
                 {
-                    swSupport.SetActive(false);
-                    swPartEnemy.SetActive(false);
+                    swPartEnemy.SetActive(false); ;
                     swPartPlayer.SetActive(false);
                 }
                 if (ax == x + 1 && ay == y - 1)      // SouthEast
                 {
-                    seSupport.SetActive(false);
-                    sePartEnemy.SetActive(false);
+                    sePartEnemy.SetActive(false); ;
                     sePartPlayer.SetActive(false);
                 }
             }
