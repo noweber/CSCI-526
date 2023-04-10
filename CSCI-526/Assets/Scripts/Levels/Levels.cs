@@ -655,12 +655,12 @@ namespace Assets.Scripts.Levels
                 {
                     Tuple<int, int> position = new(x, y);
 
-                    if (x == 1 && y == 0)
+                    if (x == 4 && y == 3)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Base));
                     }
 
-                    if (x == 7 && y == 3)
+                    if (x == 1 && y == 2 || x == 5 && y == 2)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Scout));
                     }
@@ -670,38 +670,34 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, true, PieceMono.Triangle));
                     }
 
-                    if (x == 0 && y == 0 || x == _width - 1 && y == 0)
+                    if (x == 3 && y == 4 || x == 5 && y == 3)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Circle));
                     }
 
-                    if (x == 3 && y == 0 || x == 4 && y == 0)
+                    if (x == 3 && y == 3)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                     }
 
-                    if (x == 2 && y == _height - 3 || x == _width - 3 && y == _height - 3)
-                    {
-                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
-
-                    }
-
-                    if (x == 0 && y == _height - 1 || x == _width - 1 && y == _height - 1)
+                   
+                    // enemies
+                    if (x == 0 && y == _height - 1 || x == _width - 1 && y == 0 || x == _width - 1 && y == 5)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Circle));
                     }
 
-                    if (x == 3 && y == _height - 1 || x == 4 && y == _height - 1)
+                    if (x == 3 && y == _height - 2)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Diamond));
                     }
 
-                    if (x == 3 && y == 7)
+                    if (x == 4 && y == _height - 1)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Scout));
                     }
 
-                    if (x == 6 && y == 9)
+                    if (x == 7 && y == _height - 1)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Base));
                     }

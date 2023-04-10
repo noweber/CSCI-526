@@ -450,6 +450,11 @@ public class GameManagerChain : MonoBehaviour
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
                     MenuManager.Instance.SetLevelName("Level Two");
                 }
+				else if (SceneName == "Level_Three")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.LevelThree());
+                    MenuManager.Instance.SetLevelName("Level Three");
+                }
                 else if (SceneName == "Challenge_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
