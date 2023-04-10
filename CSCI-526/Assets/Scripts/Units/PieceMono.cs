@@ -259,8 +259,9 @@ public abstract class PieceMono : MonoBehaviour
             {
                 if(this.IsHuman())
                 {
-                    // Adjacent ally is circle
-                    if (LevelMono.Instance.GetPiece(coord).IsCircle())
+                    // Adjacent ally is circle or scout
+                    if ((LevelMono.Instance.GetPiece(coord).IsCircle() || LevelMono.Instance.GetPiece(coord).IsScout())
+                        && LevelMono.Instance.tiles[coord].CanPlayerSee())
                     {
                         if (ax == x + 1 && ay == y)      // East
                         {
@@ -331,7 +332,7 @@ public abstract class PieceMono : MonoBehaviour
                             }
                         }
                     }
-                    // Adjacent ally is not circle
+                    // Adjacent ally is not circle or scout
                     else
                     {
                         if (ax == x + 1 && ay == y)      // East
@@ -371,8 +372,9 @@ public abstract class PieceMono : MonoBehaviour
                 }
                 else
                 {
-                    // Adjacent ally is circle
-                    if (LevelMono.Instance.GetPiece(coord).IsCircle() && LevelMono.Instance.tiles[coord].CanPlayerSee())
+                    // Adjacent ally is circle or scout
+                    if ((LevelMono.Instance.GetPiece(coord).IsCircle() || LevelMono.Instance.GetPiece(coord).IsScout())
+                        && LevelMono.Instance.tiles[coord].CanPlayerSee())
                     {
                         if (ax == x + 1 && ay == y)      // East
                         {
@@ -443,7 +445,7 @@ public abstract class PieceMono : MonoBehaviour
                             }
                         }
                     }
-                    // Adjacent ally is not circle
+                    // Adjacent ally is not circle or scout
                     else
                     {
                         if (ax == x + 1 && ay == y)      // East
@@ -539,7 +541,7 @@ public abstract class PieceMono : MonoBehaviour
         }
     }
 
-    private void UpdateCircleIndicator()
+    private void UpdateBuffIndicator()
     {
         if(this.IsHuman())
         {
@@ -555,7 +557,7 @@ public abstract class PieceMono : MonoBehaviour
                 buffParticles.Stop();
             }
         }
-        else        // ENEMY CIRCLE
+        else        // ENEMY
         {
             if(this.IsAdjacentToAllyDiamond())
             {
@@ -584,9 +586,9 @@ public abstract class PieceMono : MonoBehaviour
             UpdateDiamondIndicators();
         }
 
-        if(this.IsCircle())
+        if(this.IsCircle() || this.IsScout())
         {
-            UpdateCircleIndicator();
+            UpdateBuffIndicator();
         }
         if(!LevelMono.Instance.debug)       // Debug mode will display all units and could bug this
         {
