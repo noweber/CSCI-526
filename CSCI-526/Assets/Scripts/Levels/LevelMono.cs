@@ -106,6 +106,17 @@ public class LevelMono : MonoBehaviour
         return playerPieces;
     }
 
+	public List<Tuple<int, int>> GetPlayerCoords()
+    {
+        List<Tuple<int, int>> playerPieces = new List<Tuple<int, int>>();
+        foreach (var piece in _pieces)
+        {
+            if (piece.Value.IsHuman() && !piece.Value.IsBase() && !piece.Value.IsTriangle()) { playerPieces.Add(piece.Key); }
+        }
+
+        return playerPieces;
+    }
+
     public List<PieceMono> GetEnemyPieces()
     {
         List<PieceMono> enemyPieces = new List<PieceMono>();

@@ -238,6 +238,17 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
+	private bool IsAUnitCapture(Tuple<int, int> destination)
+    {
+        //if the destination move would be a capturing move, check if it is a base
+        if (IsACapturingMove(destination))
+        {
+            return (LevelMono.Instance.GetPiece(destination).IsCircle() || LevelMono.Instance.GetPiece(destination).IsDiamond() || LevelMono.Instance.GetPiece(destination).IsScout());
+        }
+
+        return false;
+    }
+
     private int PickBestMove(List<Tuple<int, int>> moves)
     {
         var lvlMono = LevelMono.Instance;
@@ -256,14 +267,62 @@ public class EnemyAI : MonoBehaviour
                 }
             }
         }
+		// captures that can be done in current turn
         foreach (var index in capturingMoves)
         {
             bestMove = index;
             //prioritize base captures
             if (IsABaseCapture(moves[index]))
                 break;
+			if (IsAUnitCapture(moves[index]))
+				break;
         }
 
+		// find nearest human unit within vision
+		if (bestMove == -1)
+        {
+            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
+            for (int i = 0; i < moves.Count; i++)
+            {
+                //move towards the base if you can see it
+                foreach (var player in lvlMono.GetPlayerCoords())
+                {
+                    if (lvlMono.GetTile(player).CanEnemySee())
+                    {
+                        var distance = CalculateDistance(player, moves[i]);
+                        if (distance < minDistance)
+                        {
+                            bestMove = i;
+                            minDistance = distance;
+                        }
+                    }
+                }
+            }
+        }
+
+		// go towards satellites if nothing near to capture
+		if (bestMove == -1)
+        {
+            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
+            for (int i = 0; i < moves.Count; i++)
+            {
+                //move towards the towers
+                foreach (var tower in lvlMono.towerLocations)
+                {
+                    if (lvlMono.GetPiece(tower).IsHuman())
+                    {
+                        var distance = CalculateDistance(tower, moves[i]);
+                        if (distance < minDistance)
+                        {
+                            bestMove = i;
+                            minDistance = distance;
+                        }
+                    }
+                }
+            }
+        }
+
+		// capture planet
         if (bestMove == -1)
         {
             minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
@@ -275,27 +334,6 @@ public class EnemyAI : MonoBehaviour
                     if (lvlMono.GetTile(playerBase).CanEnemySee())
                     {
                         var distance = CalculateDistance(playerBase, moves[i]);
-                        if (distance < minDistance)
-                        {
-                            bestMove = i;
-                            minDistance = distance;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (bestMove == -1)
-        {
-            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
-            for (int i = 0; i < moves.Count; i++)
-            {
-                //move towards the towers
-                foreach (var tower in lvlMono.towerLocations)
-                {
-                    if (lvlMono.GetPiece(tower).IsHuman())
-                    {
-                        var distance = CalculateDistance(tower, moves[i]);
                         if (distance < minDistance)
                         {
                             bestMove = i;
