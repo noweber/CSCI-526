@@ -322,10 +322,10 @@ public class EnemyAI : MonoBehaviour
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectBestPiece();
-        if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
+        /*if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
         {
             aiCoord = SelectRandomPiece();
-        }
+        }*/
 
         if (aiCoord != null)
         {
@@ -335,6 +335,7 @@ public class EnemyAI : MonoBehaviour
             Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
             
             // Decide movement logic 
+			/*
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
                 // Random AI (with adjacent capture logic)
@@ -355,17 +356,18 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                Debug.Log("OPTIMAL AI");
-                if (aiPiece.IsDiamond() && ShouldMoveDiamondToCircle(aiCoord))
-                {
-                    destination = MoveDiamondToCircle(aiCoord, moves);
-                }
-                else
-                {
-                    int index = PickBestMove(moves);
-                    destination = moves[index];
-                }
+			*/
+            Debug.Log("OPTIMAL AI");
+            if (aiPiece.IsDiamond() && ShouldMoveDiamondToCircle(aiCoord))
+            {
+                destination = MoveDiamondToCircle(aiCoord, moves);
             }
+            else
+            {
+                int index = PickBestMove(moves);
+                destination = moves[index];
+            }
+            // }
             
             // Make AI movement based on above logic
             if (lvlMono.MovePiece(destination))

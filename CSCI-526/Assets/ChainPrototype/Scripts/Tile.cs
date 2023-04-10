@@ -163,7 +163,7 @@ public class Tile : MonoBehaviour
 
     public bool CanEnemySee()
     {
-        return this.canEnemySee;
+        return this.canEnemySee || LevelMono.Instance.debug;
     }
     
 /*    public void ShowVisibility()
