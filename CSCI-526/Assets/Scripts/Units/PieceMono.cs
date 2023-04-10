@@ -194,8 +194,7 @@ public abstract class PieceMono : MonoBehaviour
                 if(this.IsHuman())
                 {
                     // Adjacent ally is circle or scout
-                    if ((LevelMono.Instance.GetPiece(coord).IsCircle() || LevelMono.Instance.GetPiece(coord).IsScout())
-                        && LevelMono.Instance.tiles[coord].CanPlayerSee())
+                    if (LevelMono.Instance.GetPiece(coord).IsCircle() || LevelMono.Instance.GetPiece(coord).IsScout())
                     {
                         if (ax == x + 1 && ay == y)      // East
                         {
@@ -336,7 +335,6 @@ public abstract class PieceMono : MonoBehaviour
                             if (!nePartEnemy.activeInHierarchy)
                             {
                                 nePartEnemy.SetActive(true);
-
                             }
                         }
                         if (ax == x - 1 && ay == y + 1)      // NorthWest
@@ -487,6 +485,34 @@ public abstract class PieceMono : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if(this.IsDiamond())
+        {
+            if (this.IsHuman())      // Disable all enemy indicators
+            {
+                nPartEnemy.SetActive(false);
+                ePartEnemy.SetActive(false);
+                wPartEnemy.SetActive(false);
+                sPartEnemy.SetActive(false);
+                nwPartEnemy.SetActive(false);
+                nePartEnemy.SetActive(false);
+                swPartEnemy.SetActive(false);
+                sePartEnemy.SetActive(false);
+            }
+            else                    // Disable all player indicators
+            {
+                nPartPlayer.SetActive(false);
+                ePartPlayer.SetActive(false);
+                wPartPlayer.SetActive(false);
+                sPartPlayer.SetActive(false);
+                nwPartPlayer.SetActive(false);
+                nePartPlayer.SetActive(false);
+                swPartPlayer.SetActive(false);
+                sePartPlayer.SetActive(false);
+            }
+        }
+    }
     private void Update()
     {
         if(this.IsDiamond())

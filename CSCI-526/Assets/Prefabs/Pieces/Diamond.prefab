@@ -69268,14 +69268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2c5428618023384a90786ac98e1d5b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nSupport: {fileID: 3120656805728450576}
-  wSupport: {fileID: 2715814102974027801}
-  sSupport: {fileID: 4605592281272087176}
-  eSupport: {fileID: 928520696113264767}
-  nwSupport: {fileID: 2522979306977622371}
-  neSupport: {fileID: 7239580506414969956}
-  swSupport: {fileID: 1323556968430634128}
-  seSupport: {fileID: 1581511666677643677}
   nPartPlayer: {fileID: 2875921926071614952}
   nPartEnemy: {fileID: 3442741399728262718}
   wPartPlayer: {fileID: 4192958994943795147}
