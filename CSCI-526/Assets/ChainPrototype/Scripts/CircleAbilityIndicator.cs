@@ -15,7 +15,7 @@ public class CircleAbilityIndicator : MonoBehaviour
 
     private IEnumerator FadeAway()
     {
-        for(float i = 1; i >= 0; i -= Time.deltaTime * fadeSpeed)
+        for (float i = 1; i >= 0; i -= Time.deltaTime * fadeSpeed)
         {
             plus1.color = new Color(startColor.r, startColor.g, startColor.b, i);
             plus2.color = new Color(startColor.r, startColor.g, startColor.b, i);
@@ -40,6 +40,6 @@ public class CircleAbilityIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

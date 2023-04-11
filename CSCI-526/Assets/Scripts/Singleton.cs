@@ -10,7 +10,7 @@ namespace Assets.Scripts
         {
             if (Instance == null)
             {
-                Instance = (T) this;
+                Instance = (T)this;
             }
             else
             {

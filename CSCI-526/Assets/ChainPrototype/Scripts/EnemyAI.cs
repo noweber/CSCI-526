@@ -105,7 +105,7 @@ public class EnemyAI : Singleton<EnemyAI>
                 }
             }
         }
-        
+
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
@@ -132,7 +132,7 @@ public class EnemyAI : Singleton<EnemyAI>
         }
 
         //TODO: add clause to check if circle is close to enemy - move if so
-        
+
 
         return false;
     }
@@ -163,8 +163,8 @@ public class EnemyAI : Singleton<EnemyAI>
             foreach (var move in moves)
             {
                 if (added)
-                { 
-                    break; 
+                {
+                    break;
                 }
                 if (IsACapturingMove(move))
                 {
@@ -177,11 +177,11 @@ public class EnemyAI : Singleton<EnemyAI>
         return canCapture;
     }
 
-    private Tuple<int,int> MoveDiamondToCircle(Tuple<int, int> diamond, List<Tuple<int, int>> moves)
+    private Tuple<int, int> MoveDiamondToCircle(Tuple<int, int> diamond, List<Tuple<int, int>> moves)
     {
         var circles = GetCircles();
         int index = Random.Range(0, moves.Count);
-        int minDistance = LevelMono.Instance.GetHeight()*LevelMono.Instance.GetWidth();
+        int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
         for (int i = 0; i < moves.Count; i++)
         {
             foreach (var circle in circles)
@@ -204,7 +204,7 @@ public class EnemyAI : Singleton<EnemyAI>
     }
 
     public void PerformTurn()
-    {       
+    {
         if (!isRunning)
             StartCoroutine(DelayEnemyStart());
         // PerformTurn();
@@ -236,7 +236,7 @@ public class EnemyAI : Singleton<EnemyAI>
         return false;
     }
 
-	private bool IsAUnitCapture(Tuple<int, int> destination)
+    private bool IsAUnitCapture(Tuple<int, int> destination)
     {
         //if the destination move would be a capturing move, check if it is a base
         if (IsACapturingMove(destination))
@@ -254,7 +254,7 @@ public class EnemyAI : Singleton<EnemyAI>
         int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
 
         List<int> capturingMoves = new List<int>();
-        for (int i=0; i<moves.Count; i++)
+        for (int i = 0; i < moves.Count; i++)
         {
             //If AI has visibility, consider this move for capture
             if (lvlMono.GetTile(moves[i]).CanEnemySee())
@@ -265,19 +265,19 @@ public class EnemyAI : Singleton<EnemyAI>
                 }
             }
         }
-		// captures that can be done in current turn
+        // captures that can be done in current turn
         foreach (var index in capturingMoves)
         {
             bestMove = index;
             //prioritize base captures
             if (IsABaseCapture(moves[index]))
                 break;
-			if (IsAUnitCapture(moves[index]))
-				break;
+            if (IsAUnitCapture(moves[index]))
+                break;
         }
 
-		// find nearest human unit within vision
-		if (bestMove == -1)
+        // find nearest human unit within vision
+        if (bestMove == -1)
         {
             minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
             for (int i = 0; i < moves.Count; i++)
@@ -298,8 +298,8 @@ public class EnemyAI : Singleton<EnemyAI>
             }
         }
 
-		// go towards satellites if nothing near to capture
-		if (bestMove == -1)
+        // go towards satellites if nothing near to capture
+        if (bestMove == -1)
         {
             minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
             for (int i = 0; i < moves.Count; i++)
@@ -320,7 +320,7 @@ public class EnemyAI : Singleton<EnemyAI>
             }
         }
 
-		// capture planet
+        // capture planet
         if (bestMove == -1)
         {
             minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
@@ -369,9 +369,9 @@ public class EnemyAI : Singleton<EnemyAI>
             lvlMono.SelectPiece(aiPiece, aiCoord);
             var moves = aiPiece.LegalMoves(lvlMono.GetWidth(), lvlMono.GetHeight());
             Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
-            
+
             // Decide movement logic 
-			/*
+            /*
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
                 // Random AI (with adjacent capture logic)
@@ -404,7 +404,7 @@ public class EnemyAI : Singleton<EnemyAI>
                 destination = moves[index];
             }
             // }
-            
+
             // Make AI movement based on above logic
             if (lvlMono.MovePiece(destination))
             {

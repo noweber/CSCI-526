@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Assets.Scripts.Units
 {
     public class Circle : PieceMono
-    { 
+    {
         //public string unitInfo = "Upon Capture, Circle can move again.";
         public override string getUnitInfo()
         {
@@ -17,9 +17,9 @@ namespace Assets.Scripts.Units
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
             //Circle moves like a king (delta(x) + delta(y) <= 2)
-			var pos = this.transform.position;
-			int x = (int)pos.x;
-			int y = (int)pos.y;
+            var pos = this.transform.position;
+            int x = (int)pos.x;
+            int y = (int)pos.y;
             bool changeMovement = this.CircleMovementCheck();
             var lvlMono = LevelMono.Instance;
 
@@ -31,7 +31,7 @@ namespace Assets.Scripts.Units
                 for (int i = 1; i <= range; i++)
                 {
                     var availableMove = new Tuple<int, int>(x - i, y);
-					var availablePiece = lvlMono.GetPiece(availableMove);
+                    var availablePiece = lvlMono.GetPiece(availableMove);
                     if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                     {
                         break;
@@ -171,7 +171,7 @@ namespace Assets.Scripts.Units
                         legalSpots.Add(availableMove);
                         break;
                     }
-					
+
                     else { legalSpots.Add(availableMove); }
                 }
 
@@ -195,7 +195,7 @@ namespace Assets.Scripts.Units
                         if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
                         {
                             continue;
-                        } 
+                        }
                         legalSpots.Add(move);
                     }
                 }
@@ -225,7 +225,7 @@ namespace Assets.Scripts.Units
             {
                 // Free form movement for last capture.
             }
-            
+
             // var triangleLegal = this.inTriangleRange();
             // if (triangleLegal)
             // {
@@ -236,7 +236,7 @@ namespace Assets.Scripts.Units
 
         private bool CircleMovementCheck()
         {
-			var pos = this.transform.position;
+            var pos = this.transform.position;
             var adjList = this.AdjacentAllies();
             var lvlMono = LevelMono.Instance;
             if (adjList != null)
@@ -254,7 +254,7 @@ namespace Assets.Scripts.Units
             return false;
         }
 
-		public override List<Tuple<int, int>> GetVisibleArea(int range)
+        public override List<Tuple<int, int>> GetVisibleArea(int range)
         {
             /*
             var lvlMono = LevelMono.Instance;

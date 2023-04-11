@@ -25,7 +25,7 @@ namespace Assets.Scripts.Units
 
         private bool TriangleAbilityCheck()
         {
-			var pos = this.transform.position;
+            var pos = this.transform.position;
             var adjList = this.AdjacentAllies();
             var lvlMono = LevelMono.Instance;
             if (adjList != null)
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Units
             }
             return false;
         }
-        
+
         public override List<Tuple<int, int>> GetVisibleArea(int range)
         {
             var lvlMono = LevelMono.Instance;
@@ -63,7 +63,7 @@ namespace Assets.Scripts.Units
                     }
                 }
             }
-            
+
             return visibleArea;
         }
 

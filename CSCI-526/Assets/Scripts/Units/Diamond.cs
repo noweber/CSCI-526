@@ -27,8 +27,8 @@ namespace Assets.Scripts.Units
             // adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
             // adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
             // adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
-            
-            
+
+
             int maxRange = 2;
             // left 
             var range = UnityEngine.Mathf.Min(x, maxRange);
@@ -114,11 +114,11 @@ namespace Assets.Scripts.Units
                     if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
                     {
                         continue;
-                    } 
+                    }
                     legalSpots.Add(move);
                 }
             }
-            
+
 
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0)
             {

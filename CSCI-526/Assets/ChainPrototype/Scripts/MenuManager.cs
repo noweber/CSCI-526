@@ -10,16 +10,17 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    
-    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject, 
-        _objectiveContent, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
+
+    [SerializeField]
+    private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject,
+        _objectiveContent, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject,
         _defeatObject, _pointerObject, _gridManagerObject;
     [SerializeField] private TextMeshProUGUI objectiveLevelName;        // Displayed on the top right
 
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public GameObject _playerTurnIndicator, _enemyTurnIndicator;
-    
+
     // Prompt variables
     [SerializeField] private GameObject promptObject;
     [SerializeField] private TextMeshProUGUI levelName, levelDescription;       // Displayed in the prompt popup
@@ -241,7 +242,7 @@ public class MenuManager : MonoBehaviour
         _victoryObject.SetActive(status);
 
         //Set every other UI elements to inactive
-        if(status)
+        if (status)
         {
             _turnInfoObject.SetActive(false);
             _selectedUnitInfo.SetActive(false);
@@ -283,12 +284,12 @@ public class MenuManager : MonoBehaviour
 
     private IEnumerator FingerBlink()
     {
-        while(_pointerObject.activeInHierarchy == true)
+        while (_pointerObject.activeInHierarchy == true)
         {
-         _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);      // Visible
-         yield return new WaitForSeconds(0.5f);
-         _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 0);      // Invisible
-         yield return new WaitForSeconds(0.5f);
+            _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);      // Visible
+            yield return new WaitForSeconds(0.5f);
+            _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 0);      // Invisible
+            yield return new WaitForSeconds(0.5f);
         }
 
         yield return null;

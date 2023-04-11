@@ -6,11 +6,11 @@ using UnityEngine.Tilemaps;
 
 public abstract class PieceMono : MonoBehaviour
 {
-	protected bool isHuman;
-	
-	protected bool hasMoved;
+    protected bool isHuman;
 
-	public string UnitName { get; protected set; }
+    protected bool hasMoved;
+
+    public string UnitName { get; protected set; }
 
     public const string Circle = "Fighter";
 
@@ -23,7 +23,8 @@ public abstract class PieceMono : MonoBehaviour
     public const string Base = "Planet";
 
     // [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
-    [SerializeField] private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
+    [SerializeField]
+    private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
                                         nePartPlayer, nePartEnemy, nwPartPlayer, nwPartEnemy, swPartPlayer, swPartEnemy, sePartPlayer, sePartEnemy;
 
     [SerializeField] private ParticleSystem buffParticles;      // Circle indicator when it is buffed by Diamond
@@ -33,44 +34,44 @@ public abstract class PieceMono : MonoBehaviour
     [SerializeField] private GameObject enemySightIndicator;        // Display when the enemy is able to see the player unit
     public abstract string getUnitInfo();
 
-	public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
+    public void SetHuman(bool isHuman) { this.isHuman = isHuman; }
 
-	public void SetName(string name) { this.UnitName = name; }
+    public void SetName(string name) { this.UnitName = name; }
 
-	public void SetMoveState(bool state) { this.hasMoved = state; }
+    public void SetMoveState(bool state) { this.hasMoved = state; }
 
-	public bool IsEnemyOf(PieceMono piece) { return this.IsHuman() != piece.IsHuman(); }
+    public bool IsEnemyOf(PieceMono piece) { return this.IsHuman() != piece.IsHuman(); }
 
-	public bool CanMove() { return !this.hasMoved; }
+    public bool CanMove() { return !this.hasMoved; }
 
-	public bool IsHuman() { return this.isHuman; }
+    public bool IsHuman() { return this.isHuman; }
 
-	public bool IsCircle() { return string.Equals(this.UnitName, Circle); }
+    public bool IsCircle() { return string.Equals(this.UnitName, Circle); }
 
-	public bool IsTriangle() { return string.Equals(this.UnitName, Triangle); }
+    public bool IsTriangle() { return string.Equals(this.UnitName, Triangle); }
 
-	public bool IsDiamond() { return string.Equals(this.UnitName, Diamond); }
+    public bool IsDiamond() { return string.Equals(this.UnitName, Diamond); }
 
-	public bool IsScout() { return string.Equals(this.UnitName, Scout); }
+    public bool IsScout() { return string.Equals(this.UnitName, Scout); }
 
     public bool IsBase() { return string.Equals(this.UnitName, Base); }
 
-	public string GetName() { return this.UnitName; }
+    public string GetName() { return this.UnitName; }
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
-    
-    public abstract List<Tuple<int, int>> GetVisibleArea(int range=-1);
+
+    public abstract List<Tuple<int, int>> GetVisibleArea(int range = -1);
 
     public void UpdateLocation(Vector3 location) { this.transform.position = location; }
-    
-	protected List<Tuple<int, int>> AdjacentAllies()
-	{
-		var lvlMono = LevelMono.Instance;
-		var pos = this.transform.position;
-		int x = (int)pos.x;
-		int y = (int)pos.y;
 
-		var adjacentList = new List<Tuple<int, int>>();
+    protected List<Tuple<int, int>> AdjacentAllies()
+    {
+        var lvlMono = LevelMono.Instance;
+        var pos = this.transform.position;
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+
+        var adjacentList = new List<Tuple<int, int>>();
         adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
         adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
         adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
@@ -81,91 +82,91 @@ public abstract class PieceMono : MonoBehaviour
         adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); //left down diag
 
         var adjAlly = new List<Tuple<int, int>>();
-		
+
         foreach (Tuple<int, int> coord in adjacentList)
         {
-			if (lvlMono.GetPiece(coord) != null && !this.IsEnemyOf(lvlMono.GetPiece(coord)))
+            if (lvlMono.GetPiece(coord) != null && !this.IsEnemyOf(lvlMono.GetPiece(coord)))
             {
-            	adjAlly.Add(coord);
+                adjAlly.Add(coord);
             }
-        }    
-        return adjAlly;
-	}
-	
-	protected List<Tuple<int, int>> AdjacentEnemies()
-	{
-		var lvlMono = LevelMono.Instance;
-		var pos = this.transform.position;
-		int x = (int)pos.x;
-		int y = (int)pos.y;
-
-		var adjacentList = new List<Tuple<int, int>>();
-		adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
-		adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
-		adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
-		adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
-		adjacentList.Add(new Tuple<int, int>(x + 1, y + 1)); //right up diag
-		adjacentList.Add(new Tuple<int, int>(x - 1, y + 1)); //left  up diag
-		adjacentList.Add(new Tuple<int, int>(x + 1, y - 1)); //right down diag
-		adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); //left down diag
-
-		var adjAlly = new List<Tuple<int, int>>();
-		
-		foreach (Tuple<int, int> coord in adjacentList)
-		{
-			if (lvlMono.GetPiece(coord) != null && this.IsEnemyOf(lvlMono.GetPiece(coord)))
-			{
-				adjAlly.Add(coord);
-			}
-		}    
-		return adjAlly;
-	}
-
-	// Checks if piece gameobject is near a triangle
-	public Tuple<int, int> InTowerRange()
-    {
-		var lvlMono = LevelMono.Instance;
-		var pos = this.transform.position;
-		int x = (int)pos.x;
-		int y = (int)pos.y;
-		
-		var adjacentList = this.AdjacentEnemies();
-
-        foreach (Tuple<int, int> coord in adjacentList)
-        {
-			if (lvlMono.GetPiece(coord).IsTriangle())
-            {	
-            	return coord;
-        	}
-		}    
-        return null;
-	}
-
-	public bool IsAdjacentToAllyCircle()
-    {
-		var list = this.AdjacentAllies();
-		foreach (var ally in list)
-        {
-			if (LevelMono.Instance.GetPiece(ally).IsCircle())
-            {
-				return true;
-			}
         }
-		return false;
+        return adjAlly;
     }
 
-	public bool IsAdjacentToAllyDiamond()
-	{
-		var list = this.AdjacentAllies();
-		foreach (var ally in list)
-		{
-			if (LevelMono.Instance.GetPiece(ally).IsDiamond())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    protected List<Tuple<int, int>> AdjacentEnemies()
+    {
+        var lvlMono = LevelMono.Instance;
+        var pos = this.transform.position;
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+
+        var adjacentList = new List<Tuple<int, int>>();
+        adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
+        adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
+        adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
+        adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
+        adjacentList.Add(new Tuple<int, int>(x + 1, y + 1)); //right up diag
+        adjacentList.Add(new Tuple<int, int>(x - 1, y + 1)); //left  up diag
+        adjacentList.Add(new Tuple<int, int>(x + 1, y - 1)); //right down diag
+        adjacentList.Add(new Tuple<int, int>(x - 1, y - 1)); //left down diag
+
+        var adjAlly = new List<Tuple<int, int>>();
+
+        foreach (Tuple<int, int> coord in adjacentList)
+        {
+            if (lvlMono.GetPiece(coord) != null && this.IsEnemyOf(lvlMono.GetPiece(coord)))
+            {
+                adjAlly.Add(coord);
+            }
+        }
+        return adjAlly;
+    }
+
+    // Checks if piece gameobject is near a triangle
+    public Tuple<int, int> InTowerRange()
+    {
+        var lvlMono = LevelMono.Instance;
+        var pos = this.transform.position;
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+
+        var adjacentList = this.AdjacentEnemies();
+
+        foreach (Tuple<int, int> coord in adjacentList)
+        {
+            if (lvlMono.GetPiece(coord).IsTriangle())
+            {
+                return coord;
+            }
+        }
+        return null;
+    }
+
+    public bool IsAdjacentToAllyCircle()
+    {
+        var list = this.AdjacentAllies();
+        foreach (var ally in list)
+        {
+            if (LevelMono.Instance.GetPiece(ally).IsCircle())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsAdjacentToAllyDiamond()
+    {
+        var list = this.AdjacentAllies();
+        foreach (var ally in list)
+        {
+            if (LevelMono.Instance.GetPiece(ally).IsDiamond())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void UpdateDiamondIndicators()        // FOR DIAMOND PIECE
     {
@@ -191,7 +192,7 @@ public abstract class PieceMono : MonoBehaviour
 
             if (LevelMono.Instance.GetPiece(coord) != null && !this.IsEnemyOf(LevelMono.Instance.GetPiece(coord)))
             {
-                if(this.IsHuman())
+                if (this.IsHuman())
                 {
                     // Adjacent ally is circle or scout
                     if (LevelMono.Instance.GetPiece(coord).IsCircle() || LevelMono.Instance.GetPiece(coord).IsScout())
@@ -397,7 +398,7 @@ public abstract class PieceMono : MonoBehaviour
                         }
                     }
                 }
-                
+
             }
             // Empty adjacent tile
             else
@@ -449,11 +450,11 @@ public abstract class PieceMono : MonoBehaviour
 
     private void UpdateBuffIndicator()
     {
-        if(this.IsHuman())
+        if (this.IsHuman())
         {
-            if(this.IsAdjacentToAllyDiamond())
+            if (this.IsAdjacentToAllyDiamond())
             {
-                if(!buffParticles.isPlaying)
+                if (!buffParticles.isPlaying)
                 {
                     buffParticles.Play();
                 }
@@ -465,11 +466,11 @@ public abstract class PieceMono : MonoBehaviour
         }
         else        // ENEMY
         {
-            if(this.IsAdjacentToAllyDiamond())
+            if (this.IsAdjacentToAllyDiamond())
             {
-                foreach(var ally in this.AdjacentAllies())
+                foreach (var ally in this.AdjacentAllies())
                 {
-                    if(LevelMono.Instance.GetPiece(ally).IsDiamond() && LevelMono.Instance.tiles[ally].CanPlayerSee())
+                    if (LevelMono.Instance.GetPiece(ally).IsDiamond() && LevelMono.Instance.tiles[ally].CanPlayerSee())
                     {
                         if (!buffParticles.isPlaying)
                         {
@@ -487,7 +488,7 @@ public abstract class PieceMono : MonoBehaviour
 
     private void Start()
     {
-        if(this.IsDiamond())
+        if (this.IsDiamond())
         {
             if (this.IsHuman())      // Disable all enemy indicators
             {
@@ -515,16 +516,16 @@ public abstract class PieceMono : MonoBehaviour
     }
     private void Update()
     {
-        if(this.IsDiamond())
+        if (this.IsDiamond())
         {
             UpdateDiamondIndicators();
         }
 
-        if(this.IsCircle() || this.IsScout())
+        if (this.IsCircle() || this.IsScout())
         {
             UpdateBuffIndicator();
         }
-        if(!LevelMono.Instance.debug)       // Debug mode will display all units and could bug this
+        if (!LevelMono.Instance.debug)       // Debug mode will display all units and could bug this
         {
             if (this.IsHuman())      // Red "eye" when player is in enemy vision
             {

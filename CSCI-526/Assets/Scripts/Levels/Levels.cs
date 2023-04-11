@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Levels
 {
-    public class Levels 
-    { 
-        
+    public class Levels
+    {
+
         /// <summary>
         /// A method representing the tutorial level's data.
         /// </summary>
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Levels
                 Units = units
             };
         }
-        
+
         public static LoadLevelData TutorialCircle()
         {
             int _width = 7;
@@ -108,7 +108,7 @@ namespace Assets.Scripts.Levels
                 {
                     var position = new Tuple<int, int>(x, y);
 
-                    if (x==1 && y == 0)
+                    if (x == 1 && y == 0)
                     {
                         //Add Player Base
                         units.Add(new PieceInfo(position, true, PieceMono.Base));
@@ -157,11 +157,11 @@ namespace Assets.Scripts.Levels
                 {
                     var position = new Tuple<int, int>(x, y);
 
-                    if (x==0 && y == 0)
+                    if (x == 0 && y == 0)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Base));
                     }
-               
+
                     if (x == 2 && y == 2)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Diamond));
@@ -308,10 +308,10 @@ namespace Assets.Scripts.Levels
                 {
                     var position = new Tuple<int, int>(x, y);
 
-					// Player pieces
+                    // Player pieces
                     if (x == 2 && y == 0)
                     {
-                        
+
                         units.Add(new PieceInfo(position, true, PieceMono.Base));
                     }
 
@@ -325,12 +325,12 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, true, PieceMono.Circle));
                     }
 
-					if (x == 0 && y == 2)
+                    if (x == 0 && y == 2)
                     {
                         units.Add(new PieceInfo(position, true, PieceMono.Scout));
                     }
 
-					// Enemy pieces
+                    // Enemy pieces
                     if ((x == 2 && y == 7) || (x == 2 && y == 2))
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Triangle));
@@ -396,7 +396,7 @@ namespace Assets.Scripts.Levels
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Circle));
                     }
-                    
+
                     if (x == 2 && y == 5)
                     {
                         units.Add(new PieceInfo(position, false, PieceMono.Triangle));
@@ -642,8 +642,8 @@ namespace Assets.Scripts.Levels
                 Units = units
             };
         }
-        
-         public static LoadLevelData LevelThree()
+
+        public static LoadLevelData LevelThree()
         {
             int _width = 9;
             int _height = 9;
@@ -680,7 +680,7 @@ namespace Assets.Scripts.Levels
                         units.Add(new PieceInfo(position, true, PieceMono.Diamond));
                     }
 
-                   
+
                     // enemies
                     if (x == 0 && y == _height - 1 || x == _width - 1 && y == 0 || x == _width - 1 && y == 5)
                     {

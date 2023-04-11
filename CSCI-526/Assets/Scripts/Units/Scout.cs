@@ -60,7 +60,7 @@ namespace Assets.Scripts.Units
                 downArrow.SetActive(false);
                 leftArrow.SetActive(false);
                 rightArrow.SetActive(true);
-            } 
+            }
             else if (y - destination.Item2 > 0)
             {
                 Debug.Log("GOING DOWN");
@@ -84,7 +84,7 @@ namespace Assets.Scripts.Units
         {
             return "Capture Enemies: Yes \nAbility: Grants directional vision.";
         }
-        
+
         private bool CircleMovementCheck()
         {
             var pos = this.transform.position;
@@ -110,9 +110,9 @@ namespace Assets.Scripts.Units
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
 
             //Circle moves like a king (delta(x) + delta(y) <= 2)
-			var pos = this.transform.position;
-			int x = (int)pos.x;
-			int y = (int)pos.y;
+            var pos = this.transform.position;
+            int x = (int)pos.x;
+            int y = (int)pos.y;
             var lvlMono = LevelMono.Instance;
             bool changeMovement = this.CircleMovementCheck();
 
@@ -237,7 +237,7 @@ namespace Assets.Scripts.Units
             {
                 // Free form movement for last capture.
             }
-            
+
             return legalSpots;
         }
 
@@ -276,11 +276,11 @@ namespace Assets.Scripts.Units
                     {
                         for (int j = 1; j < Math.Max(i + 1, 2); j++)
                         {
-                            if (lvlMono.CheckOutOfBounds(x+i, y - j))
+                            if (lvlMono.CheckOutOfBounds(x + i, y - j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x + i, y - j));
                             }
-                            if (lvlMono.CheckOutOfBounds(x+i, y+j))
+                            if (lvlMono.CheckOutOfBounds(x + i, y + j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x + i, y + j));
                             }
@@ -289,18 +289,18 @@ namespace Assets.Scripts.Units
                         {
                             visibleArea.Add(new Tuple<int, int>(x + i, y));
                         }
-                    }                    
+                    }
                     break;
                 case Direction.Down:
                     for (int j = 0; j < range; j++)
                     {
                         for (int i = 1; i < Math.Max(j + 1, 2); i++)
                         {
-                            if (lvlMono.CheckOutOfBounds(x-i, y - j))
+                            if (lvlMono.CheckOutOfBounds(x - i, y - j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x - i, y - j));
                             }
-                            if (lvlMono.CheckOutOfBounds(x+i, y - j))
+                            if (lvlMono.CheckOutOfBounds(x + i, y - j))
                             {
                                 visibleArea.Add(new Tuple<int, int>(x + i, y - j));
                             }
@@ -336,10 +336,11 @@ namespace Assets.Scripts.Units
             visibleArea.Add(new Tuple<int, int>(x, y));
             return visibleArea;
         }
-        
+
     }
 
-    public enum Direction {
+    public enum Direction
+    {
         Up = 0,
         Right = 1,
         Down = 2,
