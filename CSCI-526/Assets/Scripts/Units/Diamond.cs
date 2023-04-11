@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Piece;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,16 +21,9 @@ namespace Assets.Scripts.Units
             var pos = this.transform.position;
             int x = (int)pos.x;
             int y = (int)pos.y;
-            // var adjacentList = new List<Tuple<int, int>>();
-            // adjacentList.Add(new Tuple<int, int>(x + 1, y)); //right
-            // adjacentList.Add(new Tuple<int, int>(x - 1, y)); //left
-            // adjacentList.Add(new Tuple<int, int>(x, y + 1)); //up
-            // adjacentList.Add(new Tuple<int, int>(x, y - 1)); //down
-
-
             int maxRange = 2;
             // left 
-            var range = UnityEngine.Mathf.Min(x, maxRange);
+            var range = Mathf.Min(x, maxRange);
             for (int i = 1; i <= range; i++)
             {
                 var availableMove = new Tuple<int, int>(x - i, y);
@@ -49,7 +41,7 @@ namespace Assets.Scripts.Units
             }
 
             // right
-            range = UnityEngine.Mathf.Min(boardWidth - x - 1, maxRange);
+            range = Mathf.Min(boardWidth - x - 1, maxRange);
             for (int i = 1; i <= range; i++)
             {
                 var availableMove = new Tuple<int, int>(x + i, y);
@@ -67,7 +59,7 @@ namespace Assets.Scripts.Units
             }
 
             // up
-            range = UnityEngine.Mathf.Min(boardHeight - y - 1, maxRange);
+            range = Mathf.Min(boardHeight - y - 1, maxRange);
             for (int j = 1; j <= range; j++)
             {
                 var availableMove = new Tuple<int, int>(x, y + j);
@@ -85,7 +77,7 @@ namespace Assets.Scripts.Units
             }
 
             // down
-            range = UnityEngine.Mathf.Min(y, maxRange);
+            range = Mathf.Min(y, maxRange);
             for (int j = 1; j <= range; j++)
             {
                 var availableMove = new Tuple<int, int>(x, y - j);
@@ -102,11 +94,13 @@ namespace Assets.Scripts.Units
                 else { legalSpots.Add(availableMove); }
             }
 
-            var availableMoves = new List<Tuple<int, int>>();
-            availableMoves.Add(new Tuple<int, int>(x - 1, y - 1));
-            availableMoves.Add(new Tuple<int, int>(x - 1, y + 1));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y - 1));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y + 1));
+            var availableMoves = new List<Tuple<int, int>>
+            {
+                new Tuple<int, int>(x - 1, y - 1),
+                new Tuple<int, int>(x - 1, y + 1),
+                new Tuple<int, int>(x + 1, y - 1),
+                new Tuple<int, int>(x + 1, y + 1)
+            };
             foreach (Tuple<int, int> move in availableMoves)
             {
                 if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
@@ -136,14 +130,6 @@ namespace Assets.Scripts.Units
             {
                 legalSpots.Clear();
             }
-
-
-            // var Position = new Tuple<int, int>(x, y);
-            // var triangleLegal = inTriangleRange(Position);
-            // if (triangleLegal != null)
-            // {                
-            // }
-
             return legalSpots;
         }
 

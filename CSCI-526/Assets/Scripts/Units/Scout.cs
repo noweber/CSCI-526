@@ -1,4 +1,3 @@
-using Assets.Scripts.Piece;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -94,10 +93,8 @@ namespace Assets.Scripts.Units
             {
                 foreach (Tuple<int, int> coord in adjList)
                 {
-                    //Debug.Log("" + coord.Item1 + " " + coord.Item2);
                     if (lvlMono.GetPiece(coord) != null && lvlMono.GetPiece(coord).IsDiamond())
                     {
-                        // Debug.Log("Make Circle move like Queen");
                         return true;
                     }
                 }
@@ -108,8 +105,6 @@ namespace Assets.Scripts.Units
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
-
-            //Circle moves like a king (delta(x) + delta(y) <= 2)
             var pos = this.transform.position;
             int x = (int)pos.x;
             int y = (int)pos.y;

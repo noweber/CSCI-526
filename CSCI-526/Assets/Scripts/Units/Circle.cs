@@ -1,12 +1,10 @@
-﻿using Assets.Scripts.Piece;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.Units
 {
     public class Circle : PieceMono
     {
-        //public string unitInfo = "Upon Capture, Circle can move again.";
         public override string getUnitInfo()
         {
             return "Capture Enemies: Yes \nAbility: Upon successful capture, Fighter can move again.";
@@ -15,8 +13,6 @@ namespace Assets.Scripts.Units
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
             List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
-
-            //Circle moves like a king (delta(x) + delta(y) <= 2)
             var pos = this.transform.position;
             int x = (int)pos.x;
             int y = (int)pos.y;
@@ -225,12 +221,6 @@ namespace Assets.Scripts.Units
             {
                 // Free form movement for last capture.
             }
-
-            // var triangleLegal = this.inTriangleRange();
-            // if (triangleLegal)
-            // {
-            // }
-
             return legalSpots;
         }
 
@@ -243,10 +233,8 @@ namespace Assets.Scripts.Units
             {
                 foreach (Tuple<int, int> coord in adjList)
                 {
-                    //Debug.Log("" + coord.Item1 + " " + coord.Item2);
                     if (lvlMono.GetPiece(coord) != null && lvlMono.GetPiece(coord).IsDiamond())
                     {
-                        // Debug.Log("Make Circle move like Queen");
                         return true;
                     }
                 }
@@ -256,36 +244,7 @@ namespace Assets.Scripts.Units
 
         public override List<Tuple<int, int>> GetVisibleArea(int range)
         {
-            /*
-            var lvlMono = LevelMono.Instance;
-            var pos = this.transform.position;
-            int x = (int)pos.x;
-            int y = (int)pos.y;
-            List<Tuple<int, int>> visibleArea = new List<Tuple<int, int>>();
-            var availableMoves = new List<Tuple<int, int>>();
-            availableMoves.Add(new Tuple<int, int>(x, y));
-            availableMoves.Add(new Tuple<int, int>(x - 1, y - 1));
-            availableMoves.Add(new Tuple<int, int>(x - 1, y));
-            availableMoves.Add(new Tuple<int, int>(x - 1, y + 1));
-            availableMoves.Add(new Tuple<int, int>(x, y - 1));
-            availableMoves.Add(new Tuple<int, int>(x, y + 1));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y - 1));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y));
-            availableMoves.Add(new Tuple<int, int>(x + 1, y + 1));
-            foreach (Tuple<int, int> move in availableMoves)
-            {
-                if (move.Item1 >= 0 && move.Item1 < lvlMono.GetWidth() && move.Item2 >= 0 && move.Item2 < lvlMono.GetHeight())
-                {
-                    if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
-                    {
-                        continue;
-                    }
-                    visibleArea.Add(move);
-                }
-            }
-            */
-            List<Tuple<int, int>> visibleArea = new List<Tuple<int, int>>();
-            return visibleArea;
+            return new List<Tuple<int, int>>();
         }
     }
 }
