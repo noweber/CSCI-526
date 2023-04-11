@@ -7,14 +7,14 @@ public class SceneTransition : MonoBehaviour
 {
     public List<string> sceneNames;
 
-    public void LoadSelectedScene(int inputIndex)
+    public void LoadSelectedScene(int sceneIndex)
     {
-        SceneManager.LoadScene(sceneNames[inputIndex]);
+        SceneManager.LoadScene(sceneIndex);
     }
 
-    public void LoadNextLevel(string inputLevelName)
+    public void LoadNextLevel()
     {
-        SceneManager.LoadScene(inputLevelName);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void RestartLevel()

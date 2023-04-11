@@ -335,8 +335,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 210b696434086434dabdc861711a0b45, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: d7c003f055c4d7042a56119f4af0a5e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -386,3 +386,4 @@ MonoBehaviour:
   buffParticles: {fileID: 0}
   canMoveObject: {fileID: 4336704710664707431}
   cantMoveObject: {fileID: 3698429481844293765}
+  enemySightIndicator: {fileID: 0}

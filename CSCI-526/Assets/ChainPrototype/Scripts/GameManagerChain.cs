@@ -6,12 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using Assets.Scripts.Analytics;
-using UnityEngine.UIElements;
+using Assets.Scripts;
 
-public class GameManagerChain : MonoBehaviour
+public class GameManagerChain : Singleton<GameManagerChain>
 {
-    public static GameManagerChain Instance;
-
     public GameStateEnum GameStateEnum;
 
     /// <summary>
@@ -105,9 +103,9 @@ public class GameManagerChain : MonoBehaviour
         return "AI";
     }
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         SceneName = SceneManager.GetActiveScene().name;
         movesMade = 0;
         TotalMoves = 0;
@@ -240,7 +238,7 @@ public class GameManagerChain : MonoBehaviour
         //movesMade += amount;
 
         // Check win condition
-    	if (SceneName == "Challenge_Circle")
+        if (SceneName == "Challenge_Circle")
         {
             // Challenge Circle specific win condition
             Debug.Log("TOTAL MOVES: " + TotalMoves);
@@ -279,18 +277,22 @@ public class GameManagerChain : MonoBehaviour
             */
         }
     }
-    
-    public bool IsPlayerTurnOver() {
+
+    public bool IsPlayerTurnOver()
+    {
         var playerPieces = LevelMono.Instance.GetPlayerPieces();
-        foreach (var piece in playerPieces) {
+        foreach (var piece in playerPieces)
+        {
             if (!piece.IsTriangle() && !piece.IsBase() && piece.CanMove() == true) { return false; }
         }
         return true;
     }
 
-    public bool IsEnemyTurnOver() {
+    public bool IsEnemyTurnOver()
+    {
         var enemyPieces = LevelMono.Instance.GetEnemyPieces();
-        foreach (var piece in enemyPieces) {
+        foreach (var piece in enemyPieces)
+        {
             if (!piece.IsTriangle() && piece.CanMove() == true) { return false; }
         }
         return true;
@@ -423,7 +425,7 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Tutorial_Diamond_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamondAbility());
-                    MenuManager.Instance.SetPrompt("Support Ability Tutorial", "Supports extend a fighter's movement when next to one. Move one of your <color=blue>supports</color> near one of your <color=blue>fighters</color> to reach the <color=red>enemy planet</color> quickly.");
+                    MenuManager.Instance.SetPrompt("Support Ability Tutorial", "Supports extend an ally Scout or Fighter's movement when next to one. Move one of your <color=blue>supports</color> near your <color=blue>scout</color> or <color=blue>fighter</color> to reach the <color=red>enemy planet</color> quicker.");
                 }
                 else if (SceneName == "Tutorial_Scout_Ability")
                 {
@@ -450,6 +452,11 @@ public class GameManagerChain : MonoBehaviour
                     LevelMono.Instance.LoadLevel(Levels.LevelTwo());
                     MenuManager.Instance.SetLevelName("Level Two");
                 }
+                else if (SceneName == "Level_Three")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.LevelThree());
+                    MenuManager.Instance.SetLevelName("Level Three");
+                }
                 else if (SceneName == "Challenge_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
@@ -459,7 +466,7 @@ public class GameManagerChain : MonoBehaviour
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeScout());
                     MenuManager.Instance.SetPrompt("Challenge Scout");
-                } 
+                }
                 StartCoroutine(FadeMovableAlpha());     // Start the blinking timer for movable units here
                 MenuManager.Instance.SetVictoryScreen(false);
                 break;

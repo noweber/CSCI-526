@@ -85,7 +85,7 @@ public class Analytics : MonoBehaviour
         form.AddField("entry.346810973", countOfCirclePiecesMoved);
         form.AddField("entry.1119668788", countOfDiamondPiecesMoved);
         form.AddField("entry.1498362014", countOfScoutPiecesMoved);
-        form.AddField("entry.1649735813", countOfPiecesMovedByTypeJson); 
+        form.AddField("entry.1649735813", countOfPiecesMovedByTypeJson);
         form.AddField("entry.617707412", replayDataJson);
         return PostAnalyticsForm(form, EndOfLevelUrl);
     }

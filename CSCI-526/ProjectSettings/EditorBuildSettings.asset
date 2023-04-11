@@ -12,24 +12,6 @@ EditorBuildSettings:
     path: Assets/ChainPrototype/Scenes/LevelSelection.unity
     guid: 4d3b227a07e094b48a4fb786b1c5f4dc
   - enabled: 1
-    path: Assets/ChainPrototype/Scenes/Archive/TutorialLevel.unity
-    guid: 5807e4acbd4384d789e6e85706a8d86c
-  - enabled: 1
-    path: Assets/ChainPrototype/Scenes/Archive/TutorialFogOfWar.unity
-    guid: 54385e1a0d04beb49858852e02efa0e4
-  - enabled: 1
-    path: Assets/ChainPrototype/Scenes/Level_One.unity
-    guid: a5fc7124fe9e747c6b220966cffad0fb
-  - enabled: 1
-    path: Assets/ChainPrototype/Scenes/Level_Two.unity
-    guid: 7034c7386f03c4d0d80876a3ba28eed4
-  - enabled: 1
-    path: Assets/ChainPrototype/Scenes/Archive/Challenge_Circle.unity
-    guid: ad724729185724c138078e762bb37225
-  - enabled: 1
-    path: Assets/ChainPrototype/Scenes/Archive/Challenge_Scout.unity
-    guid: 1e4d3accb4a414e3db5da8be649197d3
-  - enabled: 1
     path: Assets/ChainPrototype/Scenes/Tutorial_Circle.unity
     guid: 59cef077e2e3a304784982de5a1fba3d
   - enabled: 1
@@ -47,4 +29,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ChainPrototype/Scenes/Tutorial_Triangle_Ability.unity
     guid: 53896dbf018522247861a0d4533b9947
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/Level_One.unity
+    guid: a5fc7124fe9e747c6b220966cffad0fb
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/Level_Two.unity
+    guid: 7034c7386f03c4d0d80876a3ba28eed4
+  - enabled: 1
+    path: Assets/ChainPrototype/Scenes/Level_Three.unity
+    guid: 748a1cc219dbe445b9ced48cb096768e
   m_configObjects: {}

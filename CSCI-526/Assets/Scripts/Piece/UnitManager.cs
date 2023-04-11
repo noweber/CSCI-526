@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -28,7 +27,6 @@ public class UnitManager : MonoBehaviour
             var randomPrefab = GetRandomUnit<PieceMono>(Alignment.Player);
             var spawnedHero = Instantiate(randomPrefab);
             var randomSpawnTile = WorldMapController.Instance.GetRandomSpawnTile();
-            //randomSpawnTile.SetUnitOccupant(spawnedHero);
         }
     }
 
@@ -41,7 +39,6 @@ public class UnitManager : MonoBehaviour
             var randomPrefab = GetRandomUnit<PieceMono>(Alignment.Enemy);
             var spawnedEnemy = Instantiate(randomPrefab);
             var randomSpawnTile = WorldMapController.Instance.GetRandomSpawnTile();
-            //randomSpawnTile.SetUnitOccupant(spawnedEnemy);
         }
     }
 
@@ -53,13 +50,10 @@ public class UnitManager : MonoBehaviour
     public void SetSelectedHero(PieceMono hero)
     {
         SelectedHero = hero;
-        //Prototype2MenuManager.Instance.ShowSelectedHero(hero);
     }
 
     public void SetSelectedEnemy(PieceMono enemy)
     {
         SelectedEnemy = enemy;
-        //Prototype2MenuManager.Instance.ShowSelectedEnemy(enemy);
     }
-
 }

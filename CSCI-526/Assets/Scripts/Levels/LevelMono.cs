@@ -87,9 +87,9 @@ public class LevelMono : MonoBehaviour
         List<Tuple<int, int>> enemyPieces = new List<Tuple<int, int>>();
         foreach (var piece in _pieces)
         {
-            if (!piece.Value.IsHuman() && !piece.Value.IsTriangle() && !piece.Value.IsBase()) 
-            { 
-                enemyPieces.Add(piece.Key); 
+            if (!piece.Value.IsHuman() && !piece.Value.IsTriangle() && !piece.Value.IsBase())
+            {
+                enemyPieces.Add(piece.Key);
             }
         }
         return enemyPieces;
@@ -101,6 +101,17 @@ public class LevelMono : MonoBehaviour
         foreach (var piece in _pieces)
         {
             if (piece.Value.IsHuman()) { playerPieces.Add(piece.Value); }
+        }
+
+        return playerPieces;
+    }
+
+    public List<Tuple<int, int>> GetPlayerCoords()
+    {
+        List<Tuple<int, int>> playerPieces = new List<Tuple<int, int>>();
+        foreach (var piece in _pieces)
+        {
+            if (piece.Value.IsHuman() && !piece.Value.IsBase() && !piece.Value.IsTriangle()) { playerPieces.Add(piece.Key); }
         }
 
         return playerPieces;
@@ -534,7 +545,7 @@ public class LevelMono : MonoBehaviour
             // CAPTURE TAKES PLACE HERE
             // TODO: Implement intercepting capture
             Destroy(this.GetPiece(coord).gameObject);
-            if(this.selectedPiece.IsHuman()) { tile.PlayEnemyExplosion(); }     // Human capturing enemy
+            if (this.selectedPiece.IsHuman()) { tile.PlayEnemyExplosion(); }     // Human capturing enemy
             else { tile.PlayPlayerExplosion(); }        // Enemy capturing human
             //this.selectedPiece.gameObject.SetActive(true);
             captured = true;
@@ -585,7 +596,7 @@ public class LevelMono : MonoBehaviour
 
 
         // Render vision
-        if (!this.debug )
+        if (!this.debug)
         {
             if (captured)
             {
