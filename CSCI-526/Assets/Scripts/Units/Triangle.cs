@@ -1,7 +1,5 @@
-﻿using Assets.Scripts.Piece;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Scripts.Units
 {
@@ -9,40 +7,14 @@ namespace Assets.Scripts.Units
     {
         public override string getUnitInfo()
         {
-            return "Cannot move. Grants a large amount of vision.";
+            return "Capture Enemies: No \nAbility: Grants a large amount of vision to its owner.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
         {
-            List<Tuple<int, int>> legalSpots = new List<Tuple<int, int>>();
-            var pos = this.transform.position;
-            if (this.TriangleAbilityCheck())
-            {
-                // MenuManager.Instance.ShowAbilityButton();
-            }
-            return legalSpots;
+            return new List<Tuple<int, int>>();
         }
 
-        private bool TriangleAbilityCheck()
-        {
-			var pos = this.transform.position;
-            var adjList = this.AdjacentAllies();
-            var lvlMono = LevelMono.Instance;
-            if (adjList != null)
-            {
-                foreach (Tuple<int, int> coord in adjList)
-                {
-                    if (lvlMono.GetPiece(coord) != null && lvlMono.GetPiece(coord).IsCircle())// && string.Equals(lvlModel.TryGetUnit(coord).Name(), UnitType.Circle.ToString()))
-                    {
-                        Debug.Log("Set Triangle Ability True");
-                        //return true;
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        
         public override List<Tuple<int, int>> GetVisibleArea(int range)
         {
             var lvlMono = LevelMono.Instance;
@@ -63,9 +35,8 @@ namespace Assets.Scripts.Units
                     }
                 }
             }
-            
+
             return visibleArea;
         }
-
     }
 }

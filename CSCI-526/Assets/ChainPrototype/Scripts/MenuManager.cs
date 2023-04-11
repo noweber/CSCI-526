@@ -10,18 +10,20 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance { get; private set; }
-    
-    [SerializeField] private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject, 
-        _objectiveContent, _sideObjectiveHeader, _sideObjectiveIcon, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject, 
+
+    [SerializeField]
+    private GameObject _turnInfoObject, _selectedUnitInfo, _abilityUseObject, _endTurnObject, _objectiveObject,
+        _objectiveContent, _mainObjectiveHeader, _overallObjectiveContent, _slackObject, _pauseObject, _victoryObject,
         _defeatObject, _pointerObject, _gridManagerObject;
-   
+    [SerializeField] private TextMeshProUGUI objectiveLevelName;        // Displayed on the top right
+
     [SerializeField] private TextMeshProUGUI unitInfo, unitAbility;     // Text components of Unit game object
 
     public GameObject _playerTurnIndicator, _enemyTurnIndicator;
-    
+
     // Prompt variables
     [SerializeField] private GameObject promptObject;
-    [SerializeField] private TextMeshProUGUI levelName, levelDescription;
+    [SerializeField] private TextMeshProUGUI levelName, levelDescription;       // Displayed in the prompt popup
 
     public MenuManager()
     {
@@ -49,6 +51,7 @@ public class MenuManager : MonoBehaviour
     public void SetLevelName(string name)
     {
         levelName.text = name;
+        objectiveLevelName.text = name;
     }
     public void SetLevelDescription(string description)
     {
@@ -67,11 +70,14 @@ public class MenuManager : MonoBehaviour
         if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human)
         {
             _turnInfoObject.GetComponentInChildren<Text>().text = "Blue Turn";
+            _turnInfoObject.GetComponent<Image>().color = new Color(0, 0, 1, 1);
         }
         else if (GameManagerChain.Instance.GameStateEnum == GameStateEnum.AI)
         {
             Debug.Log("AI TURN");
             _turnInfoObject.GetComponentInChildren<Text>().text = "Red Turn";
+            _turnInfoObject.GetComponent<Image>().color = new Color(1, 0, 0, 1);
+
         }
     }
 
@@ -236,7 +242,7 @@ public class MenuManager : MonoBehaviour
         _victoryObject.SetActive(status);
 
         //Set every other UI elements to inactive
-        if(status)
+        if (status)
         {
             _turnInfoObject.SetActive(false);
             _selectedUnitInfo.SetActive(false);
@@ -278,12 +284,12 @@ public class MenuManager : MonoBehaviour
 
     private IEnumerator FingerBlink()
     {
-        while(_pointerObject.activeInHierarchy == true)
+        while (_pointerObject.activeInHierarchy == true)
         {
-         _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);      // Visible
-         yield return new WaitForSeconds(0.5f);
-         _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 0);      // Invisible
-         yield return new WaitForSeconds(0.5f);
+            _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);      // Visible
+            yield return new WaitForSeconds(0.5f);
+            _pointerObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 0);      // Invisible
+            yield return new WaitForSeconds(0.5f);
         }
 
         yield return null;
@@ -317,20 +323,12 @@ public class MenuManager : MonoBehaviour
             MenuManager.Instance.UpdateObjectiveContent();
             _endTurnObject.SetActive(false);
 
-            //Setting side objective off
-            _sideObjectiveHeader.SetActive(false);
-            _sideObjectiveIcon.SetActive(false);
-            _objectiveContent.SetActive(false);
         }
         else
         {
             //_objectiveObject.SetActive(false);
             _endTurnObject.SetActive(true);
 
-            //Setting side objective off
-            _sideObjectiveHeader.SetActive(false);
-            _sideObjectiveIcon.SetActive(false);
-            _objectiveContent.SetActive(false);
         }
         SetVictoryScreen(false);
         //promptObject.SetActive(false);
@@ -374,7 +372,7 @@ public class MenuManager : MonoBehaviour
 
             TextMeshProUGUI tempOverallObjective = _overallObjectiveContent.GetComponent<TextMeshProUGUI>();
             //tempOverallObjective.text = "Enemies Remaining: " + tempLevelMono.GetEnemyPieceCoords().Count;
-            tempOverallObjective.text = "Capture the <color=red>Star</color>!";
+            tempOverallObjective.text = "Find and capture the <color=red>enemy planet</color>!";
             // Debug.Log(tempLevelMono.GetEnemyPiecesNum());
             //Debug.Log(temp.GetPlayerPieces().Count);
         }

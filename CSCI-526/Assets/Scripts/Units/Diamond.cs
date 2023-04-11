@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Piece;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace Assets.Scripts.Units
 
         public override string getUnitInfo()
         {
-            return "Can Capture Enemies. When adjacent to Circle, Circle gains increased range.";
+            return "Capture Enemies: Yes \nAbility: When adjacent to an ally Scout or Fighter, increases that unit's movement range.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
@@ -22,46 +21,98 @@ namespace Assets.Scripts.Units
             var pos = this.transform.position;
             int x = (int)pos.x;
             int y = (int)pos.y;
-
-            for (int i = 0; i < boardWidth; i++)
+            int maxRange = 2;
+            // left 
+            var range = Mathf.Min(x, maxRange);
+            for (int i = 1; i <= range; i++)
             {
-                for (int j = 0; j < boardHeight; j++)
+                var availableMove = new Tuple<int, int>(x - i, y);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
                 {
-                    //get diagonals - those are ok
-                    if (Mathf.Abs(i - x) == 1 && Mathf.Abs(j - y) == 1)
-                    {
-                        var availableMove = new Tuple<int, int>(i, j);
-                        var availablePiece = lvlMono.GetPiece(availableMove);
-                        if (availablePiece != null)
-                        {
-                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
-                        }
-                        legalSpots.Add(availableMove);
-                    }
+                    break;
+                }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
 
-                    //get +1 to cardinal directions
-                    if (Mathf.Abs(i - x) == 2 && Mathf.Abs(j - y) == 0)
+            // right
+            range = Mathf.Min(boardWidth - x - 1, maxRange);
+            for (int i = 1; i <= range; i++)
+            {
+                var availableMove = new Tuple<int, int>(x + i, y);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                {
+                    break;
+                }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
+
+            // up
+            range = Mathf.Min(boardHeight - y - 1, maxRange);
+            for (int j = 1; j <= range; j++)
+            {
+                var availableMove = new Tuple<int, int>(x, y + j);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                {
+                    break;
+                }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
+
+            // down
+            range = Mathf.Min(y, maxRange);
+            for (int j = 1; j <= range; j++)
+            {
+                var availableMove = new Tuple<int, int>(x, y - j);
+                var availablePiece = lvlMono.GetPiece(availableMove);
+                if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                {
+                    break;
+                }
+                else if (availablePiece != null && this.IsEnemyOf(availablePiece))
+                {
+                    legalSpots.Add(availableMove);
+                    break;
+                }
+                else { legalSpots.Add(availableMove); }
+            }
+
+            var availableMoves = new List<Tuple<int, int>>
+            {
+                new Tuple<int, int>(x - 1, y - 1),
+                new Tuple<int, int>(x - 1, y + 1),
+                new Tuple<int, int>(x + 1, y - 1),
+                new Tuple<int, int>(x + 1, y + 1)
+            };
+            foreach (Tuple<int, int> move in availableMoves)
+            {
+                if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
+                {
+                    if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
                     {
-                        var availableMove = new Tuple<int, int>(i, j);
-                        var availablePiece = lvlMono.GetPiece(availableMove);
-                        if (availablePiece != null)
-                        {
-                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
-                        }
-                        legalSpots.Add(availableMove);
+                        continue;
                     }
-                    if (Mathf.Abs(i - x) == 0 && Mathf.Abs(j - y) == 2)
-                    {
-                        var availableMove = new Tuple<int, int>(i, j);
-                        var availablePiece = lvlMono.GetPiece(availableMove);
-                        if (availablePiece != null)
-                        {
-                            if (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()) { continue; }
-                        }
-                        legalSpots.Add(availableMove);
-                    }
+                    legalSpots.Add(move);
                 }
             }
+
 
             if (GameManagerChain.Instance.SceneName == "TutorialLevel" && GameManagerChain.Instance.TotalMoves == 0)
             {
@@ -79,14 +130,6 @@ namespace Assets.Scripts.Units
             {
                 legalSpots.Clear();
             }
-
-
-            // var Position = new Tuple<int, int>(x, y);
-            // var triangleLegal = inTriangleRange(Position);
-            // if (triangleLegal != null)
-            // {                
-            // }
-
             return legalSpots;
         }
 

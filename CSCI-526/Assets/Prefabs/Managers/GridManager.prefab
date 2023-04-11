@@ -48,11 +48,12 @@ MonoBehaviour:
   _trianglePrefab: {fileID: 407907921454345211, guid: 3de7a7b5052bf45c3ab52ce7772f0e3c, type: 3}
   _diamondPrefab: {fileID: -2407875458895566835, guid: 25d78e865f02248f4af66875889e1384, type: 3}
   _circlePrefab: {fileID: 4121908883811533435, guid: 88faaf480b95a451fb31740047228ead, type: 3}
+  circleAbilityIndicator: {fileID: 2389417047362340735, guid: 5b0615cc804a7ee4ab4437186e1aa1a6, type: 3}
   _basePrefab: {fileID: 7376478469752636539, guid: 05d4f9ebee23f064cb90c80febe37719, type: 3}
   _scoutPrefab: {fileID: -577971291739253569, guid: 754c7020d67cf460a8f59452dbe24cf4, type: 3}
   _camera: {fileID: 0}
-  playerColor: {r: 0.004434774, g: 0, b: 0.735849, a: 1}
-  enemyColor: {r: 0.5471698, g: 0, b: 0, a: 1}
+  playerColor: {r: 0, g: 0.84832686, b: 0.990566, a: 1}
+  enemyColor: {r: 1, g: 0.16961579, b: 0.14528298, a: 1}
   selectedPiece: {fileID: 0}
-  debug: 0
+  debug: 1
   capturedTower: 0

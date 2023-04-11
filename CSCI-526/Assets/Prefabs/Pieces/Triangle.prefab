@@ -287,7 +287,7 @@ Transform:
   m_GameObject: {fileID: 7653570004281109898}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8850199273829370539}
@@ -335,8 +335,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: d7c003f055c4d7042a56119f4af0a5e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -359,5 +359,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfe40ae102a9dbc40b630cc392762f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nSupport: {fileID: 0}
+  wSupport: {fileID: 0}
+  sSupport: {fileID: 0}
+  eSupport: {fileID: 0}
+  nwSupport: {fileID: 0}
+  neSupport: {fileID: 0}
+  swSupport: {fileID: 0}
+  seSupport: {fileID: 0}
+  nPartPlayer: {fileID: 0}
+  nPartEnemy: {fileID: 0}
+  wPartPlayer: {fileID: 0}
+  wPartEnemy: {fileID: 0}
+  sPartPlayer: {fileID: 0}
+  sPartEnemy: {fileID: 0}
+  ePartPlayer: {fileID: 0}
+  ePartEnemy: {fileID: 0}
+  nePartPlayer: {fileID: 0}
+  nePartEnemy: {fileID: 0}
+  nwPartPlayer: {fileID: 0}
+  nwPartEnemy: {fileID: 0}
+  swPartPlayer: {fileID: 0}
+  swPartEnemy: {fileID: 0}
+  sePartPlayer: {fileID: 0}
+  sePartEnemy: {fileID: 0}
+  buffParticles: {fileID: 0}
   canMoveObject: {fileID: 4336704710664707431}
   cantMoveObject: {fileID: 3698429481844293765}
+  enemySightIndicator: {fileID: 0}

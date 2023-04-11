@@ -1,19 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts.Units;
 using System;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using Assets.Scripts;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : Singleton<EnemyAI>
 {
-    public static EnemyAI Instance;
     private bool isRunning;
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         isRunning = false;
     }
 
@@ -26,10 +24,7 @@ public class EnemyAI : MonoBehaviour
             return null;
         }
 
-
         List<Tuple<int, int>> movableEnemies = new List<Tuple<int, int>>();
-        List<Tuple<int, int>> movableDiamonds = new List<Tuple<int, int>>();
-        List<Tuple<int, int>> movableCircles = new List<Tuple<int, int>>();
         foreach (var coord in enemyPieceCoords)
         {
             if (lvlMono.GetPiece(coord).CanMove())
@@ -110,7 +105,7 @@ public class EnemyAI : MonoBehaviour
                 }
             }
         }
-        
+
         return movableEnemies[Random.Range(0, movableEnemies.Count)];
     }
 
@@ -137,7 +132,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         //TODO: add clause to check if circle is close to enemy - move if so
-        
+
 
         return false;
     }
@@ -168,8 +163,8 @@ public class EnemyAI : MonoBehaviour
             foreach (var move in moves)
             {
                 if (added)
-                { 
-                    break; 
+                {
+                    break;
                 }
                 if (IsACapturingMove(move))
                 {
@@ -182,11 +177,11 @@ public class EnemyAI : MonoBehaviour
         return canCapture;
     }
 
-    private Tuple<int,int> MoveDiamondToCircle(Tuple<int, int> diamond, List<Tuple<int, int>> moves)
+    private Tuple<int, int> MoveDiamondToCircle(Tuple<int, int> diamond, List<Tuple<int, int>> moves)
     {
         var circles = GetCircles();
         int index = Random.Range(0, moves.Count);
-        int minDistance = LevelMono.Instance.GetHeight()*LevelMono.Instance.GetWidth();
+        int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
         for (int i = 0; i < moves.Count; i++)
         {
             foreach (var circle in circles)
@@ -209,7 +204,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     public void PerformTurn()
-    {       
+    {
         if (!isRunning)
             StartCoroutine(DelayEnemyStart());
         // PerformTurn();
@@ -218,16 +213,37 @@ public class EnemyAI : MonoBehaviour
 
     private bool IsACapturingMove(Tuple<int, int> destination)
     {
-        //TODO: account for enemy visibility
         var pieceAtDestination = LevelMono.Instance.GetPiece(destination);
         var lvlMono = LevelMono.Instance;
         var tile = lvlMono.GetTile(destination);
 
-        //If piece at destination not null and is Player and AI has visibility
+        //Capture if piece at destination not null and is Player and AI has visibility
         if (pieceAtDestination != null && pieceAtDestination.IsHuman() && tile.CanEnemySee())
         {
             return true;
         }
+        return false;
+    }
+
+    private bool IsABaseCapture(Tuple<int, int> destination)
+    {
+        //if the destination move would be a capturing move, check if it is a base
+        if (IsACapturingMove(destination))
+        {
+            return (LevelMono.Instance.GetPiece(destination).IsBase());
+        }
+
+        return false;
+    }
+
+    private bool IsAUnitCapture(Tuple<int, int> destination)
+    {
+        //if the destination move would be a capturing move, check if it is a base
+        if (IsACapturingMove(destination))
+        {
+            return (LevelMono.Instance.GetPiece(destination).IsCircle() || LevelMono.Instance.GetPiece(destination).IsDiamond() || LevelMono.Instance.GetPiece(destination).IsScout());
+        }
+
         return false;
     }
 
@@ -236,22 +252,86 @@ public class EnemyAI : MonoBehaviour
         var lvlMono = LevelMono.Instance;
         int bestMove = -1;
         int minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
-        for (int i=0; i<moves.Count; i++)
+
+        List<int> capturingMoves = new List<int>();
+        for (int i = 0; i < moves.Count; i++)
         {
-            //If AI has visibility AND the move is a capturing move
-            if (lvlMono.GetTile(moves[i]).CanEnemySee() && IsACapturingMove(moves[i]))
-                bestMove = i;
+            //If AI has visibility, consider this move for capture
+            if (lvlMono.GetTile(moves[i]).CanEnemySee())
+            {
+                if (IsACapturingMove(moves[i]))
+                {
+                    capturingMoves.Add(i);
+                }
+            }
+        }
+        // captures that can be done in current turn
+        foreach (var index in capturingMoves)
+        {
+            bestMove = index;
+            //prioritize base captures
+            if (IsABaseCapture(moves[index]))
+                break;
+            if (IsAUnitCapture(moves[index]))
+                break;
         }
 
+        // find nearest human unit within vision
         if (bestMove == -1)
         {
+            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
             for (int i = 0; i < moves.Count; i++)
             {
-                foreach (var tower in LevelMono.Instance.towerLocations)
+                //move towards the base if you can see it
+                foreach (var player in lvlMono.GetPlayerCoords())
                 {
-                    if (LevelMono.Instance.GetPiece(tower).IsHuman())
+                    if (lvlMono.GetTile(player).CanEnemySee())
+                    {
+                        var distance = CalculateDistance(player, moves[i]);
+                        if (distance < minDistance)
+                        {
+                            bestMove = i;
+                            minDistance = distance;
+                        }
+                    }
+                }
+            }
+        }
+
+        // go towards satellites if nothing near to capture
+        if (bestMove == -1)
+        {
+            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
+            for (int i = 0; i < moves.Count; i++)
+            {
+                //move towards the towers
+                foreach (var tower in lvlMono.towerLocations)
+                {
+                    if (lvlMono.GetPiece(tower).IsHuman())
                     {
                         var distance = CalculateDistance(tower, moves[i]);
+                        if (distance < minDistance)
+                        {
+                            bestMove = i;
+                            minDistance = distance;
+                        }
+                    }
+                }
+            }
+        }
+
+        // capture planet
+        if (bestMove == -1)
+        {
+            minDistance = LevelMono.Instance.GetHeight() * LevelMono.Instance.GetWidth();
+            for (int i = 0; i < moves.Count; i++)
+            {
+                //move towards the base if you can see it
+                foreach (var playerBase in lvlMono.GetBaseCoords(true))
+                {
+                    if (lvlMono.GetTile(playerBase).CanEnemySee())
+                    {
+                        var distance = CalculateDistance(playerBase, moves[i]);
                         if (distance < minDistance)
                         {
                             bestMove = i;
@@ -270,7 +350,6 @@ public class EnemyAI : MonoBehaviour
     }
 
 
-
     //Ranking Movement:
     //1. Diamond to Circle synergy
     //2. "PickBestMove" --> prioritize captures
@@ -279,10 +358,10 @@ public class EnemyAI : MonoBehaviour
     {
         var lvlMono = LevelMono.Instance;
         var aiCoord = SelectBestPiece();
-        if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
+        /*if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
         {
             aiCoord = SelectRandomPiece();
-        }
+        }*/
 
         if (aiCoord != null)
         {
@@ -290,28 +369,42 @@ public class EnemyAI : MonoBehaviour
             lvlMono.SelectPiece(aiPiece, aiCoord);
             var moves = aiPiece.LegalMoves(lvlMono.GetWidth(), lvlMono.GetHeight());
             Tuple<int, int> destination = moves[Random.Range(0, moves.Count)];
-            
+
             // Decide movement logic 
+            /*
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
-                // Random AI
+                // Random AI (with adjacent capture logic)
                 // Subject to change
                 Debug.Log("RANDOM AI");
+
+                //If the player moves into enemy vision AND piece can capture: Capture.
+                //Prioritize capturing bases over pieces
+                foreach (var coord in moves)
+                {
+                    if (IsACapturingMove(coord))
+                    {
+                        destination = coord;
+                        if (IsABaseCapture(coord))
+                            break;
+                    }
+                }
             }
             else
             {
-                Debug.Log("OPTIMAL AI");
-                if (aiPiece.IsDiamond() && ShouldMoveDiamondToCircle(aiCoord))
-                {
-                    destination = MoveDiamondToCircle(aiCoord, moves);
-                }
-                else
-                {
-                    int index = PickBestMove(moves);
-                    destination = moves[index];
-                }
+			*/
+            Debug.Log("OPTIMAL AI");
+            if (aiPiece.IsDiamond() && ShouldMoveDiamondToCircle(aiCoord))
+            {
+                destination = MoveDiamondToCircle(aiCoord, moves);
             }
-            
+            else
+            {
+                int index = PickBestMove(moves);
+                destination = moves[index];
+            }
+            // }
+
             // Make AI movement based on above logic
             if (lvlMono.MovePiece(destination))
             {
@@ -350,10 +443,10 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(.6f);
+            yield return new WaitForSeconds(.4f);
         }
         MovePiece();
-        yield return new WaitForSeconds(.6f);
+        yield return new WaitForSeconds(.4f);
         StartCoroutine(DelayEnemyStart());
     }
 }
