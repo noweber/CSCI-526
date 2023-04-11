@@ -1,19 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts.Units;
 using System;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using Assets.Scripts;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : Singleton<EnemyAI>
 {
-    public static EnemyAI Instance;
     private bool isRunning;
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         isRunning = false;
     }
 
