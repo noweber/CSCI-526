@@ -1,6 +1,4 @@
-using Assets.Scripts.Piece;
 using System;
-using System.Collections.Generic;
 
 namespace Assets.Scripts.Levels
 {
