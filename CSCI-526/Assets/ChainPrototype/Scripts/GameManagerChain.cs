@@ -423,7 +423,7 @@ public class GameManagerChain : MonoBehaviour
                 else if (SceneName == "Tutorial_Diamond_Ability")
                 {
                     LevelMono.Instance.LoadLevel(Levels.TutorialDiamondAbility());
-                    MenuManager.Instance.SetPrompt("Support Ability Tutorial", "Supports extend a fighter's movement when next to one. Move one of your <color=blue>supports</color> near one of your <color=blue>fighters</color> to reach the <color=red>enemy planet</color> quickly.");
+                    MenuManager.Instance.SetPrompt("Support Ability Tutorial", "Supports extend an ally Scout or Fighter's movement when next to one. Move one of your <color=blue>supports</color> near your <color=blue>scout</color> or <color=blue>fighter</color> to reach the <color=red>enemy planet</color> quicker.");
                 }
                 else if (SceneName == "Tutorial_Scout_Ability")
                 {

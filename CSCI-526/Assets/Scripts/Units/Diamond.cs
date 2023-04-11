@@ -11,7 +11,7 @@ namespace Assets.Scripts.Units
 
         public override string getUnitInfo()
         {
-            return "Capture Enemies: Yes \nAbility: When adjacent to a Fighter, that Fighter gains increased movement range.";
+            return "Capture Enemies: Yes \nAbility: When adjacent to an ally Scout or Fighter, increases that unit's movement range.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
