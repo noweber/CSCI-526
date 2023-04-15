@@ -18,7 +18,7 @@ public class Tile : MonoBehaviour
     [SerializeField] public GameObject _fog, _redFog;
     [SerializeField] private ParticleSystem twinkleParticles, fogParticles;
 
-    [SerializeField] private GameObject closeEye, openEye, boot;
+    [SerializeField] private GameObject closeEye, openEye, boot, target;
 
     [SerializeField] private ParticleSystem enemyExplosion1, enemyExplosion2, playerExplosion1, playerExplosion2;
     [SerializeField] private ParticleSystem playerExplosionV2, enemyExplosionV2;
@@ -65,10 +65,20 @@ public class Tile : MonoBehaviour
         var lvlMono = LevelMono.Instance;
         int x = (int)this.transform.position.x;
         int y = (int)this.transform.position.y;
+        Tuple<int, int> tile = new Tuple<int, int>(x, y);
         // If legal move, turn on boot
         if (isLegalMove)
         {
-            boot.SetActive(true);
+            if(lvlMono.GetPiece(tile) != null        // If enemy VISIBLE on tile, show target instead
+                && !lvlMono.GetPiece(tile).IsHuman()
+                && lvlMono.GetTile(tile).CanPlayerSee())    
+            {
+                target.SetActive(true);
+            }
+            else
+            {
+                boot.SetActive(true);
+            }
             List<Tuple<int, int>> area = new List<Tuple<int, int>>();
             // IF adjacent ally is triangle, render triangle visible area as eyes
             /*foreach(Tuple<int,int> coord in AdjacentPieces())
@@ -108,6 +118,10 @@ public class Tile : MonoBehaviour
                 }
             }*/
             lvlMono.TurnOffEyes();
+        }
+        if(this.target.activeInHierarchy)
+        {
+            target.SetActive(false);
         }
     }
 
@@ -241,6 +255,7 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         boot.SetActive(false);
+        target.SetActive(false);
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
         var lvlMono = LevelMono.Instance;
         lvlMono.TurnOffEyes();
