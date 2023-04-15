@@ -69,6 +69,19 @@ public class Tile : MonoBehaviour
         // If legal move, turn on boot
         if (isLegalMove)
         {
+            if(lvlMono.debug)
+            {
+                if (lvlMono.GetPiece(tile) != null        // If enemy VISIBLE on tile, show target instead
+                    && !lvlMono.GetPiece(tile).IsHuman())
+                {
+                    target.SetActive(true);
+                }
+                else
+                {
+                    boot.SetActive(true);
+                }
+                return;
+            }
             if(lvlMono.GetPiece(tile) != null        // If enemy VISIBLE on tile, show target instead
                 && !lvlMono.GetPiece(tile).IsHuman()
                 && lvlMono.GetTile(tile).CanPlayerSee())    
@@ -262,7 +275,7 @@ public class Tile : MonoBehaviour
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
-        if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
+        if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns && !GameManagerChain.Instance.endingMatch) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
         {
             if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
