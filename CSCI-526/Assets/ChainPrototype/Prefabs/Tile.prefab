@@ -5323,7 +5323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _base: {r: 1, g: 1, b: 1, a: 0.39215687}
-  _offset: {r: 0.383811, g: 0.5660378, b: 0.27447492, a: 0}
+  _offset: {r: 0.23322839, g: 0.16197933, b: 0.4716981, a: 0.6392157}
   _renderer: {fileID: 5922647709050670891}
   _highlight: {fileID: 2354291538725966542}
   _legal: {fileID: 8054336187393558483}
