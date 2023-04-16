@@ -22,6 +22,8 @@ public abstract class PieceMono : MonoBehaviour
 
     public const string Base = "Planet";
 
+	public const string Background = "Background";
+
     // [SerializeField] private GameObject nSupport, wSupport, sSupport, eSupport, nwSupport, neSupport, swSupport, seSupport;     // Diamond support indicators
     [SerializeField]
     private GameObject nPartPlayer, nPartEnemy, wPartPlayer, wPartEnemy, sPartPlayer, sPartEnemy, ePartPlayer, ePartEnemy,
@@ -55,6 +57,8 @@ public abstract class PieceMono : MonoBehaviour
     public bool IsScout() { return string.Equals(this.UnitName, Scout); }
 
     public bool IsBase() { return string.Equals(this.UnitName, Base); }
+
+	public bool IsBackground() { return string.Equals(this.UnitName, Background); }
 
     public string GetName() { return this.UnitName; }
 

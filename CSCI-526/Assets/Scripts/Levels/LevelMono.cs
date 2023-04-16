@@ -362,7 +362,9 @@ public class LevelMono : MonoBehaviour
                 basePiece.SetMoveState(false);
                 basePiece.gameObject.GetComponent<SpriteRenderer>().color = basePiece.IsHuman() ? playerColor : enemyColor;
                 _pieces[coord] = basePiece;
-            }
+            } else if (unit.IsBackground()) {
+				tile.gameObject.SetActive(false);
+			}
         }
 
         // Sets Fog based on player vision
