@@ -32,6 +32,10 @@ namespace Assets.Scripts.Units
                     {
                         break;
                     }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
+                    {
+                        break;
+                    }
                     else if (availablePiece != null && this.IsEnemyOf(availablePiece))
                     {
                         legalSpots.Add(availableMove);
@@ -47,6 +51,10 @@ namespace Assets.Scripts.Units
                     var availableMove = new Tuple<int, int>(x + i, y);
                     var availablePiece = lvlMono.GetPiece(availableMove);
                     if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                    {
+                        break;
+                    }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
                     {
                         break;
                     }
@@ -68,6 +76,10 @@ namespace Assets.Scripts.Units
                     {
                         break;
                     }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
+                    {
+                        break;
+                    }
                     else if (availablePiece != null && this.IsEnemyOf(availablePiece))
                     {
                         legalSpots.Add(availableMove);
@@ -83,6 +95,10 @@ namespace Assets.Scripts.Units
                     var availableMove = new Tuple<int, int>(x, y - j);
                     var availablePiece = lvlMono.GetPiece(availableMove);
                     if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                    {
+                        break;
+                    }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
                     {
                         break;
                     }
@@ -105,6 +121,10 @@ namespace Assets.Scripts.Units
                     {
                         break;
                     }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
+                    {
+                        break;
+                    }
                     else if (availablePiece != null && this.IsEnemyOf(availablePiece))
                     {
                         legalSpots.Add(availableMove);
@@ -121,6 +141,10 @@ namespace Assets.Scripts.Units
                     var availableMove = new Tuple<int, int>(x + i, y + i);
                     var availablePiece = lvlMono.GetPiece(availableMove);
                     if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                    {
+                        break;
+                    }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
                     {
                         break;
                     }
@@ -143,6 +167,10 @@ namespace Assets.Scripts.Units
                     {
                         break;
                     }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
+                    {
+                        break;
+                    }
                     else if (availablePiece != null && this.IsEnemyOf(availablePiece))
                     {
                         legalSpots.Add(availableMove);
@@ -159,6 +187,10 @@ namespace Assets.Scripts.Units
                     var availableMove = new Tuple<int, int>(x + i, y - i);
                     var availablePiece = lvlMono.GetPiece(availableMove);
                     if (availablePiece != null && (!this.IsEnemyOf(availablePiece) || availablePiece.IsTriangle()))
+                    {
+                        break;
+                    }
+                    else if (!lvlMono.GetTile(availableMove).gameObject.activeInHierarchy)
                     {
                         break;
                     }
