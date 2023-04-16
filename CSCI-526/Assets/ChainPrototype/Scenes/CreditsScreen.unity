@@ -470,15 +470,25 @@ MonoBehaviour:
   m_text: "Team Attributions:\n\nNicholas Weber - Captrain, Analytics\n\nAnn Yan
     - AI, Guidance\n\nDerek Nguyen - Physics, AI, Guidance\n\nJeffrey Lin - AI, Analytics,
     Guidance\n\nJoshua Maranan - Note Taker, UI, Game Feel\n\nZhengren Lin - UI,
-    Game Feel\n\nMridul Shah - Analytics, Game Feel\n\n\n\rArt Attributions:\n\nSpaceship
-    pack\r\nhttps://darkcesium.itch.io/pixel-spaceships-pack-1\r\n\r\nScout + satellites\r\nhttps://mattwalkden.itch.io/lunar-battle-pack\r\nhttps://enjl.itch.io/tileset-space-station
-    \r\n\r\nPlanets\r\nhttps://helianthus-games.itch.io/pixel-art-planets \r\n\r\nBackground
-    Images\r\nhttps://craftpix.net/freebies/free-space-shooter-game-gui/\r\nhttps://deep-fold.itch.io/space-background-generator
-    \r\n\r\nGame board\r\nhttps://helianthus-games.itch.io/parallax-space-background
-    \r\n\r\nAsteroid\r\nhttps://foozlecc.itch.io/void-environment-pack\r\n\r\nSpace
-    UI Asset Pack\r\nhttps://craftpix.net/freebies/free-space-shooter-game-gui/\r\n\r\nIcons\r\n-Space
-    Launch\r\nhttps://www.flaticon.com/free-icon/launch_9857766\n-One\r\nhttps://www.flaticon.com/free-icon/one_1338470\n-Circle\r\nhttps://www.flaticon.com/free-icon/rec_808569\r\n-Shoes/Walk\r\nhttps://www.flaticon.com/free-icon/walk_3330930\r\n-Fight/Swords\r\nhttps://www.flaticon.com/free-icon/swords_861891\r\n-Open
-    Eye\r\nhttps://www.flaticon.com/free-icon/visibility_4264841\r\n-Closed Eye\r\nhttps://www.flaticon.com/free-icon/eyes_3945105\r\n-Target\r\nhttps://www.flaticon.com/free-icon/focus_1204051?related_id=1204102&origin=search\r\n\r\nFont\r\n-Clarity\r\nhttps://gossamore.itch.io/clarity\r\n-Abaddon\r\nhttps://caffinate.itch.io/abaddon\r"
+    Game Feel\n\nMridul Shah - Analytics, Game Feel\n\n\n\rArt Attributions:\n\nSpaceships
+    - Pixel Spaceships \r by DarkCesium\nhttps://darkcesium.itch.io/pixel-spaceships-pack-1\r\n\r\nScout
+    - Lunar Battle Pack by MattWalkden\nhttps://mattwalkden.itch.io/lunar-battle-pack\r\n\nSatellite
+    - Tileset Space Station by Enji\nhttps://enjl.itch.io/tileset-space-station \r\n\r\nPlanets\r
+    - Pixel art planets by Helianthus Games\nhttps://helianthus-games.itch.io/pixel-art-planets
+    \r\n\r\nUI - Free Space Shooter Game GUI by CraftPix\nhttps://craftpix.net/freebies/free-space-shooter-game-gui/\r\n\nGame
+    Background - Space Background Generator by Deep-Fold\nhttps://deep-fold.itch.io/space-background-generator
+    \r\n\r\nGame board\r - Parallax Space Background by Helianthus Games (not in
+    build)\nhttps://helianthus-games.itch.io/parallax-space-background \r\n\r\nAsteroid\r
+    - Void Environment Pack by Fooztecc (not in build)\nhttps://foozlecc.itch.io/void-environment-pack\r\n\n\r\nIcons:\n\r\nRocket
+    - Launch free icon by Yogi Aprelliyanto \nhttps://www.flaticon.com/free-icon/launch_9857766\n\nOne\r
+    - One free icon by Freepik\nhttps://www.flaticon.com/free-icon/one_1338470\n\nCircle
+    - Rec by hirschwolf (not in build)\r\nhttps://www.flaticon.com/free-icon/rec_808569\r\n\nShoe
+    - Walk by Freepik\nhttps://www.flaticon.com/free-icon/walk_3330930\r\n\nSwords
+    - Swords by Good Ware\nhttps://www.flaticon.com/free-icon/swords_861891\r\n\nOpen
+    Eye - Visibility by Freepik\nhttps://www.flaticon.com/free-icon/visibility_4264841\r\n\nClosed
+    Eye\r - Eyees Free Icon by Creatype\nhttps://www.flaticon.com/free-icon/eyes_3945105\r\n\nTarget\r
+    - Focus free icon by Freepik\nhttps://www.flaticon.com/free-icon/focus_1204051?related_id=1204102&origin=search\r\n\r\nFonts:\n\r\nClarity
+    by Gossamore\r\nhttps://gossamore.itch.io/clarity\r\n\nAbaddon by Caffinate\r\nhttps://caffinate.itch.io/abaddon\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ac9cac4359cb3aa4dadc045cc1aac1b2, type: 2}
   m_sharedMaterial: {fileID: 8923225791170936057, guid: ac9cac4359cb3aa4dadc045cc1aac1b2, type: 2}
@@ -759,7 +769,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.00008276442, y: 0.0026605676}
   m_SizeDelta: {x: 0, y: 3442.2}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &972900846
@@ -1408,7 +1418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1428,8 +1438,8 @@ Canvas:
   m_GameObject: {fileID: 1426805231}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1910542555}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1659,8 +1669,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1119961631}
   m_HandleRect: {fileID: 1119961630}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.08763802
+  m_Value: 0.99999917
+  m_Size: 0.08763803
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
