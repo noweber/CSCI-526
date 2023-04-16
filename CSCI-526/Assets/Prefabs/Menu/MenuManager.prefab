@@ -7524,6 +7524,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5692367029894097906}
   - component: {fileID: 5692367029894097677}
+  - component: {fileID: 7520197461869158779}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -7583,6 +7584,19 @@ MonoBehaviour:
   promptObject: {fileID: 8354037008148122343}
   levelName: {fileID: 4338495516868114835}
   levelDescription: {fileID: 5427811438386898108}
+--- !u!114 &7520197461869158779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5692367029894097676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5d48108b64ab74cbd9a972951aa8b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comet: {fileID: 4711195402423799964, guid: 6d5afb8dfab09bb4da6b96ce1eb82cba, type: 3}
 --- !u!1 &5692367029907478092
 GameObject:
   m_ObjectHideFlags: 0
