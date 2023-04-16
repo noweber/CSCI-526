@@ -24,7 +24,6 @@ public class CometManager : MonoBehaviour
     void Awake()
     {
         StartCoroutine(SpawnComet());
-
     }
 
     // Update is called once per frame
