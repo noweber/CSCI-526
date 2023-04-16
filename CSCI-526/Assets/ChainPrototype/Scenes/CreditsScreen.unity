@@ -467,8 +467,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Team Attributions:\n\nNicholas Weber - Captrain, Analytics\n\nAnn Yan
-    - AI, Guidance\n\nDerek Nguyen - Physics, AI, Guidance\n\nJeffrey Lin - AI, Analytics,
+  m_text: "Team Attributions:\n\nNicholas Weber - Captain, Analytics\n\nAnn Yan -
+    AI, Guidance\n\nDerek Nguyen - Physics, AI, Guidance\n\nJeffrey Lin - AI, Analytics,
     Guidance\n\nJoshua Maranan - Note Taker, UI, Game Feel\n\nZhengren Lin - UI,
     Game Feel\n\nMridul Shah - Analytics, Game Feel\n\n\n\rArt Attributions:\n\nSpaceships
     - Pixel Spaceships \r by DarkCesium\nhttps://darkcesium.itch.io/pixel-spaceships-pack-1\r\n\r\nScout
