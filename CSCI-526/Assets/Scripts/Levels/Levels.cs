@@ -810,5 +810,148 @@ namespace Assets.Scripts.Levels
                 Units = units
             };
         }
+
+        public static LoadLevelData LevelFive()
+        {
+            int _width = 15;
+            int _height = 15;
+            List<PieceInfo> units = new List<PieceInfo>();
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    Tuple<int, int> position = new (x, y);
+
+                    if (x == 9 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Base));
+                    }
+
+                    if (x == 5 && y == 5)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Scout));
+                    }
+
+                    if (x == 9 && y == 5)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Scout));
+                    }
+
+                    if ((x==6 || x == 8) && y == 4)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Circle));
+                    }
+
+                    if (x == 7 && y == 0)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
+                    if (x == 5 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Scout));
+                    }
+
+                    if (x == 7 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Triangle));
+                    }
+
+                    if (x == 9 && y == 2)
+                    {
+                        units.Add(new PieceInfo(position, true, PieceMono.Diamond));
+                    }
+
+
+
+
+                    // enemies
+                    if (x == 14 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Base));
+                    }
+
+                    if ((x==5 || x==9) && y == 14)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Diamond));
+                    }
+
+                    if (x == 7 && y == 14)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                    if (x == 0 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                    if (x == 5 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 7 && y == 8)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 9 && y == 9)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Scout));
+                    }
+
+                    if (x == 7 && y == 12)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
+                    }
+
+                    if (x == 14 && y == 7)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Circle));
+                    }
+
+                    if (x == 2 && y == 7)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
+                    }
+
+                    if (x == 12 && y == 7)
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Triangle));
+                    }
+
+                    // background tiles
+                    if ((x >= 0 && x <= 4) && (y <= 14 && y >= 10))
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Background));
+                    }
+
+                    if ((x >= 10 && x <= 14) && (y <= 14 && y >= 10))
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Background));
+                    }
+
+                    if ((x >= 0 && x <= 4) && (y >= 0 && y <= 4))
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Background));
+                    }
+
+                    if ((x >= 10 && x <= 14) && (y >= 0 && y <= 4))
+                    {
+                        units.Add(new PieceInfo(position, false, PieceMono.Background));
+                    }
+
+
+                }
+            }
+            return new LoadLevelData()
+            {
+                Width = _width,
+                Height = _height,
+                Units = units
+            };
+        }
     }
 }
