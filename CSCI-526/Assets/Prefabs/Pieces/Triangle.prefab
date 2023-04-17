@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 0.39215687}
   m_FlipX: 0
@@ -156,7 +156,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 1, b: 0, a: 0.39215687}
   m_FlipX: 0
@@ -359,14 +359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfe40ae102a9dbc40b630cc392762f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nSupport: {fileID: 0}
-  wSupport: {fileID: 0}
-  sSupport: {fileID: 0}
-  eSupport: {fileID: 0}
-  nwSupport: {fileID: 0}
-  neSupport: {fileID: 0}
-  swSupport: {fileID: 0}
-  seSupport: {fileID: 0}
   nPartPlayer: {fileID: 0}
   nPartEnemy: {fileID: 0}
   wPartPlayer: {fileID: 0}
