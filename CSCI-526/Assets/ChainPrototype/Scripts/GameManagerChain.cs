@@ -471,6 +471,11 @@ public class GameManagerChain : Singleton<GameManagerChain>
                     LevelMono.Instance.LoadLevel(Levels.LevelFive());
                     MenuManager.Instance.SetLevelName("Level Five");
                 }
+                else if (SceneName == "Level_Six")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.LevelSix());
+                    MenuManager.Instance.SetLevelName("Level Six");
+                }
                 else if (SceneName == "Challenge_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
