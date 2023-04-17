@@ -138,6 +138,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -17.470001
       objectReference: {fileID: 0}
+    - target: {fileID: 2095665095818425575, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: sceneNames.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2095665095818425575, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: sceneNames.Array.data[0]
+      value: Level_Four
+      objectReference: {fileID: 0}
     - target: {fileID: 5692367027862456497, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -165,6 +173,14 @@ PrefabInstance:
     - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LoadSelectedScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028246788719, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692367028258655691, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5692367028284544184, guid: ff9cbea54d2a0e349b444fa68476a197, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -473,6 +489,7 @@ MonoBehaviour:
   movableAlpha: 0
   increasingAlpha: 0
   switchingTurns: 0
+  endingMatch: 0
 --- !u!4 &889055180
 Transform:
   m_ObjectHideFlags: 0
