@@ -293,6 +293,7 @@ public class LevelMono : MonoBehaviour
                 }
                 circle.SetMoveState(false);
                 circle.gameObject.GetComponent<SpriteRenderer>().color = circle.IsHuman() ? playerColor : enemyColor;
+                circle.SetInitialDirection(circle.IsHuman() ? Direction.Up : Direction.Down);
                 _pieces[coord] = circle;
             }
             else if (unit.IsDiamond())
@@ -307,6 +308,7 @@ public class LevelMono : MonoBehaviour
                 //diamond.gameObject.SetActive(unit.IsHuman());
                 diamond.SetMoveState(false);
                 diamond.gameObject.GetComponent<SpriteRenderer>().color = diamond.IsHuman() ? playerColor : enemyColor;
+                diamond.SetInitialDirection(diamond.IsHuman() ? Direction.Up : Direction.Down);
                 _pieces[coord] = diamond;
             }
             else if (unit.IsScout())

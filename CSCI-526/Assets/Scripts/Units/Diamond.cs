@@ -6,6 +6,15 @@ namespace Assets.Scripts.Units
 {
     public class Diamond : PieceMono
     {
+        //TODO: Enemy Scout Unit set as Up instead of Down on Initialization
+        public void SetInitialDirection(Direction direction)
+        {
+            if (direction == Direction.Down)
+            {
+                this.gameObject.transform.Rotate(new Vector3(0, 0, 180f));
+            }
+        }
+
         private List<Tuple<int, int>> adjAllies = new List<Tuple<int, int>>();
 
         public override string getUnitInfo()

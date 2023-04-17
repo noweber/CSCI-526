@@ -5,6 +5,13 @@ namespace Assets.Scripts.Units
 {
     public class Circle : PieceMono
     {
+        public void SetInitialDirection(Direction direction)
+        {
+            if (direction == Direction.Down)
+            {
+                this.gameObject.transform.Rotate(new UnityEngine.Vector3(0, 0, 180f));
+            }
+        }
         public override string getUnitInfo()
         {
             return "Capture Enemies: Yes \nAbility: Upon successful capture, Fighter can move again.";
