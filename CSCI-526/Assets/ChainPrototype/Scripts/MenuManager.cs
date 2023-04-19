@@ -1,5 +1,6 @@
 using Assets.Scripts.Units;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject promptObject;
     [SerializeField] private TextMeshProUGUI levelName, levelDescription;       // Displayed in the prompt popup
 
+    
     public MenuManager()
     {
         Instance = this;

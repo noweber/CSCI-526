@@ -87,6 +87,7 @@ public class EnemyAI : Singleton<EnemyAI>
             return canCapture[Random.Range(0, canCapture.Count)];
         }
 
+
         foreach (var circle in movableCircles)
         {
             if (ShouldMoveCircle(circle))

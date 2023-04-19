@@ -66,6 +66,8 @@ public class GameManagerChain : Singleton<GameManagerChain>
 
     public bool switchingTurns = false;        // Flag used to lock switching turns if the game is in the process of doing so
 
+    public bool endingMatch = false;        // Flag used to lock movement if the level is ending
+
     public LevelReplayData replayDataForAnalytics;
 
     /// <summary>
@@ -244,8 +246,8 @@ public class GameManagerChain : Singleton<GameManagerChain>
             Debug.Log("TOTAL MOVES: " + TotalMoves);
             if (TotalMoves == 4)
             {
-                if (!LevelMono.Instance.DoEnemiesRemain()) { this.ChangeState(GameStateEnum.Victory); }
-                else { this.ChangeState(GameStateEnum.Loss); }
+                if (!LevelMono.Instance.DoEnemiesRemain()) { StartCoroutine(DelayVictory()); }
+                else { StartCoroutine(DelayLoss()); }
             }
         }
         else
@@ -255,12 +257,14 @@ public class GameManagerChain : Singleton<GameManagerChain>
             if (!LevelMono.Instance.IsEnemyBaseAlive())
             {
                 // TODO: Transition to a win state per open tasks once designed.
-                this.ChangeState(GameStateEnum.Victory);
+                // this.ChangeState(GameStateEnum.Victory);
+                StartCoroutine(DelayVictory());
             }
             else if (!LevelMono.Instance.IsHumanBaseAlive() || !LevelMono.Instance.DoHumansRemain())
             {
                 // TODO: Transition to a lose state.
-                this.ChangeState(GameStateEnum.Loss);
+                // this.ChangeState(GameStateEnum.Loss);
+                StartCoroutine(DelayLoss());
             }
             /*
             // Normal level's win condition
@@ -336,7 +340,7 @@ public class GameManagerChain : Singleton<GameManagerChain>
     // TESTING using this instead of directly changing turns to briefly display an obvious turn indicator -- animate after midterm?
     public IEnumerator StateToAI()
     {
-        if (!switchingTurns && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)     // Prevents spamming the call of this IEnumerator and bugging the turn sequence
+        if (!switchingTurns && !endingMatch && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)     // Prevents spamming the call of this IEnumerator and bugging the turn sequence
         {
             switchingTurns = true;
             MenuManager.Instance._enemyTurnIndicator.SetActive(true);
@@ -354,7 +358,7 @@ public class GameManagerChain : Singleton<GameManagerChain>
     }
     public IEnumerator StateToHuman()
     {
-        if (!switchingTurns && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)
+        if (!switchingTurns && !endingMatch && GameStateEnum != GameStateEnum.Victory && GameStateEnum != GameStateEnum.Loss)
         {
             switchingTurns = true;
             MenuManager.Instance._playerTurnIndicator.SetActive(true);
@@ -457,6 +461,21 @@ public class GameManagerChain : Singleton<GameManagerChain>
                     LevelMono.Instance.LoadLevel(Levels.LevelThree());
                     MenuManager.Instance.SetLevelName("Level Three");
                 }
+                else if (SceneName == "Level_Four")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.LevelFour());
+                    MenuManager.Instance.SetLevelName("Level Four");
+                }
+                else if (SceneName == "Level_Five")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.LevelFive());
+                    MenuManager.Instance.SetLevelName("Level Five");
+                }
+                else if (SceneName == "Level_Six")
+                {
+                    LevelMono.Instance.LoadLevel(Levels.LevelSix());
+                    MenuManager.Instance.SetLevelName("Level Six");
+                }
                 else if (SceneName == "Challenge_Circle")
                 {
                     LevelMono.Instance.LoadLevel(Levels.ChallengeCircle());
@@ -523,16 +542,29 @@ public class GameManagerChain : Singleton<GameManagerChain>
             case GameStateEnum.Victory:
                 Debug.Log("VICTORY");
                 MenuManager.Instance.SetVictoryScreen(true);
+                endingMatch = false;
                 SendEndOfLevelAnalytics(true);
                 break;
             case GameStateEnum.Loss:
                 Debug.Log("LOSS");
                 SendEndOfLevelAnalytics(false);
                 MenuManager.Instance.SetDefeatScreen(true);
+                endingMatch = false;
                 break;
         }
     }
-
+    public IEnumerator DelayVictory()
+    {
+        endingMatch = true;
+        yield return new WaitForSeconds(1f);
+        this.ChangeState(GameStateEnum.Victory);
+    }
+    public IEnumerator DelayLoss()
+    {
+        endingMatch = true;
+        yield return new WaitForSeconds(1f);
+        this.ChangeState(GameStateEnum.Loss);
+    }
     private void SendEndOfLevelAnalytics(bool humanPlayerWasVictorious)
     {
         float timePlayedThisLevelInSeconds = (Time.realtimeSinceStartup - playStartTime) / 60;

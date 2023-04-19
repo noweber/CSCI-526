@@ -23,6 +23,8 @@ namespace Assets.Scripts.Levels
         public bool IsDiamond() { return string.Equals(unitName, PieceMono.Diamond); }
         public bool IsScout() { return string.Equals(unitName, PieceMono.Scout); }
         public bool IsBase() { return string.Equals(unitName, PieceMono.Base); }
+        
+        public bool IsBackground() { return string.Equals(unitName, PieceMono.Background); }
 
         public bool IsHuman() { return this.isHuman; }
 

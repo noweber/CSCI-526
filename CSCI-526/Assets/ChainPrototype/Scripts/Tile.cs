@@ -16,9 +16,9 @@ public class Tile : MonoBehaviour
     [SerializeField] public GameObject _legal;
 
     [SerializeField] public GameObject _fog, _redFog;
-    [SerializeField] private ParticleSystem asteroids, asteroidFog;
+    [SerializeField] private ParticleSystem twinkleParticles, fogParticles;
 
-    [SerializeField] private GameObject closeEye, openEye, boot;
+    [SerializeField] private GameObject closeEye, openEye, boot, target;
 
     [SerializeField] private ParticleSystem enemyExplosion1, enemyExplosion2, playerExplosion1, playerExplosion2;
     [SerializeField] private ParticleSystem playerExplosionV2, enemyExplosionV2;
@@ -65,10 +65,33 @@ public class Tile : MonoBehaviour
         var lvlMono = LevelMono.Instance;
         int x = (int)this.transform.position.x;
         int y = (int)this.transform.position.y;
+        Tuple<int, int> tile = new Tuple<int, int>(x, y);
         // If legal move, turn on boot
         if (isLegalMove)
         {
-            boot.SetActive(true);
+            if(lvlMono.debug)
+            {
+                if (lvlMono.GetPiece(tile) != null        // If enemy VISIBLE on tile, show target instead
+                    && !lvlMono.GetPiece(tile).IsHuman())
+                {
+                    target.SetActive(true);
+                }
+                else
+                {
+                    boot.SetActive(true);
+                }
+                return;
+            }
+            if(lvlMono.GetPiece(tile) != null        // If enemy VISIBLE on tile, show target instead
+                && !lvlMono.GetPiece(tile).IsHuman()
+                && lvlMono.GetTile(tile).CanPlayerSee())    
+            {
+                target.SetActive(true);
+            }
+            else
+            {
+                boot.SetActive(true);
+            }
             List<Tuple<int, int>> area = new List<Tuple<int, int>>();
             // IF adjacent ally is triangle, render triangle visible area as eyes
             /*foreach(Tuple<int,int> coord in AdjacentPieces())
@@ -109,6 +132,10 @@ public class Tile : MonoBehaviour
             }*/
             lvlMono.TurnOffEyes();
         }
+        if(this.target.activeInHierarchy)
+        {
+            target.SetActive(false);
+        }
     }
 
     public void ToggleFog()
@@ -118,16 +145,16 @@ public class Tile : MonoBehaviour
             if (canPlayerSee)
             {
                 _fog.SetActive(false);
-                // asteroids.Stop();
-                asteroidFog.gameObject.SetActive(false);
-                asteroids.gameObject.SetActive(false);
+                twinkleParticles.Stop();
+                fogParticles.Stop();
+                // twinkleParticles.gameObject.SetActive(false);
             }
             else
             {
                 _fog.SetActive(true);
-                // asteroids.Play();
-                asteroidFog.gameObject.SetActive(true);
-                asteroids.gameObject.SetActive(true);
+                twinkleParticles.Play();
+                fogParticles.Play();
+                // twinkleParticles.gameObject.SetActive(true);
             }
         }
 
@@ -241,13 +268,14 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         boot.SetActive(false);
+        target.SetActive(false);
         var coord = new Tuple<int, int>((int)this.transform.position.x, (int)this.transform.position.y);
         var lvlMono = LevelMono.Instance;
         lvlMono.TurnOffEyes();
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
-        if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
+        if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns && !GameManagerChain.Instance.endingMatch) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
         {
             if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
             {
