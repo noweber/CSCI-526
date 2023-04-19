@@ -231,6 +231,10 @@ namespace Assets.Scripts.Units
                         {
                             continue;
                         }
+                        else if (!lvlMono.GetTile(move).gameObject.activeInHierarchy)
+                        {
+                            continue;
+                        }
                         legalSpots.Add(move);
                     }
                 }
