@@ -81,7 +81,10 @@ namespace Assets.Scripts.Units
         }
         public override string getUnitInfo()
         {
-            return "Capture Enemies: Yes \nAbility: Grants directional vision.";
+            if (this.IsHuman())
+                return "Capture Enemies: Yes \nAbility: Grants directional vision.";
+            else
+                return "Capture Player: Yes \nAbility: Grants directional vision.";
         }
 
         private bool CircleMovementCheck()

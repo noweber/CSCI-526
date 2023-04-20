@@ -14,7 +14,10 @@ namespace Assets.Scripts.Units
         }
         public override string getUnitInfo()
         {
-            return "Capture Enemies: Yes \nAbility: Upon successful capture, Fighter can move again.";
+            if (this.IsHuman())
+                return "Capture Enemies: Yes \nAbility: Upon successful capture, can move again.";
+            else
+                return "Capture Player: Yes \nAbility: Upon successful capture, can move again.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)

@@ -7,7 +7,10 @@ namespace Assets.Scripts.Units
     {
         public override string getUnitInfo()
         {
-            return "Capture Enemies: No \nAbility: Grants a large amount of vision to its owner.";
+            if (this.IsHuman())
+                return "Capture Enemies: No \nAbility: Grants a large amount of vision to its owner.";
+            else
+                return "Capture Player: No \nAbility: Grants a large amount of vision to its owner.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)

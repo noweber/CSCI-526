@@ -275,6 +275,20 @@ public class Tile : MonoBehaviour
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
+        if (clickedPiece != null)
+        {
+            //show piece info for both sides
+            if (clickedPiece.IsHuman() || (!clickedPiece.IsHuman() && (this.canPlayerSee||lvlMono.debug)) || clickedPiece.IsTriangle())
+            {
+                Debug.Log("Showing piece info");
+                MenuManager.Instance.ShowUnitInfo(clickedPiece);
+            }
+        }
+        else
+        {
+            MenuManager.Instance.HideUnitInfo(null);
+        }
+
         if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns && !GameManagerChain.Instance.endingMatch) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
         {
             if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
@@ -284,7 +298,7 @@ public class Tile : MonoBehaviour
                 lvlMono.SelectPiece(clickedPiece, coord);
                 lvlMono.HighlightMoves();
 
-                MenuManager.Instance.ShowUnitInfo(clickedPiece);
+                //MenuManager.Instance.ShowUnitInfo(clickedPiece);
                 GameManagerChain.Instance.AddMovedPiece(clickedPiece, coord);
             }
             else

@@ -60,7 +60,13 @@ public abstract class PieceMono : MonoBehaviour
 
 	public bool IsBackground() { return string.Equals(this.UnitName, Background); }
 
-    public string GetName() { return this.UnitName; }
+    public string GetName() 
+    {
+        if (this.IsHuman())
+            return this.UnitName;
+        else
+            return "Enemy " + this.UnitName;
+    }
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
 
