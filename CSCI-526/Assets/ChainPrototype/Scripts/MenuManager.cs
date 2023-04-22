@@ -158,17 +158,18 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void HideUnitInfo(PieceMono piece)
+    public bool HideUnitInfo()
     {
-        if (piece == null)
+        if (_selectedUnitInfo.activeSelf == true)
         {
             _selectedUnitInfo.SetActive(false);
-            return;
+            return true;
         }
         // Necessary?
         unitInfo.text = "Unit Name";
         unitAbility.text = "Unit Ability";
-        _selectedUnitInfo.SetActive(false);
+        //_selectedUnitInfo.SetActive(false);
+		return false;
     }
 
 
