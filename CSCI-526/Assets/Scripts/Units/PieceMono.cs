@@ -31,7 +31,7 @@ public abstract class PieceMono : MonoBehaviour
 
     [SerializeField] private ParticleSystem buffParticles;      // Circle indicator when it is buffed by Diamond
 
-    public GameObject canMoveObject, cantMoveObject;     // Highlight will be temporary -- change to particles after midterm
+    public GameObject canMoveObject, cantMoveObject;
 
     [SerializeField] private GameObject enemySightIndicator;        // Display when the enemy is able to see the player unit
     public abstract string getUnitInfo();

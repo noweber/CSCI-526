@@ -586,7 +586,7 @@ public class LevelMono : MonoBehaviour
         if (this.selectedPiece.IsHuman() && !this.selectedPiece.IsCircle())
         {
             this.selectedPiece.canMoveObject.SetActive(false);
-            this.selectedPiece.cantMoveObject.SetActive(true);
+            // this.selectedPiece.cantMoveObject.SetActive(true);
         }
         if (this.selectedPiece.IsHuman() && this.selectedPiece.IsCircle())
         {
@@ -599,7 +599,7 @@ public class LevelMono : MonoBehaviour
             else
             {
                 this.selectedPiece.canMoveObject.SetActive(false);
-                this.selectedPiece.cantMoveObject.SetActive(true);
+                // this.selectedPiece.cantMoveObject.SetActive(true);
             }
         }
         _pieces[coord] = this.selectedPiece;

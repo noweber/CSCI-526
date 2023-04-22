@@ -496,7 +496,7 @@ public class GameManagerChain : Singleton<GameManagerChain>
                     if (!piece.IsTriangle() && !piece.IsBase())
                     {
                         piece.canMoveObject.SetActive(true);
-                        piece.cantMoveObject.SetActive(false);
+                        // piece.cantMoveObject.SetActive(false);
                     }
                 }
                 foreach (PieceMono piece in LevelMono.Instance.GetEnemyPieces())
@@ -504,7 +504,7 @@ public class GameManagerChain : Singleton<GameManagerChain>
                     if (!piece.IsTriangle() && !piece.IsBase())     // Do not show enemy movability during player turn
                     {
                         piece.canMoveObject.SetActive(false);
-                        piece.cantMoveObject.SetActive(false);
+                        // piece.cantMoveObject.SetActive(false);
                     }
                     /*                    piece.canMoveObject.SetActive(false);
                                         piece.canMoveObject.SetActive(false);*/
@@ -523,7 +523,7 @@ public class GameManagerChain : Singleton<GameManagerChain>
                     if (!piece.IsTriangle() && !piece.IsBase())     // Do not show player movability during enemy turn
                     {
                         piece.canMoveObject.SetActive(false);
-                        piece.cantMoveObject.SetActive(false);
+                        // piece.cantMoveObject.SetActive(false);
                     }
                 }
                 if (SceneName == "TutorialLevel" || SceneName == "Challenge_Circle")

@@ -5239,7 +5239,7 @@ MonoBehaviour:
   sePartEnemy: {fileID: 0}
   buffParticles: {fileID: 6417924530883737115}
   canMoveObject: {fileID: 345989405470797271}
-  cantMoveObject: {fileID: 3511072670434693464}
+  cantMoveObject: {fileID: 0}
   enemySightIndicator: {fileID: 4707445510753171961}
 --- !u!1 &7143685811454871220
 GameObject:
