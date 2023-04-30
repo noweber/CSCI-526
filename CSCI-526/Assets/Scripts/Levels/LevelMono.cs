@@ -29,6 +29,7 @@ public class LevelMono : MonoBehaviour
     public Dictionary<Tuple<int, int>, PieceMono> _pieces;
 
     public PieceMono selectedPiece = null;
+	public PieceMono viewPiece = null;
     public Tuple<int, int> selectedCoord = new Tuple<int, int>(-1, -1);
     public List<Tuple<int, int>> highlightedMoves = new List<Tuple<int, int>>();
     private List<Tuple<int, int>> eyes = new List<Tuple<int, int>>();
@@ -427,6 +428,26 @@ public class LevelMono : MonoBehaviour
         return this.selectedCoord;
     }
 
+	public bool HasViewPiece()
+    {
+        return this.viewPiece != null;
+    }
+
+    public PieceMono GetViewPiece()
+    {
+        return this.viewPiece;
+    }
+
+	public void ViewPiece(PieceMono piece)
+    {
+        this.viewPiece = piece;
+		MenuManager.Instance.ShowUnitInfo(this.viewPiece);
+    }
+
+	public void ResetViewPiece() {
+		MenuManager.Instance.ShowUnitInfo(null);
+		this.viewPiece = null;
+	}
 
     public void SelectPiece(PieceMono piece, Tuple<int, int> coord)
     {
@@ -565,7 +586,7 @@ public class LevelMono : MonoBehaviour
         if (this.selectedPiece.IsHuman() && !this.selectedPiece.IsCircle())
         {
             this.selectedPiece.canMoveObject.SetActive(false);
-            this.selectedPiece.cantMoveObject.SetActive(true);
+            // this.selectedPiece.cantMoveObject.SetActive(true);
         }
         if (this.selectedPiece.IsHuman() && this.selectedPiece.IsCircle())
         {
@@ -578,7 +599,7 @@ public class LevelMono : MonoBehaviour
             else
             {
                 this.selectedPiece.canMoveObject.SetActive(false);
-                this.selectedPiece.cantMoveObject.SetActive(true);
+                // this.selectedPiece.cantMoveObject.SetActive(true);
             }
         }
         _pieces[coord] = this.selectedPiece;

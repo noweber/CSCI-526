@@ -14,7 +14,10 @@ namespace Assets.Scripts.Units
         }
         public override string getUnitInfo()
         {
-            return "Capture Enemies: Yes \nAbility: Upon successful capture, Fighter can move again.";
+            if (this.IsHuman())
+                return "Capture Enemies: Yes \nAbility: Upon successful capture, can move again.";
+            else
+                return "Capture Player: Yes \nAbility: Upon successful capture, can move again.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
@@ -228,6 +231,10 @@ namespace Assets.Scripts.Units
                     if (move.Item1 >= 0 && move.Item1 < boardWidth && move.Item2 >= 0 && move.Item2 < boardHeight)
                     {
                         if (lvlMono.GetPiece(move) != null && (!this.IsEnemyOf(lvlMono.GetPiece(move)) || (lvlMono.GetPiece(move).IsTriangle())))
+                        {
+                            continue;
+                        }
+                        else if (!lvlMono.GetTile(move).gameObject.activeInHierarchy)
                         {
                             continue;
                         }

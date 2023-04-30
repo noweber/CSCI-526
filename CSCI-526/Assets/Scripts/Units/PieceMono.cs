@@ -31,7 +31,7 @@ public abstract class PieceMono : MonoBehaviour
 
     [SerializeField] private ParticleSystem buffParticles;      // Circle indicator when it is buffed by Diamond
 
-    public GameObject canMoveObject, cantMoveObject;     // Highlight will be temporary -- change to particles after midterm
+    public GameObject canMoveObject, cantMoveObject;
 
     [SerializeField] private GameObject enemySightIndicator;        // Display when the enemy is able to see the player unit
     public abstract string getUnitInfo();
@@ -60,7 +60,13 @@ public abstract class PieceMono : MonoBehaviour
 
 	public bool IsBackground() { return string.Equals(this.UnitName, Background); }
 
-    public string GetName() { return this.UnitName; }
+    public string GetName() 
+    {
+        if (this.IsHuman())
+            return this.UnitName;
+        else
+            return "Enemy " + this.UnitName;
+    }
 
     public abstract List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight);
 

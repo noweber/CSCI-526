@@ -275,17 +275,40 @@ public class Tile : MonoBehaviour
         var clickedPiece = lvlMono.GetPiece(coord);
         var turn = GameManagerChain.Instance.GameStateEnum == GameStateEnum.Human ? true : false;
 
+        /*
+		if (clickedPiece != null)
+        {
+            //show piece info for both sides
+            if (clickedPiece.IsHuman() || (!clickedPiece.IsHuman() && (this.canPlayerSee||lvlMono.debug)) || clickedPiece.IsTriangle())
+            {
+                Debug.Log("Showing piece info");
+                MenuManager.Instance.ShowUnitInfo(clickedPiece);
+            }
+        }
+        else
+        {
+            MenuManager.Instance.HideUnitInfo(null);
+        }
+		*/
+		
+		
         if (clickedPiece != null && !GameManagerChain.Instance.switchingTurns && !GameManagerChain.Instance.endingMatch) // selected piece is correct turn's color, prevents moving another unit while game is switching turns
         {
-            if (!lvlMono.HasSelectedPiece() && turn == clickedPiece.IsHuman() && clickedPiece.CanMove())
+            if (!lvlMono.HasViewPiece())
             {
-                // SELECTING CLICKED PIECE AS SELECTEDPIECE
-                Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
-                lvlMono.SelectPiece(clickedPiece, coord);
-                lvlMono.HighlightMoves();
+				if (turn == clickedPiece.IsHuman() && clickedPiece.CanMove()) {
+                	// SELECTING CLICKED PIECE AS SELECTEDPIECE
+                	Debug.Log("TOTAL MOVES: " + GameManagerChain.Instance.TotalMoves);
+                	lvlMono.SelectPiece(clickedPiece, coord);
+					lvlMono.ViewPiece(clickedPiece);
+                	lvlMono.HighlightMoves();
 
-                MenuManager.Instance.ShowUnitInfo(clickedPiece);
-                GameManagerChain.Instance.AddMovedPiece(clickedPiece, coord);
+                	GameManagerChain.Instance.AddMovedPiece(clickedPiece, coord);
+				}
+
+				if ((!clickedPiece.IsHuman() && lvlMono.GetTile(coord).CanPlayerSee()) || clickedPiece.IsTriangle()) {
+					lvlMono.ViewPiece(clickedPiece);
+				}
             }
             else
             {
@@ -317,8 +340,9 @@ public class Tile : MonoBehaviour
 
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(lvlMono.GetSelectedPiece());
                 }
+				//Debug.Log("Clicked on another piece, so reset view");
+				lvlMono.ResetViewPiece();
             }
         }
         else
@@ -330,7 +354,6 @@ public class Tile : MonoBehaviour
                 {
                     // UI/Analytics
                     MenuManager.Instance.HideAbilityButton();
-                    MenuManager.Instance.HideUnitInfo(lvlMono.selectedPiece);
                     GameManagerChain.Instance.IncrementMoves(1);
 
                     if (SceneManager.GetActiveScene().name == "TutorialLevel")
@@ -343,10 +366,11 @@ public class Tile : MonoBehaviour
                     Debug.Log("FAILED TO MOVE");
                 }
 
-                MenuManager.Instance.HideUnitInfo(lvlMono.GetSelectedPiece());
                 lvlMono.RemoveHighlight();
                 lvlMono.ResetPiece();
             }
+			//Debug.Log("Clicked on a random tile, so reset view");
+			lvlMono.ResetViewPiece();
         }
 
 

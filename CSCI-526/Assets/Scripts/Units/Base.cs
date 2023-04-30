@@ -8,7 +8,10 @@ namespace Assets.Scripts.Units
     {
         public override string getUnitInfo()
         {
-            return "Capture Enemies: N\\A \nAbility: Capture enemy planet to win";
+            if (this.IsHuman())
+                return "Capture Enemies: N\\A \nAbility: Protect your planet from enemies or else you lose.";
+            else
+                return "Capture Player: N\\A \nAbility: Capture enemy planet to win.";
         }
 
         public override List<Tuple<int, int>> LegalMoves(int boardWidth, int boardHeight)
