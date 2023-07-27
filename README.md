@@ -80,7 +80,5 @@ Contributions to the Aquarius Emblem project are welcome. If you find any issues
 
 ## Credits
 - Game Design and Development: Aquarius Emblem Team
-- Artwork: [Artist's Name]
-- Music and Sound Effects: [Sound Designer's Name]
 
 Aquarius Emblem is a collaborative effort brought to you by the talented members of the team. Let the cosmic battle begin! Will you harness the power of unit synergies to conquer the stars in Aquarius Emblem? Challenge yourself and embark on an interstellar adventure that will test your strategic wit and tactical prowess in this captivating chess-like strategy game.
